@@ -1,2 +1,6 @@
 CompileFlags:
-    CompilationDatabase: "./cmake-build-citron/compile_commands.json"
+  CompilationDatabase: "cmake-build-citron"
+  Remove:
+    - "-fdeps-format=*"
+    - "-fmodules-ts"
+    - "-fmodule-mapper=*"

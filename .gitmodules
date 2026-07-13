@@ -1,0 +1,18 @@
+[submodule "vendor/EnTT"]
+	path = vendor/EnTT
+	url = https://github.com/skypjack/entt.git
+[submodule "vendor/SDL"]
+	path = vendor/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "GLM"]
+	path = GLM
+	url = https://github.com/g-truc/glm.git
+[submodule "vendor/Box3D"]
+	path = vendor/Box3D
+	url = https://github.com/erincatto/box3d.git
+[submodule "vendor/GLM"]
+	path = vendor/GLM
+	url = https://github.com/g-truc/glm.git
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

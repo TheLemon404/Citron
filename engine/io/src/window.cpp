@@ -3,6 +3,7 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_messagebox.h"
 #include "SDL3/SDL_video.h"
+#include <logger.hpp>
 
 using namespace CitronIO;
 
@@ -17,8 +18,7 @@ Window::~Window() {
 
 bool Window::init() {
   if (!SDL_Init(SDL_INIT_VIDEO)) {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error",
-                             "Error initializing SDL3", nullptr);
+    CITRON_CORE_CRITICAL("Error initializing SDL3");
     return false;
   }
   return true;
@@ -27,16 +27,15 @@ bool Window::init() {
 void Window::open() {
   sdl_window = SDL_CreateWindow(title, width, height, SDL_WINDOW_RESIZABLE);
   if (!sdl_window) {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error",
-                             "Error creating SDL window", nullptr);
+    CITRON_CORE_CRITICAL("Error initializing SDL window");
     close();
     return;
   }
 
   sdl_surface = SDL_GetWindowSurface(sdl_window);
   if (!sdl_surface) {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error",
-                             "Error getting SDL window surface", nullptr);
+    CITRON_CORE_CRITICAL("Error getting SDL window surface");
+
     close();
     return;
   }

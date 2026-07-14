@@ -24,8 +24,8 @@ private:
 } // namespace CitronCore
 
 // core macros
-#define CITRON_CORE_FATAL(...)                                                 \
-  ::CitronCore::Logger::getCoreLogger()->fatal(__VA_ARGS__)
+#define CITRON_CORE_CRITICAL(...)                                              \
+  ::CitronCore::Logger::getCoreLogger()->critical(__VA_ARGS__)
 #define CITRON_CORE_ERROR(...)                                                 \
   ::CitronCore::Logger::getCoreLogger()->error(__VA_ARGS__)
 #define CITRON_CORE_WARN(...)                                                  \
@@ -38,8 +38,8 @@ private:
   ::CitronCore::Logger::getCoreLogger()->trace(__VA_ARGS__)
 
 // client macros
-#define CITRON_CLIENT_FATAL(...)                                               \
-  ::CitronCore::Logger::getClientLogger()->fatal(__VA_ARGS__)
+#define CITRON_CLIENT_CRITICAL(...)                                            \
+  ::CitronCore::Logger::getClientLogger()->critical(__VA_ARGS__)
 #define CITRON_CLIENT_ERROR(...)                                               \
   ::CitronCore::Logger::getClientLogger()->error(__VA_ARGS__)
 #define CITRON_CLIENT_WARN(...)                                                \

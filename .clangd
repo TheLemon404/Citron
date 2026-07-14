@@ -1,4 +1,5 @@
 CompileFlags:
+  Compiler: C:/msys64/clang64/bin/clang++
   CompilationDatabase: "cmake-build-citron"
   Remove:
     - "-fdeps-format=*"

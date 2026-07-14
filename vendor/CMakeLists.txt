@@ -1,3 +1,5 @@
+add_library(citron_vendor INTERFACE)
+
 add_subdirectory(Box3D)
 add_subdirectory(EnTT)
 add_subdirectory(GLM)

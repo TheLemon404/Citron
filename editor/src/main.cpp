@@ -1,22 +1,17 @@
-#include <logger.hpp>
+#include "SDL3/SDL_keycode.h"
+#include "editor.hpp"
+#include <input.hpp>
 #include <window.hpp>
 
-using namespace CitronIO;
 using namespace CitronCore;
+using namespace CitronInput;
 
 int main() {
-  Logger::init();
-  CITRON_CORE_INFO("Core logger initialized");
-  CITRON_CLIENT_INFO("Client logger initialized");
-  Window w = Window("Citron Editor", 800, 600);
-  if (!w.init()) {
-    return 1;
+  Editor editor = Editor();
+  editor.init();
+  while (editor.isRunning()) {
+    editor.update();
+    editor.close();
   }
-  w.open();
-  while (!w.shouldClose()) {
-    w.pollEvents();
-    w.swapBuffers();
-  }
-  w.close();
   return 0;
 }

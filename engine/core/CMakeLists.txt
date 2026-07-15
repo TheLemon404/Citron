@@ -7,4 +7,8 @@ target_include_directories(citron_core PUBLIC include)
 
 target_compile_features(citron_core PUBLIC cxx_std_26)
 
-target_link_libraries(citron_core PUBLIC spdlog::spdlog)
+target_link_libraries(citron_core
+PUBLIC
+spdlog::spdlog
+SDL3::SDL3
+)

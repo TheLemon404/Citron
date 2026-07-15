@@ -11,8 +11,8 @@ PRIVATE
 citron_core
 #citron_ecs
 #citron_graphics
-#citron_input
-citron_io
+citron_input
+#citron_io
 #citron_networking
 #citron_physics
 #citron_util
@@ -25,7 +25,7 @@ add_custom_command(TARGET citron_editor POST_BUILD
 )
 add_custom_command(TARGET citron_editor POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  $<TARGET_FILE:citron_io>
+  $<TARGET_FILE:citron_input>
   $<TARGET_FILE_DIR:citron_editor>
 )
 add_custom_command(TARGET citron_editor POST_BUILD

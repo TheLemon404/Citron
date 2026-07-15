@@ -2,8 +2,10 @@
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_messagebox.h"
+#include "SDL3/SDL_oldnames.h"
 #include "SDL3/SDL_video.h"
-#include "app.hpp"
+#include "keyboard.hpp"
+#include "mouse.hpp"
 #include <logger.hpp>
 
 using namespace CitronCore;
@@ -48,19 +50,69 @@ void Window::open() {
 void Window::pollEvents() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_EVENT_QUIT) {
+    switch (event.type) {
+    case SDL_EVENT_QUIT: {
       WindowCloseEvent closeEvent = WindowCloseEvent();
       eventCallback(closeEvent);
-    } else if (event.type == SDL_EVENT_WINDOW_RESIZED) {
+      break;
+    }
+    case SDL_EVENT_WINDOW_RESIZED: {
       WindowResizeEvent resizeEvent =
           WindowResizeEvent(event.window.data1, event.window.data2);
       eventCallback(resizeEvent);
-    } else if (event.type == SDL_EVENT_WINDOW_FOCUS_GAINED) {
+      break;
+    }
+    case SDL_EVENT_WINDOW_FOCUS_GAINED: {
       WindowFocusEvent focusEvent = WindowFocusEvent();
       eventCallback(focusEvent);
-    } else if (event.type == SDL_EVENT_WINDOW_FOCUS_LOST) {
+      break;
+    }
+    case SDL_EVENT_WINDOW_FOCUS_LOST: {
       WindowLostFocusEvent focusEvent = WindowLostFocusEvent();
       eventCallback(focusEvent);
+      break;
+    }
+    case SDL_EVENT_KEY_DOWN: {
+      if (event.key.repeat == 0) {
+        KeyJustPressedEvent pressedEvent = KeyJustPressedEvent(event.key.key);
+        eventCallback(pressedEvent);
+      } else {
+        KeyPressedEvent pressedEvent =
+            KeyPressedEvent(event.key.key, event.key.repeat);
+        eventCallback(pressedEvent);
+      }
+      break;
+    }
+    case SDL_EVENT_KEY_UP: {
+      // TODO: add key just released logic
+      KeyReleasedEvent releasedEvent = KeyReleasedEvent(event.key.key);
+      eventCallback(releasedEvent);
+      break;
+    }
+    case SDL_EVENT_MOUSE_MOTION: {
+      MouseMovedEvent motionEvent =
+          MouseMovedEvent(event.motion.x, event.motion.y);
+      eventCallback(motionEvent);
+      break;
+    }
+    case SDL_EVENT_MOUSE_WHEEL: {
+      MouseScrolledEvent scrolledEvent =
+          MouseScrolledEvent(event.motion.x, event.motion.y);
+      eventCallback(scrolledEvent);
+      break;
+    }
+    case SDL_EVENT_MOUSE_BUTTON_DOWN: {
+      MouseButtonPressedEvent pressedEvent =
+          MouseButtonPressedEvent(event.button.button);
+      eventCallback(pressedEvent);
+      break;
+    }
+    case SDL_EVENT_MOUSE_BUTTON_UP: {
+      MouseButtonReleasedEvent releasedEvent =
+          MouseButtonReleasedEvent(event.button.button);
+      eventCallback(releasedEvent);
+      break;
+    }
     }
   }
 }

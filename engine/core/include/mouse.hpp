@@ -3,12 +3,30 @@
 #include "event.hpp"
 #include <sstream>
 
-using namespace CitronCore;
-
-namespace CitronInput {
+namespace CitronCore {
 class MouseEvent : public Event {
 public:
   EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+};
+
+class MouseScrolledEvent : public MouseEvent {
+public:
+  MouseScrolledEvent(double dx, double dy) : dx(dx), dy(dy) {}
+
+  inline double getDx() const { return dx; }
+  inline double getDy() const { return dy; }
+
+  std::string toString() const override {
+    std::stringstream ss;
+    ss << "MouseScrolledEvent: (" << dx << "," << dy << ")";
+    return ss.str();
+  }
+
+  EVENT_CLASS_TYPE(MouseScrolled)
+
+private:
+  double dx;
+  double dy;
 };
 
 class MouseMovedEvent : public MouseEvent {
@@ -73,4 +91,4 @@ private:
   int button;
 };
 
-} // namespace CitronInput
+} // namespace CitronCore

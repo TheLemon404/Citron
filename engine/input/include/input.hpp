@@ -1,5 +1,6 @@
 #pragma once
 
+#include "layer.hpp"
 #include <SDL3/SDL.h>
 #include <event.hpp>
 #include <logger.hpp>
@@ -16,14 +17,24 @@ enum class PressableInputState {
   JUST_RELEASED
 };
 
-class Input {
-  static std::unordered_map<uint32_t, PressableInputState> pressableInputs;
-
+class InputLayer : public Layer {
 public:
-  static bool isPressed(uint32_t pressable);
-  static bool isReleased(uint32_t pressable);
-  static bool isJustPressed(uint32_t pressable);
-  static bool isJustReleased(uint32_t pressable);
+  InputLayer() : Layer("InputLayer") {}
+  ~InputLayer() override = default;
+
+  void onAttach() override;
+  void onDetach() override;
+  void onUpdate() override;
+  void onEvent(Event &e) override;
+
+  bool isPressed(uint32_t pressable);
+  bool isReleased(uint32_t pressable);
+  bool isJustPressed(uint32_t pressable);
+  bool isJustReleased(uint32_t pressable);
+
+private:
+  bool processKeyEvent(Event &e);
+  bool processMouseEvent(Event &e);
 };
 
 } // namespace CitronInput

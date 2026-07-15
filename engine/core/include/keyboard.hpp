@@ -3,9 +3,7 @@
 #include "event.hpp"
 #include <sstream>
 
-using namespace CitronCore;
-
-namespace CitronInput {
+namespace CitronCore {
 class KeyEvent : public Event {
 public:
   inline int getKeycode() const { return keycode; }
@@ -14,19 +12,6 @@ public:
 protected:
   KeyEvent(int keycode) : keycode(keycode) {}
   int keycode;
-};
-
-class KeyTypedEvent : public KeyEvent {
-public:
-  KeyTypedEvent(int keycode) : KeyEvent(keycode) {}
-
-  std::string toString() const override {
-    std::stringstream ss;
-    ss << "KeyTypedEvent: " << keycode;
-    return ss.str();
-  }
-
-  EVENT_CLASS_TYPE(KeyTyped);
 };
 
 class KeyPressedEvent : public KeyEvent {
@@ -48,6 +33,19 @@ private:
   int repeatCount;
 };
 
+class KeyJustPressedEvent : public KeyEvent {
+public:
+  KeyJustPressedEvent(int keycode) : KeyEvent(keycode) {}
+
+  std::string toString() const override {
+    std::stringstream ss;
+    ss << "KeyJustPressedEvent: " << keycode;
+    return ss.str();
+  }
+
+  EVENT_CLASS_TYPE(KeyJustPressed);
+};
+
 class KeyReleasedEvent : public KeyEvent {
 public:
   KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
@@ -61,4 +59,17 @@ public:
   EVENT_CLASS_TYPE(KeyReleased);
 };
 
-} // namespace CitronInput
+class KeyJustReleasedEvent : public KeyEvent {
+public:
+  KeyJustReleasedEvent(int keycode) : KeyEvent(keycode) {}
+
+  std::string toString() const override {
+    std::stringstream ss;
+    ss << "KeyJustReleasedEvent: " << keycode;
+    return ss.str();
+  }
+
+  EVENT_CLASS_TYPE(KeyJustReleased);
+};
+
+} // namespace CitronCore

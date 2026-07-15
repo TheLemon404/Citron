@@ -6,6 +6,7 @@ target_sources(citron_editor PRIVATE ${src})
 
 target_link_libraries(citron_editor
 PRIVATE
+citron_app
 #citron_assets
 #citron_audio
 citron_core
@@ -18,6 +19,11 @@ citron_input
 #citron_util
 )
 
+add_custom_command(TARGET citron_editor POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+  $<TARGET_FILE:citron_app>
+  $<TARGET_FILE_DIR:citron_editor>
+)
 add_custom_command(TARGET citron_editor POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
   $<TARGET_FILE:citron_core>

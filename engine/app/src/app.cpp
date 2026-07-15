@@ -1,11 +1,13 @@
 #include "app.hpp"
 #include "core.hpp"
 #include "event.hpp"
+#include "input.hpp"
 #include "logger.hpp"
 
 #include <functional>
 
 using namespace CitronCore;
+using namespace CitronInput;
 
 App *App::instance = nullptr;
 
@@ -13,6 +15,8 @@ App::App()
     : window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)) {
   CITRON_CORE_ASSERT(!instance, "App already exists");
   instance = this;
+
+  layerStack.pushLayer(new InputLayer());
 }
 
 App::~App() {}

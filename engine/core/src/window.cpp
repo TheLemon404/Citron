@@ -62,6 +62,12 @@ void Window::pollEvents() {
       eventCallback(resizeEvent);
       break;
     }
+    case SDL_EVENT_WINDOW_MOVED: {
+      WindowMovedEvent moveEvent =
+          WindowMovedEvent(event.window.data1, event.window.data2);
+      eventCallback(moveEvent);
+      break;
+    }
     case SDL_EVENT_WINDOW_FOCUS_GAINED: {
       WindowFocusEvent focusEvent = WindowFocusEvent();
       eventCallback(focusEvent);

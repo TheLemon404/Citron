@@ -7,8 +7,6 @@ void EditorLayer::onUpdate() {}
 
 void EditorLayer::onDetach() {}
 
-void EditorLayer::onEvent(CitronCore::Event &e) {
-  CITRON_CLIENT_INFO(e.toString());
-}
+void EditorLayer::onEvent(CitronCore::Event &e) {}
 
 Editor::Editor() : CitronCore::App() { pushLayer(new EditorLayer()); }

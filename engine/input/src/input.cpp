@@ -30,6 +30,6 @@ void InputLayer::onEvent(Event &e) {
       CITRON_BIND_EVENT_FN(InputLayer::processMouseEvent));
 }
 
-bool InputLayer::processKeyEvent(Event &e) { return true; }
+bool InputLayer::processKeyEvent(Event &e) { return false; }
 
-bool InputLayer::processMouseEvent(Event &e) { return true; }
+bool InputLayer::processMouseEvent(Event &e) { return false; }

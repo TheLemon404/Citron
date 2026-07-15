@@ -10,7 +10,7 @@ citron_app
 #citron_assets
 #citron_audio
 citron_core
-#citron_ecs
+citron_ecs
 #citron_graphics
 citron_input
 #citron_io
@@ -20,22 +20,27 @@ citron_input
 )
 
 add_custom_command(TARGET citron_editor POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  $<TARGET_FILE:citron_app>
-  $<TARGET_FILE_DIR:citron_editor>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:citron_app>
+		$<TARGET_FILE_DIR:citron_editor>
 )
 add_custom_command(TARGET citron_editor POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  $<TARGET_FILE:citron_core>
-  $<TARGET_FILE_DIR:citron_editor>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:citron_core>
+		$<TARGET_FILE_DIR:citron_editor>
 )
 add_custom_command(TARGET citron_editor POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  $<TARGET_FILE:citron_input>
-  $<TARGET_FILE_DIR:citron_editor>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:citron_ecs>
+		$<TARGET_FILE_DIR:citron_editor>
 )
 add_custom_command(TARGET citron_editor POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:SDL3::SDL3>
-        $<TARGET_FILE_DIR:citron_editor>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:citron_input>
+		$<TARGET_FILE_DIR:citron_editor>
+)
+add_custom_command(TARGET citron_editor POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy_if_different
+								$<TARGET_FILE:SDL3::SDL3>
+								$<TARGET_FILE_DIR:citron_editor>
 )

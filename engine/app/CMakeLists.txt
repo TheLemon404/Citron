@@ -11,4 +11,5 @@ target_link_libraries(citron_app
 PUBLIC
 citron_core
 citron_input
+citron_ecs
 )

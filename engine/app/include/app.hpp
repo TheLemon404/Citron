@@ -1,9 +1,9 @@
 #pragma once
 
-#include "event.hpp"
-#include "layer.hpp"
-#include "layer_stack.hpp"
-#include "window.hpp"
+#include <event.hpp>
+#include <layer.hpp>
+#include <layer_stack.hpp>
+#include <window.hpp>
 
 #include <sstream>
 

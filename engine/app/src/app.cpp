@@ -1,11 +1,9 @@
 #include "app.hpp"
 #include <core.hpp>
-#include <entity.hpp>
+#include <ecs.hpp>
 #include <event.hpp>
 #include <input.hpp>
 #include <logger.hpp>
-
-#include <functional>
 
 using namespace CitronCore;
 using namespace CitronInput;
@@ -19,7 +17,7 @@ App::App()
   instance = this;
 
   layerStack.pushLayer(new InputLayer());
-  layerStack.pushLayer(new EntityLayer());
+  layerStack.pushLayer(new SceneLayer());
 }
 
 App::~App() {}

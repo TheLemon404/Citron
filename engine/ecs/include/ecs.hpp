@@ -13,12 +13,11 @@ class Scene;
 
 class System {
 public:
-  virtual void init(Scene &activeScene) = 0;
-  virtual void start(Scene &activeScene) = 0;
-  virtual void update(Scene &activeScene) = 0;
-  virtual void editorUpdate(Scene &activeScene) = 0;
-  virtual void onEvent(Scene &activeScene, Event &e) = 0;
-  virtual void end(Scene &registry) = 0;
+  virtual void init(Scene &activeScene) {};
+  virtual void start(Scene &activeScene) {};
+  virtual void update(Scene &activeScene) {};
+  virtual void onEvent(Scene &activeScene, Event &e) {};
+  virtual void end(Scene &registry) {};
 };
 
 class Scene {
@@ -31,7 +30,7 @@ public:
   void end();
 
 private:
-  std::vector<System> systems;
+  std::vector<std::shared_ptr<System>> systems;
   entt::registry registry;
 };
 

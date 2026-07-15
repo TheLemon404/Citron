@@ -5,37 +5,33 @@ using namespace CitronECS;
 
 void Scene::init() {
   for (auto &system : systems) {
-    system.init(*this);
+    system->init(*this);
   }
 }
 
 void Scene::start() {
   for (auto &system : systems) {
-    system.start(*this);
+    system->start(*this);
   }
 }
 
 void Scene::update() {
   for (auto &system : systems) {
-    system.update(*this);
+    system->update(*this);
   }
 }
 
-void Scene::editorUpdate() {
-  for (auto &system : systems) {
-    system.editorUpdate(*this);
-  }
-}
+void Scene::editorUpdate() {}
 
 void Scene::onEvent(Event &e) {
   for (auto &system : systems) {
-    system.onEvent(*this, e);
+    system->onEvent(*this, e);
   }
 }
 
 void Scene::end() {
   for (auto &system : systems) {
-    system.end(*this);
+    system->end(*this);
   }
 }
 

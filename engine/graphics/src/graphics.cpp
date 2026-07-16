@@ -8,8 +8,8 @@ void GraphicsLayer::onAttach() {
 	device.aquirePlatformResources();
 }
 
-void GraphicsLayer::onDetach() {}
+void GraphicsLayer::onDetach() { device.releasePlatformResources(); }
 
-void GraphicsLayer::onUpdate() {}
+void GraphicsLayer::onUpdate() { device.submitCommandBuffers(); }
 
 void GraphicsLayer::onEvent(Event &e) {}

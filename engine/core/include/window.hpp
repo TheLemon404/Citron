@@ -93,6 +93,12 @@ class Window {
 	void swapBuffers();
 	void close();
 
+	void *getSDLWindow() const { return sdl_window; }
+	void *getSDLSurface() const { return sdl_surface; }
+
+	int getWidth() const { return width; }
+	int getHeight() const { return height; }
+
   private:
 	EventCallbackFn eventCallback = nullptr;
 };

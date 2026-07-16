@@ -1,12 +1,17 @@
+#include "SDL3/SDL_video.h"
+#include "mesh.hpp"
 #include <cstddef>
 #define WEBGPU_CPP_IMPLEMENTATION
 
 #include "device.hpp"
 #include <logger.hpp>
+#include <sdl3webgpu.h>
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
 using namespace CitronGraphics;
+
+Device::Device(Window &window) : window(window) {}
 
 void Device::aquirePlatformResources() {
 	instance = wgpu::createInstance();
@@ -15,6 +20,8 @@ void Device::aquirePlatformResources() {
 
 	wgpu::RequestAdapterOptions adapterOptions = {};
 	adapterOptions.nextInChain = nullptr;
+	adapterOptions.compatibleSurface =
+		SDL_GetWGPUSurface(instance, (SDL_Window *)window.getSDLWindow());
 	wgpu::Adapter adapter = instance.requestAdapter(adapterOptions);
 	CITRON_CORE_ASSERT(adapter, "Failed to obtained WGPU adapter");
 	CITRON_CORE_INFO("WGPU adapter obtained");
@@ -108,9 +115,30 @@ void Device::aquirePlatformResources() {
 		}
 	};
 	queue.onSubmittedWorkDone(eventDoneCallbackInfo);
+
+	surface = SDL_GetWGPUSurface(instance, (SDL_Window *)window.getSDLWindow());
+	wgpu::SurfaceConfiguration surfaceConfiguration = {};
+	surfaceConfiguration.nextInChain = nullptr;
+	surfaceConfiguration.width = window.getWidth();
+	surfaceConfiguration.height = window.getHeight();
+	// May need to revesit how we get supported surface formats in the future
+	wgpu::SurfaceCapabilities cap = {};
+	surface.getCapabilities(adapter, &cap);
+	surfaceConfiguration.format = cap.formats[0];
+	surfaceConfiguration.viewFormatCount = 0;
+	surfaceConfiguration.viewFormats = nullptr;
+	surfaceConfiguration.usage = wgpu::TextureUsage::RenderAttachment;
+	surfaceConfiguration.device = device;
+	surfaceConfiguration.presentMode = wgpu::PresentMode::Fifo;
+	surfaceConfiguration.alphaMode = wgpu::CompositeAlphaMode::Auto;
+	surface.configure(surfaceConfiguration);
 }
 
 void Device::releasePlatformResources() {
+	if (surface) {
+		surface.unconfigure();
+		surface.release();
+	}
 	if (queue)
 		queue.release();
 	if (device)
@@ -119,4 +147,49 @@ void Device::releasePlatformResources() {
 		adapter.release();
 	if (instance)
 		instance.release();
+}
+
+void Device::submitCommandBuffers() {
+	wgpu::SurfaceTexture surfaceTexture = {};
+	surface.getCurrentTexture(&surfaceTexture);
+	wgpu::TextureDescriptor viewDescriptor = {};
+	viewDescriptor.nextInChain = nullptr;
+	viewDescriptor.dimension = wgpu::TextureDimension::_2D;
+	viewDescriptor.format = wgpu::TextureFormat::RGBA8Unorm;
+	viewDescriptor.usage = wgpu::TextureUsage::RenderAttachment;
+	viewDescriptor.mipLevelCount = 1;
+	viewDescriptor.sampleCount = 1;
+	viewDescriptor.viewFormatCount = 0;
+	viewDescriptor.viewFormats = nullptr;
+	wgpu::TextureView view =
+		((wgpu::Texture)surfaceTexture.texture).createView();
+
+	wgpu::CommandEncoder encoder = device.createCommandEncoder();
+
+	wgpu::RenderPassColorAttachment colorAttachment = {};
+	colorAttachment.nextInChain = nullptr;
+	colorAttachment.view = view;
+	colorAttachment.resolveTarget = nullptr;
+	colorAttachment.loadOp = wgpu::LoadOp::Clear;
+	colorAttachment.storeOp = wgpu::StoreOp::Store;
+	colorAttachment.clearValue = {1.0, 1.0, 1.0, 1.0};
+
+	wgpu::RenderPassDescriptor renderPassDescriptor = {};
+	renderPassDescriptor.nextInChain = nullptr;
+	renderPassDescriptor.colorAttachmentCount = 1;
+	renderPassDescriptor.colorAttachments = &colorAttachment;
+	wgpu::RenderPassEncoder renderPass =
+		encoder.beginRenderPass(renderPassDescriptor);
+	renderPass.end();
+	renderPass.release();
+	wgpu::CommandBuffer commandBuffer = encoder.finish();
+	encoder.release();
+
+	queue.submit(commandBuffer);
+
+	commandBuffer.release();
+
+	view.release();
+
+	surface.present();
 }

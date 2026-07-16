@@ -5,6 +5,7 @@
 #include <graphics.hpp>
 #include <input.hpp>
 #include <logger.hpp>
+#include <x86gprintrin.h>
 
 using namespace CitronCore;
 using namespace CitronInput;
@@ -14,65 +15,65 @@ using namespace CitronGraphics;
 App *App::instance = nullptr;
 
 App::App()
-    : window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)) {
-  CITRON_CORE_ASSERT(!instance, "App already exists");
-  instance = this;
+	: window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)) {
+	CITRON_CORE_ASSERT(!instance, "App already exists");
+	instance = this;
 }
 
 App::~App() {}
 
 void App::init() {
-  Logger::init();
-  CITRON_CORE_INFO("Core logger initialized");
-  CITRON_CLIENT_INFO("Client logger initialized");
+	Logger::init();
+	CITRON_CORE_INFO("Core logger initialized");
+	CITRON_CLIENT_INFO("Client logger initialized");
 
-  window.init();
-  window.open();
+	window.init();
+	window.open();
 
-  pushLayer(new InputLayer());
-  pushLayer(new SceneLayer());
-  pushLayer(new GraphicsLayer(window));
+	pushLayer(new GraphicsLayer(window));
+	pushLayer(new InputLayer());
+	pushLayer(new SceneLayer());
 }
 
 void App::update() {
-  while (running) {
-    for (Layer *layer : layerStack) {
-      layer->onUpdate();
-    }
+	while (running) {
+		for (Layer *layer : layerStack) {
+			layer->onUpdate();
+		}
 
-    window.pollEvents();
-    window.swapBuffers();
-  }
+		window.pollEvents();
+		window.swapBuffers();
+	}
 }
 
 void App::close() {
-  running = false;
-  window.close();
+	running = false;
+	window.close();
 }
 
 void App::onEvent(Event &e) {
-  EventDispatcher dispatcher(e);
-  dispatcher.dispatch<WindowCloseEvent>(
-      CITRON_BIND_EVENT_FN(App::onWindowClose));
+	EventDispatcher dispatcher(e);
+	dispatcher.dispatch<WindowCloseEvent>(
+		CITRON_BIND_EVENT_FN(App::onWindowClose));
 
-  for (auto it = layerStack.end(); it != layerStack.begin();) {
-    (*--it)->onEvent(e);
-    if (e.handled)
-      break;
-  }
+	for (auto it = layerStack.end(); it != layerStack.begin();) {
+		(*--it)->onEvent(e);
+		if (e.handled)
+			break;
+	}
 }
 
 void App::pushLayer(Layer *layer) {
-  layerStack.pushLayer(layer);
-  layer->onAttach();
+	layerStack.pushLayer(layer);
+	layer->onAttach();
 }
 
 void App::popLayer(Layer *layer) {
-  layerStack.popLayer(layer);
-  layer->onDetach();
+	layerStack.popLayer(layer);
+	layer->onDetach();
 }
 
 bool App::onWindowClose(Event &e) {
-  running = false;
-  return true;
+	running = false;
+	return true;
 }

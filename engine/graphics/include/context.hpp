@@ -9,15 +9,15 @@ using namespace CitronCore;
 
 namespace CitronGraphics {
 class Context {
-public:
-  Context(Window &window) {};
-  ~Context() = default;
+  public:
+	Context(Window &window) {};
+	~Context() = default;
 
-  void aquirePlatformResources();
+	void aquirePlatformResources();
 
-private:
-  wgpu::Instance instance;
-  wgpu::Adapter adapter;
-  wgpu::Device device;
+  private:
+	wgpu::Instance instance;
+	wgpu::Adapter adapter;
+	wgpu::Device device;
 };
 } // namespace CitronGraphics

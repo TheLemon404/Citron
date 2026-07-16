@@ -4,8 +4,8 @@
 using namespace CitronGraphics;
 
 void GraphicsLayer::onAttach() {
-  CITRON_CORE_INFO("onAttach");
-  context.aquirePlatformResources();
+	CITRON_CORE_INFO("onAttach");
+	context.aquirePlatformResources();
 }
 
 void GraphicsLayer::onDetach() {}

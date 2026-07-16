@@ -7,15 +7,15 @@ using namespace CitronCore;
 
 namespace CitronGraphics {
 class GraphicsLayer : public Layer {
-public:
-  GraphicsLayer(Window &window) : Layer("GraphicsLayer"), context(window) {}
+  public:
+	GraphicsLayer(Window &window) : Layer("GraphicsLayer"), context(window) {}
 
-  virtual void onAttach() override;
-  virtual void onDetach() override;
-  virtual void onUpdate() override;
-  virtual void onEvent(Event &e) override;
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onEvent(Event &e) override;
 
-private:
-  Context context;
+  private:
+	Context context;
 };
 } // namespace CitronGraphics

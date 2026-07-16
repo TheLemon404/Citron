@@ -19,34 +19,20 @@ citron_input
 #citron_util
 )
 
-add_custom_command(TARGET citron_editor POST_BUILD
+function(target_copy_shared_library target library)
+	add_custom_command(TARGET ${target} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:citron_app>
-		$<TARGET_FILE_DIR:citron_editor>
-)
-add_custom_command(TARGET citron_editor POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:citron_graphics>
-		$<TARGET_FILE_DIR:citron_editor>
-)
-add_custom_command(TARGET citron_editor POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:citron_core>
-		$<TARGET_FILE_DIR:citron_editor>
-)
-add_custom_command(TARGET citron_editor POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:citron_ecs>
-		$<TARGET_FILE_DIR:citron_editor>
-)
-add_custom_command(TARGET citron_editor POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:citron_input>
-		$<TARGET_FILE_DIR:citron_editor>
-)
-add_custom_command(TARGET citron_editor POST_BUILD
-				COMMAND ${CMAKE_COMMAND} -E copy_if_different
-								$<TARGET_FILE:SDL3::SDL3>
-								$<TARGET_FILE_DIR:citron_editor>
-)
+		$<TARGET_FILE:${library}>
+		$<TARGET_FILE_DIR:${target}>
+	)
+endfunction()
+
+target_copy_shared_library(citron_editor citron_app)
+target_copy_shared_library(citron_editor citron_graphics)
+target_copy_shared_library(citron_editor citron_core)
+target_copy_shared_library(citron_editor citron_ecs)
+target_copy_shared_library(citron_editor citron_input)
+target_copy_shared_library(citron_editor citron_io)
+target_copy_shared_library(citron_editor citron_assets)
+target_copy_shared_library(citron_editor SDL3::SDL3)
 target_copy_graphics_shared_dependencies(citron_editor)

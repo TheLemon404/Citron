@@ -8,12 +8,13 @@
 using namespace CitronCore;
 
 namespace CitronGraphics {
-class Context {
+class Device {
   public:
-	Context(Window &window) {};
-	~Context() = default;
+	Device(Window &window) {};
+	~Device() = default;
 
 	void aquirePlatformResources();
+	void releasePlatformResources();
 
   private:
 	wgpu::Instance instance;

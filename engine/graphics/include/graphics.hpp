@@ -1,6 +1,6 @@
 #pragma once
 
-#include "context.hpp"
+#include "device.hpp"
 #include <layer.hpp>
 
 using namespace CitronCore;
@@ -8,7 +8,7 @@ using namespace CitronCore;
 namespace CitronGraphics {
 class GraphicsLayer : public Layer {
   public:
-	GraphicsLayer(Window &window) : Layer("GraphicsLayer"), context(window) {}
+	GraphicsLayer(Window &window) : Layer("GraphicsLayer"), device(window) {}
 
 	virtual void onAttach() override;
 	virtual void onDetach() override;
@@ -16,6 +16,6 @@ class GraphicsLayer : public Layer {
 	virtual void onEvent(Event &e) override;
 
   private:
-	Context context;
+	Device device;
 };
 } // namespace CitronGraphics

@@ -2,12 +2,14 @@
 #include <core.hpp>
 #include <ecs.hpp>
 #include <event.hpp>
+#include <graphics.hpp>
 #include <input.hpp>
 #include <logger.hpp>
 
 using namespace CitronCore;
 using namespace CitronInput;
 using namespace CitronECS;
+using namespace CitronGraphics;
 
 App *App::instance = nullptr;
 
@@ -15,9 +17,6 @@ App::App()
     : window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)) {
   CITRON_CORE_ASSERT(!instance, "App already exists");
   instance = this;
-
-  layerStack.pushLayer(new InputLayer());
-  layerStack.pushLayer(new SceneLayer());
 }
 
 App::~App() {}
@@ -29,6 +28,10 @@ void App::init() {
 
   window.init();
   window.open();
+
+  pushLayer(new InputLayer());
+  pushLayer(new SceneLayer());
+  pushLayer(new GraphicsLayer(window));
 }
 
 void App::update() {

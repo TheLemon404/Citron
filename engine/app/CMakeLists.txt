@@ -12,4 +12,5 @@ PUBLIC
 citron_core
 citron_input
 citron_ecs
+citron_graphics
 )

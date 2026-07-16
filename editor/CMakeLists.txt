@@ -11,7 +11,7 @@ citron_app
 #citron_audio
 citron_core
 citron_ecs
-#citron_graphics
+citron_graphics
 citron_input
 #citron_io
 #citron_networking
@@ -22,6 +22,11 @@ citron_input
 add_custom_command(TARGET citron_editor POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		$<TARGET_FILE:citron_app>
+		$<TARGET_FILE_DIR:citron_editor>
+)
+add_custom_command(TARGET citron_editor POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:citron_graphics>
 		$<TARGET_FILE_DIR:citron_editor>
 )
 add_custom_command(TARGET citron_editor POST_BUILD
@@ -44,3 +49,4 @@ add_custom_command(TARGET citron_editor POST_BUILD
 								$<TARGET_FILE:SDL3::SDL3>
 								$<TARGET_FILE_DIR:citron_editor>
 )
+target_copy_graphics_shared_dependencies(citron_editor)

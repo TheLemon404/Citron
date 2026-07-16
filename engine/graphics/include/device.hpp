@@ -20,5 +20,6 @@ class Device {
 	wgpu::Instance instance;
 	wgpu::Adapter adapter;
 	wgpu::Device device;
+	wgpu::Queue queue;
 };
 } // namespace CitronGraphics

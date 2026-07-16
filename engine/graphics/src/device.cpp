@@ -93,9 +93,26 @@ void Device::aquirePlatformResources() {
 					 deviceLimits.maxTextureDimension3D);
 	CITRON_CORE_INFO(" - maxTextureArrayLayers: {0}",
 					 deviceLimits.maxTextureArrayLayers);
+
+	queue = device.getQueue();
+	wgpu::QueueWorkDoneCallbackInfo eventDoneCallbackInfo = {};
+	eventDoneCallbackInfo.nextInChain = nullptr;
+	eventDoneCallbackInfo.callback = [](WGPUQueueWorkDoneStatus status,
+										void *userData1, void *userData2) {
+		if (status == wgpu::QueueWorkDoneStatus::Error) {
+			CITRON_CORE_ERROR("Queue work done error status: {0}",
+							  static_cast<uint32_t>(status));
+		} else {
+			CITRON_CORE_INFO("Queue work done with status: {0}",
+							 static_cast<uint32_t>(status));
+		}
+	};
+	queue.onSubmittedWorkDone(eventDoneCallbackInfo);
 }
 
 void Device::releasePlatformResources() {
+	if (queue)
+		queue.release();
 	if (device)
 		device.release();
 	if (adapter)

@@ -22,7 +22,10 @@ class Device {
 	const void *getDevice() const { return device; }
 	const void *getSurface() const { return surface; }
 
+	void resizeSurface(int width, int height);
+
   private:
+	wgpu::TextureFormat preferredSurfaceFormat;
 	Window &window;
 	std::vector<wgpu::CommandBuffer> commandBuffers;
 	wgpu::Instance instance;

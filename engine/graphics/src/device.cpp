@@ -124,7 +124,8 @@ void Device::aquirePlatformResources() {
 	// May need to revesit how we get supported surface formats in the future
 	wgpu::SurfaceCapabilities cap = {};
 	surface.getCapabilities(adapter, &cap);
-	surfaceConfiguration.format = cap.formats[0];
+	preferredSurfaceFormat = cap.formats[0];
+	surfaceConfiguration.format = preferredSurfaceFormat;
 	surfaceConfiguration.viewFormatCount = 0;
 	surfaceConfiguration.viewFormats = nullptr;
 	surfaceConfiguration.usage = wgpu::TextureUsage::RenderAttachment;
@@ -192,4 +193,19 @@ void Device::submitCommandBuffers() {
 	view.release();
 
 	surface.present();
+}
+
+void Device::resizeSurface(int width, int height) {
+	wgpu::SurfaceConfiguration surfaceConfiguration = {};
+	surfaceConfiguration.nextInChain = nullptr;
+	surfaceConfiguration.width = window.getWidth();
+	surfaceConfiguration.height = window.getHeight();
+	surfaceConfiguration.format = preferredSurfaceFormat;
+	surfaceConfiguration.viewFormatCount = 0;
+	surfaceConfiguration.viewFormats = nullptr;
+	surfaceConfiguration.usage = wgpu::TextureUsage::RenderAttachment;
+	surfaceConfiguration.device = device;
+	surfaceConfiguration.presentMode = wgpu::PresentMode::Fifo;
+	surfaceConfiguration.alphaMode = wgpu::CompositeAlphaMode::Auto;
+	surface.configure(surfaceConfiguration);
 }

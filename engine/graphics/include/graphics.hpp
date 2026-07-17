@@ -14,10 +14,12 @@ class GraphicsContext {
 	void end();
 	void constructRenderData();
 	void submitRenderData();
+	void onEvent(Event &e);
 
 	const Device &getDevice() const { return device; }
 
   private:
+	bool onWindowResize(Event &e);
 	Device device;
 };
 } // namespace CitronGraphics

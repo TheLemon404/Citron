@@ -68,6 +68,8 @@ void App::onEvent(Event &e) {
 		if (e.handled)
 			break;
 	}
+
+	graphicsContext.onEvent(e);
 }
 
 bool App::onWindowClose(Event &e) {

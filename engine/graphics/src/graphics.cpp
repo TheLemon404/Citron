@@ -12,7 +12,9 @@ void GraphicsContext::init() {
 
 void GraphicsContext::end() { device.releasePlatformResources(); }
 
-void GraphicsContext::constructRenderData() {}
+void GraphicsContext::constructPreFrameRenderContext() {
+	device.constructRenderPass();
+}
 
 void GraphicsContext::submitRenderData() { device.submitCommandBuffers(); }
 

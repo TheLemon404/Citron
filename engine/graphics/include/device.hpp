@@ -17,14 +17,22 @@ class Device {
 	void aquirePlatformResources();
 	void releasePlatformResources();
 
+	void constructRenderPass();
 	void submitCommandBuffers();
 
-	const void *getDevice() const { return device; }
-	const void *getSurface() const { return surface; }
+	const void *getWGPUDevice() const { return device; }
+	const void *getWGPUSurface() const { return surface; }
+	const wgpu::TextureFormat getWGPUPreferredSurfaceFormat() const {
+		return preferredSurfaceFormat;
+	}
+	const wgpu::RenderPassEncoder &getWGPURenderPassEncoder() const {
+		return currentRenderPassEncoder;
+	}
 
 	void resizeSurface(int width, int height);
 
   private:
+	bool isResizing = false;
 	wgpu::TextureFormat preferredSurfaceFormat;
 	Window &window;
 	std::vector<wgpu::CommandBuffer> commandBuffers;
@@ -33,5 +41,8 @@ class Device {
 	wgpu::Device device;
 	wgpu::Queue queue;
 	wgpu::Surface surface;
+	wgpu::RenderPassEncoder currentRenderPassEncoder;
+	wgpu::CommandEncoder currentCommandEncoder;
+	wgpu::TextureView currentView;
 };
 } // namespace CitronGraphics

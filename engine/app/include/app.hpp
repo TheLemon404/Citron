@@ -40,6 +40,7 @@ class App {
 	~App();
 
 	void init();
+	virtual void onPushClientLayers() = 0;
 	void update();
 	void close();
 	void onEvent(Event &e);
@@ -60,8 +61,9 @@ class App {
 	inline static App &get() { return *instance; }
 	inline bool isRunning() const { return running; }
 
-	const LayerStack &getLayerStack() const { return layerStack; }
-	const Window &getWindow() const { return window; }
+	const LayerStack &getLayerStack() { return layerStack; }
+	const Window &getWindow() { return window; }
+	const GraphicsContext &getGraphicsContext() { return graphicsContext; }
 
   private:
 	GraphicsContext graphicsContext;

@@ -1,10 +1,5 @@
 #include "editor.hpp"
-#include "backends/imgui_impl_sdl3.h"
-#include "backends/imgui_impl_wgpu.h"
-#include "graphics.hpp"
-#include "logger.hpp"
-
-#include <imgui.h>
+#include "gui.hpp"
 
 void EditorLayer::onAttach() {}
 
@@ -14,4 +9,7 @@ void EditorLayer::onDetach() {}
 
 void EditorLayer::onEvent(CitronCore::Event &e) {}
 
-Editor::Editor() : CitronCore::App() { pushLayer<EditorLayer>(); }
+void Editor::onPushClientLayers() {
+	pushLayer<GuiLayer>();
+	pushLayer<EditorLayer>();
+}

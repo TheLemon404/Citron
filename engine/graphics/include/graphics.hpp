@@ -12,7 +12,7 @@ class GraphicsContext {
 
 	void init();
 	void end();
-	void constructRenderData();
+	void constructPreFrameRenderContext();
 	void submitRenderData();
 	void onEvent(Event &e);
 

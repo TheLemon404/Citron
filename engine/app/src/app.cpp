@@ -36,15 +36,18 @@ void App::init() {
 
 	pushLayer<InputLayer>();
 	pushLayer<SceneLayer>();
+
+	onPushClientLayers();
 }
 
 void App::update() {
 	while (running) {
+		graphicsContext.constructPreFrameRenderContext();
+
 		for (auto &layer : layerStack) {
 			layer->onUpdate();
 		}
 
-		graphicsContext.constructRenderData();
 		graphicsContext.submitRenderData();
 
 		window.pollEvents();

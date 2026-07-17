@@ -150,7 +150,7 @@ void Device::releasePlatformResources() {
 		instance.release();
 }
 
-void Device::submitCommandBuffers() {
+void Device::constructRenderPass() {
 	wgpu::SurfaceTexture surfaceTexture = {};
 	surface.getCurrentTexture(&surfaceTexture);
 	wgpu::TextureDescriptor viewDescriptor = {};
@@ -162,14 +162,13 @@ void Device::submitCommandBuffers() {
 	viewDescriptor.sampleCount = 1;
 	viewDescriptor.viewFormatCount = 0;
 	viewDescriptor.viewFormats = nullptr;
-	wgpu::TextureView view =
-		((wgpu::Texture)surfaceTexture.texture).createView();
+	currentView = ((wgpu::Texture)surfaceTexture.texture).createView();
 
-	wgpu::CommandEncoder encoder = device.createCommandEncoder();
+	currentCommandEncoder = device.createCommandEncoder();
 
 	wgpu::RenderPassColorAttachment colorAttachment = {};
 	colorAttachment.nextInChain = nullptr;
-	colorAttachment.view = view;
+	colorAttachment.view = currentView;
 	colorAttachment.resolveTarget = nullptr;
 	colorAttachment.loadOp = wgpu::LoadOp::Clear;
 	colorAttachment.storeOp = wgpu::StoreOp::Store;
@@ -179,18 +178,21 @@ void Device::submitCommandBuffers() {
 	renderPassDescriptor.nextInChain = nullptr;
 	renderPassDescriptor.colorAttachmentCount = 1;
 	renderPassDescriptor.colorAttachments = &colorAttachment;
-	wgpu::RenderPassEncoder renderPass =
-		encoder.beginRenderPass(renderPassDescriptor);
-	renderPass.end();
-	renderPass.release();
-	wgpu::CommandBuffer commandBuffer = encoder.finish();
-	encoder.release();
+	currentRenderPassEncoder =
+		currentCommandEncoder.beginRenderPass(renderPassDescriptor);
+}
+
+void Device::submitCommandBuffers() {
+	currentRenderPassEncoder.end();
+	currentRenderPassEncoder.release();
+	wgpu::CommandBuffer commandBuffer = currentCommandEncoder.finish();
+	currentCommandEncoder.release();
 
 	queue.submit(commandBuffer);
 
 	commandBuffer.release();
 
-	view.release();
+	currentView.release();
 
 	surface.present();
 }

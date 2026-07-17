@@ -12,6 +12,8 @@ void GuiLayer::onAttach() {
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
 	io.ConfigInputTrickleEventQueue = false;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(

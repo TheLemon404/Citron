@@ -23,6 +23,11 @@ class LayerStack {
 	void popLayer() {
 		layers.erase(layers.begin() + layerMap[typeid(T)]);
 		layerMap.erase(typeid(T));
+		for (auto it = layerMap.begin(); it != layerMap.end(); it++) {
+			if (it->second > layerMap[typeid(T)]) {
+				it->second--;
+			}
+		}
 	}
 
 	template <typename T>

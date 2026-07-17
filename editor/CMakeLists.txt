@@ -13,6 +13,7 @@ citron_core
 citron_ecs
 citron_graphics
 citron_input
+imgui
 #citron_io
 #citron_networking
 #citron_physics

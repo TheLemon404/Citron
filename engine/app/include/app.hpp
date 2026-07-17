@@ -1,11 +1,14 @@
 #pragma once
 
+#include "graphics.hpp"
 #include <event.hpp>
 #include <layer.hpp>
 #include <layer_stack.hpp>
 #include <window.hpp>
 
 #include <sstream>
+
+using namespace CitronGraphics;
 
 namespace CitronCore {
 class AppEvent : public Event {
@@ -41,13 +44,27 @@ class App {
 	void close();
 	void onEvent(Event &e);
 
-	void pushLayer(Layer *layer);
-	void popLayer(Layer *layer);
+	template <typename T>
+		requires std::derived_from<T, Layer>
+	void pushLayer() {
+		layerStack.pushLayer<T>();
+		layerStack.getLayer<T>()->onAttach();
+	}
+	template <typename T>
+		requires std::derived_from<T, Layer>
+	void popLayer() {
+		layerStack.getLayer<T>()->onDetach();
+		layerStack.popLayer<T>();
+	}
 
 	inline static App &get() { return *instance; }
 	inline bool isRunning() const { return running; }
 
+	const LayerStack &getLayerStack() const { return layerStack; }
+	const Window &getWindow() const { return window; }
+
   private:
+	GraphicsContext graphicsContext;
 	bool onWindowClose(Event &e);
 
 	bool running = true;

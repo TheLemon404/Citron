@@ -3,13 +3,13 @@
 
 using namespace CitronGraphics;
 
-void GraphicsLayer::onAttach() {
+void GraphicsContext::init() {
 	CITRON_CORE_INFO("onAttach");
 	device.aquirePlatformResources();
 }
 
-void GraphicsLayer::onDetach() { device.releasePlatformResources(); }
+void GraphicsContext::end() { device.releasePlatformResources(); }
 
-void GraphicsLayer::onUpdate() { device.submitCommandBuffers(); }
+void GraphicsContext::constructRenderData() {}
 
-void GraphicsLayer::onEvent(Event &e) {}
+void GraphicsContext::submitRenderData() { device.submitCommandBuffers(); }

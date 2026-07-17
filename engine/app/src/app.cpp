@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include <concepts>
 #include <core.hpp>
 #include <ecs.hpp>
 #include <event.hpp>
@@ -15,7 +16,8 @@ using namespace CitronGraphics;
 App *App::instance = nullptr;
 
 App::App()
-	: window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)) {
+	: window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)),
+	  graphicsContext(window) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 }
@@ -30,16 +32,20 @@ void App::init() {
 	window.init();
 	window.open();
 
-	pushLayer(new GraphicsLayer(window));
-	pushLayer(new InputLayer());
-	pushLayer(new SceneLayer());
+	graphicsContext.init();
+
+	pushLayer<InputLayer>();
+	pushLayer<SceneLayer>();
 }
 
 void App::update() {
 	while (running) {
-		for (Layer *layer : layerStack) {
+		for (auto &layer : layerStack) {
 			layer->onUpdate();
 		}
+
+		graphicsContext.constructRenderData();
+		graphicsContext.submitRenderData();
 
 		window.pollEvents();
 		window.swapBuffers();
@@ -47,6 +53,7 @@ void App::update() {
 }
 
 void App::close() {
+	graphicsContext.end();
 	running = false;
 	window.close();
 }
@@ -61,16 +68,6 @@ void App::onEvent(Event &e) {
 		if (e.handled)
 			break;
 	}
-}
-
-void App::pushLayer(Layer *layer) {
-	layerStack.pushLayer(layer);
-	layer->onAttach();
-}
-
-void App::popLayer(Layer *layer) {
-	layerStack.popLayer(layer);
-	layer->onDetach();
 }
 
 bool App::onWindowClose(Event &e) {

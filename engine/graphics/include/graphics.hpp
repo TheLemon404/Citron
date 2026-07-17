@@ -6,14 +6,16 @@
 using namespace CitronCore;
 
 namespace CitronGraphics {
-class GraphicsLayer : public Layer {
+class GraphicsContext {
   public:
-	GraphicsLayer(Window &window) : Layer("GraphicsLayer"), device(window) {}
+	GraphicsContext(Window &window) : device(window) {}
 
-	virtual void onAttach() override;
-	virtual void onDetach() override;
-	virtual void onUpdate() override;
-	virtual void onEvent(Event &e) override;
+	void init();
+	void end();
+	void constructRenderData();
+	void submitRenderData();
+
+	const Device &getDevice() const { return device; }
 
   private:
 	Device device;

@@ -19,3 +19,6 @@
 [submodule "vendor/WebGPU_SDL"]
 	path = vendor/WebGPU_SDL
 	url = https://github.com/eliemichel/sdl3webgpu.git
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/ocornut/imgui.git

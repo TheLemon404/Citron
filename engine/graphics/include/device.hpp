@@ -19,6 +19,9 @@ class Device {
 
 	void submitCommandBuffers();
 
+	const void *getDevice() const { return device; }
+	const void *getSurface() const { return surface; }
+
   private:
 	Window &window;
 	std::vector<wgpu::CommandBuffer> commandBuffers;

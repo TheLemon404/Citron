@@ -1,6 +1,7 @@
 #include "SDL3/SDL_video.h"
 #include "mesh.hpp"
 #include <cstddef>
+#include <webgpu.h>
 #define WEBGPU_CPP_IMPLEMENTATION
 
 #include "device.hpp"
@@ -150,19 +151,58 @@ void Device::releasePlatformResources() {
 		instance.release();
 }
 
-void Device::constructRenderPass() {
-	wgpu::SurfaceTexture surfaceTexture = {};
-	surface.getCurrentTexture(&surfaceTexture);
-	wgpu::TextureDescriptor viewDescriptor = {};
+bool Device::constructRenderPass() {
+	if (getLastSurfaceWidth() != window.getWidth() ||
+		getLastSurfaceHeight() != window.getHeight()) {
+		CITRON_CORE_WARN("Current WGPU surface size is different from window "
+						 "size, attempting to resize...");
+		resizeSurface(window.getWidth(), window.getHeight());
+		return false;
+	}
+
+	surface.getCurrentTexture(&currentSurfaceTexture);
+	if (currentSurfaceTexture.status ==
+		wgpu::SurfaceGetCurrentTextureStatus::Error) {
+		CITRON_CORE_ERROR(
+			"Current WGPU surface failed in pre-render with status Error");
+		return false;
+	}
+	if (currentSurfaceTexture.status ==
+		wgpu::SurfaceGetCurrentTextureStatus::SuccessSuboptimal) {
+		if (currentSurfaceTexture.texture)
+			((wgpu::Texture)currentSurfaceTexture.texture).release();
+
+		resizeSurface(window.getWidth(), window.getHeight());
+		CITRON_CORE_ERROR("Current WGPU surface completed in pre-render with "
+						  "status SuccessSuboptimal, attempting to resize...");
+		return false;
+	}
+	if (((wgpu::Texture)currentSurfaceTexture.texture).getWidth() !=
+			getLastSurfaceWidth() ||
+		((wgpu::Texture)currentSurfaceTexture.texture).getHeight() !=
+			getLastSurfaceHeight()) {
+		((wgpu::Texture)currentSurfaceTexture.texture).release();
+
+		resizeSurface(window.getWidth(), window.getHeight());
+		CITRON_CORE_ERROR("Current surface and surface texture size mismatch, "
+						  "attempting to resize...");
+
+		return false;
+	}
+
+	wgpu::TextureViewDescriptor viewDescriptor = {};
 	viewDescriptor.nextInChain = nullptr;
-	viewDescriptor.dimension = wgpu::TextureDimension::_2D;
-	viewDescriptor.format = wgpu::TextureFormat::RGBA8Unorm;
+	viewDescriptor.dimension = wgpu::TextureViewDimension::_2D;
+	viewDescriptor.format =
+		((wgpu::Texture)currentSurfaceTexture.texture).getFormat();
 	viewDescriptor.usage = wgpu::TextureUsage::RenderAttachment;
+	viewDescriptor.baseMipLevel = 0;
 	viewDescriptor.mipLevelCount = 1;
-	viewDescriptor.sampleCount = 1;
-	viewDescriptor.viewFormatCount = 0;
-	viewDescriptor.viewFormats = nullptr;
-	currentView = ((wgpu::Texture)surfaceTexture.texture).createView();
+	viewDescriptor.baseArrayLayer = 0;
+	viewDescriptor.arrayLayerCount = 1;
+	viewDescriptor.aspect = WGPUTextureAspect_All;
+	currentView = ((wgpu::Texture)currentSurfaceTexture.texture)
+					  .createView(viewDescriptor);
 
 	currentCommandEncoder = device.createCommandEncoder();
 
@@ -180,6 +220,8 @@ void Device::constructRenderPass() {
 	renderPassDescriptor.colorAttachments = &colorAttachment;
 	currentRenderPassEncoder =
 		currentCommandEncoder.beginRenderPass(renderPassDescriptor);
+
+	return true;
 }
 
 void Device::submitCommandBuffers() {
@@ -195,13 +237,20 @@ void Device::submitCommandBuffers() {
 	currentView.release();
 
 	surface.present();
+
+	if (currentSurfaceTexture.texture)
+		((wgpu::Texture)currentSurfaceTexture.texture).release();
 }
+
+const int Device::getLastSurfaceWidth() const { return m_lastSurfaceWidth; }
+
+const int Device::getLastSurfaceHeight() const { return m_lastSurfaceHeight; }
 
 void Device::resizeSurface(int width, int height) {
 	wgpu::SurfaceConfiguration surfaceConfiguration = {};
 	surfaceConfiguration.nextInChain = nullptr;
-	surfaceConfiguration.width = window.getWidth();
-	surfaceConfiguration.height = window.getHeight();
+	surfaceConfiguration.width = width;
+	surfaceConfiguration.height = height;
 	surfaceConfiguration.format = preferredSurfaceFormat;
 	surfaceConfiguration.viewFormatCount = 0;
 	surfaceConfiguration.viewFormats = nullptr;
@@ -210,4 +259,7 @@ void Device::resizeSurface(int width, int height) {
 	surfaceConfiguration.presentMode = wgpu::PresentMode::Fifo;
 	surfaceConfiguration.alphaMode = wgpu::CompositeAlphaMode::Auto;
 	surface.configure(surfaceConfiguration);
+
+	m_lastSurfaceWidth = width;
+	m_lastSurfaceHeight = height;
 }

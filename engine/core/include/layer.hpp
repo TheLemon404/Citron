@@ -13,6 +13,7 @@ class Layer {
 	virtual void onDetach() = 0;
 	virtual void onUpdate() = 0;
 	virtual void onEvent(Event &e) = 0;
+	virtual void onRender() {};
 
 	inline const std::string &getName() const { return debugName; }
 

@@ -10,5 +10,6 @@ class GuiLayer : public Layer {
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
+	void onRender() override;
 	void onEvent(Event &e) override;
 };

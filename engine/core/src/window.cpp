@@ -59,6 +59,8 @@ void Window::pollEvents() {
 		case SDL_EVENT_WINDOW_RESIZED: {
 			WindowResizeEvent resizeEvent =
 				WindowResizeEvent(event.window.data1, event.window.data2);
+			width = event.window.data1;
+			height = event.window.data2;
 			eventCallback(resizeEvent);
 			break;
 		}

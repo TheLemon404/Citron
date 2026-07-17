@@ -2,6 +2,7 @@
 #include "app.hpp"
 #include "backends/imgui_impl_sdl3.h"
 #include "backends/imgui_impl_wgpu.h"
+#include "device.hpp"
 #include "editor.hpp"
 #include "graphics.hpp"
 #include <imgui.h>
@@ -31,7 +32,9 @@ void GuiLayer::onDetach() {
 	ImGui::DestroyContext();
 }
 
-void GuiLayer::onUpdate() {
+void GuiLayer::onUpdate() {}
+
+void GuiLayer::onRender() {
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();

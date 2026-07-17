@@ -17,7 +17,7 @@ class Device {
 	void aquirePlatformResources();
 	void releasePlatformResources();
 
-	void constructRenderPass();
+	bool constructRenderPass();
 	void submitCommandBuffers();
 
 	const void *getWGPUDevice() const { return device; }
@@ -29,10 +29,14 @@ class Device {
 		return currentRenderPassEncoder;
 	}
 
+	const int getLastSurfaceWidth() const;
+	const int getLastSurfaceHeight() const;
+
 	void resizeSurface(int width, int height);
 
   private:
-	bool isResizing = false;
+	int m_lastSurfaceWidth = 0;
+	int m_lastSurfaceHeight = 0;
 	wgpu::TextureFormat preferredSurfaceFormat;
 	Window &window;
 	std::vector<wgpu::CommandBuffer> commandBuffers;
@@ -41,6 +45,7 @@ class Device {
 	wgpu::Device device;
 	wgpu::Queue queue;
 	wgpu::Surface surface;
+	wgpu::SurfaceTexture currentSurfaceTexture;
 	wgpu::RenderPassEncoder currentRenderPassEncoder;
 	wgpu::CommandEncoder currentCommandEncoder;
 	wgpu::TextureView currentView;

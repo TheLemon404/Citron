@@ -42,13 +42,16 @@ void App::init() {
 
 void App::update() {
 	while (running) {
-		graphicsContext.constructPreFrameRenderContext();
-
 		for (auto &layer : layerStack) {
 			layer->onUpdate();
 		}
 
-		graphicsContext.submitRenderData();
+		if (graphicsContext.constructRenderContext()) {
+			for (auto &layer : layerStack) {
+				layer->onRender();
+			}
+			graphicsContext.submitRenderData();
+		}
 
 		window.pollEvents();
 		window.swapBuffers();

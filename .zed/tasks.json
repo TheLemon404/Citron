@@ -1,0 +1,19 @@
+[
+	{
+		"label": "CMake Configure Desktop",
+		"command": "cmake",
+		"args": ["-G", "Ninja", "-B", "cmake-build-citron"],
+		"use_new_terminal": false,
+	},
+	{
+		"label": "Build Desktop",
+		"command": "cmake",
+		"args": ["--build", "cmake-build-citron", "--target", "citron_editor"],
+		"use_new_terminal": false,
+	},
+	{
+		"label": "Run Desktop",
+		"command": "./cmake-build-citron/editor/citron_editor.exe",
+		"use_new_terminal": false,
+	},
+]

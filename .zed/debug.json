@@ -1,0 +1,8 @@
+[
+	{
+		"label": "Debug Desktop",
+		"request": "launch",
+		"program": "cmake-build-citron/editor/citron_editor.exe",
+		"adapter": "GDB",
+	},
+]

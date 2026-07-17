@@ -52,73 +52,74 @@ void Window::pollEvents() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_EVENT_QUIT: {
-			WindowCloseEvent closeEvent = WindowCloseEvent();
+			WindowCloseEvent closeEvent = WindowCloseEvent(&event);
 			eventCallback(closeEvent);
 			break;
 		}
 		case SDL_EVENT_WINDOW_RESIZED: {
-			WindowResizeEvent resizeEvent =
-				WindowResizeEvent(event.window.data1, event.window.data2);
+			WindowResizeEvent resizeEvent = WindowResizeEvent(
+				&event, event.window.data1, event.window.data2);
 			width = event.window.data1;
 			height = event.window.data2;
 			eventCallback(resizeEvent);
 			break;
 		}
 		case SDL_EVENT_WINDOW_MOVED: {
-			WindowMovedEvent moveEvent =
-				WindowMovedEvent(event.window.data1, event.window.data2);
+			WindowMovedEvent moveEvent = WindowMovedEvent(
+				&event, event.window.data1, event.window.data2);
 			eventCallback(moveEvent);
 			break;
 		}
 		case SDL_EVENT_WINDOW_FOCUS_GAINED: {
-			WindowFocusEvent focusEvent = WindowFocusEvent();
+			WindowFocusEvent focusEvent = WindowFocusEvent(&event);
 			eventCallback(focusEvent);
 			break;
 		}
 		case SDL_EVENT_WINDOW_FOCUS_LOST: {
-			WindowLostFocusEvent focusEvent = WindowLostFocusEvent();
+			WindowLostFocusEvent focusEvent = WindowLostFocusEvent(&event);
 			eventCallback(focusEvent);
 			break;
 		}
 		case SDL_EVENT_KEY_DOWN: {
 			if (event.key.repeat == 0) {
 				KeyJustPressedEvent pressedEvent =
-					KeyJustPressedEvent(event.key.key);
+					KeyJustPressedEvent(&event, event.key.key);
 				eventCallback(pressedEvent);
 			} else {
 				KeyPressedEvent pressedEvent =
-					KeyPressedEvent(event.key.key, event.key.repeat);
+					KeyPressedEvent(&event, event.key.key, event.key.repeat);
 				eventCallback(pressedEvent);
 			}
 			break;
 		}
 		case SDL_EVENT_KEY_UP: {
 			// TODO: add key just released logic
-			KeyReleasedEvent releasedEvent = KeyReleasedEvent(event.key.key);
+			KeyReleasedEvent releasedEvent =
+				KeyReleasedEvent(&event, event.key.key);
 			eventCallback(releasedEvent);
 			break;
 		}
 		case SDL_EVENT_MOUSE_MOTION: {
 			MouseMovedEvent motionEvent =
-				MouseMovedEvent(event.motion.x, event.motion.y);
+				MouseMovedEvent(&event, event.motion.x, event.motion.y);
 			eventCallback(motionEvent);
 			break;
 		}
 		case SDL_EVENT_MOUSE_WHEEL: {
 			MouseScrolledEvent scrolledEvent =
-				MouseScrolledEvent(event.motion.x, event.motion.y);
+				MouseScrolledEvent(&event, event.motion.x, event.motion.y);
 			eventCallback(scrolledEvent);
 			break;
 		}
 		case SDL_EVENT_MOUSE_BUTTON_DOWN: {
 			MouseButtonPressedEvent pressedEvent =
-				MouseButtonPressedEvent(event.button.button);
+				MouseButtonPressedEvent(&event, event.button.button);
 			eventCallback(pressedEvent);
 			break;
 		}
 		case SDL_EVENT_MOUSE_BUTTON_UP: {
 			MouseButtonReleasedEvent releasedEvent =
-				MouseButtonReleasedEvent(event.button.button);
+				MouseButtonReleasedEvent(&event, event.button.button);
 			eventCallback(releasedEvent);
 			break;
 		}
@@ -129,7 +130,7 @@ void Window::pollEvents() {
 void Window::swapBuffers() {}
 
 void Window::close() {
-	WindowCloseEvent event = WindowCloseEvent();
+	WindowCloseEvent event = WindowCloseEvent(nullptr);
 
 	if (sdl_window) {
 		SDL_DestroyWindow(sdl_window);

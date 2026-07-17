@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SDL3/SDL_events.h"
 #include "SDL3/SDL_surface.h"
 #include <SDL3/SDL.h>
 #include <event.hpp>
@@ -10,30 +11,35 @@ namespace CitronCore {
 
 class WindowEvent : public Event {
   public:
+	WindowEvent(SDL_Event *e) : Event(e) {}
 	EVENT_CLASS_CATEGORY(EventCategoryWindow)
 };
 
 class WindowFocusEvent : public WindowEvent {
   public:
+	WindowFocusEvent(SDL_Event *e) : WindowEvent(e) {}
 	std::string toString() const override { return "WindowFocusEvent"; }
 	EVENT_CLASS_TYPE(WindowFocus)
 };
 
 class WindowLostFocusEvent : public WindowEvent {
   public:
+	WindowLostFocusEvent(SDL_Event *e) : WindowEvent(e) {}
 	std::string toString() const override { return "WindowLostFocusEvent"; }
 	EVENT_CLASS_TYPE(WindowLostFocus)
 };
 
 class WindowCloseEvent : public WindowEvent {
   public:
+	WindowCloseEvent(SDL_Event *e) : WindowEvent(e) {}
 	std::string toString() const override { return "WindowCloseEvent"; }
 	EVENT_CLASS_TYPE(WindowClose)
 };
 
 class WindowResizeEvent : public WindowEvent {
   public:
-	WindowResizeEvent(int width, int height) : width(width), height(height) {}
+	WindowResizeEvent(SDL_Event *e, int width, int height)
+		: WindowEvent(e), width(width), height(height) {}
 
 	inline int getWidth() const { return width; }
 	inline int getHeight() const { return height; }
@@ -52,7 +58,8 @@ class WindowResizeEvent : public WindowEvent {
 
 class WindowMovedEvent : public WindowEvent {
   public:
-	WindowMovedEvent(int dx, int dy) : dx(dx), dy(dy) {}
+	WindowMovedEvent(SDL_Event *e, int dx, int dy)
+		: WindowEvent(e), dx(dx), dy(dy) {}
 
 	inline int getDx() const { return dx; }
 	inline int getDy() const { return dy; }

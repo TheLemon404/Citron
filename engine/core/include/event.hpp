@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SDL3/SDL_events.h"
 #include "core.hpp"
 
 #include <iostream>
@@ -50,12 +51,16 @@ enum EventCategory : int {
 
 class Event {
 	friend class EventDispatcher;
+	SDL_Event *event;
 
   public:
+	Event(SDL_Event *internalEvent) : event(internalEvent) {}
 	virtual EventType getEventType() const = 0;
 	virtual const char *getName() const = 0;
 	virtual int getCategoryFlags() const = 0;
 	virtual std::string toString() const { return getName(); }
+
+	void *getInternalEvent() const { return event; }
 
 	inline bool isInCategory(EventCategory category) {
 		return getCategoryFlags() & category;

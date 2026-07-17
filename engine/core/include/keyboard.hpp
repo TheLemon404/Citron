@@ -10,14 +10,14 @@ class KeyEvent : public Event {
 	EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
   protected:
-	KeyEvent(int keycode) : keycode(keycode) {}
+	KeyEvent(SDL_Event *e, int keycode) : Event(e), keycode(keycode) {}
 	int keycode;
 };
 
 class KeyPressedEvent : public KeyEvent {
   public:
-	KeyPressedEvent(int keycode, int repeatCount)
-		: KeyEvent(keycode), repeatCount(repeatCount) {}
+	KeyPressedEvent(SDL_Event *e, int keycode, int repeatCount)
+		: KeyEvent(e, keycode), repeatCount(repeatCount) {}
 
 	inline int getRepeatCount() const { return repeatCount; }
 
@@ -36,7 +36,7 @@ class KeyPressedEvent : public KeyEvent {
 
 class KeyJustPressedEvent : public KeyEvent {
   public:
-	KeyJustPressedEvent(int keycode) : KeyEvent(keycode) {}
+	KeyJustPressedEvent(SDL_Event *e, int keycode) : KeyEvent(e, keycode) {}
 
 	std::string toString() const override {
 		std::stringstream ss;
@@ -49,7 +49,7 @@ class KeyJustPressedEvent : public KeyEvent {
 
 class KeyReleasedEvent : public KeyEvent {
   public:
-	KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
+	KeyReleasedEvent(SDL_Event *e, int keycode) : KeyEvent(e, keycode) {}
 
 	std::string toString() const override {
 		std::stringstream ss;
@@ -62,7 +62,7 @@ class KeyReleasedEvent : public KeyEvent {
 
 class KeyJustReleasedEvent : public KeyEvent {
   public:
-	KeyJustReleasedEvent(int keycode) : KeyEvent(keycode) {}
+	KeyJustReleasedEvent(SDL_Event *e, int keycode) : KeyEvent(e, keycode) {}
 
 	std::string toString() const override {
 		std::stringstream ss;

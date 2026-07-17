@@ -1,17 +1,21 @@
 #pragma once
 
+#include "SDL3/SDL_events.h"
 #include "event.hpp"
 #include <sstream>
 
 namespace CitronCore {
 class MouseEvent : public Event {
   public:
+	MouseEvent(SDL_Event *e) : Event(e) {}
+
 	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 };
 
 class MouseScrolledEvent : public MouseEvent {
   public:
-	MouseScrolledEvent(double dx, double dy) : dx(dx), dy(dy) {}
+	MouseScrolledEvent(SDL_Event *e, double dx, double dy)
+		: MouseEvent(e), dx(dx), dy(dy) {}
 
 	inline double getDx() const { return dx; }
 	inline double getDy() const { return dy; }
@@ -31,7 +35,8 @@ class MouseScrolledEvent : public MouseEvent {
 
 class MouseMovedEvent : public MouseEvent {
   public:
-	MouseMovedEvent(double dx, double dy) : dx(dx), dy(dy) {}
+	MouseMovedEvent(SDL_Event *e, double dx, double dy)
+		: MouseEvent(e), dx(dx), dy(dy) {}
 
 	inline double getDx() const { return dx; }
 	inline double getDy() const { return dy; }
@@ -51,13 +56,16 @@ class MouseMovedEvent : public MouseEvent {
 
 class MouseButtonEvent : public MouseEvent {
   public:
+	MouseButtonEvent(SDL_Event *e) : MouseEvent(e) {}
+
 	EVENT_CLASS_CATEGORY(EventCategoryMouseButton | EventCategoryMouse |
 						 EventCategoryInput)
 };
 
 class MouseButtonPressedEvent : public MouseButtonEvent {
   public:
-	MouseButtonPressedEvent(int button) : button(button) {}
+	MouseButtonPressedEvent(SDL_Event *e, int button)
+		: MouseButtonEvent(e), button(button) {}
 
 	inline int getButton() const { return button; }
 
@@ -75,7 +83,8 @@ class MouseButtonPressedEvent : public MouseButtonEvent {
 
 class MouseButtonReleasedEvent : public MouseButtonEvent {
   public:
-	MouseButtonReleasedEvent(int button) : button(button) {}
+	MouseButtonReleasedEvent(SDL_Event *e, int button)
+		: MouseButtonEvent(e), button(button) {}
 
 	inline int getButton() const { return button; }
 

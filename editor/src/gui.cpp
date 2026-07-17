@@ -10,7 +10,8 @@
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGui::GetIO();
+	ImGuiIO &io = ImGui::GetIO();
+	io.ConfigInputTrickleEventQueue = false;
 
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
@@ -18,7 +19,7 @@ void GuiLayer::onAttach() {
 	ImGui_ImplWGPU_InitInfo initInfo = {};
 	initInfo.Device =
 		(WGPUDevice)editorApp.getGraphicsContext().getDevice().getWGPUDevice();
-	initInfo.NumFramesInFlight = 3;
+	initInfo.NumFramesInFlight = 2;
 	initInfo.RenderTargetFormat =
 		(WGPUTextureFormat)editorApp.getGraphicsContext()
 			.getDevice()
@@ -50,4 +51,7 @@ void GuiLayer::onRender() {
 									  .getWGPURenderPassEncoder());
 }
 
-void GuiLayer::onEvent(Event &e) {}
+void GuiLayer::onEvent(Event &e) {
+	if (SDL_Event *sdlEvent = (SDL_Event *)e.getInternalEvent())
+		ImGui_ImplSDL3_ProcessEvent(sdlEvent);
+}

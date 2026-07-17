@@ -42,6 +42,8 @@ void App::init() {
 
 void App::update() {
 	while (running) {
+		window.pollEvents();
+
 		for (auto &layer : layerStack) {
 			layer->onUpdate();
 		}
@@ -53,7 +55,6 @@ void App::update() {
 			graphicsContext.submitRenderData();
 		}
 
-		window.pollEvents();
 		window.swapBuffers();
 	}
 }

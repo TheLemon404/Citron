@@ -17,20 +17,27 @@ class Device {
 	void aquirePlatformResources();
 	void releasePlatformResources();
 
-	bool constructRenderPass();
-	void submitCommandBuffers();
+	bool prepareCurrentSurfaceTexture();
+	void presentCurrentSurfaceTexture();
 
-	const void *getWGPUDevice() const { return device; }
-	const void *getWGPUSurface() const { return surface; }
-	const wgpu::TextureFormat getWGPUPreferredSurfaceFormat() const {
+	wgpu::Device &getWGPUDevice() { return device; }
+	const void *getWGPUDeviceRaw() { return &device; }
+	wgpu::Surface &getWGPUSurface() { return surface; }
+	const void *getWGPUSurfaceRaw() { return &surface; }
+	wgpu::SurfaceTexture &getCurrentSurfaceTexture() {
+		return currentSurfaceTexture;
+	}
+	const void *getCurrentSurfaceTextureRaw() { return &currentSurfaceTexture; }
+
+	const wgpu::TextureFormat getWGPUPreferredSurfaceFormat() {
 		return preferredSurfaceFormat;
 	}
-	const wgpu::RenderPassEncoder &getWGPURenderPassEncoder() const {
-		return currentRenderPassEncoder;
-	}
+	const wgpu::RenderPassEncoder &createDisposableRenderPassEncoder();
 
-	const int getLastSurfaceWidth() const;
-	const int getLastSurfaceHeight() const;
+	const int getLastSurfaceWidth();
+	const int getLastSurfaceHeight();
+
+	const wgpu::Queue &getQueue() { return queue; }
 
 	void resizeSurface(int width, int height);
 
@@ -39,15 +46,11 @@ class Device {
 	int m_lastSurfaceHeight = 0;
 	wgpu::TextureFormat preferredSurfaceFormat;
 	Window &window;
-	std::vector<wgpu::CommandBuffer> commandBuffers;
 	wgpu::Instance instance;
 	wgpu::Adapter adapter;
 	wgpu::Device device;
 	wgpu::Queue queue;
 	wgpu::Surface surface;
 	wgpu::SurfaceTexture currentSurfaceTexture;
-	wgpu::RenderPassEncoder currentRenderPassEncoder;
-	wgpu::CommandEncoder currentCommandEncoder;
-	wgpu::TextureView currentView;
 };
 } // namespace CitronGraphics

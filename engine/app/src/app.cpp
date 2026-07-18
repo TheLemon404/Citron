@@ -1,11 +1,12 @@
 #include "app.hpp"
+#include "device.hpp"
 #include <concepts>
 #include <core.hpp>
 #include <ecs.hpp>
 #include <event.hpp>
-#include <graphics.hpp>
 #include <input.hpp>
 #include <logger.hpp>
+#include <renderer.hpp>
 #include <x86gprintrin.h>
 
 using namespace CitronCore;
@@ -17,7 +18,7 @@ App *App::instance = nullptr;
 
 App::App()
 	: window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)),
-	  graphicsContext(window) {
+	  renderer(window) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 }
@@ -32,7 +33,7 @@ void App::init() {
 	window.init();
 	window.open();
 
-	graphicsContext.init();
+	renderer.init();
 
 	pushLayer<InputLayer>();
 	pushLayer<SceneLayer>();
@@ -48,11 +49,19 @@ void App::update() {
 			layer->onUpdate();
 		}
 
-		if (graphicsContext.constructRenderContext()) {
-			for (auto &layer : layerStack) {
-				layer->onRender();
-			}
-			graphicsContext.submitRenderData();
+		if (renderer.frameReady()) {
+			Frame frame = renderer.beginFrame();
+			RenderPass colorPass =
+				frame.beginRenderPass(frame.getSurfaceTexture());
+			colorPass.end();
+
+			RenderPass uiPass =
+				frame.beginRenderPass(frame.getSurfaceTexture());
+			if (renderer.onGuiDrawCallback)
+				renderer.onGuiDrawCallback(colorPass.getTargetView(), uiPass);
+			uiPass.end();
+
+			renderer.endFrame(frame);
 		}
 
 		window.swapBuffers();
@@ -60,7 +69,7 @@ void App::update() {
 }
 
 void App::close() {
-	graphicsContext.end();
+	renderer.end();
 	running = false;
 	window.close();
 }
@@ -76,7 +85,7 @@ void App::onEvent(Event &e) {
 			break;
 	}
 
-	graphicsContext.onEvent(e);
+	renderer.onEvent(e);
 }
 
 bool App::onWindowClose(Event &e) {

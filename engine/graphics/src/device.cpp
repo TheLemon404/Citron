@@ -23,7 +23,7 @@ void Device::aquirePlatformResources() {
 	adapterOptions.nextInChain = nullptr;
 	adapterOptions.compatibleSurface =
 		SDL_GetWGPUSurface(instance, (SDL_Window *)window.getSDLWindow());
-	wgpu::Adapter adapter = instance.requestAdapter(adapterOptions);
+	adapter = instance.requestAdapter(adapterOptions);
 	CITRON_CORE_ASSERT(adapter, "Failed to obtained WGPU adapter");
 	CITRON_CORE_INFO("WGPU adapter obtained");
 
@@ -151,7 +151,10 @@ void Device::releasePlatformResources() {
 		instance.release();
 }
 
-bool Device::constructRenderPass() {
+bool Device::prepareCurrentSurfaceTexture() {
+	if (currentSurfaceTexture.texture)
+		((wgpu::Texture)currentSurfaceTexture.texture).release();
+
 	if (getLastSurfaceWidth() != window.getWidth() ||
 		getLastSurfaceHeight() != window.getHeight()) {
 		CITRON_CORE_WARN("Current WGPU surface size is different from window "
@@ -190,61 +193,15 @@ bool Device::constructRenderPass() {
 		return false;
 	}
 
-	wgpu::TextureViewDescriptor viewDescriptor = {};
-	viewDescriptor.nextInChain = nullptr;
-	viewDescriptor.dimension = wgpu::TextureViewDimension::_2D;
-	viewDescriptor.format =
-		((wgpu::Texture)currentSurfaceTexture.texture).getFormat();
-	viewDescriptor.usage = wgpu::TextureUsage::RenderAttachment;
-	viewDescriptor.baseMipLevel = 0;
-	viewDescriptor.mipLevelCount = 1;
-	viewDescriptor.baseArrayLayer = 0;
-	viewDescriptor.arrayLayerCount = 1;
-	viewDescriptor.aspect = WGPUTextureAspect_All;
-	currentView = ((wgpu::Texture)currentSurfaceTexture.texture)
-					  .createView(viewDescriptor);
-
-	currentCommandEncoder = device.createCommandEncoder();
-
-	wgpu::RenderPassColorAttachment colorAttachment = {};
-	colorAttachment.nextInChain = nullptr;
-	colorAttachment.view = currentView;
-	colorAttachment.resolveTarget = nullptr;
-	colorAttachment.loadOp = wgpu::LoadOp::Clear;
-	colorAttachment.storeOp = wgpu::StoreOp::Store;
-	colorAttachment.clearValue = {1.0, 1.0, 1.0, 1.0};
-
-	wgpu::RenderPassDescriptor renderPassDescriptor = {};
-	renderPassDescriptor.nextInChain = nullptr;
-	renderPassDescriptor.colorAttachmentCount = 1;
-	renderPassDescriptor.colorAttachments = &colorAttachment;
-	currentRenderPassEncoder =
-		currentCommandEncoder.beginRenderPass(renderPassDescriptor);
-
-	return true;
+	return currentSurfaceTexture.status ==
+		   wgpu::SurfaceGetCurrentTextureStatus::SuccessOptimal;
 }
 
-void Device::submitCommandBuffers() {
-	currentRenderPassEncoder.end();
-	currentRenderPassEncoder.release();
-	wgpu::CommandBuffer commandBuffer = currentCommandEncoder.finish();
-	currentCommandEncoder.release();
+void Device::presentCurrentSurfaceTexture() { surface.present(); }
 
-	queue.submit(commandBuffer);
+const int Device::getLastSurfaceWidth() { return m_lastSurfaceWidth; }
 
-	commandBuffer.release();
-
-	currentView.release();
-
-	surface.present();
-
-	if (currentSurfaceTexture.texture)
-		((wgpu::Texture)currentSurfaceTexture.texture).release();
-}
-
-const int Device::getLastSurfaceWidth() const { return m_lastSurfaceWidth; }
-
-const int Device::getLastSurfaceHeight() const { return m_lastSurfaceHeight; }
+const int Device::getLastSurfaceHeight() { return m_lastSurfaceHeight; }
 
 void Device::resizeSurface(int width, int height) {
 	wgpu::SurfaceConfiguration surfaceConfiguration = {};

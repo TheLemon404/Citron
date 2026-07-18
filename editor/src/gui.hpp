@@ -1,6 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <layer.hpp>
+#include <renderer.hpp>
+#include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
 
@@ -10,6 +13,7 @@ class GuiLayer : public Layer {
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
-	void onRender() override;
+	void drawGui(wgpu::TextureView &sceneView,
+				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;
 };

@@ -1,12 +1,10 @@
 #pragma once
 
-#include "graphics.hpp"
 #include <event.hpp>
 #include <layer.hpp>
 #include <layer_stack.hpp>
+#include <renderer.hpp>
 #include <window.hpp>
-
-#include <sstream>
 
 using namespace CitronGraphics;
 
@@ -63,10 +61,10 @@ class App {
 
 	const LayerStack &getLayerStack() { return layerStack; }
 	const Window &getWindow() { return window; }
-	const GraphicsContext &getGraphicsContext() { return graphicsContext; }
+	Renderer &getRenderer() { return renderer; }
 
   private:
-	GraphicsContext graphicsContext;
+	Renderer renderer;
 	bool onWindowClose(Event &e);
 
 	bool running = true;

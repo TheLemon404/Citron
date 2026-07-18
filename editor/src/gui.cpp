@@ -4,8 +4,12 @@
 #include "backends/imgui_impl_wgpu.h"
 #include "device.hpp"
 #include "editor.hpp"
-#include "graphics.hpp"
+#include "event.hpp"
+#include "renderer.hpp"
+#include "window.hpp"
+#include <cstdint>
 #include <imgui.h>
+#include <webgpu/webgpu.hpp>
 
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
@@ -20,13 +24,15 @@ void GuiLayer::onAttach() {
 		(SDL_Window *)editorApp.getWindow().getSDLWindow());
 	ImGui_ImplWGPU_InitInfo initInfo = {};
 	initInfo.Device =
-		(WGPUDevice)editorApp.getGraphicsContext().getDevice().getWGPUDevice();
+		(WGPUDevice)editorApp.getRenderer().getDevice().getWGPUDevice();
 	initInfo.NumFramesInFlight = 2;
-	initInfo.RenderTargetFormat =
-		(WGPUTextureFormat)editorApp.getGraphicsContext()
-			.getDevice()
-			.getWGPUPreferredSurfaceFormat();
+	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getRenderer()
+									  .getDevice()
+									  .getWGPUPreferredSurfaceFormat();
 	ImGui_ImplWGPU_Init(&initInfo);
+
+	Editor::get().getRenderer().onGuiDrawCallback = std::bind(
+		&GuiLayer::drawGui, this, std::placeholders::_1, std::placeholders::_2);
 }
 
 void GuiLayer::onDetach() {
@@ -37,20 +43,29 @@ void GuiLayer::onDetach() {
 
 void GuiLayer::onUpdate() {}
 
-void GuiLayer::onRender() {
+void GuiLayer::drawGui(wgpu::TextureView &sceneView,
+					   CitronGraphics::RenderPass &currentRenderPass) {
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow();
+	ImGui::DockSpaceOverViewport();
+
+	ImGui::Begin("Viewport");
+	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+	ImGui::End();
+	ImGui::Begin("Scene");
+	ImGui::End();
+	ImGui::Begin("Inspector");
+	ImGui::End();
+	ImGui::Begin("Assets");
+	ImGui::End();
+
 	ImGui::EndFrame();
 	ImGui::Render();
 
 	ImGui_ImplWGPU_RenderDrawData(ImGui::GetDrawData(),
-								  Editor::get()
-									  .getGraphicsContext()
-									  .getDevice()
-									  .getWGPURenderPassEncoder());
+								  currentRenderPass.getRenderPassEncoder());
 }
 
 void GuiLayer::onEvent(Event &e) {

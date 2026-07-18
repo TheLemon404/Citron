@@ -4,6 +4,7 @@
 #include <layer.hpp>
 #include <layer_stack.hpp>
 #include <renderer.hpp>
+#include <webgpu/webgpu.hpp>
 #include <window.hpp>
 
 using namespace CitronGraphics;
@@ -70,6 +71,8 @@ class App {
 	bool running = true;
 	LayerStack layerStack;
 	static App *instance;
+	wgpu::Texture colorTarget;
+	wgpu::TextureView colorTargetView;
 
 	Window window;
 };

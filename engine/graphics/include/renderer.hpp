@@ -15,7 +15,7 @@ class Frame;
 
 class RenderPass {
   public:
-	RenderPass(wgpu::Device &device, wgpu::SurfaceTexture &surfaceTexture,
+	RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
 			   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame);
 	~RenderPass();
 	RenderPass(const RenderPass &) = delete;
@@ -36,7 +36,7 @@ class RenderPass {
 
   private:
 	Frame &parentFrame;
-	wgpu::SurfaceTexture &targetTexture;
+	wgpu::Texture &targetTexture;
 	wgpu::CommandEncoder &commandEncoder;
 	wgpu::TextureView targetView;
 	wgpu::RenderPassEncoder renderPassEncoder;
@@ -49,7 +49,7 @@ class Frame {
 		  wgpu::SurfaceTexture &surfaceTexture)
 		: device(device), encoder(encoder), surfaceTexture(surfaceTexture) {}
 
-	RenderPass beginRenderPass(wgpu::SurfaceTexture &tartetTexture);
+	RenderPass beginRenderPass(wgpu::Texture &tartetTexture);
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 	wgpu::SurfaceTexture &getSurfaceTexture() { return surfaceTexture; }

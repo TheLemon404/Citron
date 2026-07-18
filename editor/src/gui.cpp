@@ -9,6 +9,7 @@
 #include "window.hpp"
 #include <cstdint>
 #include <imgui.h>
+#include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
 void GuiLayer::onAttach() {
@@ -53,6 +54,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 
 	ImGui::Begin("Viewport");
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+	WGPUTextureView view = sceneView;
+	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
 	ImGui::End();
 	ImGui::Begin("Scene");
 	ImGui::End();

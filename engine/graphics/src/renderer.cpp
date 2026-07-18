@@ -6,13 +6,12 @@
 
 using namespace CitronGraphics;
 
-RenderPass::RenderPass(wgpu::Device &device,
-					   wgpu::SurfaceTexture &targetTexture,
+RenderPass::RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
 					   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame)
 	: device(device), commandEncoder(commandEncoder),
 	  targetTexture(targetTexture), parentFrame(parentFrame) {
 
-	targetView = ((wgpu::Texture)targetTexture.texture).createView();
+	targetView = targetTexture.createView();
 
 	wgpu::RenderPassColorAttachment colorAttachment = {};
 	colorAttachment.nextInChain = nullptr;
@@ -20,14 +19,12 @@ RenderPass::RenderPass(wgpu::Device &device,
 	colorAttachment.resolveTarget = nullptr;
 	colorAttachment.loadOp = wgpu::LoadOp::Clear;
 	colorAttachment.storeOp = wgpu::StoreOp::Store;
-	colorAttachment.clearValue = {1.0, 1.0, 1.0, 1.0};
+	colorAttachment.clearValue = {1.0, 0.0, 1.0, 1.0};
 
 	wgpu::RenderPassDescriptor renderPassDescriptor = {};
 	renderPassDescriptor.nextInChain = nullptr;
 	renderPassDescriptor.colorAttachmentCount = 1;
 	renderPassDescriptor.colorAttachments = &colorAttachment;
-
-	auto texture = (wgpu::Texture)targetTexture.texture;
 
 	renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 }
@@ -39,7 +36,7 @@ void RenderPass::end() {
 	renderPassEncoder.release();
 }
 
-RenderPass Frame::beginRenderPass(wgpu::SurfaceTexture &targetTexture) {
+RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
 	return RenderPass(device, targetTexture, encoder, *this);
 }
 

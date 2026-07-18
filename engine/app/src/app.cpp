@@ -7,6 +7,7 @@
 #include <input.hpp>
 #include <logger.hpp>
 #include <renderer.hpp>
+#include <webgpu/webgpu.hpp>
 #include <x86gprintrin.h>
 
 using namespace CitronCore;
@@ -39,6 +40,23 @@ void App::init() {
 	pushLayer<SceneLayer>();
 
 	onPushClientLayers();
+
+	wgpu::TextureDescriptor colorTargetDesc = {};
+	colorTargetDesc.label = wgpu::StringView("colorTarget");
+	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;
+	colorTargetDesc.size.width = window.getWidth();
+	colorTargetDesc.size.height = window.getHeight();
+	colorTargetDesc.size.depthOrArrayLayers = 1;
+	colorTargetDesc.mipLevelCount = 1;
+	colorTargetDesc.sampleCount = 1;
+	colorTargetDesc.format =
+		renderer.getDevice().getWGPUPreferredSurfaceFormat();
+	colorTargetDesc.usage = wgpu::TextureUsage::RenderAttachment |
+							wgpu::TextureUsage::TextureBinding;
+	colorTarget =
+		renderer.getDevice().getWGPUDevice().createTexture(colorTargetDesc);
+
+	colorTargetView = colorTarget.createView();
 }
 
 void App::update() {
@@ -51,14 +69,14 @@ void App::update() {
 
 		if (renderer.frameReady()) {
 			Frame frame = renderer.beginFrame();
-			RenderPass colorPass =
-				frame.beginRenderPass(frame.getSurfaceTexture());
+
+			RenderPass colorPass = frame.beginRenderPass(colorTarget);
 			colorPass.end();
 
-			RenderPass uiPass =
-				frame.beginRenderPass(frame.getSurfaceTexture());
+			wgpu::Texture swapchainTarget = frame.getSurfaceTexture().texture;
+			RenderPass uiPass = frame.beginRenderPass(swapchainTarget);
 			if (renderer.onGuiDrawCallback)
-				renderer.onGuiDrawCallback(colorPass.getTargetView(), uiPass);
+				renderer.onGuiDrawCallback(colorTargetView, uiPass);
 			uiPass.end();
 
 			renderer.endFrame(frame);

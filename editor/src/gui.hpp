@@ -16,4 +16,7 @@ class GuiLayer : public Layer {
 	void drawGui(wgpu::TextureView &sceneView,
 				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;
+
+  private:
+	void applyTheme();
 };

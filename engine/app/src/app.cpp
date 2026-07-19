@@ -18,7 +18,7 @@ using namespace CitronGraphics;
 App *App::instance = nullptr;
 
 App::App()
-	: window("Citron Editor", 800, 600, CITRON_BIND_EVENT_FN(App::onEvent)),
+	: window("Citron Editor", 1280, 720, CITRON_BIND_EVENT_FN(App::onEvent)),
 	  renderer(window) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core.hpp>
 #include <memory>
 #include <shader.hpp>
 

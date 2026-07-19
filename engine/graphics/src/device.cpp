@@ -2,6 +2,7 @@
 #include "mesh.hpp"
 #include <cstddef>
 #include <webgpu.h>
+
 #define WEBGPU_CPP_IMPLEMENTATION
 
 #include "device.hpp"
@@ -219,4 +220,23 @@ void Device::resizeSurface(int width, int height) {
 
 	m_lastSurfaceWidth = width;
 	m_lastSurfaceHeight = height;
+}
+
+wgpu::Texture Device::createTexture() {
+	wgpu::TextureDescriptor colorTargetDesc = {};
+	colorTargetDesc.label = wgpu::StringView("colorTarget");
+	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;
+	colorTargetDesc.size.width = window.getWidth();
+	colorTargetDesc.size.height = window.getHeight();
+	colorTargetDesc.size.depthOrArrayLayers = 1;
+	colorTargetDesc.mipLevelCount = 1;
+	colorTargetDesc.sampleCount = 1;
+	colorTargetDesc.format = preferredSurfaceFormat;
+	colorTargetDesc.usage = wgpu::TextureUsage::RenderAttachment |
+							wgpu::TextureUsage::TextureBinding;
+	return device.createTexture(colorTargetDesc);
+}
+
+wgpu::TextureView Device::createTextureView(wgpu::Texture &texture) {
+	return texture.createView();
 }

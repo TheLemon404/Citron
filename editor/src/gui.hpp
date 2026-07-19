@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include "panel.hpp"
 #include <layer.hpp>
 #include <renderer.hpp>
 #include <webgpu/webgpu.hpp>
@@ -9,7 +9,7 @@ using namespace CitronCore;
 
 class GuiLayer : public Layer {
   public:
-	GuiLayer() : Layer("GuiLayer") {};
+	GuiLayer() : Layer("GuiLayer"), consolePanel() {};
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
@@ -18,5 +18,6 @@ class GuiLayer : public Layer {
 	void onEvent(Event &e) override;
 
   private:
+	ConsolePanel consolePanel;
 	void applyTheme();
 };

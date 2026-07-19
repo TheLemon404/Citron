@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assets.hpp>
+#include <core.hpp>
 
 using namespace CitronAssets;
 

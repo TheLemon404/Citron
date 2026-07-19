@@ -43,15 +43,19 @@ void GuiLayer::onAttach() {
 		&GuiLayer::drawGui, this, std::placeholders::_1, std::placeholders::_2);
 
 	applyTheme();
+
+	consolePanel.onAttach();
 }
 
 void GuiLayer::onDetach() {
 	ImGui_ImplSDL3_Shutdown();
 	ImGui_ImplWGPU_Shutdown();
 	ImGui::DestroyContext();
+
+	consolePanel.onDetach();
 }
 
-void GuiLayer::onUpdate() {}
+void GuiLayer::onUpdate() { consolePanel.onUpdate(); }
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					   CitronGraphics::RenderPass &currentRenderPass) {
@@ -61,9 +65,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 
 	ImGui::DockSpaceOverViewport();
 
-	ImGui::ShowDemoWindow();
-
-	ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoTitleBar);
+	ImGui::Begin("Viewport");
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	WGPUTextureView view = sceneView;
 	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
@@ -74,6 +76,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui::End();
 	ImGui::Begin("Assets");
 	ImGui::End();
+
+	consolePanel.onDraw();
 
 	ImGui::EndFrame();
 	ImGui::Render();
@@ -90,8 +94,10 @@ void GuiLayer::onEvent(Event &e) {
 void GuiLayer::applyTheme() {
 	ImGuiStyle &style = ImGui::GetStyle();
 
-	style.TabBarBorderSize = 0.0f;
-	style.TabRounding = 0.0f;
+	style.WindowMenuButtonPosition = ImGuiDir_None;
+
+	style.TabBarBorderSize = 1.0f;
+	style.TabRounding = 1.0f;
 	style.TabBarOverlineSize = 0.0f;
 	style.WindowBorderSize = 0.0f;
 	style.WindowPadding = ImVec2(3.0, 3.0);
@@ -102,12 +108,13 @@ void GuiLayer::applyTheme() {
 	style.ScrollbarRounding = 12.0f;
 	style.ScrollbarPadding = 3.0f;
 	style.DockingSeparatorSize = 1.0f;
+	style.FontSizeBase = 16.0f;
 
 	style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	style.Colors[ImGuiCol_TextDisabled] =
 		ImVec4(0.49803922f, 0.49803922f, 0.49803922f, 1.0f);
 	style.Colors[ImGuiCol_WindowBg] =
-		ImVec4(0.05882353f, 0.05882353f, 0.05882353f, 1.0f);
+		ImVec4(0.060085833f, 0.06008523f, 0.06008523f, 1.0f);
 	style.Colors[ImGuiCol_ChildBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 	style.Colors[ImGuiCol_PopupBg] =
 		ImVec4(0.078431375f, 0.078431375f, 0.078431375f, 0.94f);
@@ -115,7 +122,7 @@ void GuiLayer::applyTheme() {
 		ImVec4(0.42745098f, 0.42745098f, 0.49803922f, 0.5f);
 	style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 	style.Colors[ImGuiCol_FrameBg] =
-		ImVec4(0.167382f, 0.16738033f, 0.16738033f, 1.0f);
+		ImVec4(0.20171672f, 0.2017147f, 0.2017147f, 1.0f);
 	style.Colors[ImGuiCol_FrameBgHovered] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
 	style.Colors[ImGuiCol_FrameBgActive] =
@@ -123,7 +130,7 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_TitleBg] =
 		ImVec4(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
 	style.Colors[ImGuiCol_TitleBgActive] =
-		ImVec4(0.25490198f, 0.25490198f, 0.25490198f, 1.0f);
+		ImVec4(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
 	style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.0f, 0.0f, 0.0f, 0.51f);
 	style.Colors[ImGuiCol_MenuBarBg] =
 		ImVec4(0.13725491f, 0.13725491f, 0.13725491f, 1.0f);

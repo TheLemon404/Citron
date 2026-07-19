@@ -3,6 +3,8 @@
 #include <input.hpp>
 #include <window.hpp>
 
+#include <core.hpp>
+
 using namespace CitronCore;
 using namespace CitronInput;
 

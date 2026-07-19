@@ -41,6 +41,9 @@ class Device {
 
 	void resizeSurface(int width, int height);
 
+	wgpu::Texture createTexture();
+	wgpu::TextureView createTextureView(wgpu::Texture &texture);
+
   private:
 	int m_lastSurfaceWidth = 0;
 	int m_lastSurfaceHeight = 0;

@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include <layer.hpp>
+#include <logger.hpp>
 #include <window.hpp>
 
 class EditorLayer : public CitronCore::Layer {

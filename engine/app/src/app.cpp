@@ -1,6 +1,5 @@
 #include "app.hpp"
 #include "device.hpp"
-#include <concepts>
 #include <core.hpp>
 #include <ecs.hpp>
 #include <event.hpp>
@@ -28,6 +27,9 @@ App::~App() {}
 
 void App::init() {
 	Logger::init();
+
+	initLogSink();
+
 	CITRON_CORE_INFO("Core logger initialized");
 	CITRON_CLIENT_INFO("Client logger initialized");
 
@@ -41,22 +43,8 @@ void App::init() {
 
 	onPushClientLayers();
 
-	wgpu::TextureDescriptor colorTargetDesc = {};
-	colorTargetDesc.label = wgpu::StringView("colorTarget");
-	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;
-	colorTargetDesc.size.width = window.getWidth();
-	colorTargetDesc.size.height = window.getHeight();
-	colorTargetDesc.size.depthOrArrayLayers = 1;
-	colorTargetDesc.mipLevelCount = 1;
-	colorTargetDesc.sampleCount = 1;
-	colorTargetDesc.format =
-		renderer.getDevice().getWGPUPreferredSurfaceFormat();
-	colorTargetDesc.usage = wgpu::TextureUsage::RenderAttachment |
-							wgpu::TextureUsage::TextureBinding;
-	colorTarget =
-		renderer.getDevice().getWGPUDevice().createTexture(colorTargetDesc);
-
-	colorTargetView = colorTarget.createView();
+	colorTarget = renderer.getDevice().createTexture();
+	colorTargetView = renderer.getDevice().createTextureView(colorTarget);
 }
 
 void App::update() {

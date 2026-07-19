@@ -48,9 +48,6 @@ class LayerStack {
 	std::vector<std::unique_ptr<Layer>>::iterator end() { return layers.end(); }
 
   private:
-	class key {
-		std::type_index type;
-	};
 	std::unordered_map<std::type_index, size_t> layerMap;
 	std::vector<std::unique_ptr<Layer>> layers;
 };

@@ -58,6 +58,16 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui::NewFrame();
 
 	ImGui::DockSpaceOverViewport();
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("File")) {
+			ImGui::MenuItem("Save");
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit")) {
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
 
 	ImGui::Begin("Viewport");
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();

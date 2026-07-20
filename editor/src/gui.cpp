@@ -77,9 +77,6 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 			}
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit")) {
-			ImGui::EndMenu();
-		}
 		ImGui::EndMainMenuBar();
 	}
 

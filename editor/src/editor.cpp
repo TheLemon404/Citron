@@ -4,22 +4,31 @@
 #include "gui.hpp"
 #include "keyboard.hpp"
 #include "yaml-cpp/node/node.h"
+#include "yaml-cpp/node/parse.h"
 #include <input.hpp>
 #include <io.hpp>
 #include <yaml-cpp/yaml.h>
 
-EditorContext::EditorContext(std::string projectFilePath)
-	: projectFilePath(projectFilePath) {}
+EditorLayer::EditorLayer() : CitronCore::Layer("EditorLayer") {
+	YAML::Node configNode =
+		YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml");
+	if (!configNode["last_project"].IsNull()) {
+		CITRON_CORE_WARN(
+			"No last opened project found... creating new project...");
+		editorContext.projectFilePath =
+			configNode["last_project"].as<std::string>();
+		try {
+			YAML::LoadFile(editorContext.projectFilePath);
+		} catch (...) {
+			CITRON_CORE_ERROR(
+				"Failed to load last project. Creating new project...");
+			createProject();
+		}
 
-EditorLayer::EditorLayer()
-	: CitronCore::Layer("EditorLayer"),
-	  editorContext(YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) +
-								   "/citron.yaml")["last_project"]
-							.IsNull()
-						? std::string()
-						: YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) +
-										 "/citron.yaml")["last_project"]
-							  .as<std::string>()) {
+	} else {
+		createProject();
+	}
+
 	if (editorContext.projectFilePath.empty()) {
 		openProject(CitronIO::IO::openFileDialog("Project", "ctrnproject"));
 	} else {

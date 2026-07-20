@@ -3,6 +3,8 @@
 
 using namespace CitronECS;
 
+void Scene::load(const std::string &assetSource) {}
+
 void Scene::init() {
 	for (auto &system : systems) {
 		system->init(*this);

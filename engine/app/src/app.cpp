@@ -6,7 +6,6 @@
 #include <ecs.hpp>
 #include <event.hpp>
 #include <input.hpp>
-#include <iomanip>
 #include <logger.hpp>
 #include <renderer.hpp>
 #include <string>
@@ -48,7 +47,7 @@ void AppLogSink::sink_it_(const spdlog::details::log_msg &msg) {
 		type = "Off";
 		break;
 	}
-	LogEntry e = {std::string(message), time, type};
+	LogEntry e = {std::string(message), time, type, msg.level};
 	entries.push_back(e);
 	if (entries.size() > 64)
 		entries.erase(entries.begin());

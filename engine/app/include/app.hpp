@@ -1,5 +1,6 @@
 #pragma once
 
+#include "spdlog/common.h"
 #include <event.hpp>
 #include <layer.hpp>
 #include <layer_stack.hpp>
@@ -36,19 +37,11 @@ class AppUpdateEvent : public AppEvent {
 	EVENT_CLASS_TYPE(AppUpdate)
 };
 
-enum class LogType {
-	Trace,
-	Debug,
-	Info,
-	Warn,
-	Error,
-	Critical,
-};
-
 struct LogEntry {
 	std::string message;
 	uint32_t timestamp;
 	std::string type;
+	spdlog::level::level_enum logLevel;
 };
 
 class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {

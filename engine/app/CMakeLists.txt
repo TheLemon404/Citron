@@ -9,6 +9,7 @@ target_compile_features(citron_app PUBLIC cxx_std_26)
 
 target_link_libraries(citron_app
 PUBLIC
+citron_assets
 citron_core
 citron_input
 citron_ecs

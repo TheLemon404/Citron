@@ -7,7 +7,7 @@ target_sources(citron_editor PRIVATE ${src})
 target_link_libraries(citron_editor
 PRIVATE
 citron_app
-#citron_assets
+citron_assets
 #citron_audio
 citron_core
 citron_ecs
@@ -29,6 +29,7 @@ function(target_copy_shared_library target library)
 endfunction()
 
 target_copy_shared_library(citron_editor citron_app)
+target_copy_shared_library(citron_editor citron_assets)
 target_copy_shared_library(citron_editor citron_graphics)
 target_copy_shared_library(citron_editor citron_core)
 target_copy_shared_library(citron_editor citron_ecs)

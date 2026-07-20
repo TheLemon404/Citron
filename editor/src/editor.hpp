@@ -1,7 +1,16 @@
 #include "app.hpp"
+#include <ecs.hpp>
 #include <layer.hpp>
 #include <logger.hpp>
 #include <window.hpp>
+
+using namespace CitronECS;
+
+class EditorContext {
+  public:
+  private:
+	std::shared_ptr<Scene> currentScene = nullptr;
+};
 
 class EditorLayer : public CitronCore::Layer {
   public:

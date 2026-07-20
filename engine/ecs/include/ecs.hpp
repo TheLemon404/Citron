@@ -1,10 +1,12 @@
 #pragma once
 
 #include "entt/entity/fwd.hpp"
+#include <assets.hpp>
 #include <entt/entt.hpp>
 #include <layer.hpp>
 #include <memory>
 
+using namespace CitronAssets;
 using namespace CitronCore;
 
 namespace CitronECS {
@@ -20,8 +22,10 @@ class System {
 	virtual void end(Scene &registry) {};
 };
 
-class Scene {
+class Scene : public ILoadable<Scene> {
   public:
+	virtual void load(const std::string &assetSource) override;
+
 	void init();
 	void start();
 	void update();

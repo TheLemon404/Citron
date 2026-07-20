@@ -20,7 +20,9 @@ void GuiLayer::onAttach() {
 	io.ConfigInputTrickleEventQueue = false;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.Fonts->AddFontFromFileTTF(CITRON_INIT_FONT);
+	const std::string citronFont = std::string(CITRON_PROGRAM_FOLDER) +
+								   "/EngineResources/JetBrainsMono-Regular.ttf";
+	io.Fonts->AddFontFromFileTTF(citronFont.c_str());
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
 		(SDL_Window *)editorApp.getWindow().getSDLWindow());

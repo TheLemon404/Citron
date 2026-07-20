@@ -8,17 +8,17 @@
 #include <io.hpp>
 #include <yaml-cpp/yaml.h>
 
-constexpr const char *CITRON_INIT_FILE =
-	"C:/Users/vghy7/OneDrive/Desktop/Citron/citron.yaml";
-
 EditorContext::EditorContext(std::string projectFilePath)
 	: projectFilePath(projectFilePath) {}
 
 EditorLayer::EditorLayer()
 	: CitronCore::Layer("EditorLayer"),
-	  editorContext(YAML::LoadFile(CITRON_INIT_FILE)["last_project"].IsNull()
+	  editorContext(YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) +
+								   "/citron.yaml")["last_project"]
+							.IsNull()
 						? std::string()
-						: YAML::LoadFile(CITRON_INIT_FILE)["last_project"]
+						: YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) +
+										 "/citron.yaml")["last_project"]
 							  .as<std::string>()) {
 	if (editorContext.projectFilePath.empty()) {
 		openProject(CitronIO::IO::openFileDialog("Project", "ctrnproject"));
@@ -69,7 +69,7 @@ void EditorLayer::openProject(std::string projectFilePath) {
 	std::string editorTitle =
 		std::string("Citron Editor: ") + editorContext.projectName;
 	Editor::get().getWindow().setName(editorTitle);
-	CitronIO::IO::writeFile(CITRON_INIT_FILE,
+	CitronIO::IO::writeFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
 							"last_project: " + projectFilePath);
 	CITRON_CLIENT_INFO("Opened project: {}", projectFilePath);
 }

@@ -9,11 +9,7 @@
 using namespace CitronECS;
 using namespace CitronCore;
 
-constexpr const char *CITRON_INIT_FOLDER =
-	"C:/Users/vghy7/OneDrive/Desktop/Citron/";
-constexpr const char *CITRON_INIT_FONT =
-	"C:/Users/vghy7/OneDrive/Desktop/Citron/EngineResources/"
-	"JetBrainsMono-Regular.ttf";
+constexpr const char *CITRON_PROGRAM_FOLDER = "C:/Program Files/Citron";
 
 class EditorContext {
   public:

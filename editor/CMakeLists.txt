@@ -14,6 +14,7 @@ citron_ecs
 citron_graphics
 citron_input
 imgui
+yaml-cpp::yaml-cpp
 citron_io
 #citron_networking
 #citron_physics

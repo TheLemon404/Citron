@@ -9,7 +9,7 @@ enum class AssetCategory { ENGINE, PROJECT };
 
 template <typename T> class ILoadable {
   public:
-	virtual void load(const std::string &assetSource) = 0;
+	virtual void load(const std::string &source) = 0;
 };
 
 template <typename T> class ISaveable {

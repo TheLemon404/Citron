@@ -84,8 +84,7 @@ std::string IO::openFileDialog(const std::string &filtername,
 	return result;
 }
 
-std::string IO::saveFileDialog(const std::string &fileName,
-							   const std::string &filtername,
+std::string IO::saveFileDialog(const std::string &filtername,
 							   const std::string &filters, const void *bytes,
 							   size_t size) {
 	std::string result = "";
@@ -97,7 +96,6 @@ std::string IO::saveFileDialog(const std::string &fileName,
 	nfdsavedialogu8args_t args = {0};
 	args.filterCount = 1;
 	args.filterList = filt;
-	args.title = fileName.c_str();
 	nfdresult_t openResult = NFD_SaveDialogU8_With(&outPath, &args);
 	if (openResult == NFD_OKAY) {
 		result = outPath;

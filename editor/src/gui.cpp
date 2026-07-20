@@ -9,6 +9,7 @@
 #include "window.hpp"
 #include <cstdint>
 #include <imgui.h>
+#include <io.hpp>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
@@ -19,8 +20,7 @@ void GuiLayer::onAttach() {
 	io.ConfigInputTrickleEventQueue = false;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.Fonts->AddFontFromFileTTF("C:/Users/vghy7/Downloads/JetBrainsMono-2.304/"
-								 "fonts/ttf/JetBrainsMono-Regular.ttf");
+	io.Fonts->AddFontFromFileTTF(CITRON_INIT_FONT);
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
 		(SDL_Window *)editorApp.getWindow().getSDLWindow());
@@ -60,7 +60,22 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui::DockSpaceOverViewport();
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
-			ImGui::MenuItem("Save");
+			if (ImGui::MenuItem("Create New Project")) {
+				std::string newProjectPath = CitronIO::IO::saveFileDialog(
+					"Project", "ctrnproject", nullptr, 0);
+				CitronIO::IO::createFile(newProjectPath);
+				Editor::get()
+					.getLayerStack()
+					.getLayer<EditorLayer>()
+					->openProject(newProjectPath);
+			}
+			if (ImGui::MenuItem("Open Project")) {
+				Editor::get()
+					.getLayerStack()
+					.getLayer<EditorLayer>()
+					->openProject(
+						CitronIO::IO::openFileDialog("Project", "ctrnproject"));
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit")) {

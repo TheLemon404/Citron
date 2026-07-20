@@ -9,12 +9,20 @@
 using namespace CitronECS;
 using namespace CitronCore;
 
+constexpr const char *CITRON_INIT_FOLDER =
+	"C:/Users/vghy7/OneDrive/Desktop/Citron/";
+constexpr const char *CITRON_INIT_FONT =
+	"C:/Users/vghy7/OneDrive/Desktop/Citron/EngineResources/"
+	"JetBrainsMono-Regular.ttf";
+
 class EditorContext {
   public:
-	std::string sceneSavePath = "";
+	EditorContext(std::string projectFilePath);
+	std::string sceneSaveAssetPath = "";
 
 	std::shared_ptr<Scene> &getCurrentScene() { return currentScene; }
 	void setCurrentScene(std::shared_ptr<Scene> scene) { currentScene = scene; }
+	std::string projectFilePath = "";
 
   private:
 	std::shared_ptr<Scene> currentScene = nullptr;
@@ -22,12 +30,13 @@ class EditorContext {
 
 class EditorLayer : public CitronCore::Layer {
   public:
-	EditorLayer() : CitronCore::Layer("EditorLayer") {}
+	EditorLayer();
 
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
 	void onEvent(CitronCore::Event &e) override;
+	void openProject(std::string projectFilePath);
 
   private:
 	EditorContext editorContext;

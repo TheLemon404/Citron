@@ -80,7 +80,7 @@ class App {
 	inline static App &get() { return *instance; }
 	inline bool isRunning() const { return running; }
 
-	const LayerStack &getLayerStack() { return layerStack; }
+	LayerStack &getLayerStack() { return layerStack; }
 	const Window &getWindow() { return window; }
 	Renderer &getRenderer() { return renderer; }
 

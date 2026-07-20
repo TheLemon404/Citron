@@ -15,8 +15,7 @@ class IO {
 
 	static std::string openFileDialog(const std::string &filtername,
 									  const std::string &filters);
-	static std::string saveFileDialog(const std::string &fileName,
-									  const std::string &filtername,
+	static std::string saveFileDialog(const std::string &filtername,
 									  const std::string &filters,
 									  const void *bytes, size_t size);
 };

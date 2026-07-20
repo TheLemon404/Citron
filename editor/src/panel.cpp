@@ -23,9 +23,9 @@ void ConsolePanel::onDraw() {
 	if (ImGui::BeginTable("LogTable", 3,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
 		ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed,
-								150.0f);
+								75.0f);
 		ImGui::TableSetupColumn("Timestamp", ImGuiTableColumnFlags_WidthFixed,
-								150.0f);
+								100.0f);
 		ImGui::TableSetupColumn("Message");
 		ImGui::TableSetupScrollFreeze(3, 1);
 		ImGui::TableHeadersRow();

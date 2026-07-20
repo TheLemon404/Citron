@@ -91,7 +91,7 @@ void GuiLayer::applyTheme() {
 	style.WindowMenuButtonPosition = ImGuiDir_None;
 
 	style.TabBarBorderSize = 1.0f;
-	style.TabRounding = 1.0f;
+	style.TabRounding = 3.0f;
 	style.TabBarOverlineSize = 0.0f;
 	style.WindowBorderSize = 0.0f;
 	style.WindowPadding = ImVec2(3.0, 3.0);

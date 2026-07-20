@@ -1,5 +1,6 @@
 #pragma once
 
+#include <app.hpp>
 #include <event.hpp>
 
 using namespace CitronCore;

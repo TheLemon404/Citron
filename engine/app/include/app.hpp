@@ -47,7 +47,8 @@ enum class LogType {
 
 struct LogEntry {
 	std::string message;
-	LogType type;
+	uint32_t timestamp;
+	std::string type;
 };
 
 class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
@@ -55,12 +56,7 @@ class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
 	std::vector<LogEntry> entries;
 
   private:
-	void sink_it_(const spdlog::details::log_msg &msg) override {
-		spdlog::memory_buf_t formatted;
-		base_sink<std::mutex>::formatter_->format(msg, formatted);
-		LogEntry e = {fmt::to_string(formatted), LogType::Info};
-		entries.push_back(e);
-	}
+	void sink_it_(const spdlog::details::log_msg &msg) override;
 	void flush_() override {}
 };
 

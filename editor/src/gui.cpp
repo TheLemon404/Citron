@@ -20,13 +20,7 @@ void GuiLayer::onAttach() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.Fonts->AddFontFromFileTTF("C:/Users/vghy7/Downloads/JetBrainsMono-2.304/"
-								 "fonts/ttf/JetBrainsMono-Bold.ttf");
-	io.Fonts->AddFontFromFileTTF("C:/Users/vghy7/Downloads/JetBrainsMono-2.304/"
 								 "fonts/ttf/JetBrainsMono-Regular.ttf");
-	io.Fonts->AddFontFromFileTTF("C:/Users/vghy7/Downloads/JetBrainsMono-2.304/"
-								 "fonts/ttf/JetBrainsMono-Medium.ttf");
-	io.Fonts->AddFontFromFileTTF("C:/Users/vghy7/Downloads/JetBrainsMono-2.304/"
-								 "fonts/ttf/JetBrainsMono-Light.ttf");
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
 		(SDL_Window *)editorApp.getWindow().getSDLWindow());
@@ -109,6 +103,7 @@ void GuiLayer::applyTheme() {
 	style.ScrollbarPadding = 3.0f;
 	style.DockingSeparatorSize = 1.0f;
 	style.FontSizeBase = 16.0f;
+	style.FrameRounding = 3.0f;
 
 	style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	style.Colors[ImGuiCol_TextDisabled] =
@@ -192,7 +187,7 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_TableBorderLight] =
 		ImVec4(0.22745098f, 0.22745098f, 0.24705882f, 1.0f);
 	style.Colors[ImGuiCol_TableRowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-	style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(1.0f, 1.0f, 1.0f, 0.06f);
+	style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(1.0f, 1.0f, 1.0f, 0.005f);
 	style.Colors[ImGuiCol_TextSelectedBg] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
 	style.Colors[ImGuiCol_DragDropTarget] = ImVec4(1.0f, 1.0f, 0.0f, 0.9f);

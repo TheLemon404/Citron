@@ -3,6 +3,7 @@
 #include "event.hpp"
 #include "gui.hpp"
 #include "keyboard.hpp"
+#include "yaml-cpp/node/node.h"
 #include <input.hpp>
 #include <io.hpp>
 #include <yaml-cpp/yaml.h>
@@ -46,8 +47,28 @@ void EditorLayer::onEvent(CitronCore::Event &e) {
 	}
 }
 
+void EditorLayer::createProject() {
+	CITRON_CLIENT_INFO("Creating project...");
+	std::string newProjectPath =
+		CitronIO::IO::saveFileDialog("Project", "ctrnproject", nullptr, 0);
+	if (!newProjectPath.empty()) {
+		CitronIO::IO::writeFile(
+			newProjectPath,
+			"name: '" +
+				newProjectPath.substr(newProjectPath.find_last_of("/") + 1) +
+				"'");
+		openProject(newProjectPath);
+	}
+}
+
 void EditorLayer::openProject(std::string projectFilePath) {
+	CITRON_CORE_ASSERT(!projectFilePath.empty(), "projectFilePath is empty");
 	editorContext.projectFilePath = projectFilePath;
+	YAML::Node node = YAML::LoadFile(projectFilePath);
+	editorContext.projectName = node["name"].as<std::string>();
+	std::string editorTitle =
+		std::string("Citron Editor: ") + editorContext.projectName;
+	Editor::get().getWindow().setName(editorTitle);
 	CitronIO::IO::writeFile(CITRON_INIT_FILE,
 							"last_project: " + projectFilePath);
 	CITRON_CLIENT_INFO("Opened project: {}", projectFilePath);

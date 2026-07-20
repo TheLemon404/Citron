@@ -94,6 +94,8 @@ class Window {
 		eventCallback = callback;
 	}
 
+	void setName(std::string &name);
+
 	bool init();
 	void open();
 	void pollEvents();

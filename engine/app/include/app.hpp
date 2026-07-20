@@ -81,7 +81,7 @@ class App {
 	inline bool isRunning() const { return running; }
 
 	LayerStack &getLayerStack() { return layerStack; }
-	const Window &getWindow() { return window; }
+	Window &getWindow() { return window; }
 	Renderer &getRenderer() { return renderer; }
 
 	void initLogSink() {

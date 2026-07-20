@@ -23,6 +23,7 @@ class EditorContext {
 	std::shared_ptr<Scene> &getCurrentScene() { return currentScene; }
 	void setCurrentScene(std::shared_ptr<Scene> scene) { currentScene = scene; }
 	std::string projectFilePath = "";
+	std::string projectName = "";
 
   private:
 	std::shared_ptr<Scene> currentScene = nullptr;
@@ -36,6 +37,7 @@ class EditorLayer : public CitronCore::Layer {
 	void onDetach() override;
 	void onUpdate() override;
 	void onEvent(CitronCore::Event &e) override;
+	void createProject();
 	void openProject(std::string projectFilePath);
 
   private:

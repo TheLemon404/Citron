@@ -61,13 +61,10 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 			if (ImGui::MenuItem("Create New Project")) {
-				std::string newProjectPath = CitronIO::IO::saveFileDialog(
-					"Project", "ctrnproject", nullptr, 0);
-				CitronIO::IO::createFile(newProjectPath);
 				Editor::get()
 					.getLayerStack()
 					.getLayer<EditorLayer>()
-					->openProject(newProjectPath);
+					->createProject();
 			}
 			if (ImGui::MenuItem("Open Project")) {
 				Editor::get()

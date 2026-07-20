@@ -21,6 +21,10 @@ Window::~Window() {
 	}
 }
 
+void Window::setName(std::string &name) {
+	SDL_SetWindowTitle(sdl_window, name.c_str());
+}
+
 bool Window::init() {
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		CITRON_CORE_CRITICAL("Error initializing SDL3");

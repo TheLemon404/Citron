@@ -12,7 +12,12 @@ class IO {
 	static bool fileExists(const std::string &path);
 	static void cloneFile(const std::string &srcPath,
 						  const std::string &dstPath);
-	static void overwriteFile(const std::string &path,
-							  const std::string &content);
+
+	static std::string openFileDialog(const std::string &filtername,
+									  const std::string &filters);
+	static std::string saveFileDialog(const std::string &fileName,
+									  const std::string &filtername,
+									  const std::string &filters,
+									  const void *bytes, size_t size);
 };
 } // namespace CitronIO

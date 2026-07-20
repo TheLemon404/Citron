@@ -83,11 +83,11 @@ void Window::pollEvents() {
 		case SDL_EVENT_KEY_DOWN: {
 			if (event.key.repeat == 0) {
 				KeyJustPressedEvent pressedEvent =
-					KeyJustPressedEvent(&event, event.key.key);
+					KeyJustPressedEvent(&event, event.key.key, event.key.mod);
 				eventCallback(pressedEvent);
 			} else {
-				KeyPressedEvent pressedEvent =
-					KeyPressedEvent(&event, event.key.key, event.key.repeat);
+				KeyPressedEvent pressedEvent = KeyPressedEvent(
+					&event, event.key.key, event.key.repeat, event.key.mod);
 				eventCallback(pressedEvent);
 			}
 			break;

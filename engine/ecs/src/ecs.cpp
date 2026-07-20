@@ -1,9 +1,21 @@
 #include "ecs.hpp"
+#include <io.hpp>
 #include <memory>
 
 using namespace CitronECS;
 
 void Scene::load(const std::string &assetSource) {}
+
+void Scene::save(const std::string &assetPath) {
+	if (!CitronIO::IO::fileExists(assetPath))
+		CitronIO::IO::createFile(assetPath);
+
+	CitronIO::IO::writeFile(assetPath, serialize());
+}
+
+std::string Scene::serialize() const { return "this is a test"; }
+
+void Scene::deserialize(const std::string &data, Scene &result) {}
 
 void Scene::init() {
 	for (auto &system : systems) {

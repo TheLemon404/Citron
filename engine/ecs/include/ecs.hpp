@@ -22,9 +22,18 @@ class System {
 	virtual void end(Scene &registry) {};
 };
 
-class Scene : public ILoadable<Scene> {
+class Scene : public ILoadable<Scene>,
+			  public ISaveable<Scene>,
+			  public ISerializable<Scene> {
   public:
+	Scene(std::string name) : name(name) {}
+
 	virtual void load(const std::string &assetSource) override;
+	virtual void save(const std::string &assetPath) override;
+	virtual std::string serialize() const override;
+	virtual void deserialize(const std::string &data, Scene &result) override;
+
+	const std::string &getName() { return name; }
 
 	void init();
 	void start();
@@ -34,6 +43,7 @@ class Scene : public ILoadable<Scene> {
 	void end();
 
   private:
+	std::string name;
 	std::vector<std::shared_ptr<System>> systems;
 	entt::registry registry;
 };

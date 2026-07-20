@@ -12,6 +12,17 @@ template <typename T> class ILoadable {
 	virtual void load(const std::string &assetSource) = 0;
 };
 
+template <typename T> class ISaveable {
+  public:
+	virtual void save(const std::string &assetPath) = 0;
+};
+
+template <typename T> class ISerializable {
+  public:
+	virtual std::string serialize() const = 0;
+	virtual void deserialize(const std::string &data, T &result) = 0;
+};
+
 class Assets {
   public:
 	template <typename T>

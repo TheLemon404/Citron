@@ -16,10 +16,12 @@ class KeyEvent : public Event {
 
 class KeyPressedEvent : public KeyEvent {
   public:
-	KeyPressedEvent(SDL_Event *e, int keycode, int repeatCount)
-		: KeyEvent(e, keycode), repeatCount(repeatCount) {}
+	KeyPressedEvent(SDL_Event *e, int keycode, int repeatCount, int mods)
+		: KeyEvent(e, keycode), repeatCount(repeatCount), mods(mods) {}
 
 	inline int getRepeatCount() const { return repeatCount; }
+
+	inline int getMods() const { return mods; }
 
 	std::string toString() const override {
 		std::stringstream ss;
@@ -31,12 +33,16 @@ class KeyPressedEvent : public KeyEvent {
 	EVENT_CLASS_TYPE(KeyPressed);
 
   private:
+	int mods;
 	int repeatCount;
 };
 
 class KeyJustPressedEvent : public KeyEvent {
   public:
-	KeyJustPressedEvent(SDL_Event *e, int keycode) : KeyEvent(e, keycode) {}
+	KeyJustPressedEvent(SDL_Event *e, int keycode, int mods)
+		: KeyEvent(e, keycode), mods(mods) {}
+
+	inline int getMods() const { return mods; }
 
 	std::string toString() const override {
 		std::stringstream ss;
@@ -45,6 +51,9 @@ class KeyJustPressedEvent : public KeyEvent {
 	}
 
 	EVENT_CLASS_TYPE(KeyJustPressed);
+
+  private:
+	int mods;
 };
 
 class KeyReleasedEvent : public KeyEvent {

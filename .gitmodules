@@ -22,3 +22,6 @@
 [submodule "vendor/imgui"]
 	path = vendor/imgui
 	url = https://github.com/TheLemon404/imgui.git
+[submodule "vendor/nativefiledialog"]
+	path = vendor/nativefiledialog
+	url = https://github.com/btzy/nativefiledialog-extended.git

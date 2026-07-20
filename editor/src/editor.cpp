@@ -12,11 +12,11 @@
 EditorLayer::EditorLayer() : CitronCore::Layer("EditorLayer") {
 	YAML::Node configNode =
 		YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml");
+
 	if (!configNode["last_project"].IsNull()) {
-		CITRON_CORE_WARN(
-			"No last opened project found... creating new project...");
 		editorContext.projectFilePath =
 			configNode["last_project"].as<std::string>();
+
 		try {
 			YAML::LoadFile(editorContext.projectFilePath);
 		} catch (...) {
@@ -24,8 +24,9 @@ EditorLayer::EditorLayer() : CitronCore::Layer("EditorLayer") {
 				"Failed to load last project. Creating new project...");
 			createProject();
 		}
-
 	} else {
+		CITRON_CORE_WARN(
+			"No last opened project found... creating new project...");
 		createProject();
 	}
 

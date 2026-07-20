@@ -41,7 +41,8 @@ void ConsolePanel::onDraw() {
 				color = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
 				break;
 			case spdlog::level::info:
-				color = ImVec4(0.2f, 0.2f, 1.0f, 1.0f);
+				color = ImVec4(0.27843137254f, 0.44705882352f, 0.70196078431f,
+							   1.0f);
 				break;
 			case spdlog::level::warn:
 				color = ImVec4(1.0f, 0.6f, 0.0f, 1.0f);

@@ -18,6 +18,7 @@ class GuiLayer : public Layer {
 	void onEvent(Event &e) override;
 
   private:
+	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;
 	void applyTheme();
 };

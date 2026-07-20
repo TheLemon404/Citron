@@ -41,6 +41,7 @@ void GuiLayer::onAttach() {
 
 	applyTheme();
 
+	outlinerPanel.onAttach();
 	consolePanel.onAttach();
 }
 
@@ -49,10 +50,14 @@ void GuiLayer::onDetach() {
 	ImGui_ImplWGPU_Shutdown();
 	ImGui::DestroyContext();
 
+	outlinerPanel.onDetach();
 	consolePanel.onDetach();
 }
 
-void GuiLayer::onUpdate() { consolePanel.onUpdate(); }
+void GuiLayer::onUpdate() {
+	outlinerPanel.onUpdate();
+	consolePanel.onUpdate();
+}
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					   CitronGraphics::RenderPass &currentRenderPass) {
@@ -87,14 +92,13 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	WGPUTextureView view = sceneView;
 	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
 	ImGui::End();
-	ImGui::Begin("Outliner");
-	ImGui::End();
 	ImGui::Begin("Inspector");
 	ImGui::End();
 
 	ImGui::Begin("Assets");
 	ImGui::End();
 
+	outlinerPanel.onDraw();
 	consolePanel.onDraw();
 
 	ImGui::EndFrame();
@@ -105,6 +109,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 }
 
 void GuiLayer::onEvent(Event &e) {
+	outlinerPanel.onEvent(e);
+	consolePanel.onEvent(e);
 	if (SDL_Event *sdlEvent = (SDL_Event *)e.getInternalEvent())
 		ImGui_ImplSDL3_ProcessEvent(sdlEvent);
 }

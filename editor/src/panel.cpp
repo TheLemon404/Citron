@@ -6,6 +6,7 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "misc/cpp/imgui_stdlib.h"
 #include "spdlog/common.h"
 
 using namespace CitronCore;
@@ -71,3 +72,15 @@ void ConsolePanel::onDraw() {
 	ImGui::End();
 }
 void ConsolePanel::onEvent(Event &e) {}
+
+void OutlinerPanel::onAttach() {}
+void OutlinerPanel::onDetach() {}
+void OutlinerPanel::onUpdate() {}
+void OutlinerPanel::onDraw() {
+	ImGui::Begin("Outliner");
+	char text[64];
+	ImGui::InputTextWithHint("Search", "Search by entity name", text, 64);
+
+	ImGui::End();
+}
+void OutlinerPanel::onEvent(Event &e) {}

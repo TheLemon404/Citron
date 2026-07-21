@@ -3,6 +3,7 @@
 #include "event.hpp"
 #include "gui.hpp"
 #include "keyboard.hpp"
+#include "logger.hpp"
 #include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/parse.h"
 #include <input.hpp>
@@ -16,24 +17,20 @@ EditorLayer::EditorLayer() : CitronCore::Layer("EditorLayer") {
 	if (!configNode["last_project"].IsNull()) {
 		editorContext.projectFilePath =
 			configNode["last_project"].as<std::string>();
-
-		try {
-			YAML::LoadFile(editorContext.projectFilePath);
-		} catch (...) {
-			CITRON_CORE_ERROR(
-				"Failed to load last project. Creating new project...");
-			createProject();
-		}
 	} else {
 		CITRON_CORE_WARN(
 			"No last opened project found... creating new project...");
-		createProject();
+		while (!createProject()) {
+		}
 	}
 
-	if (editorContext.projectFilePath.empty()) {
-		openProject(CitronIO::IO::openFileDialog("Project", "ctrnproject"));
-	} else {
+	try {
 		openProject(editorContext.projectFilePath);
+	} catch (...) {
+		CITRON_CORE_ERROR(
+			"Failed to load last project. Creating new project...");
+		while (!createProject()) {
+		}
 	}
 }
 
@@ -44,7 +41,14 @@ void EditorLayer::onAttach() {
 
 void EditorLayer::onUpdate() {}
 
-void EditorLayer::onDetach() {}
+void EditorLayer::onDetach() {
+	if (!editorContext.projectFilePath.empty()) {
+		CitronIO::IO::writeFile(
+			std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
+			"last_project: " + editorContext.projectFilePath);
+		CITRON_CORE_ERROR(editorContext.projectFilePath);
+	}
+}
 
 void EditorLayer::onEvent(CitronCore::Event &e) {
 	if (e.isInCategory(CitronCore::EventCategoryInput)) {
@@ -57,7 +61,7 @@ void EditorLayer::onEvent(CitronCore::Event &e) {
 	}
 }
 
-void EditorLayer::createProject() {
+bool EditorLayer::createProject() {
 	CITRON_CLIENT_INFO("Creating project...");
 	std::string newProjectPath =
 		CitronIO::IO::saveFileDialog("Project", "ctrnproject", nullptr, 0);
@@ -68,11 +72,15 @@ void EditorLayer::createProject() {
 				newProjectPath.substr(newProjectPath.find_last_of("/") + 1) +
 				"'");
 		openProject(newProjectPath);
+		return true;
 	}
+	return false;
 }
 
-void EditorLayer::openProject(std::string projectFilePath) {
+bool EditorLayer::openProject(std::string projectFilePath) {
 	CITRON_CORE_ASSERT(!projectFilePath.empty(), "projectFilePath is empty");
+	if (projectFilePath.empty())
+		return false;
 	editorContext.projectFilePath = projectFilePath;
 	YAML::Node node = YAML::LoadFile(projectFilePath);
 	editorContext.projectName = node["name"].as<std::string>();
@@ -82,6 +90,7 @@ void EditorLayer::openProject(std::string projectFilePath) {
 	CitronIO::IO::writeFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
 							"last_project: " + projectFilePath);
 	CITRON_CLIENT_INFO("Opened project: {}", projectFilePath);
+	return true;
 }
 
 void EditorLayer::saveCurrentScene() {

@@ -76,11 +76,14 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					->createProject();
 			}
 			if (ImGui::MenuItem("Open Project")) {
-				Editor::get()
-					.getLayerStack()
-					.getLayer<EditorLayer>()
-					->openProject(
-						CitronIO::IO::openFileDialog("Project", "ctrnproject"));
+				std::string projectPath =
+					CitronIO::IO::openFileDialog("Project", "ctrnproject");
+				if (!projectPath.empty()) {
+					Editor::get()
+						.getLayerStack()
+						.getLayer<EditorLayer>()
+						->openProject(projectPath);
+				}
 			}
 			ImGui::EndMenu();
 		}
@@ -153,6 +156,7 @@ void GuiLayer::applyTheme() {
 	style.DockingSeparatorSize = 2.0f;
 
 	style.FontSizeBase = 16.0f;
+
 	style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	style.Colors[ImGuiCol_TextDisabled] =
 		ImVec4(0.49803922f, 0.49803922f, 0.49803922f, 1.0f);

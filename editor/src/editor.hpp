@@ -9,7 +9,7 @@
 using namespace CitronECS;
 using namespace CitronCore;
 
-constexpr const char *CITRON_PROGRAM_FOLDER = "C:/Program Files/Citron";
+constexpr const char *CITRON_PROGRAM_FOLDER = "C:/Citron";
 
 class EditorContext {
   public:
@@ -32,8 +32,8 @@ class EditorLayer : public CitronCore::Layer {
 	void onDetach() override;
 	void onUpdate() override;
 	void onEvent(CitronCore::Event &e) override;
-	void createProject();
-	void openProject(std::string projectFilePath);
+	bool createProject();
+	bool openProject(std::string projectFilePath);
 
   private:
 	EditorContext editorContext;

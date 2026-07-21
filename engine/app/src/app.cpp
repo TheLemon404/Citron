@@ -109,6 +109,10 @@ void App::update() {
 
 		window.swapBuffers();
 	}
+
+	for (auto &layer : layerStack) {
+		layer->onDetach();
+	}
 }
 
 void App::close() {

@@ -77,7 +77,6 @@ void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {}
 void OutlinerPanel::onDraw() {
-	ImGui::ShowStyleEditor();
 	ImGui::Begin("Outliner");
 	char text[64];
 	ImGui::InputTextWithHint("Search", "Search by entity name", text, 64);

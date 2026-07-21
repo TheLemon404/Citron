@@ -130,17 +130,17 @@ void GuiLayer::applyTheme() {
 
 	style.Alpha = 1.0f;
 	style.DisabledAlpha = 0.6f;
-	style.WindowPadding = ImVec2(4.0f, 4.0f);
+	style.WindowPadding = ImVec2(7.0f, 7.0f);
 	style.WindowRounding = 3.0f;
 	style.WindowBorderSize = 0.0f;
 	style.WindowMinSize = ImVec2(32.0f, 32.0f);
 	style.WindowTitleAlign = ImVec2(0.0f, 0.6f);
 	style.WindowMenuButtonPosition = ImGuiDir_Left;
-	style.ChildRounding = 0.0f;
-	style.ChildBorderSize = 1.0f;
+	style.ChildRounding = 3.0f;
+	style.ChildBorderSize = 0.0f;
 	style.PopupRounding = 3.0f;
 	style.PopupBorderSize = 0.0f;
-	style.FramePadding = ImVec2(4.0f, 3.0f);
+	style.FramePadding = ImVec2(4.0f, 4.0f);
 	style.FrameRounding = 3.0f;
 	style.FrameBorderSize = 0.0f;
 	style.ItemSpacing = ImVec2(8.0f, 4.0f);
@@ -169,7 +169,7 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_WindowBg] =
 		ImVec4(0.15686275f, 0.15686275f, 0.15686275f, 1.0f);
 	style.Colors[ImGuiCol_ChildBg] =
-		ImVec4(0.0f, 0.015686275f, 0.015686275f, 0.0f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_PopupBg] =
 		ImVec4(0.12875539f, 0.1287541f, 0.1287541f, 1.0f);
 	style.Colors[ImGuiCol_Border] =
@@ -211,9 +211,9 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_Header] =
 		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_HeaderHovered] =
-		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
+		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_HeaderActive] =
-		ImVec4(0.25490198f, 0.25490198f, 0.25490198f, 1.0f);
+		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_Separator] =
 		ImVec4(0.42745098f, 0.42745098f, 0.49803922f, 0.5f);
 	style.Colors[ImGuiCol_SeparatorHovered] =

@@ -182,7 +182,13 @@ void InspectorPanel::onDraw() {
 			context.getCurrentSelectedEntity()) {
 		auto &registry = context.getCurrentScene()->getRegistry();
 		EntityBase &entityBase = registry.get<EntityBase>(*selectedEntity);
-		ImGui::InputText("Name", &entityBase.name);
+
+		if (ImGui::CollapsingHeader("Entity Base",
+									ImGuiTreeNodeFlags_DefaultOpen)) {
+			float width = ImGui::GetContentRegionAvail().x;
+
+			ImGui::InputText("Name", &entityBase.name);
+		}
 	}
 	ImGui::End();
 }

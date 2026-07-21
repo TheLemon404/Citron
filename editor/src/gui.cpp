@@ -22,7 +22,7 @@ void GuiLayer::onAttach() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	const std::string citronFont = std::string(CITRON_PROGRAM_FOLDER) +
-								   "/EngineResources/JetBrainsMono-Regular.ttf";
+								   "/EngineResources/JetBrainsMono-Light.ttf";
 	io.Fonts->AddFontFromFileTTF(citronFont.c_str());
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
@@ -98,6 +98,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui::Begin("Inspector");
 	ImGui::End();
 
+	ImGui::ShowStyleEditor();
+
 	ImGui::Begin("Assets");
 	ImGui::End();
 
@@ -125,16 +127,16 @@ void GuiLayer::applyTheme() {
 
 	style.Alpha = 1.0f;
 	style.DisabledAlpha = 0.6f;
-	style.WindowPadding = ImVec2(10.2f, 8.5f);
-	style.WindowRounding = 5.7f;
-	style.WindowBorderSize = 1.0f;
+	style.WindowPadding = ImVec2(4.0f, 4.0f);
+	style.WindowRounding = 3.0f;
+	style.WindowBorderSize = 0.0f;
 	style.WindowMinSize = ImVec2(32.0f, 32.0f);
 	style.WindowTitleAlign = ImVec2(0.0f, 0.6f);
 	style.WindowMenuButtonPosition = ImGuiDir_Left;
-	style.ChildRounding = 5.0f;
+	style.ChildRounding = 0.0f;
 	style.ChildBorderSize = 1.0f;
 	style.PopupRounding = 3.0f;
-	style.PopupBorderSize = 1.0f;
+	style.PopupBorderSize = 0.0f;
 	style.FramePadding = ImVec2(4.0f, 3.0f);
 	style.FrameRounding = 3.0f;
 	style.FrameBorderSize = 0.0f;
@@ -154,6 +156,7 @@ void GuiLayer::applyTheme() {
 	style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 	style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
 	style.DockingSeparatorSize = 2.0f;
+	style.MenuItemRounding = 3.0f;
 
 	style.FontSizeBase = 16.0f;
 

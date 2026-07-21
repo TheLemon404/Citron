@@ -150,32 +150,34 @@ void GuiLayer::applyTheme() {
 	style.ColorButtonPosition = ImGuiDir_Right;
 	style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 	style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
+	style.DockingSeparatorSize = 2.0f;
 
+	style.FontSizeBase = 16.0f;
 	style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	style.Colors[ImGuiCol_TextDisabled] =
 		ImVec4(0.49803922f, 0.49803922f, 0.49803922f, 1.0f);
 	style.Colors[ImGuiCol_WindowBg] =
-		ImVec4(0.08627451f, 0.08627451f, 0.08627451f, 1.0f);
+		ImVec4(0.15686275f, 0.15686275f, 0.15686275f, 1.0f);
 	style.Colors[ImGuiCol_ChildBg] =
 		ImVec4(0.0f, 0.015686275f, 0.015686275f, 0.0f);
 	style.Colors[ImGuiCol_PopupBg] =
 		ImVec4(0.12875539f, 0.1287541f, 0.1287541f, 1.0f);
 	style.Colors[ImGuiCol_Border] =
-		ImVec4(0.42745098f, 0.42745098f, 0.49803922f, 0.5f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 	style.Colors[ImGuiCol_FrameBg] =
-		ImVec4(0.1882353f, 0.1882353f, 0.1882353f, 1.0f);
+		ImVec4(0.10729611f, 0.10729504f, 0.10729504f, 1.0f);
 	style.Colors[ImGuiCol_FrameBgHovered] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
 	style.Colors[ImGuiCol_FrameBgActive] =
 		ImVec4(0.25490198f, 0.25490198f, 0.25490198f, 1.0f);
 	style.Colors[ImGuiCol_TitleBg] =
-		ImVec4(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_TitleBgActive] =
-		ImVec4(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.0f, 0.0f, 0.0f, 0.51f);
 	style.Colors[ImGuiCol_MenuBarBg] =
-		ImVec4(0.16078432f, 0.16862746f, 0.18431373f, 1.0f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_ScrollbarBg] =
 		ImVec4(0.019607844f, 0.019607844f, 0.019607844f, 0.53f);
 	style.Colors[ImGuiCol_ScrollbarGrab] =
@@ -191,13 +193,13 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_SliderGrabActive] =
 		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
 	style.Colors[ImGuiCol_Button] =
-		ImVec4(0.25490198f, 0.25490198f, 0.25490198f, 1.0f);
+		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_ButtonHovered] =
 		ImVec4(0.35193133f, 0.35192782f, 0.35192782f, 1.0f);
 	style.Colors[ImGuiCol_ButtonActive] =
 		ImVec4(0.20171672f, 0.2017147f, 0.2017147f, 1.0f);
 	style.Colors[ImGuiCol_Header] =
-		ImVec4(0.25490198f, 0.25490198f, 0.25490198f, 1.0f);
+		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_HeaderHovered] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
 	style.Colors[ImGuiCol_HeaderActive] =
@@ -213,13 +215,13 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_ResizeGripActive] =
 		ImVec4(0.3862661f, 0.38626224f, 0.38626224f, 1.0f);
 	style.Colors[ImGuiCol_Tab] =
-		ImVec4(0.13725491f, 0.13725491f, 0.13725491f, 1.0f);
+		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
 	style.Colors[ImGuiCol_TabHovered] =
-		ImVec4(0.33476394f, 0.3347606f, 0.3347606f, 1.0f);
+		ImVec4(0.13304722f, 0.1330459f, 0.1330459f, 1.0f);
 	style.Colors[ImGuiCol_TabActive] =
-		ImVec4(0.2532189f, 0.25321636f, 0.25321636f, 1.0f);
+		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
 	style.Colors[ImGuiCol_TabUnfocused] =
-		ImVec4(0.1254902f, 0.1254902f, 0.1254902f, 1.0f);
+		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
 	style.Colors[ImGuiCol_TabUnfocusedActive] =
 		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
 	style.Colors[ImGuiCol_PlotLines] =
@@ -231,7 +233,7 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_PlotHistogramHovered] =
 		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
 	style.Colors[ImGuiCol_TableHeaderBg] =
-		ImVec4(0.1882353f, 0.1882353f, 0.2f, 1.0f);
+		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_TableBorderStrong] =
 		ImVec4(0.30980393f, 0.30980393f, 0.34901962f, 1.0f);
 	style.Colors[ImGuiCol_TableBorderLight] =
@@ -250,6 +252,7 @@ void GuiLayer::applyTheme() {
 		ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
 	style.Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.8f, 0.8f, 0.8f, 0.2f);
 	style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.8f, 0.8f, 0.8f, 0.35f);
+
 	style.Colors[ImGuiCol_CheckboxSelectedBg] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
 }

@@ -225,13 +225,13 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_ResizeGripActive] =
 		ImVec4(0.3862661f, 0.38626224f, 0.38626224f, 1.0f);
 	style.Colors[ImGuiCol_Tab] =
-		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
+		ImVec4(0.13304722f, 0.1330459f, 0.1330459f, 1.0f);
 	style.Colors[ImGuiCol_TabHovered] =
 		ImVec4(0.13304722f, 0.1330459f, 0.1330459f, 1.0f);
 	style.Colors[ImGuiCol_TabActive] =
 		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
 	style.Colors[ImGuiCol_TabUnfocused] =
-		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
+		ImVec4(0.13304722f, 0.1330459f, 0.1330459f, 1.0f);
 	style.Colors[ImGuiCol_TabUnfocusedActive] =
 		ImVec4(0.15879828f, 0.15879668f, 0.15879668f, 1.0f);
 	style.Colors[ImGuiCol_PlotLines] =

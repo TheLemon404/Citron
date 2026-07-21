@@ -79,9 +79,32 @@ void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {}
 void OutlinerPanel::onDraw() {
+	EditorContext &context = Editor::get()
+								 .getLayerStack()
+								 .getLayer<EditorLayer>()
+								 ->getEditorContext();
+	std::shared_ptr<Scene> currentEditedScene = context.getCurrentScene();
+
 	ImGui::Begin("Outliner");
+
 	char text[64];
 	ImGui::InputTextWithHint("Search", "Search by entity name", text, 64);
+	ImGui::SameLine();
+	if (ImGui::Button(" + ")) {
+		ImGui::OpenPopup("ActionsPopup");
+	}
+	if (ImGui::BeginPopup("ActionsPopup")) {
+		if (ImGui::Button("Add System")) {
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Create Entity")) {
+			if (currentEditedScene) {
+				currentEditedScene->createEntity();
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		ImGui::EndPopup();
+	}
 
 	if (ImGui::BeginTable("LogTable", 2,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
@@ -89,12 +112,8 @@ void OutlinerPanel::onDraw() {
 		ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed,
 								75.0f);
 		ImGui::TableHeadersRow();
+
 		int i = 0;
-		EditorContext &context = Editor::get()
-									 .getLayerStack()
-									 .getLayer<EditorLayer>()
-									 ->getEditorContext();
-		std::shared_ptr<Scene> currentEditedScene = context.getCurrentScene();
 		if (currentEditedScene) {
 			for (std::shared_ptr<System> &system :
 				 currentEditedScene->getSystems()) {
@@ -128,11 +147,13 @@ void OutlinerPanel::onDraw() {
 					context.setCurrentSelectedEntity(&entity);
 				}
 				ImGui::TableNextColumn();
-				ImGui::Text("System");
+				ImGui::Text("Entity");
 				ImGui::PopID();
 			}
 
 			if (ImGui::BeginPopupContextWindow()) {
+				if (ImGui::MenuItem("Add System")) {
+				}
 				if (ImGui::MenuItem("Create Entity")) {
 					currentEditedScene->createEntity();
 				}

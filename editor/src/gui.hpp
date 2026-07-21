@@ -20,5 +20,6 @@ class GuiLayer : public Layer {
   private:
 	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;
+	InspectorPanel inspectorPanel;
 	void applyTheme();
 };

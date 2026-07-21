@@ -43,3 +43,14 @@ class OutlinerPanel : public Panel {
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
 };
+
+class InspectorPanel : public Panel {
+  public:
+	InspectorPanel() : Panel("Inspector") {}
+
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onDraw() override;
+	virtual void onEvent(Event &e) override;
+};

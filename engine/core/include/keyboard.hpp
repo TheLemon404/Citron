@@ -14,6 +14,23 @@ class KeyEvent : public Event {
 	int keycode;
 };
 
+class KeyTypedEvent : public KeyEvent {
+  public:
+	KeyTypedEvent(SDL_Event *e, const char *text)
+		: KeyEvent(e, e->key.key), text(text) {}
+
+	std::string toString() const override {
+		std::stringstream ss;
+		ss << "KeyTypedEvent: " << keycode;
+		return ss.str();
+	}
+
+	EVENT_CLASS_TYPE(KeyTyped);
+
+  private:
+	const char *text;
+};
+
 class KeyPressedEvent : public KeyEvent {
   public:
 	KeyPressedEvent(SDL_Event *e, int keycode, int repeatCount, int mods)

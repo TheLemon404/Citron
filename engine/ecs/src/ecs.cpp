@@ -1,4 +1,5 @@
 #include "ecs.hpp"
+#include <cstdint>
 #include <io.hpp>
 #include <memory>
 
@@ -16,6 +17,11 @@ void Scene::save(const std::string &assetPath) {
 std::string Scene::serialize() const { return "this is a test"; }
 
 void Scene::deserialize(const std::string &data, Scene &result) {}
+
+void Scene::createEntity() {
+	const auto entity = registry.create();
+	registry.emplace<EntityBase>(entity, static_cast<uint64_t>(0), "Entity");
+}
 
 void Scene::init() {
 	for (auto &system : systems) {

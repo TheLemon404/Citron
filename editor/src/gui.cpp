@@ -43,6 +43,7 @@ void GuiLayer::onAttach() {
 
 	outlinerPanel.onAttach();
 	consolePanel.onAttach();
+	inspectorPanel.onAttach();
 }
 
 void GuiLayer::onDetach() {
@@ -52,11 +53,13 @@ void GuiLayer::onDetach() {
 
 	outlinerPanel.onDetach();
 	consolePanel.onDetach();
+	inspectorPanel.onDetach();
 }
 
 void GuiLayer::onUpdate() {
 	outlinerPanel.onUpdate();
 	consolePanel.onUpdate();
+	inspectorPanel.onUpdate();
 }
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView,
@@ -95,8 +98,6 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	WGPUTextureView view = sceneView;
 	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
 	ImGui::End();
-	ImGui::Begin("Inspector");
-	ImGui::End();
 
 	ImGui::ShowStyleEditor();
 
@@ -105,6 +106,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 
 	outlinerPanel.onDraw();
 	consolePanel.onDraw();
+	inspectorPanel.onDraw();
 
 	ImGui::EndFrame();
 	ImGui::Render();
@@ -116,6 +118,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 void GuiLayer::onEvent(Event &e) {
 	outlinerPanel.onEvent(e);
 	consolePanel.onEvent(e);
+	inspectorPanel.onEvent(e);
 	if (SDL_Event *sdlEvent = (SDL_Event *)e.getInternalEvent())
 		ImGui_ImplSDL3_ProcessEvent(sdlEvent);
 }

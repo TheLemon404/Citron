@@ -35,6 +35,7 @@ bool Window::init() {
 
 void Window::open() {
 	sdl_window = SDL_CreateWindow(title, width, height, SDL_WINDOW_RESIZABLE);
+	SDL_StartTextInput(sdl_window);
 	if (!sdl_window) {
 		CITRON_CORE_CRITICAL("Error initializing SDL window");
 		close();
@@ -82,6 +83,11 @@ void Window::pollEvents() {
 		case SDL_EVENT_WINDOW_FOCUS_LOST: {
 			WindowLostFocusEvent focusEvent = WindowLostFocusEvent(&event);
 			eventCallback(focusEvent);
+			break;
+		}
+		case SDL_EVENT_TEXT_INPUT: {
+			KeyTypedEvent typedEvent = KeyTypedEvent(&event, event.text.text);
+			eventCallback(typedEvent);
 			break;
 		}
 		case SDL_EVENT_KEY_DOWN: {

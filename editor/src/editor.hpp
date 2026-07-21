@@ -1,4 +1,3 @@
-#include "SDL3/SDL_events.h"
 #include "app.hpp"
 #include "event.hpp"
 #include <ecs.hpp>
@@ -16,11 +15,19 @@ class EditorContext {
 	std::string sceneSaveAssetPath = "";
 
 	std::shared_ptr<Scene> &getCurrentScene() { return currentScene; }
+	const entt::entity *getCurrentSelectedEntity() {
+		return currentSelectedEntity;
+	}
+	void setCurrentSelectedEntity(const entt::entity *entity) {
+		currentSelectedEntity = entity;
+	}
+
 	void setCurrentScene(std::shared_ptr<Scene> scene) { currentScene = scene; }
 	std::string projectFilePath = "";
 	std::string projectName = "";
 
   private:
+	const entt::entity *currentSelectedEntity = nullptr;
 	std::shared_ptr<Scene> currentScene = nullptr;
 };
 
@@ -34,6 +41,8 @@ class EditorLayer : public CitronCore::Layer {
 	void onEvent(CitronCore::Event &e) override;
 	bool createProject();
 	bool openProject(std::string projectFilePath);
+
+	EditorContext &getEditorContext() { return editorContext; }
 
   private:
 	EditorContext editorContext;

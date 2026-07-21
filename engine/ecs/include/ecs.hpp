@@ -2,6 +2,7 @@
 
 #include "entt/entity/fwd.hpp"
 #include <assets.hpp>
+#include <cstdint>
 #include <entt/entt.hpp>
 #include <layer.hpp>
 #include <memory>
@@ -13,13 +14,23 @@ namespace CitronECS {
 
 class Scene;
 
+struct EntityBase {
+	uint64_t id;
+	std::string name;
+};
+
 class System {
   public:
+	System(const std::string name) : name(name) {}
 	virtual void init(Scene &activeScene) {};
 	virtual void start(Scene &activeScene) {};
 	virtual void update(Scene &activeScene) {};
 	virtual void onEvent(Scene &activeScene, Event &e) {};
 	virtual void end(Scene &registry) {};
+	virtual const std::string getName() { return name; }
+
+  private:
+	const std::string name;
 };
 
 class Scene : public ILoadable<Scene>,
@@ -34,6 +45,10 @@ class Scene : public ILoadable<Scene>,
 	virtual void deserialize(const std::string &data, Scene &result) override;
 
 	const std::string &getName() { return name; }
+	std::vector<std::shared_ptr<System>> &getSystems() { return systems; }
+	entt::registry &getRegistry() { return registry; }
+
+	void createEntity();
 
 	void init();
 	void start();
@@ -41,10 +56,10 @@ class Scene : public ILoadable<Scene>,
 	void editorUpdate();
 	void onEvent(Event &e);
 	void end();
+	std::vector<std::shared_ptr<System>> systems;
 
   private:
 	std::string name;
-	std::vector<std::shared_ptr<System>> systems;
 	entt::registry registry;
 };
 
@@ -65,6 +80,8 @@ class SceneLayer : public Layer {
 	void onEvent(Event &e) override;
 
 	void switchScene(std::shared_ptr<Scene> newScene);
+
+	std::shared_ptr<Scene> &getActiveScene() { return activeScene; }
 
   private:
 	SceneMode mode = SceneMode::EDIT;

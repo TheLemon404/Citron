@@ -46,7 +46,6 @@ void EditorLayer::onDetach() {
 		CitronIO::IO::writeFile(
 			std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
 			"last_project: " + editorContext.projectFilePath);
-		CITRON_CORE_ERROR(editorContext.projectFilePath);
 	}
 }
 

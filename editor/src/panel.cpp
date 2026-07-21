@@ -1,7 +1,10 @@
 #include "panel.hpp"
 
+#include "IconsFontAwesome5.h"
 #include "editor.hpp"
+#include <cfloat>
 #include <event.hpp>
+#include <float.h>
 #include <io.hpp>
 #include <logger.hpp>
 
@@ -9,11 +12,40 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "spdlog/common.h"
+#include <IconsFontAwesome5.h>
+#include <IconsFontAwesome6.h>
 #include <ecs.hpp>
 #include <imgui_stdlib.h>
 
 using namespace CitronCore;
 using namespace CitronECS;
+
+bool CustomCollapsingHeader(const char *label, bool *p_open,
+							const char *icon_open = ICON_FA_SQUARE_MINUS,
+							const char *icon_closed = ICON_FA_SQUARE_PLUS) {
+	ImGuiWindow *window = ImGui::GetCurrentWindow();
+	if (window->SkipItems)
+		return false;
+
+	ImGuiContext &g = *GImGui;
+	const ImGuiStyle &style = g.Style;
+
+	// Align button text to the left
+	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.5f));
+
+	// Format full-width label with your custom trailing/leading icons
+	char buf[128];
+	snprintf(buf, sizeof(buf), "%s  %s", (*p_open ? icon_open : icon_closed),
+			 label);
+
+	// Draw full-width style frame
+	if (ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))) {
+		*p_open = !*p_open;
+	}
+
+	ImGui::PopStyleVar();
+	return *p_open;
+}
 
 void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get()
@@ -30,11 +62,11 @@ void AssetPanel::onDraw() {
 
 	ImGui::Begin("Assets");
 	ImGui::BeginGroup();
-	if (ImGui::Button("Refresh")) {
+	if (ImGui::Button(ICON_FA_ARROWS_ROTATE)) {
 		refreshDirectoryListings();
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("^")) {
+	if (ImGui::Button(ICON_FA_ARROW_UP)) {
 		if (!currentDirectory.empty()) {
 			currentDirectory =
 				CitronIO::IO::getParentDirectory(currentDirectory);
@@ -42,10 +74,10 @@ void AssetPanel::onDraw() {
 		}
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("+"))
+	if (ImGui::Button(ICON_FA_MAGNIFYING_GLASS_PLUS))
 		zoomLevel += 50;
 	ImGui::SameLine();
-	if (ImGui::Button("-"))
+	if (ImGui::Button(ICON_FA_MAGNIFYING_GLASS_MINUS))
 		zoomLevel -= 50;
 	zoomLevel = std::max(100, zoomLevel);
 
@@ -64,15 +96,25 @@ void AssetPanel::onDraw() {
 		ImGui::Columns(ImGui::GetCurrentWindow()->Size.x / zoomLevel, nullptr,
 					   false);
 		ImGui::PushID(i++);
+
 		if (entry.isDirectory) {
-			if (ImGui::Button(entry.name.c_str(),
+			ImGui::SetWindowFontScale(5.0f * zoomLevel / 150.0f);
+			if (ImGui::Button(ICON_FA_FOLDER,
 							  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
 				currentDirectory = entry.path;
 				pendingRefreshDirectory = true;
 			}
-		} else
-			ImGui::Button(entry.name.c_str(),
-						  ImVec2(zoomLevel * 0.9f, zoomLevel));
+			ImGui::SetWindowFontScale(1.0f);
+			ImGui::Text(entry.name.c_str());
+		} else {
+			ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
+			ImGui::Button(ICON_FA_FILE, ImVec2(zoomLevel * 0.9f, zoomLevel));
+			ImGui::SetWindowFontScale(1.0f);
+			ImGui::Text(entry.name.c_str());
+		}
+
+		ImGui::SetWindowFontScale(1.0f);
+
 		ImGui::PopID();
 		ImGui::NextColumn();
 	}
@@ -164,6 +206,8 @@ void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {}
 void OutlinerPanel::onDraw() {
+	bool pendingCreateEntity = false;
+
 	EditorContext &context = Editor::get()
 								 .getLayerStack()
 								 .getLayer<EditorLayer>()
@@ -172,19 +216,21 @@ void OutlinerPanel::onDraw() {
 
 	ImGui::Begin("Outliner");
 
-	char text[64];
-	ImGui::InputTextWithHint("Search", "Search by entity name", text, 64);
+	std::string entitySearchResult;
+	ImGui::InputTextWithHint(ICON_FA_MAGNIFYING_GLASS, "Search by entity name",
+							 &entitySearchResult);
 	ImGui::SameLine();
-	if (ImGui::Button("+")) {
+	if (ImGui::Button(ICON_FA_PLUS_CIRCLE)) {
 		ImGui::OpenPopup("ActionsPopup");
 	}
 	if (ImGui::BeginPopup("ActionsPopup")) {
-		if (ImGui::Button("Add System")) {
+		if (ImGui::MenuItem("Add System")) {
 			ImGui::CloseCurrentPopup();
 		}
-		if (ImGui::Button("Create Entity")) {
+		if (ImGui::MenuItem("Create Entity")) {
 			if (currentEditedScene) {
-				currentEditedScene->createEntity();
+				context.setCurrentSelectedEntity(entt::null);
+				pendingCreateEntity = true;
 				ImGui::CloseCurrentPopup();
 			}
 		}
@@ -229,14 +275,28 @@ void OutlinerPanel::onDraw() {
 				ImGui::TableNextColumn();
 				if (ImGui::Selectable(entityBase.name.c_str(), false,
 									  ImGuiSelectableFlags_SpanAllColumns)) {
-					context.setCurrentSelectedEntity(&entity);
+					context.setCurrentSelectedEntity(entity);
+				}
+
+				if (ImGui::IsItemHovered() &&
+					ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+					ImGui::OpenPopup("EntityContextPopup");
+				}
+
+				if (ImGui::BeginPopup("EntityContextPopup")) {
+					if (ImGui::MenuItem("Delete Entity")) {
+						currentEditedScene->getRegistry().destroy(entity);
+					}
+					ImGui::EndPopup();
 				}
 				ImGui::TableNextColumn();
 				ImGui::Text("Entity");
 				ImGui::PopID();
 			}
 
-			if (ImGui::BeginPopupContextWindow()) {
+			if (ImGui::BeginPopupContextWindow(
+					"SceneContextPopup",
+					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
 				if (ImGui::MenuItem("Add System")) {
 				}
 				if (ImGui::MenuItem("Create Entity")) {
@@ -251,28 +311,44 @@ void OutlinerPanel::onDraw() {
 	}
 
 	ImGui::End();
+
+	if (pendingCreateEntity) {
+		currentEditedScene->createEntity();
+	}
 }
 void OutlinerPanel::onEvent(Event &e) {}
 
 void InspectorPanel::onAttach() {}
 void InspectorPanel::onDetach() {}
 void InspectorPanel::onUpdate() {}
+
 void InspectorPanel::onDraw() {
 	ImGui::Begin("Inspector");
 	EditorContext &context = Editor::get()
 								 .getLayerStack()
 								 .getLayer<EditorLayer>()
 								 ->getEditorContext();
-	if (const entt::entity *selectedEntity =
-			context.getCurrentSelectedEntity()) {
-		auto &registry = context.getCurrentScene()->getRegistry();
-		EntityBase &entityBase = registry.get<EntityBase>(*selectedEntity);
+	auto &registry = context.getCurrentScene()->getRegistry();
+	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
+	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
+		EntityBase &entityBase = registry.get<EntityBase>(selectedEntity);
 
-		if (ImGui::CollapsingHeader("Entity Base",
-									ImGuiTreeNodeFlags_DefaultOpen)) {
+		static bool selection = true;
+		if (CustomCollapsingHeader("Entity Base", &selection)) {
 			float width = ImGui::GetContentRegionAvail().x;
 
 			ImGui::InputText("Name", &entityBase.name);
+		}
+
+		if (ImGui::Button("Add Component", ImVec2(-FLT_MIN, 0.0f))) {
+			ImGui::OpenPopup("ActionsPopup");
+		}
+		if (ImGui::BeginPopup("ActionsPopup")) {
+			std::string componentSearchResult;
+			ImGui::InputTextWithHint("##ComponentSearch",
+									 "Enter Component Class Name",
+									 &componentSearchResult);
+			ImGui::EndPopup();
 		}
 	}
 	ImGui::End();

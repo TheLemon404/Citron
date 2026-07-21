@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "entt/entity/entity.hpp"
 #include "event.hpp"
 #include <ecs.hpp>
 #include <layer.hpp>
@@ -15,10 +16,10 @@ class EditorContext {
 	std::string sceneSaveAssetPath = "";
 
 	std::shared_ptr<Scene> &getCurrentScene() { return currentScene; }
-	const entt::entity *getCurrentSelectedEntity() {
+	const entt::entity getCurrentSelectedEntity() {
 		return currentSelectedEntity;
 	}
-	void setCurrentSelectedEntity(const entt::entity *entity) {
+	void setCurrentSelectedEntity(const entt::entity entity) {
 		currentSelectedEntity = entity;
 	}
 
@@ -28,7 +29,7 @@ class EditorContext {
 	std::string projectRootFolderPath = "";
 
   private:
-	const entt::entity *currentSelectedEntity = nullptr;
+	entt::entity currentSelectedEntity = entt::null;
 	std::shared_ptr<Scene> currentScene = nullptr;
 };
 

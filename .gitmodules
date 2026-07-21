@@ -28,3 +28,6 @@
 [submodule "vendor/yaml-cpp"]
 	path = vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "vendor/iconfontcppheaders"]
+	path = vendor/iconfontcppheaders
+	url = https://github.com/TheLemon404/IconFontCppHeaders.git

@@ -8,6 +8,7 @@
 #include "imgui_internal.h"
 #include "renderer.hpp"
 #include "window.hpp"
+#include <IconsFontAwesome6.h>
 #include <cstdint>
 #include <imgui.h>
 #include <io.hpp>
@@ -21,9 +22,26 @@ void GuiLayer::onAttach() {
 	io.ConfigInputTrickleEventQueue = false;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	const std::string citronFont = std::string(CITRON_PROGRAM_FOLDER) +
-								   "/EngineResources/JetBrainsMono-Light.ttf";
+	const std::string citronFont =
+		std::string(CITRON_PROGRAM_FOLDER) +
+		"/EngineResources/Fonts/JetBrainsMono-Light.ttf";
 	io.Fonts->AddFontFromFileTTF(citronFont.c_str());
+	float iconFontSize =
+		16 * 2.0f / 3.0f; // FontAwesome fonts need to have their sizes reduced
+						  // by 2.0f/3.0f in order to align correctly
+
+	// merge in icons from Font Awesome
+	static const ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_16_FA, 0};
+	ImFontConfig icons_config;
+	icons_config.MergeMode = true;
+	icons_config.PixelSnapH = true;
+	icons_config.GlyphMinAdvanceX = iconFontSize;
+	std::string fontPath = std::string(CITRON_PROGRAM_FOLDER) +
+						   "/EngineResources/Fonts/" + FONT_ICON_FILE_NAME_FAS;
+	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), iconFontSize, &icons_config,
+								 icons_ranges);
+	// use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
+
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
 		(SDL_Window *)editorApp.getWindow().getSDLWindow());
@@ -267,4 +285,8 @@ void GuiLayer::applyTheme() {
 
 	style.Colors[ImGuiCol_CheckboxSelectedBg] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
+	style.Colors[ImGuiCol_DockingPreview] =
+		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+	style.Colors[ImGuiCol_DockingEmptyBg] =
+		ImVec4(0.15686275f, 0.15686275f, 0.15686275f, 1.0f);
 }

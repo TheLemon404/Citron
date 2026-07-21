@@ -2,6 +2,7 @@
 
 #include <app.hpp>
 #include <event.hpp>
+#include <map>
 
 using namespace CitronCore;
 
@@ -20,6 +21,30 @@ class Panel {
 
   protected:
 	const std::string name;
+};
+
+struct AssetCard {
+	std::string name;
+	std::string path;
+	bool isDirectory;
+};
+
+class AssetPanel : public Panel {
+  public:
+	AssetPanel() : Panel("Assets") {}
+
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onDraw() override;
+	virtual void onEvent(Event &e) override;
+
+  private:
+	void refreshDirectoryListings();
+	std::string currentDirectory = "";
+	std::vector<AssetCard> directoryListings;
+
+	int zoomLevel = 150;
 };
 
 class ConsolePanel : public Panel {

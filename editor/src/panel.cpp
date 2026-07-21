@@ -2,10 +2,12 @@
 
 #include "editor.hpp"
 #include <event.hpp>
+#include <io.hpp>
 #include <logger.hpp>
 
 #include "entt/entity/fwd.hpp"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "spdlog/common.h"
 #include <ecs.hpp>
 #include <imgui_stdlib.h>
@@ -13,16 +15,99 @@
 using namespace CitronCore;
 using namespace CitronECS;
 
+void AssetPanel::onAttach() {
+	EditorContext &context = Editor::get()
+								 .getLayerStack()
+								 .getLayer<EditorLayer>()
+								 ->getEditorContext();
+	currentDirectory = context.projectRootFolderPath;
+	refreshDirectoryListings();
+}
+void AssetPanel::onDetach() {}
+void AssetPanel::onUpdate() {}
+void AssetPanel::onDraw() {
+	bool pendingRefreshDirectory = false;
+
+	ImGui::Begin("Assets");
+	ImGui::BeginGroup();
+	if (ImGui::Button("Refresh")) {
+		refreshDirectoryListings();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("^")) {
+		if (!currentDirectory.empty()) {
+			currentDirectory =
+				CitronIO::IO::getParentDirectory(currentDirectory);
+			refreshDirectoryListings();
+		}
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("+"))
+		zoomLevel += 50;
+	ImGui::SameLine();
+	if (ImGui::Button("-"))
+		zoomLevel -= 50;
+	zoomLevel = std::max(100, zoomLevel);
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1.0f);
+	ImGui::InputText("##currentDirectory", &currentDirectory);
+
+	ImGui::EndGroup();
+
+	ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(20.0f, 20.0f));
+
+	ImGui::BeginChild("AssetList");
+	ImGui::Dummy(ImVec2(0.0f, 4.0f));
+	int i = 0;
+	for (const auto &entry : directoryListings) {
+		ImGui::Columns(ImGui::GetCurrentWindow()->Size.x / zoomLevel, nullptr,
+					   false);
+		ImGui::PushID(i++);
+		if (entry.isDirectory) {
+			if (ImGui::Button(entry.name.c_str(),
+							  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+				currentDirectory = entry.path;
+				pendingRefreshDirectory = true;
+			}
+		} else
+			ImGui::Button(entry.name.c_str(),
+						  ImVec2(zoomLevel * 0.9f, zoomLevel));
+		ImGui::PopID();
+		ImGui::NextColumn();
+	}
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
+
+	ImGui::End();
+
+	if (pendingRefreshDirectory)
+		refreshDirectoryListings();
+}
+void AssetPanel::onEvent(Event &e) {}
+
+void AssetPanel::refreshDirectoryListings() {
+	CITRON_CLIENT_INFO("Refreshed directory listings for: {}",
+					   currentDirectory);
+	directoryListings.clear();
+	for (std::string &entry :
+		 CitronIO::IO::getDirectoryEntries(currentDirectory)) {
+		AssetCard card = {};
+		card.path = entry;
+		card.name = entry.substr(entry.find_last_of("\\") + 1);
+		card.isDirectory = CitronIO::IO::isDirectory(entry);
+		directoryListings.push_back(card);
+	}
+}
+
 void ConsolePanel::onAttach() {}
 void ConsolePanel::onDetach() {}
 void ConsolePanel::onUpdate() {}
 void ConsolePanel::onDraw() {
 	ImGui::Begin("Log");
-	ImGui::BeginTabBar("Menu");
-	if (ImGui::TabItemButton("Clear", ImGuiTabItemFlags_Leading)) {
+	if (ImGui::Button("Clear")) {
 		Editor::get().getLogSink()->entries.clear();
 	}
-	ImGui::EndTabBar();
 
 	if (ImGui::BeginTable("LogTable", 4,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
@@ -90,7 +175,7 @@ void OutlinerPanel::onDraw() {
 	char text[64];
 	ImGui::InputTextWithHint("Search", "Search by entity name", text, 64);
 	ImGui::SameLine();
-	if (ImGui::Button(" + ")) {
+	if (ImGui::Button("+")) {
 		ImGui::OpenPopup("ActionsPopup");
 	}
 	if (ImGui::BeginPopup("ActionsPopup")) {

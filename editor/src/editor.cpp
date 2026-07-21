@@ -68,7 +68,7 @@ bool EditorLayer::createProject() {
 		CitronIO::IO::writeFile(
 			newProjectPath,
 			"name: '" +
-				newProjectPath.substr(newProjectPath.find_last_of("/") + 1) +
+				newProjectPath.substr(newProjectPath.find_last_of("\\") + 1) +
 				"'");
 		openProject(newProjectPath);
 		return true;
@@ -81,6 +81,8 @@ bool EditorLayer::openProject(std::string projectFilePath) {
 	if (projectFilePath.empty())
 		return false;
 	editorContext.projectFilePath = projectFilePath;
+	editorContext.projectRootFolderPath =
+		projectFilePath.substr(0, projectFilePath.find_last_of("\\"));
 	YAML::Node node = YAML::LoadFile(projectFilePath);
 	editorContext.projectName = node["name"].as<std::string>();
 	std::string editorTitle =
@@ -109,6 +111,6 @@ void EditorLayer::saveCurrentScene() {
 }
 
 void Editor::onPushClientLayers() {
-	pushLayer<GuiLayer>();
 	pushLayer<EditorLayer>();
+	pushLayer<GuiLayer>();
 }

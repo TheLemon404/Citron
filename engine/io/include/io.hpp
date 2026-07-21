@@ -2,8 +2,10 @@
 
 #include <core.hpp>
 #include <string>
+#include <vector>
 
 namespace CitronIO {
+
 class IO {
   public:
 	static std::string readFile(const std::string &path);
@@ -18,5 +20,12 @@ class IO {
 	static std::string saveFileDialog(const std::string &filtername,
 									  const std::string &filters,
 									  const void *bytes, size_t size);
+
+	static std::vector<std::string>
+	getDirectoryEntries(const std::string &path);
+
+	static bool isDirectory(const std::string &path);
+
+	static std::string getParentDirectory(const std::string &path);
 };
 } // namespace CitronIO

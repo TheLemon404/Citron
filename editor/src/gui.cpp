@@ -41,6 +41,7 @@ void GuiLayer::onAttach() {
 
 	applyTheme();
 
+	assetPanel.onAttach();
 	outlinerPanel.onAttach();
 	consolePanel.onAttach();
 	inspectorPanel.onAttach();
@@ -51,12 +52,14 @@ void GuiLayer::onDetach() {
 	ImGui_ImplWGPU_Shutdown();
 	ImGui::DestroyContext();
 
+	assetPanel.onDetach();
 	outlinerPanel.onDetach();
 	consolePanel.onDetach();
 	inspectorPanel.onDetach();
 }
 
 void GuiLayer::onUpdate() {
+	assetPanel.onUpdate();
 	outlinerPanel.onUpdate();
 	consolePanel.onUpdate();
 	inspectorPanel.onUpdate();
@@ -101,9 +104,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 
 	ImGui::ShowStyleEditor();
 
-	ImGui::Begin("Assets");
-	ImGui::End();
-
+	assetPanel.onDraw();
 	outlinerPanel.onDraw();
 	consolePanel.onDraw();
 	inspectorPanel.onDraw();
@@ -116,6 +117,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 }
 
 void GuiLayer::onEvent(Event &e) {
+	assetPanel.onEvent(e);
 	outlinerPanel.onEvent(e);
 	consolePanel.onEvent(e);
 	inspectorPanel.onEvent(e);
@@ -145,7 +147,7 @@ void GuiLayer::applyTheme() {
 	style.FrameBorderSize = 0.0f;
 	style.ItemSpacing = ImVec2(8.0f, 4.0f);
 	style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-	style.CellPadding = ImVec2(4.0f, 2.0f);
+	style.CellPadding = ImVec2(4.0f, 4.0f);
 	style.IndentSpacing = 21.0f;
 	style.ColumnsMinSpacing = 6.0f;
 	style.ScrollbarSize = 14.0f;

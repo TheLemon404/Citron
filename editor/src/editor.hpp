@@ -25,6 +25,7 @@ class EditorContext {
 	void setCurrentScene(std::shared_ptr<Scene> scene) { currentScene = scene; }
 	std::string projectFilePath = "";
 	std::string projectName = "";
+	std::string projectRootFolderPath = "";
 
   private:
 	const entt::entity *currentSelectedEntity = nullptr;

@@ -1,6 +1,7 @@
 #include "io.hpp"
 
 #include <cstddef>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <logger.hpp>
@@ -110,4 +111,22 @@ std::string IO::saveFileDialog(const std::string &filtername,
 	NFD_Quit();
 
 	return result;
+}
+
+std::vector<std::string> IO::getDirectoryEntries(const std::string &path) {
+	std::vector<std::string> entries;
+
+	for (const auto &entry : std::filesystem::directory_iterator(path)) {
+		entries.push_back(entry.path().string());
+	}
+
+	return entries;
+}
+
+bool IO::isDirectory(const std::string &path) {
+	return std::filesystem::is_directory(path);
+}
+
+std::string IO::getParentDirectory(const std::string &path) {
+	return std::filesystem::path(path).parent_path().string();
 }

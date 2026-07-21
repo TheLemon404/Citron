@@ -9,7 +9,7 @@ using namespace CitronCore;
 
 class GuiLayer : public Layer {
   public:
-	GuiLayer() : Layer("GuiLayer"), consolePanel() {};
+	GuiLayer() : Layer("GuiLayer") {};
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
@@ -18,6 +18,7 @@ class GuiLayer : public Layer {
 	void onEvent(Event &e) override;
 
   private:
+	AssetPanel assetPanel;
 	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;
 	InspectorPanel inspectorPanel;

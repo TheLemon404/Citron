@@ -12,7 +12,10 @@ class UUID {
 	UUID(const UUID &other) = default;
 
 	bool operator==(const uint64_t uuid) const { return m_uuid == uuid; }
-	bool operator==(const int uuid) const { return m_uuid == uuid; }
+	bool operator==(const int uuid) const { return m_uuid == (uint64_t)uuid; }
+	bool operator==(const unsigned int uuid) const {
+		return m_uuid == (uint64_t)uuid;
+	}
 	bool operator==(const UUID &other) const { return m_uuid == other.m_uuid; }
 	operator uint64_t() const { return m_uuid; }
 

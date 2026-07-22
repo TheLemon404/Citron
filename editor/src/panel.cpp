@@ -391,6 +391,10 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	ImGui::TableNextRow();
 	ImGui::TableNextColumn();
 	bool node1_open = ImGui::TreeNode(entityBase.name.c_str());
+	if (ImGui::IsItemClicked()) {
+		context.setCurrentSelectedEntity(entity);
+	}
+
 	if (ImGui::BeginPopupContextItem("EntityContextPopup")) {
 		if (ImGui::MenuItem("Delete Entity")) {
 			pendingDeleteEntity = entityBase.uuid;
@@ -527,6 +531,7 @@ void InspectorPanel::onDraw() {
 			float width = ImGui::GetContentRegionAvail().x;
 
 			ImGui::InputText("Name", &entityBase.name);
+			ImGui::Text("ID: %u", (unsigned int)entityBase.uuid);
 		}
 
 		if (ImGui::Button("Add Component", ImVec2(-FLT_MIN, 0.0f))) {

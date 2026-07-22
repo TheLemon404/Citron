@@ -31,6 +31,19 @@ void IO::createFile(const std::string &path) {
 	file.close();
 }
 
+void IO::createDirectory(const std::string &path) {
+	std::filesystem::create_directory(path);
+}
+
+void IO::renameDirectory(const std::string &oldPath,
+						 const std::string &newPath) {
+	std::filesystem::rename(oldPath, newPath);
+}
+
+void IO::deleteDirectory(const std::string &path) {
+	std::filesystem::remove_all(path);
+}
+
 void IO::writeFile(const std::string &path, const std::string &content) {
 	if (!fileExists(path))
 		CITRON_CORE_ERROR("File cannot be written to at (does not exist): {}",

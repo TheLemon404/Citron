@@ -10,6 +10,11 @@ class IO {
   public:
 	static std::string readFile(const std::string &path);
 	static void createFile(const std::string &path);
+	static void createDirectory(const std::string &path);
+	static void renameDirectory(const std::string &oldPath,
+								const std::string &newPath);
+	static void deleteDirectory(const std::string &path);
+
 	static void writeFile(const std::string &path, const std::string &content);
 	static bool fileExists(const std::string &path);
 	static void cloneFile(const std::string &srcPath,

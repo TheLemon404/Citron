@@ -1,6 +1,7 @@
 #include "panel.hpp"
 
 #include "IconsFontAwesome5.h"
+#include "ecs.hpp"
 #include "editor.hpp"
 #include <cfloat>
 #include <event.hpp>
@@ -15,8 +16,8 @@
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
-#include <ecs.hpp>
 #include <imgui_stdlib.h>
+#include <memory>
 
 using namespace CitronCore;
 using namespace CitronECS;
@@ -355,10 +356,69 @@ void ConsolePanel::onEvent(Event &e) {}
 
 void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
-void OutlinerPanel::onUpdate() {}
-void OutlinerPanel::onDraw() {
-	bool pendingCreateEntity = false;
+void OutlinerPanel::onUpdate() {
+	std::shared_ptr<Scene> currentEditedScene = Editor::get()
+													.getLayerStack()
+													.getLayer<EditorLayer>()
+													->getEditorContext()
+													.getCurrentScene();
+	if (pendingCreateEntity) {
+		pendingCreateEntity = false;
+		UUID newEntity = currentEditedScene->createEntity();
+		if (pendingCreateEntityParent != UUID::nullID) {
+			currentEditedScene->reparentEntity(
+				currentEditedScene->getEntity(newEntity),
+				currentEditedScene->getEntity(pendingCreateEntityParent));
+			pendingCreateEntityParent = UUID::nullID;
+		}
+	}
+	if (pendingDeleteEntity != UUID::nullID) {
+		currentEditedScene->deleteEntity(pendingDeleteEntity);
+		pendingDeleteEntity = UUID::nullID;
+	}
+}
 
+void OutlinerPanel::showEntityChildTree(entt::entity entity,
+										std::shared_ptr<Scene> &scene) {
+	EditorContext &context = Editor::get()
+								 .getLayerStack()
+								 .getLayer<EditorLayer>()
+								 ->getEditorContext();
+	CitronECS::EntityBase &entityBase =
+		scene->getRegistry().get<CitronECS::EntityBase>(entity);
+
+	ImGui::PushID(entityBase.uuid);
+	ImGui::TableNextRow();
+	ImGui::TableNextColumn();
+	bool node1_open = ImGui::TreeNode(entityBase.name.c_str());
+	if (ImGui::BeginPopupContextItem("EntityContextPopup")) {
+		if (ImGui::MenuItem("Delete Entity")) {
+			pendingDeleteEntity = entityBase.uuid;
+		}
+		if (ImGui::MenuItem("Create Entity")) {
+			context.setCurrentSelectedEntity(entt::null);
+			pendingCreateEntity = true;
+			pendingCreateEntityParent = entityBase.uuid;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+	ImGui::TableSetColumnIndex(1);
+	ImGui::Text("Entity");
+
+	if (node1_open) {
+		for (UUID childID : entityBase.children) {
+			showEntityChildTree(scene->getEntity(childID), scene);
+		}
+
+		ImGui::TreePop();
+	}
+
+	ImGui::PopID();
+}
+
+void OutlinerPanel::onDraw() {
 	EditorContext &context = Editor::get()
 								 .getLayerStack()
 								 .getLayer<EditorLayer>()
@@ -402,6 +462,7 @@ void OutlinerPanel::onDraw() {
 				ImGui::PushID(i++);
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
+
 				ImGui::Selectable(system->getName().c_str(), false,
 								  ImGuiSelectableFlags_SpanAllColumns);
 				ImGui::TableNextColumn();
@@ -421,28 +482,9 @@ void OutlinerPanel::onDraw() {
 				currentEditedScene->getRegistry().view<EntityBase>();
 			for (const entt::entity &entity : view) {
 				auto &entityBase = view.get<EntityBase>(entity);
-				ImGui::PushID(i++);
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				if (ImGui::Selectable(entityBase.name.c_str(), false,
-									  ImGuiSelectableFlags_SpanAllColumns)) {
-					context.setCurrentSelectedEntity(entity);
+				if (entityBase.parentId == 0) {
+					showEntityChildTree(entity, currentEditedScene);
 				}
-
-				if (ImGui::IsItemHovered() &&
-					ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
-					ImGui::OpenPopup("EntityContextPopup");
-				}
-
-				if (ImGui::BeginPopup("EntityContextPopup")) {
-					if (ImGui::MenuItem("Delete Entity")) {
-						currentEditedScene->deleteEntity(entity);
-					}
-					ImGui::EndPopup();
-				}
-				ImGui::TableNextColumn();
-				ImGui::Text("Entity");
-				ImGui::PopID();
 			}
 
 			if (ImGui::BeginPopupContextWindow(
@@ -462,10 +504,6 @@ void OutlinerPanel::onDraw() {
 	}
 
 	ImGui::End();
-
-	if (pendingCreateEntity) {
-		currentEditedScene->createEntity();
-	}
 }
 void OutlinerPanel::onEvent(Event &e) {}
 

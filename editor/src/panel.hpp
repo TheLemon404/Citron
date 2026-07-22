@@ -1,10 +1,11 @@
 #pragma once
 
 #include <app.hpp>
+#include <ecs.hpp>
 #include <event.hpp>
-#include <map>
 
 using namespace CitronCore;
+using namespace CitronECS;
 
 class Panel {
   public:
@@ -69,6 +70,13 @@ class OutlinerPanel : public Panel {
 	virtual void onUpdate() override;
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
+
+  private:
+	void showEntityChildTree(entt::entity entity,
+							 std::shared_ptr<Scene> &scenecontext);
+	bool pendingCreateEntity = false;
+	UUID pendingCreateEntityParent = UUID::nullID;
+	UUID pendingDeleteEntity = UUID::nullID;
 };
 
 class InspectorPanel : public Panel {

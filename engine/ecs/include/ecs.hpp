@@ -17,8 +17,11 @@ namespace CitronECS {
 class Scene;
 
 struct EntityBase {
-	uint64_t uuid;
+	UUID uuid;
 	std::string name;
+
+	UUID parentId = UUID(0);
+	std::vector<UUID> children;
 };
 
 class System {
@@ -47,8 +50,9 @@ class Scene : public ISerializable<Scene> {
 	std::vector<std::shared_ptr<System>> &getSystems() { return systems; }
 	entt::registry &getRegistry() { return registry; }
 
-	void createEntity();
+	UUID createEntity();
 	entt::entity getEntity(UUID uuid);
+	void reparentEntity(entt::entity entity, entt::entity parent);
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
 

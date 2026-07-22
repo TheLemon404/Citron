@@ -1,5 +1,6 @@
 #include "ecs.hpp"
 #include "entt/entity/fwd.hpp"
+#include "logger.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include <cstdint>
@@ -14,23 +15,62 @@ std::string Scene::serialize(StreamWriter &writer) const {
 
 void Scene::deserialize(StreamReader &reader) {}
 
-void Scene::createEntity() {
+UUID Scene::createEntity() {
 	const auto entity = registry.create();
 	UUID uuid = UUID();
 	registry.emplace<EntityBase>(entity, uuid, "Entity");
 	entityMap[uuid] = entity;
+
+	CITRON_CORE_INFO("Successfully created entity: {}", (int)uuid);
+
+	return uuid;
 }
 
 entt::entity Scene::getEntity(UUID uuid) { return entityMap[uuid]; }
 
+void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
+	EntityBase &parentBase = registry.get<EntityBase>(parent);
+	EntityBase &base = registry.get<EntityBase>(entity);
+	base.parentId = parentBase.uuid;
+	parentBase.children.push_back(base.uuid);
+
+	CITRON_CORE_INFO("Successfully reparented entity: {} to parent: {}",
+					 (int)base.uuid, (int)parentBase.uuid);
+}
+
 void Scene::deleteEntity(entt::entity entity) {
-	UUID uuid = registry.get<EntityBase>(entity).uuid;
+	EntityBase &base = registry.get<EntityBase>(entity);
+
+	UUID uuid = base.uuid;
+	for (UUID childID : base.children) {
+		deleteEntity(childID);
+	}
+
+	EntityBase &parentBase = registry.get<EntityBase>(entityMap[base.parentId]);
+	parentBase.children.erase(std::remove(parentBase.children.begin(),
+										  parentBase.children.end(), uuid),
+							  parentBase.children.end());
+
+	CITRON_CORE_INFO("Successfully deleted entity: {}", (int)base.uuid);
+
 	registry.destroy(entity);
 	entityMap.erase(uuid);
 }
 
 void Scene::deleteEntity(UUID uuid) {
 	entt::entity e = entityMap[uuid];
+	EntityBase &base = registry.get<EntityBase>(e);
+	for (UUID childID : base.children) {
+		deleteEntity(childID);
+	}
+
+	EntityBase &parentBase = registry.get<EntityBase>(entityMap[base.parentId]);
+	parentBase.children.erase(std::remove(parentBase.children.begin(),
+										  parentBase.children.end(), uuid),
+							  parentBase.children.end());
+
+	CITRON_CORE_INFO("Successfully deleted entity: {}", (int)base.uuid);
+
 	registry.destroy(e);
 	entityMap.erase(uuid);
 }

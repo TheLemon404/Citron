@@ -121,6 +121,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui::End();
 
 	ImGui::ShowStyleEditor();
+	ImGui::ShowDemoWindow();
 
 	assetPanel.onDraw();
 	outlinerPanel.onDraw();
@@ -182,6 +183,8 @@ void GuiLayer::applyTheme() {
 	style.MenuItemRounding = 3.0f;
 
 	style.FontSizeBase = 16.0f;
+	style.TreeLinesSize = 1.0f;
+	style.TreeLinesFlags = ImGuiTreeNodeFlags_DrawLinesFull;
 
 	style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	style.Colors[ImGuiCol_TextDisabled] =

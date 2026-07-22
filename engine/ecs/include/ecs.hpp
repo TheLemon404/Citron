@@ -1,10 +1,12 @@
 #pragma once
 
 #include "entt/entity/fwd.hpp"
+#include "serialization.hpp"
+#include "uuid.hpp"
 #include <assets.hpp>
-#include <cstdint>
 #include <entt/entt.hpp>
 #include <layer.hpp>
+#include <map>
 #include <memory>
 
 using namespace CitronAssets;
@@ -15,7 +17,7 @@ namespace CitronECS {
 class Scene;
 
 struct EntityBase {
-	uint64_t id;
+	uint64_t uuid;
 	std::string name;
 };
 
@@ -33,22 +35,24 @@ class System {
 	const std::string name;
 };
 
-class Scene : public ILoadable<Scene>,
-			  public ISaveable<Scene>,
-			  public ISerializable<Scene> {
+class Scene : public ISerializable<Scene> {
   public:
+	Scene(StreamReader &reader) { deserialize(reader); }
 	Scene(std::string name) : name(name) {}
 
-	virtual void load(const std::string &assetSource) override;
-	virtual void save(const std::string &assetPath) override;
-	virtual std::string serialize() const override;
-	virtual void deserialize(const std::string &data, Scene &result) override;
+	virtual std::string serialize(StreamWriter &writer) const override;
+	virtual void deserialize(StreamReader &reader) override;
 
 	const std::string &getName() { return name; }
 	std::vector<std::shared_ptr<System>> &getSystems() { return systems; }
 	entt::registry &getRegistry() { return registry; }
 
 	void createEntity();
+	entt::entity getEntity(UUID uuid);
+	void deleteEntity(UUID uuid);
+	void deleteEntity(entt::entity entity);
+
+	void rename(const std::string &name) { this->name = name; }
 
 	void init();
 	void start();
@@ -59,6 +63,8 @@ class Scene : public ILoadable<Scene>,
 	std::vector<std::shared_ptr<System>> systems;
 
   private:
+	std::map<UUID, entt::entity> entityMap;
+
 	std::string name;
 	entt::registry registry;
 };

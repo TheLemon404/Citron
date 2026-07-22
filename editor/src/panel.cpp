@@ -11,6 +11,7 @@
 #include "entt/entity/fwd.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "keyboard.hpp"
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
@@ -58,7 +59,10 @@ void AssetPanel::onAttach() {
 void AssetPanel::onDetach() {}
 void AssetPanel::onUpdate() {}
 void AssetPanel::onDraw() {
-	bool pendingRefreshDirectory = false;
+	EditorContext &context = Editor::get()
+								 .getLayerStack()
+								 .getLayer<EditorLayer>()
+								 ->getEditorContext();
 
 	ImGui::Begin("Assets");
 	ImGui::BeginGroup();
@@ -168,11 +172,12 @@ void AssetPanel::onDraw() {
 						entry.path.substr(0,
 										  entry.path.find_last_of('\\') + 1) +
 						folderName;
-					CITRON_CORE_INFO("Renamed folder {} to {}", entry.path,
-									 newPath);
 					CitronIO::IO::renameDirectory(entry.path, newPath);
 					ImGui::CloseCurrentPopup();
 					pendingRefreshDirectory = true;
+
+					CITRON_CORE_INFO("Renamed folder {} to {}", entry.path,
+									 newPath);
 				}
 				if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
 					ImGui::CloseCurrentPopup();
@@ -185,6 +190,64 @@ void AssetPanel::onDraw() {
 		} else {
 			ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
 			ImGui::Button(ICON_FA_FILE, ImVec2(zoomLevel * 0.9f, zoomLevel));
+
+			if (ImGui::IsItemHovered() &&
+				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+				ImGui::OpenPopup("FilePopup");
+			}
+
+			bool renameFile = false;
+
+			if (ImGui::BeginPopup("FilePopup")) {
+				if (ImGui::MenuItem("Rename")) {
+					renameFile = true;
+				} else if (ImGui::MenuItem("Delete")) {
+					if (context.currentlyEditedSceneAssetPath == entry.path) {
+						context.currentlyEditedSceneAssetPath = "";
+					}
+
+					CitronIO::IO::deleteDirectory(entry.path);
+					ImGui::CloseCurrentPopup();
+					pendingRefreshDirectory = true;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (renameFile) {
+				ImGui::OpenPopup("FileRenamePopup");
+			}
+
+			static std::string fileName;
+			if (ImGui::BeginPopup("FileRenamePopup")) {
+				if (ImGui::InputTextWithHint(
+						"Rename Folder", "Folder Name", &fileName,
+						ImGuiInputTextFlags_EnterReturnsTrue)) {
+					std::string fileExtension =
+						entry.path.substr(entry.path.find_last_of('.'));
+					std::string newPath =
+						entry.path.substr(0,
+										  entry.path.find_last_of('\\') + 1) +
+						fileName + fileExtension;
+					if (context.currentlyEditedSceneAssetPath == entry.path) {
+						context.currentlyEditedSceneAssetPath = newPath;
+						context.getCurrentScene()->rename(fileName);
+					}
+
+					CitronIO::IO::renameDirectory(entry.path, newPath);
+					ImGui::CloseCurrentPopup();
+
+					CITRON_CORE_INFO("Renamed file {} to {}", entry.path,
+									 newPath);
+
+					pendingRefreshDirectory = true;
+				}
+				if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+
 			ImGui::SetWindowFontScale(1.0f);
 			ImGui::Text(entry.name.c_str());
 		}
@@ -200,10 +263,21 @@ void AssetPanel::onDraw() {
 
 	ImGui::End();
 
-	if (pendingRefreshDirectory)
+	if (pendingRefreshDirectory) {
 		refreshDirectoryListings();
+		pendingRefreshDirectory = false;
+	}
 }
-void AssetPanel::onEvent(Event &e) {}
+void AssetPanel::onEvent(Event &e) {
+	if (e.isInCategory(CitronCore::EventCategoryInput)) {
+		if (e.getEventType() == EventType::KeyJustPressed) {
+			KeyJustPressedEvent &event = static_cast<KeyJustPressedEvent &>(e);
+			if (event.getKeycode() == SDLK_S && event.getMods() & SDLK_LCTRL) {
+				pendingRefreshDirectory = true;
+			}
+		}
+	}
+}
 
 void AssetPanel::refreshDirectoryListings() {
 	CITRON_CLIENT_INFO("Refreshed directory listings for: {}",
@@ -362,7 +436,7 @@ void OutlinerPanel::onDraw() {
 
 				if (ImGui::BeginPopup("EntityContextPopup")) {
 					if (ImGui::MenuItem("Delete Entity")) {
-						currentEditedScene->getRegistry().destroy(entity);
+						currentEditedScene->deleteEntity(entity);
 					}
 					ImGui::EndPopup();
 				}

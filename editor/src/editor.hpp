@@ -13,7 +13,7 @@ constexpr const char *CITRON_PROGRAM_FOLDER = "C:/Citron";
 
 class EditorContext {
   public:
-	std::string sceneSaveAssetPath = "";
+	std::string currentlyEditedSceneAssetPath = "";
 
 	std::shared_ptr<Scene> &getCurrentScene() { return currentScene; }
 	const entt::entity getCurrentSelectedEntity() {

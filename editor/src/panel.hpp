@@ -40,6 +40,8 @@ class AssetPanel : public Panel {
 	virtual void onEvent(Event &e) override;
 
   private:
+	bool pendingRefreshDirectory = false;
+
 	void refreshDirectoryListings();
 	std::string currentDirectory = "";
 	std::vector<AssetCard> directoryListings;

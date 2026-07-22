@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <memory>
+#include <serialization.hpp>
 #include <string>
 
 namespace CitronAssets {
@@ -19,8 +20,8 @@ template <typename T> class ISaveable {
 
 template <typename T> class ISerializable {
   public:
-	virtual std::string serialize() const = 0;
-	virtual void deserialize(const std::string &data, T &result) = 0;
+	virtual std::string serialize(StreamWriter &writer) const = 0;
+	virtual void deserialize(StreamReader &reader) = 0;
 };
 
 class Assets {

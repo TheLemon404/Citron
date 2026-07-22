@@ -1,26 +1,38 @@
 #include "ecs.hpp"
+#include "entt/entity/fwd.hpp"
+#include "serialization.hpp"
+#include "uuid.hpp"
 #include <cstdint>
 #include <io.hpp>
 #include <memory>
 
 using namespace CitronECS;
 
-void Scene::load(const std::string &assetSource) {}
-
-void Scene::save(const std::string &assetPath) {
-	if (!CitronIO::IO::fileExists(assetPath))
-		CitronIO::IO::createFile(assetPath);
-
-	CitronIO::IO::writeFile(assetPath, serialize());
+std::string Scene::serialize(StreamWriter &writer) const {
+	return "this is a test";
 }
 
-std::string Scene::serialize() const { return "this is a test"; }
-
-void Scene::deserialize(const std::string &data, Scene &result) {}
+void Scene::deserialize(StreamReader &reader) {}
 
 void Scene::createEntity() {
 	const auto entity = registry.create();
-	registry.emplace<EntityBase>(entity, static_cast<uint64_t>(0), "Entity");
+	UUID uuid = UUID();
+	registry.emplace<EntityBase>(entity, uuid, "Entity");
+	entityMap[uuid] = entity;
+}
+
+entt::entity Scene::getEntity(UUID uuid) { return entityMap[uuid]; }
+
+void Scene::deleteEntity(entt::entity entity) {
+	UUID uuid = registry.get<EntityBase>(entity).uuid;
+	registry.destroy(entity);
+	entityMap.erase(uuid);
+}
+
+void Scene::deleteEntity(UUID uuid) {
+	entt::entity e = entityMap[uuid];
+	registry.destroy(e);
+	entityMap.erase(uuid);
 }
 
 void Scene::init() {

@@ -100,8 +100,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					->createProject();
 			}
 			if (ImGui::MenuItem("Open Project")) {
-				std::string projectPath =
-					CitronIO::IO::openFileDialog("Project", "ctrnproject");
+				std::string projectPath = CitronIO::IO::openFileDialog(
+					"Project", CITRON_PROJECT_FILE_ENDING);
 				if (!projectPath.empty()) {
 					Editor::get()
 						.getLayerStack()

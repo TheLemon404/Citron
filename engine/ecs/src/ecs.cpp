@@ -46,10 +46,13 @@ void Scene::deleteEntity(entt::entity entity) {
 		deleteEntity(childID);
 	}
 
-	EntityBase &parentBase = registry.get<EntityBase>(entityMap[base.parentId]);
-	parentBase.children.erase(std::remove(parentBase.children.begin(),
-										  parentBase.children.end(), uuid),
-							  parentBase.children.end());
+	if (base.parentId != UUID::nullID) {
+		EntityBase &parentBase =
+			registry.get<EntityBase>(entityMap[base.parentId]);
+		parentBase.children.erase(std::remove(parentBase.children.begin(),
+											  parentBase.children.end(), uuid),
+								  parentBase.children.end());
+	}
 
 	CITRON_CORE_INFO("Successfully deleted entity: {}", (int)base.uuid);
 
@@ -59,20 +62,7 @@ void Scene::deleteEntity(entt::entity entity) {
 
 void Scene::deleteEntity(UUID uuid) {
 	entt::entity e = entityMap[uuid];
-	EntityBase &base = registry.get<EntityBase>(e);
-	for (UUID childID : base.children) {
-		deleteEntity(childID);
-	}
-
-	EntityBase &parentBase = registry.get<EntityBase>(entityMap[base.parentId]);
-	parentBase.children.erase(std::remove(parentBase.children.begin(),
-										  parentBase.children.end(), uuid),
-							  parentBase.children.end());
-
-	CITRON_CORE_INFO("Successfully deleted entity: {}", (int)base.uuid);
-
-	registry.destroy(e);
-	entityMap.erase(uuid);
+	deleteEntity(e);
 }
 
 void Scene::init() {

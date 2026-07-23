@@ -171,7 +171,7 @@ void EditorLayer::saveCurrentScene() {
 	if (editorContext.currentlyEditedSceneAssetPath.empty() ||
 		!CitronIO::IO::fileExists(
 			editorContext.currentlyEditedSceneAssetPath)) {
-		editorContext.currentlyEditedSceneAssetPath = createScene();
+		createScene();
 	}
 
 	FileStreamWriter fwriter =

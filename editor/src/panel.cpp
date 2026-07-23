@@ -80,6 +80,23 @@ void AssetPanel::onDraw() {
 			refreshDirectoryListings();
 		}
 	}
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload *payload =
+				ImGui::AcceptDragDropPayload("ASSET_FILE_REORDER")) {
+			std::string srcPath((const char *)payload->Data, payload->DataSize);
+			if (srcPath != context.currentlyEditedSceneAssetPath) {
+				CitronIO::IO::moveFileOrFolder(
+					srcPath,
+					srcPath.substr(0, currentDirectory.find_last_of('\\')));
+
+				pendingRefreshDirectory = true;
+			} else {
+				CITRON_CLIENT_ERROR(
+					"Cannot move the currently edited scene asset");
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_MAGNIFYING_GLASS_PLUS))
 		zoomLevel += 50;
@@ -154,8 +171,30 @@ void AssetPanel::onDraw() {
 			}
 			ImGui::PopStyleVar();
 			ImGui::SetWindowFontScale(1.0f);
-			ImGui::Text(entry.name.c_str());
 
+			if (ImGui::BeginDragDropSource()) {
+				ImGui::SetDragDropPayload("ASSET_FILE_REORDER",
+										  entry.path.data(), entry.path.size());
+				ImGui::Text("Moving folder: %s", entry.name.c_str());
+				ImGui::EndDragDropSource();
+			}
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload *payload =
+						ImGui::AcceptDragDropPayload("ASSET_FILE_REORDER")) {
+					std::string srcPath((const char *)payload->Data,
+										payload->DataSize);
+					if (srcPath != context.currentlyEditedSceneAssetPath) {
+						CitronIO::IO::moveFileOrFolder(srcPath, entry.path);
+						pendingRefreshDirectory = true;
+						ImGui::PopID();
+						continue;
+					} else {
+						CITRON_CLIENT_ERROR(
+							"Cannot move currently opened Scene file");
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
 			if (ImGui::IsItemHovered() &&
 				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
 				ImGui::OpenPopup("FolderPopup");
@@ -215,8 +254,13 @@ void AssetPanel::onDraw() {
 			}
 			ImGui::PopStyleVar();
 			ImGui::SetWindowFontScale(1.0f);
-			ImGui::Text(entry.name.c_str());
 
+			if (ImGui::BeginDragDropSource()) {
+				ImGui::SetDragDropPayload("ASSET_FILE_REORDER",
+										  entry.path.data(), entry.path.size());
+				ImGui::Text("Moving file: %s", entry.name.c_str());
+				ImGui::EndDragDropSource();
+			}
 			if (ImGui::IsItemHovered() &&
 				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
 				ImGui::OpenPopup("FilePopup");
@@ -276,6 +320,8 @@ void AssetPanel::onDraw() {
 		}
 
 		ImGui::SetWindowFontScale(1.0f);
+
+		ImGui::Text("%s", entry.name.c_str());
 
 		ImGui::PopID();
 		ImGui::NextColumn();
@@ -422,11 +468,9 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 		ImGui::SetDragDropPayload("ENTITY_TREE_REORDER",
 								  (uint64_t *)&entityBase.uuid,
 								  sizeof(uint64_t));
-		ImGui::Text("Reparenting Entity: {}", entityBase.name.c_str());
+		ImGui::Text("Reparenting Entity: %s", entityBase.name.c_str());
 		ImGui::EndDragDropSource();
-	}
-
-	if (ImGui::BeginDragDropTarget()) {
+	} else if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload *payload =
 				ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
 			uint64_t *childEntityUUID = (uint64_t *)payload->Data;

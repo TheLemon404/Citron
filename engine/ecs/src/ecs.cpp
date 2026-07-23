@@ -47,13 +47,27 @@ void Scene::addComponent(entt::entity entity, T component) {
 }
 
 void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
-	EntityBaseComponent &parentBase = registry.get<EntityBaseComponent>(parent);
+	EntityBaseComponent &newParentBase =
+		registry.get<EntityBaseComponent>(parent);
 	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
-	base.parentId = parentBase.uuid;
-	parentBase.children.push_back(base.uuid);
+
+	if (base.uuid == newParentBase.uuid || base.parentId == newParentBase.uuid)
+		return;
+
+	if (base.parentId != UUID::nullID) {
+		EntityBaseComponent &oldParentBase =
+			registry.get<EntityBaseComponent>(entityMap[base.parentId]);
+		oldParentBase.children.erase(std::remove(oldParentBase.children.begin(),
+												 oldParentBase.children.end(),
+												 base.uuid),
+									 oldParentBase.children.end());
+	}
+
+	base.parentId = newParentBase.uuid;
+	newParentBase.children.push_back(base.uuid);
 
 	CITRON_CORE_INFO("Successfully reparented entity: {} to parent: {}",
-					 (int)base.uuid, (int)parentBase.uuid);
+					 (unsigned int)base.uuid, (unsigned int)newParentBase.uuid);
 }
 
 void Scene::deleteEntity(entt::entity entity) {

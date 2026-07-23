@@ -44,6 +44,22 @@ void IO::deleteDirectory(const std::string &path) {
 	std::filesystem::remove_all(path);
 }
 
+std::string IO::getFileName(const std::string &path, bool includeExtensions) {
+	std::string name = path.substr(path.find_last_of("\\") + 1);
+	if (!includeExtensions)
+		name = name.substr(0, name.find_last_of("."));
+	return name;
+}
+
+std::string IO::getFileExtension(const std::string &path) {
+	return path.substr(path.find_last_of("."));
+}
+
+void IO::moveFileOrFolder(const std::string &srcPath,
+						  const std::string &dstPath) {
+	std::filesystem::rename(srcPath, dstPath + "\\" + getFileName(srcPath));
+}
+
 void IO::openFileExplorer(const std::string &path) {
 	std::system(("explorer " + path).c_str());
 }

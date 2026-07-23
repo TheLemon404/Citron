@@ -15,6 +15,13 @@ class IO {
 								const std::string &newPath);
 	static void deleteDirectory(const std::string &path);
 
+	static std::string getFileName(const std::string &path,
+								   bool includeExtensions = true);
+	static std::string getFileExtension(const std::string &path);
+
+	static void moveFileOrFolder(const std::string &srcPath,
+								 const std::string &dstPath);
+
 	static void openFileExplorer(const std::string &path);
 
 	static void writeFile(const std::string &path, const std::string &content);

@@ -4,6 +4,7 @@
 #include "editor.hpp"
 #include <cfloat>
 #include <component.hpp>
+#include <cstdint>
 #include <ecs.hpp>
 #include <event.hpp>
 #include <float.h>
@@ -412,7 +413,32 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	ImGui::PushID(entityBase.uuid);
 	ImGui::TableNextRow();
 	ImGui::TableNextColumn();
-	bool node1_open = ImGui::TreeNode(entityBase.name.c_str());
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+	bool node1_open = ImGui::TreeNodeEx(entityBase.name.c_str(),
+										ImGuiTreeNodeFlags_FramePadding);
+	ImGui::PopStyleVar();
+
+	if (ImGui::BeginDragDropSource()) {
+		ImGui::SetDragDropPayload("ENTITY_TREE_REORDER",
+								  (uint64_t *)&entityBase.uuid,
+								  sizeof(uint64_t));
+		ImGui::Text("Reparenting Entity: {}", entityBase.name.c_str());
+		ImGui::EndDragDropSource();
+	}
+
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload *payload =
+				ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
+			uint64_t *childEntityUUID = (uint64_t *)payload->Data;
+			UUID newChildUUID = *childEntityUUID;
+			std::shared_ptr<Scene> &currentScene = context.getCurrentScene();
+			currentScene->reparentEntity(
+				currentScene->getEntity(newChildUUID),
+				currentScene->getEntity(entityBase.uuid));
+		}
+		ImGui::EndDragDropTarget();
+	}
+
 	if (ImGui::IsItemClicked()) {
 		context.setCurrentSelectedEntity(entity);
 	}
@@ -481,6 +507,8 @@ void OutlinerPanel::onDraw() {
 								75.0f);
 		ImGui::TableHeadersRow();
 
+		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
+
 		int i = 0;
 		if (currentEditedScene) {
 			for (std::shared_ptr<System> &system :
@@ -525,6 +553,8 @@ void OutlinerPanel::onDraw() {
 				ImGui::EndPopup();
 			}
 		}
+
+		ImGui::PopStyleVar();
 
 		ImGui::EndTable();
 	}

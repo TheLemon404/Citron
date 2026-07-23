@@ -28,6 +28,7 @@ struct AssetCard {
 	std::string name;
 	std::string path;
 	bool isDirectory;
+	bool selected;
 };
 
 class AssetPanel : public Panel {

@@ -125,12 +125,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 			if (ImGui::MenuItem("Create Scene")) {
 				EditorLayer *editorLayer =
 					Editor::get().getLayerStack().getLayer<EditorLayer>();
-				std::string scenePath = editorLayer->createSceneFile();
-				if (!scenePath.empty()) {
-					editorLayer->openSceneFile(scenePath);
-
-					assetPanel.pendingRefreshDirectory = true;
-				}
+				editorLayer->createScene();
 			}
 			if (ImGui::MenuItem("Open Scene")) {
 				std::string scenePath = CitronIO::IO::openFileDialog(
@@ -139,7 +134,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					Editor::get()
 						.getLayerStack()
 						.getLayer<EditorLayer>()
-						->openSceneFile(scenePath);
+						->openScene(scenePath);
 
 					assetPanel.pendingRefreshDirectory = true;
 				}

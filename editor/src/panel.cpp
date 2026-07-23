@@ -132,18 +132,28 @@ void AssetPanel::onDraw() {
 
 	ImGui::Dummy(ImVec2(0.0f, 4.0f));
 	int i = 0;
-	for (const auto &entry : directoryListings) {
+	for (auto &entry : directoryListings) {
 		ImGui::Columns(ImGui::GetCurrentWindow()->Size.x / zoomLevel, nullptr,
 					   false);
 		ImGui::PushID(i++);
 
 		if (entry.isDirectory) {
 			ImGui::SetWindowFontScale(5.0f * zoomLevel / 150.0f);
-			if (ImGui::Button(ICON_FA_FOLDER,
-							  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
-				currentDirectory = entry.path;
-				pendingRefreshDirectory = true;
+			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
+								ImVec2(0.5f, 0.5f));
+			if (ImGui::Selectable(ICON_FA_FOLDER, &entry.selected,
+								  ImGuiSelectableFlags_AllowDoubleClick,
+								  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+					currentDirectory = entry.path;
+					pendingRefreshDirectory = true;
+				} else {
+					entry.selected = !entry.selected;
+				}
 			}
+			ImGui::PopStyleVar();
+			ImGui::SetWindowFontScale(1.0f);
+			ImGui::Text(entry.name.c_str());
 
 			if (ImGui::IsItemHovered() &&
 				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
@@ -189,12 +199,22 @@ void AssetPanel::onDraw() {
 				}
 				ImGui::EndPopup();
 			}
-
-			ImGui::SetWindowFontScale(1.0f);
-			ImGui::Text(entry.name.c_str());
 		} else {
 			ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
-			ImGui::Button(ICON_FA_FILE, ImVec2(zoomLevel * 0.9f, zoomLevel));
+			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
+								ImVec2(0.5f, 0.5f));
+			if (ImGui::Selectable(ICON_FA_FILE, &entry.selected,
+								  ImGuiSelectableFlags_AllowDoubleClick,
+								  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+					// TODO add file double click logic
+				} else {
+					entry.selected = !entry.selected;
+				}
+			}
+			ImGui::PopStyleVar();
+			ImGui::SetWindowFontScale(1.0f);
+			ImGui::Text(entry.name.c_str());
 
 			if (ImGui::IsItemHovered() &&
 				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
@@ -252,9 +272,6 @@ void AssetPanel::onDraw() {
 				}
 				ImGui::EndPopup();
 			}
-
-			ImGui::SetWindowFontScale(1.0f);
-			ImGui::Text(entry.name.c_str());
 		}
 
 		ImGui::SetWindowFontScale(1.0f);
@@ -273,6 +290,7 @@ void AssetPanel::onDraw() {
 		pendingRefreshDirectory = false;
 	}
 }
+
 void AssetPanel::onEvent(Event &e) {
 	if (e.isInCategory(CitronCore::EventCategoryInput)) {
 		if (e.getEventType() == EventType::KeyJustPressed) {

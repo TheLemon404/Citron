@@ -44,7 +44,7 @@ void EditorLayer::onAttach() {
 		std::string lastEditedSceneFile =
 			projectFileNode["last_scene"].as<std::string>();
 
-		if (!openSceneFile(lastEditedSceneFile)) {
+		if (!openScene(lastEditedSceneFile)) {
 			CITRON_CLIENT_ERROR("Failed to load last edited scene file: {}",
 								lastEditedSceneFile);
 			editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
@@ -87,7 +87,7 @@ void EditorLayer::onEvent(CitronCore::Event &e) {
 	}
 }
 
-bool EditorLayer::openSceneFile(std::string sceneAssetPath) {
+bool EditorLayer::openScene(std::string sceneAssetPath) {
 	CITRON_CLIENT_INFO("Opening scene file: " + sceneAssetPath);
 
 	if (!CitronIO::IO::fileExists(sceneAssetPath))
@@ -101,16 +101,16 @@ bool EditorLayer::openSceneFile(std::string sceneAssetPath) {
 	return true;
 }
 
-std::string EditorLayer::createSceneFile() {
+bool EditorLayer::createScene() {
 	std::string newSceneFile = CitronIO::IO::saveFileDialog(
 		"Scene", CITRON_SCENE_FILE_ENDING, nullptr, 0);
 	if (newSceneFile.empty()) {
 		CITRON_CLIENT_WARN("Scene: {} was not saved",
 						   editorContext.getCurrentScene()->getName());
-		return "";
+		return false;
 	}
 	CitronIO::IO::createFile(newSceneFile);
-	return newSceneFile;
+	return openScene(newSceneFile);
 }
 
 bool EditorLayer::createProject() {
@@ -171,7 +171,7 @@ void EditorLayer::saveCurrentScene() {
 	if (editorContext.currentlyEditedSceneAssetPath.empty() ||
 		!CitronIO::IO::fileExists(
 			editorContext.currentlyEditedSceneAssetPath)) {
-		editorContext.currentlyEditedSceneAssetPath = createSceneFile();
+		editorContext.currentlyEditedSceneAssetPath = createScene();
 	}
 
 	FileStreamWriter fwriter =

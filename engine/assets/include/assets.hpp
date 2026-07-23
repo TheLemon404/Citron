@@ -18,12 +18,6 @@ template <typename T> class ISaveable {
 	virtual void save(const std::string &assetPath) = 0;
 };
 
-template <typename T> class ISerializable {
-  public:
-	virtual std::string serialize(StreamWriter &writer) const = 0;
-	virtual void deserialize(StreamReader &reader) = 0;
-};
-
 class Assets {
   public:
 	template <typename T>

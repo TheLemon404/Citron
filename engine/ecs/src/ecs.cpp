@@ -1,24 +1,35 @@
 #include "ecs.hpp"
+#include "component.hpp"
 #include "entt/entity/fwd.hpp"
 #include "logger.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
-#include <cstdint>
 #include <io.hpp>
 #include <memory>
 
 using namespace CitronECS;
 
-std::string Scene::serialize(StreamWriter &writer) const {
-	return "this is a test";
+void Scene::serialize(StreamWriter &writer) {
+	entt::snapshot{registry}.get<entt::entity>(writer).get<EntityBaseComponent>(
+		writer);
 }
 
-void Scene::deserialize(StreamReader &reader) {}
+void Scene::deserialize(StreamReader &reader) {
+	registry.clear();
+	entt::snapshot_loader{registry}
+		.get<entt::entity>(reader)
+		.get<EntityBaseComponent>(reader)
+		.orphans();
+	for (auto [entity, baseComponent] :
+		 registry.view<EntityBaseComponent>().each()) {
+		entityMap[baseComponent.uuid] = entity;
+	}
+}
 
 UUID Scene::createEntity() {
 	const auto entity = registry.create();
 	UUID uuid = UUID();
-	registry.emplace<EntityBase>(entity, uuid, "Entity");
+	registry.emplace<EntityBaseComponent>(entity, uuid, "Entity");
 	entityMap[uuid] = entity;
 
 	CITRON_CORE_INFO("Successfully created entity: {}", (int)uuid);
@@ -28,9 +39,14 @@ UUID Scene::createEntity() {
 
 entt::entity Scene::getEntity(UUID uuid) { return entityMap[uuid]; }
 
+template <typename T>
+void Scene::addComponent(entt::entity entity, T component) {
+	registry.emplace<T>(entity, component);
+}
+
 void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
-	EntityBase &parentBase = registry.get<EntityBase>(parent);
-	EntityBase &base = registry.get<EntityBase>(entity);
+	EntityBaseComponent &parentBase = registry.get<EntityBaseComponent>(parent);
+	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 	base.parentId = parentBase.uuid;
 	parentBase.children.push_back(base.uuid);
 
@@ -39,7 +55,7 @@ void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
 }
 
 void Scene::deleteEntity(entt::entity entity) {
-	EntityBase &base = registry.get<EntityBase>(entity);
+	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 
 	UUID uuid = base.uuid;
 	for (UUID childID : base.children) {
@@ -47,8 +63,8 @@ void Scene::deleteEntity(entt::entity entity) {
 	}
 
 	if (base.parentId != UUID::nullID) {
-		EntityBase &parentBase =
-			registry.get<EntityBase>(entityMap[base.parentId]);
+		EntityBaseComponent &parentBase =
+			registry.get<EntityBaseComponent>(entityMap[base.parentId]);
 		parentBase.children.erase(std::remove(parentBase.children.begin(),
 											  parentBase.children.end(), uuid),
 								  parentBase.children.end());

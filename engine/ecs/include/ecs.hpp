@@ -16,14 +16,6 @@ namespace CitronECS {
 
 class Scene;
 
-struct EntityBase {
-	UUID uuid;
-	std::string name;
-
-	UUID parentId = UUID(0);
-	std::vector<UUID> children;
-};
-
 class System {
   public:
 	System(const std::string name) : name(name) {}
@@ -40,10 +32,9 @@ class System {
 
 class Scene : public ISerializable<Scene> {
   public:
-	Scene(StreamReader &reader) { deserialize(reader); }
 	Scene(std::string name) : name(name) {}
 
-	virtual std::string serialize(StreamWriter &writer) const override;
+	virtual void serialize(StreamWriter &writer) override;
 	virtual void deserialize(StreamReader &reader) override;
 
 	const std::string &getName() { return name; }
@@ -52,6 +43,7 @@ class Scene : public ISerializable<Scene> {
 
 	UUID createEntity();
 	entt::entity getEntity(UUID uuid);
+	template <typename T> void addComponent(entt::entity entity, T component);
 	void reparentEntity(entt::entity entity, entt::entity parent);
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);

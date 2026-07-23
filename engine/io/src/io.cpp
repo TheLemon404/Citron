@@ -44,6 +44,10 @@ void IO::deleteDirectory(const std::string &path) {
 	std::filesystem::remove_all(path);
 }
 
+void IO::openFileExplorer(const std::string &path) {
+	std::system(("explorer " + path).c_str());
+}
+
 void IO::writeFile(const std::string &path, const std::string &content) {
 	if (!fileExists(path))
 		CITRON_CORE_ERROR("File cannot be written to at (does not exist): {}",

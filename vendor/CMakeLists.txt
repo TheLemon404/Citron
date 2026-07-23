@@ -2,6 +2,8 @@ add_library(citron_vendor INTERFACE)
 
 set(DAWN_FETCH_DEPENDENCIES ON)
 
+set(YAML_BUILD_SHARED_LIBS ON)
+
 add_subdirectory(Box3D)
 add_subdirectory(EnTT)
 add_subdirectory(GLM)
@@ -13,3 +15,4 @@ add_subdirectory(imgui)
 add_subdirectory(nativefiledialog)
 add_subdirectory(yaml-cpp)
 add_subdirectory(iconfontcppheaders)
+add_subdirectory(alpaca)

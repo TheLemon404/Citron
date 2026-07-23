@@ -4,8 +4,6 @@
 #include "gui.hpp"
 #include "keyboard.hpp"
 #include "logger.hpp"
-#include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/parse.h"
 #include <input.hpp>
 #include <io.hpp>
 #include <serialization.hpp>
@@ -42,8 +40,18 @@ void EditorLayer::onAttach() {
 		std::string editedScenePath =
 			projectFileNode["last_scene"].as<std::string>();
 
+		if (!CitronIO::IO::fileExists(editedScenePath)) {
+			editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
+			return;
+		}
+
+		std::string sceneName =
+			editedScenePath.substr(editedScenePath.find_last_of('/') + 1,
+								   editedScenePath.find_last_of('.'));
+
 		FileStreamReader reader = FileStreamReader(editedScenePath);
-		editorContext.setCurrentScene(std::make_shared<Scene>(reader));
+		editorContext.setCurrentScene(std::make_shared<Scene>(sceneName));
+		editorContext.getCurrentScene()->deserialize(reader);
 		editorContext.currentlyEditedSceneAssetPath = editedScenePath;
 	} else {
 		editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
@@ -65,6 +73,8 @@ void EditorLayer::onDetach() {
 				editorContext.currentlyEditedSceneAssetPath;
 			CitronIO::IO::writeFile(editorContext.projectFilePath,
 									YAML::Dump(projectFileNode));
+
+			saveCurrentScene();
 		}
 	}
 }
@@ -131,6 +141,7 @@ void EditorLayer::saveCurrentScene() {
 	}
 
 	editorContext.getCurrentScene()->serialize(fwriter);
+
 	CITRON_CLIENT_INFO(
 		"Scene: {} saved to {}: ", editorContext.getCurrentScene()->getName(),
 		editorContext.currentlyEditedSceneAssetPath);

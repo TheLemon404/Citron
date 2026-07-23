@@ -5,12 +5,12 @@
 #include "device.hpp"
 #include "editor.hpp"
 #include "event.hpp"
-#include "imgui_internal.h"
 #include "renderer.hpp"
 #include "window.hpp"
 #include <IconsFontAwesome6.h>
 #include <cstdint>
 #include <imgui.h>
+#include <imgui_stdlib.h>
 #include <io.hpp>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
@@ -91,6 +91,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 
 	ImGui::DockSpaceOverViewport();
 
+	bool openRenameScenePopup = false;
+
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 			if (ImGui::MenuItem("Create New Project")) {
@@ -111,7 +113,38 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Edit")) {
+			if (ImGui::MenuItem("Rename Current Scene")) {
+				ImGui::OpenPopup("SceneRenamePopup");
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
+	}
+
+	if (openRenameScenePopup) {
+		ImGui::OpenPopup("SceneRenamePopup");
+	}
+
+	std::string newName;
+	if (ImGui::BeginPopup("SceneRenamePopup")) {
+		if (ImGui::InputTextWithHint("Rename Scene", "Scene Name", &newName,
+									 ImGuiInputTextFlags_EnterReturnsTrue)) {
+
+			Editor::get()
+				.getLayerStack()
+				.getLayer<EditorLayer>()
+				->getEditorContext()
+				.getCurrentScene()
+				->rename(newName);
+			ImGui::CloseCurrentPopup();
+
+			CITRON_CORE_INFO("Renamed scene to {}", newName);
+		}
+		if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
 
 	ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoTitleBar);

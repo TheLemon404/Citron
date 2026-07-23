@@ -14,7 +14,6 @@ citron_ecs
 citron_graphics
 citron_input
 imgui
-yaml-cpp::yaml-cpp
 iconfontcppheaders
 citron_io
 #citron_networking
@@ -39,4 +38,5 @@ target_copy_shared_library(citron_editor citron_input)
 target_copy_shared_library(citron_editor citron_io)
 target_copy_shared_library(citron_editor citron_assets)
 target_copy_shared_library(citron_editor SDL3::SDL3)
+target_copy_shared_library(citron_editor yaml-cpp::yaml-cpp)
 target_copy_graphics_shared_dependencies(citron_editor)

@@ -1,9 +1,10 @@
 #include "panel.hpp"
 
 #include "IconsFontAwesome5.h"
-#include "ecs.hpp"
 #include "editor.hpp"
 #include <cfloat>
+#include <component.hpp>
+#include <ecs.hpp>
 #include <event.hpp>
 #include <float.h>
 #include <io.hpp>
@@ -101,6 +102,9 @@ void AssetPanel::onDraw() {
 			"AssetBrowserPopup", ImGuiPopupFlags_NoOpenOverExistingPopup)) {
 		if (ImGui::MenuItem("Create Folder")) {
 			createFolder = true;
+		}
+		if (ImGui::MenuItem("Open in File Explorer")) {
+			CitronIO::IO::openFileExplorer(currentDirectory.c_str());
 		}
 
 		ImGui::EndPopup();
@@ -384,8 +388,8 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 								 .getLayerStack()
 								 .getLayer<EditorLayer>()
 								 ->getEditorContext();
-	CitronECS::EntityBase &entityBase =
-		scene->getRegistry().get<CitronECS::EntityBase>(entity);
+	CitronECS::EntityBaseComponent &entityBase =
+		scene->getRegistry().get<CitronECS::EntityBaseComponent>(entity);
 
 	ImGui::PushID(entityBase.uuid);
 	ImGui::TableNextRow();
@@ -483,9 +487,9 @@ void OutlinerPanel::onDraw() {
 
 		if (currentEditedScene) {
 			const auto &view =
-				currentEditedScene->getRegistry().view<EntityBase>();
+				currentEditedScene->getRegistry().view<EntityBaseComponent>();
 			for (const entt::entity &entity : view) {
-				auto &entityBase = view.get<EntityBase>(entity);
+				auto &entityBase = view.get<EntityBaseComponent>(entity);
 				if (entityBase.parentId == 0) {
 					showEntityChildTree(entity, currentEditedScene);
 				}
@@ -524,7 +528,8 @@ void InspectorPanel::onDraw() {
 	auto &registry = context.getCurrentScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
-		EntityBase &entityBase = registry.get<EntityBase>(selectedEntity);
+		EntityBaseComponent &entityBase =
+			registry.get<EntityBaseComponent>(selectedEntity);
 
 		static bool selection = true;
 		if (CustomCollapsingHeader("Entity Base", &selection)) {

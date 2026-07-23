@@ -41,6 +41,10 @@ class EditorLayer : public CitronCore::Layer {
 	void onDetach() override;
 	void onUpdate() override;
 	void onEvent(CitronCore::Event &e) override;
+
+	bool openSceneFile(std::string sceneAssetPath);
+	std::string createSceneFile();
+
 	bool createProject();
 	bool openProject(std::string projectFilePath);
 

@@ -17,7 +17,6 @@ class GuiLayer : public Layer {
 				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;
 
-  private:
 	AssetPanel assetPanel;
 	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;

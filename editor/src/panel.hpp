@@ -40,11 +40,11 @@ class AssetPanel : public Panel {
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
 
-  private:
+	std::string currentDirectory = "";
 	bool pendingRefreshDirectory = false;
 
+  private:
 	void refreshDirectoryListings();
-	std::string currentDirectory = "";
 	std::vector<AssetCard> directoryListings;
 
 	int zoomLevel = 150;

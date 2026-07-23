@@ -10,11 +10,13 @@
 using namespace CitronECS;
 
 void Scene::serialize(StreamWriter &writer) {
+	writer.writeString(name);
 	entt::snapshot{registry}.get<entt::entity>(writer).get<EntityBaseComponent>(
 		writer);
 }
 
 void Scene::deserialize(StreamReader &reader) {
+	reader.readString(name);
 	registry.clear();
 	entt::snapshot_loader{registry}
 		.get<entt::entity>(reader)

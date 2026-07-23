@@ -85,6 +85,11 @@ void GuiLayer::onUpdate() {
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					   CitronGraphics::RenderPass &currentRenderPass) {
+	EditorContext &context = Editor::get()
+								 .getLayerStack()
+								 .getLayer<EditorLayer>()
+								 ->getEditorContext();
+
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
@@ -100,6 +105,9 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					.getLayerStack()
 					.getLayer<EditorLayer>()
 					->createProject();
+
+				assetPanel.currentDirectory = context.projectRootFolderPath;
+				assetPanel.pendingRefreshDirectory = true;
 			}
 			if (ImGui::MenuItem("Open Project")) {
 				std::string projectPath = CitronIO::IO::openFileDialog(
@@ -109,6 +117,31 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 						.getLayerStack()
 						.getLayer<EditorLayer>()
 						->openProject(projectPath);
+
+					assetPanel.currentDirectory = context.projectRootFolderPath;
+					assetPanel.pendingRefreshDirectory = true;
+				}
+			}
+			if (ImGui::MenuItem("Create Scene")) {
+				EditorLayer *editorLayer =
+					Editor::get().getLayerStack().getLayer<EditorLayer>();
+				std::string scenePath = editorLayer->createSceneFile();
+				if (!scenePath.empty()) {
+					editorLayer->openSceneFile(scenePath);
+
+					assetPanel.pendingRefreshDirectory = true;
+				}
+			}
+			if (ImGui::MenuItem("Open Scene")) {
+				std::string scenePath = CitronIO::IO::openFileDialog(
+					"Scene", CITRON_SCENE_FILE_ENDING);
+				if (!scenePath.empty()) {
+					Editor::get()
+						.getLayerStack()
+						.getLayer<EditorLayer>()
+						->openSceneFile(scenePath);
+
+					assetPanel.pendingRefreshDirectory = true;
 				}
 			}
 			ImGui::EndMenu();
@@ -152,9 +185,6 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	WGPUTextureView view = sceneView;
 	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
 	ImGui::End();
-
-	ImGui::ShowStyleEditor();
-	ImGui::ShowDemoWindow();
 
 	assetPanel.onDraw();
 	outlinerPanel.onDraw();

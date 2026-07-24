@@ -1,6 +1,8 @@
 #pragma once
 
+#include "assets.hpp"
 #include <app.hpp>
+#include <concepts>
 #include <ecs.hpp>
 #include <event.hpp>
 
@@ -89,4 +91,10 @@ class InspectorPanel : public Panel {
 	virtual void onUpdate() override;
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
+
+  private:
+	template <typename T>
+		requires std::derived_from<T, Asset>
+	void drawAssetReferenceComponentGui(const std::string assetName,
+										AssetReference<T> &assetReference);
 };

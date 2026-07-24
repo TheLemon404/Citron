@@ -42,7 +42,7 @@ void RuntimeAssetManager::createAssetRegistry() {}
 template <typename T, typename... Args>
 	requires std::derived_from<T, Asset>
 std::weak_ptr<T> EditorAssetLoader<T, Args...>::load(UUID uuid, Args... args) {
-	std::shared_ptr<T> asset = std::make_shared<T>(args...);
+	std::shared_ptr<T> asset = std::make_shared<T>(uuid, args...);
 	asset->loadFromFile(assetManager.getAssetPath(uuid));
 	return asset;
 }
@@ -50,7 +50,6 @@ std::weak_ptr<T> EditorAssetLoader<T, Args...>::load(UUID uuid, Args... args) {
 template <typename T, typename... Args>
 	requires std::derived_from<T, Asset>
 std::weak_ptr<T> RuntimeAssetLoader<T, Args...>::load(UUID uuid, Args... args) {
-	std::shared_ptr<T> asset = std::make_shared<T>(args...);
-
+	std::shared_ptr<T> asset = std::make_shared<T>(uuid, args...);
 	return asset;
 }

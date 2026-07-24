@@ -11,15 +11,18 @@ using namespace CitronCore;
 
 namespace CitronAssets {
 
-enum class AssetType {
+enum class AssetType : std::size_t {
 	SHADER,
 	MATERIAL,
 	TEXTURE,
 	MESH,
 };
 
+class AssetManager;
+
 class Asset {
   public:
+	Asset(const UUID uuid) : uuid(uuid) {}
 	virtual void loadFromFile(const std::string &filepath);
 
   private:
@@ -30,8 +33,9 @@ class Asset {
 template <typename T>
 	requires std::derived_from<T, Asset>
 struct AssetReference {
+	std::string name;
 	uint64_t uuid = UUID::nullID;
-	std::size_t typeHash = typeid(T).hash_code();
+	AssetType typeHash = static_cast<AssetType>(typeid(T).hash_code());
 };
 
 class AssetManager {

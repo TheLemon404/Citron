@@ -1,9 +1,11 @@
 #include "panel.hpp"
 
 #include "IconsFontAwesome5.h"
+#include "assets.hpp"
 #include "editor.hpp"
 #include <cfloat>
 #include <component.hpp>
+#include <concepts>
 #include <cstdint>
 #include <ecs.hpp>
 #include <event.hpp>
@@ -68,7 +70,8 @@ void AssetPanel::onDraw() {
 	}
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_ARROW_UP)) {
-		if (!currentDirectory.empty()) {
+		if (!currentDirectory.empty() &&
+			currentDirectory != context.projectRootFolderPath) {
 			currentDirectory =
 				CitronIO::IO::getParentDirectory(currentDirectory);
 			refreshDirectoryListings();
@@ -101,7 +104,8 @@ void AssetPanel::onDraw() {
 
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-1.0f);
-	ImGui::InputText("##currentDirectory", &currentDirectory);
+	ImGui::InputText("##currentDirectory", &currentDirectory,
+					 ImGuiInputTextFlags_ReadOnly);
 
 	ImGui::EndGroup();
 
@@ -507,11 +511,6 @@ void OutlinerPanel::onDraw() {
 	std::shared_ptr<Scene> currentEditedScene = context.getCurrentScene();
 
 	ImGui::Begin("Outliner");
-
-	std::string entitySearchResult;
-	ImGui::InputTextWithHint(ICON_FA_MAGNIFYING_GLASS, "Search by entity name",
-							 &entitySearchResult);
-	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_PLUS_CIRCLE)) {
 		ImGui::OpenPopup("ActionsPopup");
 	}
@@ -528,6 +527,11 @@ void OutlinerPanel::onDraw() {
 		}
 		ImGui::EndPopup();
 	}
+	ImGui::SameLine();
+	std::string entitySearchResult;
+	ImGui::SetNextItemWidth(-FLT_MIN);
+	ImGui::InputTextWithHint("##EntitySearch", "Search by entity name",
+							 &entitySearchResult);
 
 	if (ImGui::BeginTable("LogTable", 2,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
@@ -598,6 +602,14 @@ void InspectorPanel::onAttach() {}
 void InspectorPanel::onDetach() {}
 void InspectorPanel::onUpdate() {}
 
+template <typename T>
+	requires std::derived_from<T, Asset>
+void InspectorPanel::drawAssetReferenceComponentGui(
+	const std::string assetName, AssetReference<T> &assetReference) {
+	ImGui::InputText(assetName.c_str(), &assetReference.name,
+					 ImGuiInputTextFlags_ReadOnly);
+}
+
 void InspectorPanel::onDraw() {
 	ImGui::Begin("Inspector");
 	EditorContext &context = Editor::get().getEditorContext();
@@ -620,10 +632,10 @@ void InspectorPanel::onDraw() {
 				registry.get<MeshComponent>(selectedEntity);
 			static bool selection = true;
 			if (CustomCollapsingHeader("Mesh Component", &selection)) {
-				ImGui::Text("Geometry: %u",
-							(unsigned int)meshComponent.geometryAsset.uuid);
-				ImGui::Text("Material: %u",
-							(unsigned int)meshComponent.materialAsset.uuid);
+				drawAssetReferenceComponentGui("Geometry",
+											   meshComponent.geometryAsset);
+				drawAssetReferenceComponentGui("Material",
+											   meshComponent.materialAsset);
 			}
 		}
 

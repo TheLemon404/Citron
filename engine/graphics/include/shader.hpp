@@ -10,7 +10,8 @@ using namespace CitronAssets;
 namespace CitronGraphics {
 class Shader : public Asset {
   public:
-	Shader(const std::string &sourcePath) : sourcePath(sourcePath) {}
+	Shader(const UUID uuid, const std::string &sourcePath)
+		: Asset(uuid), sourcePath(sourcePath) {}
 	~Shader() = default;
 
 	const std::string &getSourcePath() const { return sourcePath; }

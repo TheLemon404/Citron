@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "assets.hpp"
 #include "device.hpp"
 #include "spdlog/common.h"
 #include <core.hpp>
@@ -7,6 +8,7 @@
 #include <event.hpp>
 #include <input.hpp>
 #include <logger.hpp>
+#include <memory>
 #include <renderer.hpp>
 #include <string>
 #include <string_view>
@@ -53,9 +55,10 @@ void AppLogSink::sink_it_(const spdlog::details::log_msg &msg) {
 		entries.erase(entries.begin());
 }
 
-App::App()
+App::App(bool isRuntime, std::unique_ptr<AssetManager> assetManager)
 	: window("Citron Editor", 1280, 720, CITRON_BIND_EVENT_FN(App::onEvent)),
-	  renderer(window) {
+	  renderer(window), isRuntimeMode(isRuntime),
+	  assetManager(std::move(assetManager)) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 }
@@ -76,11 +79,8 @@ void App::init() {
 	renderer.init();
 
 	pushLayer<InputLayer>();
-	pushLayer<SceneLayer>();
 
-	onPushClientLayers();
-
-	colorTarget = renderer.getDevice().createTexture();
+	colorTarget = renderer.getDevice().createEmptyRenderTargetTexture();
 	colorTargetView = renderer.getDevice().createTextureView(colorTarget);
 }
 

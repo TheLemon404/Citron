@@ -1,7 +1,5 @@
 #include "SDL3/SDL_video.h"
-#include "mesh.hpp"
 #include <cstddef>
-#include <webgpu.h>
 
 #define WEBGPU_CPP_IMPLEMENTATION
 
@@ -222,7 +220,7 @@ void Device::resizeSurface(int width, int height) {
 	m_lastSurfaceHeight = height;
 }
 
-wgpu::Texture Device::createTexture() {
+wgpu::Texture Device::createEmptyRenderTargetTexture() {
 	wgpu::TextureDescriptor colorTargetDesc = {};
 	colorTargetDesc.label = wgpu::StringView("colorTarget");
 	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;

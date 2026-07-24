@@ -33,14 +33,17 @@ class EditorContext {
 	std::shared_ptr<Scene> currentScene = nullptr;
 };
 
-class EditorLayer : public CitronCore::Layer {
+class Editor : public CitronCore::App {
   public:
-	EditorLayer();
+	Editor(const std::string &projectFilePath);
+	inline static Editor &get() { return (Editor &)App::get(); }
 
-	void onAttach() override;
-	void onDetach() override;
-	void onUpdate() override;
-	void onEvent(CitronCore::Event &e) override;
+	EditorContext &getEditorContext() { return editorContext; }
+
+	void init();
+	void close();
+	void update();
+	void onEvent(CitronCore::Event &e);
 
 	bool openScene(std::string sceneAssetPath);
 	bool createScene();
@@ -48,17 +51,8 @@ class EditorLayer : public CitronCore::Layer {
 	bool createProject();
 	bool openProject(std::string projectFilePath);
 
-	EditorContext &getEditorContext() { return editorContext; }
+	void saveCurrentScene();
 
   private:
 	EditorContext editorContext;
-
-	void saveCurrentScene();
-};
-
-class Editor : public CitronCore::App {
-  public:
-	Editor() : CitronCore::App() {}
-
-	virtual void onPushClientLayers() override;
 };

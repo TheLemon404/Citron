@@ -52,20 +52,14 @@ bool CustomCollapsingHeader(const char *label, bool *p_open,
 }
 
 void AssetPanel::onAttach() {
-	EditorContext &context = Editor::get()
-								 .getLayerStack()
-								 .getLayer<EditorLayer>()
-								 ->getEditorContext();
+	EditorContext &context = Editor::get().getEditorContext();
 	currentDirectory = context.projectRootFolderPath;
 	refreshDirectoryListings();
 }
 void AssetPanel::onDetach() {}
 void AssetPanel::onUpdate() {}
 void AssetPanel::onDraw() {
-	EditorContext &context = Editor::get()
-								 .getLayerStack()
-								 .getLayer<EditorLayer>()
-								 ->getEditorContext();
+	EditorContext &context = Editor::get().getEditorContext();
 
 	ImGui::Begin("Assets");
 	ImGui::BeginGroup();
@@ -426,11 +420,8 @@ void ConsolePanel::onEvent(Event &e) {}
 void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {
-	std::shared_ptr<Scene> currentEditedScene = Editor::get()
-													.getLayerStack()
-													.getLayer<EditorLayer>()
-													->getEditorContext()
-													.getCurrentScene();
+	std::shared_ptr<Scene> currentEditedScene =
+		Editor::get().getEditorContext().getCurrentScene();
 	if (pendingCreateEntity) {
 		pendingCreateEntity = false;
 		UUID newEntity = currentEditedScene->createEntity();
@@ -449,10 +440,7 @@ void OutlinerPanel::onUpdate() {
 
 void OutlinerPanel::showEntityChildTree(entt::entity entity,
 										std::shared_ptr<Scene> &scene) {
-	EditorContext &context = Editor::get()
-								 .getLayerStack()
-								 .getLayer<EditorLayer>()
-								 ->getEditorContext();
+	EditorContext &context = Editor::get().getEditorContext();
 	CitronECS::EntityBaseComponent &entityBase =
 		scene->getRegistry().get<CitronECS::EntityBaseComponent>(entity);
 
@@ -515,10 +503,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 }
 
 void OutlinerPanel::onDraw() {
-	EditorContext &context = Editor::get()
-								 .getLayerStack()
-								 .getLayer<EditorLayer>()
-								 ->getEditorContext();
+	EditorContext &context = Editor::get().getEditorContext();
 	std::shared_ptr<Scene> currentEditedScene = context.getCurrentScene();
 
 	ImGui::Begin("Outliner");
@@ -613,10 +598,7 @@ void InspectorPanel::onUpdate() {}
 
 void InspectorPanel::onDraw() {
 	ImGui::Begin("Inspector");
-	EditorContext &context = Editor::get()
-								 .getLayerStack()
-								 .getLayer<EditorLayer>()
-								 ->getEditorContext();
+	EditorContext &context = Editor::get().getEditorContext();
 	auto &registry = context.getCurrentScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {

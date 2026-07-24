@@ -129,7 +129,7 @@ void Scene::end() {
 	}
 }
 
-void SceneLayer::switchScene(std::shared_ptr<Scene> newScene) {
+void SceneManager::switchScene(std::shared_ptr<Scene> newScene) {
 	if (activeScene) {
 		if (mode == SceneMode::PLAY)
 			activeScene->end();
@@ -141,11 +141,11 @@ void SceneLayer::switchScene(std::shared_ptr<Scene> newScene) {
 	}
 }
 
-void SceneLayer::onAttach() {}
+void SceneManager::onAttach() {}
 
-void SceneLayer::onDetach() {}
+void SceneManager::onDetach() {}
 
-void SceneLayer::onUpdate() {
+void SceneManager::onUpdate() {
 	if (activeScene) {
 		switch (mode) {
 		case SceneMode::EDIT:
@@ -158,7 +158,7 @@ void SceneLayer::onUpdate() {
 	}
 }
 
-void SceneLayer::onEvent(Event &e) {
+void SceneManager::onEvent(Event &e) {
 	if (activeScene) {
 		if (mode == SceneMode::PLAY)
 			activeScene->onEvent(e);

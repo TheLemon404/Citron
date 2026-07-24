@@ -1,30 +1,107 @@
 #pragma once
 
+#include "uuid.hpp"
 #include <concepts>
 #include <memory>
 #include <serialization.hpp>
-#include <string>
+#include <unordered_map>
+
+using namespace CitronCore;
 
 namespace CitronAssets {
-enum class AssetCategory { ENGINE, PROJECT };
 
-template <typename T> class ILoadable {
-  public:
-	virtual void load(const std::string &source) = 0;
+enum class AssetType {
+	SHADER,
+	MATERIAL,
+	TEXTURE,
+	MESH,
 };
 
-template <typename T> class ISaveable {
+class Asset {
   public:
-	virtual void save(const std::string &assetPath) = 0;
-};
-
-class Assets {
-  public:
-	template <typename T>
-		requires std::derived_from<T, ILoadable<T>>
-	static std::shared_ptr<T> load(const std::string &assetPath);
+	virtual void loadFromFile(const std::string &filepath);
 
   private:
-	static AssetCategory extractCategory(const std::string &assetPath);
+	const UUID uuid;
+	AssetType type;
 };
+
+template <typename T>
+	requires std::derived_from<T, Asset>
+struct AssetReference {
+	UUID uuid;
+	std::shared_ptr<T> asset = nullptr;
+};
+
+class AssetManager {
+  public:
+	AssetManager(bool isRuntime) : isRuntime(isRuntime) {}
+
+	virtual void createAssetRegistry() = 0;
+
+	template <typename T, typename... Args>
+		requires std::derived_from<T, Asset>
+	std::shared_ptr<T> get(UUID uuid, Args... args);
+
+	const std::unordered_map<UUID, std::weak_ptr<Asset>> &
+	getLoadedAssets() const {
+		return loadedAssets;
+	}
+
+  private:
+	bool isRuntime = false;
+	std::unordered_map<UUID, std::weak_ptr<Asset>> loadedAssets;
+};
+
+class EditorAssetManager : public AssetManager {
+  public:
+	EditorAssetManager(const std::string &projectRootPath)
+		: AssetManager(false), projectRootPath(projectRootPath) {}
+
+	virtual void createAssetRegistry() override;
+
+	std::string &getAssetPath(UUID uuid) { return assetPathMap[uuid]; }
+
+  private:
+	std::unordered_map<UUID, std::string> assetPathMap;
+	const std::string projectRootPath;
+};
+
+class RuntimeAssetManager : public AssetManager {
+  public:
+	RuntimeAssetManager() : AssetManager(true) {}
+	virtual void createAssetRegistry() override;
+};
+
+template <typename T, typename... Args>
+	requires std::derived_from<T, Asset>
+class IAssetLoader {
+  public:
+	virtual std::weak_ptr<T> load(AssetReference<T> &reference, Args... args);
+};
+
+template <typename T, typename... Args>
+	requires std::derived_from<T, Asset>
+class EditorAssetLoader : public IAssetLoader<T, Args...> {
+  public:
+	EditorAssetLoader(EditorAssetManager &assetManager)
+		: IAssetLoader<T>(), assetManager(assetManager) {}
+	std::weak_ptr<T> load(UUID uuid, Args... args) override;
+
+  private:
+	EditorAssetManager &assetManager;
+};
+
+template <typename T, typename... Args>
+	requires std::derived_from<T, Asset>
+class RuntimeAssetLoader : public IAssetLoader<T, Args...> {
+  public:
+	RuntimeAssetLoader(RuntimeAssetManager &assetManager)
+		: IAssetLoader<T>(), assetManager(assetManager) {}
+	std::weak_ptr<T> load(UUID uuid, Args... args) override;
+
+  private:
+	RuntimeAssetManager &assetManager;
+};
+
 } // namespace CitronAssets

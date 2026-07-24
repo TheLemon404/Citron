@@ -1,12 +1,14 @@
 #pragma once
 
+#include "serialization.hpp"
 #include <assets.hpp>
 #include <core.hpp>
+#include <webgpu/webgpu.hpp>
 
 using namespace CitronAssets;
 
 namespace CitronGraphics {
-class Shader : public ILoadable<Shader> {
+class Shader : public Asset {
   public:
 	Shader(const std::string &sourcePath) : sourcePath(sourcePath) {}
 	~Shader() = default;
@@ -17,8 +19,10 @@ class Shader : public ILoadable<Shader> {
 		return sourcePath == other.sourcePath;
 	}
 
+	wgpu::ShaderModule &getShaderModule() { return shaderModule; }
+
   private:
 	const std::string sourcePath;
-	void load(const std::string &assetSource) override;
+	wgpu::ShaderModule shaderModule;
 };
 } // namespace CitronGraphics

@@ -4,11 +4,14 @@
 #include <assets.hpp>
 #include <cstdint>
 #include <entt/entt.hpp>
+#include <geometry.hpp>
 #include <layer.hpp>
+#include <material.hpp>
 #include <serialization.hpp>
 
 using namespace CitronCore;
 using namespace CitronAssets;
+using namespace CitronGraphics;
 
 namespace CitronECS {
 
@@ -18,6 +21,11 @@ struct EntityBaseComponent {
 
 	uint64_t parentId = UUID(0);
 	std::vector<uint64_t> children;
+};
+
+struct MeshComponent {
+	AssetReference<Geometry> geometryAsset;
+	AssetReference<Material> materialAsset;
 };
 
 } // namespace CitronECS

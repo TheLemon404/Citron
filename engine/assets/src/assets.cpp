@@ -3,41 +3,51 @@
 #include <core.hpp>
 #include <io.hpp>
 #include <memory>
-#include <stdexcept>
 
 using namespace CitronAssets;
 using namespace CitronIO;
 
-template <typename T>
-	requires std::derived_from<T, ILoadable<T>>
-std::shared_ptr<T> Assets::load(const std::string &assetPath) {
-
-	AssetCategory category = extractCategory(assetPath);
-
-	std::shared_ptr<T> result = std::make_shared<T>();
-
-	switch (category) {
-	case AssetCategory::ENGINE: {
-		result->load(IO::readFile(assetPath));
-		break;
-	}
-	case AssetCategory::PROJECT: {
-		result->load(IO::readFile(assetPath));
-		break;
-	}
-
-		return result;
+template <typename T, typename... Args>
+	requires std::derived_from<T, Asset>
+std::shared_ptr<T> AssetManager::get(UUID uuid, Args... args) {
+	if (loadedAssets.find(uuid) != loadedAssets.end()) {
+		return static_cast<std::shared_ptr<T>>(loadedAssets[uuid].lock());
+	} else {
+		std::weak_ptr<T> newlyLoadedAsset = nullptr;
+		if (isRuntime) {
+			RuntimeAssetLoader<T> loader(*this);
+			newlyLoadedAsset = loader.load(args...);
+		} else {
+			EditorAssetLoader<T> loader(*this);
+			newlyLoadedAsset = loader.load(args...);
+		}
+		if (newlyLoadedAsset != nullptr) {
+			loadedAssets[uuid] = newlyLoadedAsset;
+			return static_cast<std::shared_ptr<T>>(newlyLoadedAsset.lock());
+		}
+		CITRON_CORE_ERROR("Failed to load asset with UUID {}, it is likely "
+						  "not registered",
+						  uuid);
+		return nullptr;
 	}
 }
 
-AssetCategory Assets::extractCategory(const std::string &assetPath) {
-	std::string startingText = assetPath.substr(0, assetPath.find("://"));
-	if (startingText == "engine") {
-		return AssetCategory::ENGINE;
-	} else if (startingText == "assets") {
-		return AssetCategory::PROJECT;
-	}
+void EditorAssetManager::createAssetRegistry() {}
 
-	throw std::invalid_argument("Unknown asset category loaded from: " +
-								assetPath);
+void RuntimeAssetManager::createAssetRegistry() {}
+
+template <typename T, typename... Args>
+	requires std::derived_from<T, Asset>
+std::weak_ptr<T> EditorAssetLoader<T, Args...>::load(UUID uuid, Args... args) {
+	std::shared_ptr<T> asset = std::make_shared<T>(args...);
+	asset->loadFromFile(assetManager.getAssetPath(uuid));
+	return asset;
+}
+
+template <typename T, typename... Args>
+	requires std::derived_from<T, Asset>
+std::weak_ptr<T> RuntimeAssetLoader<T, Args...>::load(UUID uuid, Args... args) {
+	std::shared_ptr<T> asset = std::make_shared<T>(args...);
+
+	return asset;
 }

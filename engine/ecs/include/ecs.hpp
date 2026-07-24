@@ -71,15 +71,12 @@ enum class SceneMode {
 	PAUSE = 2,
 };
 
-class SceneLayer : public Layer {
+class SceneManager {
   public:
-	SceneLayer() : Layer("SceneLayer") {}
-	~SceneLayer() override = default;
-
-	void onAttach() override;
-	void onDetach() override;
-	void onUpdate() override;
-	void onEvent(Event &e) override;
+	void onAttach();
+	void onDetach();
+	void onUpdate();
+	void onEvent(Event &e);
 
 	void switchScene(std::shared_ptr<Scene> newScene);
 

@@ -1,10 +1,13 @@
 #pragma once
 
 #include "spdlog/common.h"
+#include <assets.hpp>
+#include <ecs.hpp>
 #include <event.hpp>
 #include <layer.hpp>
 #include <layer_stack.hpp>
 #include <logger.hpp>
+#include <memory>
 #include <renderer.hpp>
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/spdlog.h>
@@ -12,6 +15,8 @@
 #include <window.hpp>
 
 using namespace CitronGraphics;
+using namespace CitronECS;
+using namespace CitronAssets;
 
 namespace CitronCore {
 class AppEvent : public Event {
@@ -55,11 +60,10 @@ class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
 
 class App {
   public:
-	App();
+	App(bool isRuntime, std::unique_ptr<AssetManager> assetManager);
 	~App();
 
 	void init();
-	virtual void onPushClientLayers() = 0;
 	void update();
 	void close();
 	void onEvent(Event &e);
@@ -83,6 +87,8 @@ class App {
 	LayerStack &getLayerStack() { return layerStack; }
 	Window &getWindow() { return window; }
 	Renderer &getRenderer() { return renderer; }
+	SceneManager &getSceneManager() { return sceneManager; }
+	std::unique_ptr<AssetManager> &getAssetManager() { return assetManager; }
 
 	void initLogSink() {
 		sink = std::make_shared<AppLogSink>();
@@ -92,10 +98,17 @@ class App {
 
 	AppLogSink *getLogSink() { return sink.get(); }
 
-  private:
+	const bool isRuntime() { return isRuntimeMode; }
+
+  protected:
+	const bool isRuntimeMode = false;
+
 	std::shared_ptr<AppLogSink> sink = nullptr;
 
 	Renderer renderer;
+	SceneManager sceneManager;
+	std::unique_ptr<AssetManager> assetManager;
+
 	bool onWindowClose(Event &e);
 
 	bool running = true;

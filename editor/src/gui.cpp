@@ -85,10 +85,7 @@ void GuiLayer::onUpdate() {
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 					   CitronGraphics::RenderPass &currentRenderPass) {
-	EditorContext &context = Editor::get()
-								 .getLayerStack()
-								 .getLayer<EditorLayer>()
-								 ->getEditorContext();
+	EditorContext &context = Editor::get().getEditorContext();
 
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
@@ -101,10 +98,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 			if (ImGui::MenuItem("Create New Project")) {
-				Editor::get()
-					.getLayerStack()
-					.getLayer<EditorLayer>()
-					->createProject();
+				Editor::get().createProject();
 
 				assetPanel.currentDirectory = context.projectRootFolderPath;
 				assetPanel.pendingRefreshDirectory = true;
@@ -113,28 +107,20 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 				std::string projectPath = CitronIO::IO::openFileDialog(
 					"Project", CITRON_PROJECT_FILE_ENDING);
 				if (!projectPath.empty()) {
-					Editor::get()
-						.getLayerStack()
-						.getLayer<EditorLayer>()
-						->openProject(projectPath);
+					Editor::get().openProject(projectPath);
 
 					assetPanel.currentDirectory = context.projectRootFolderPath;
 					assetPanel.pendingRefreshDirectory = true;
 				}
 			}
 			if (ImGui::MenuItem("Create Scene")) {
-				EditorLayer *editorLayer =
-					Editor::get().getLayerStack().getLayer<EditorLayer>();
-				editorLayer->createScene();
+				Editor::get().createScene();
 			}
 			if (ImGui::MenuItem("Open Scene")) {
 				std::string scenePath = CitronIO::IO::openFileDialog(
 					"Scene", CITRON_SCENE_FILE_ENDING);
 				if (!scenePath.empty()) {
-					Editor::get()
-						.getLayerStack()
-						.getLayer<EditorLayer>()
-						->openScene(scenePath);
+					Editor::get().openScene(scenePath);
 
 					assetPanel.pendingRefreshDirectory = true;
 				}
@@ -159,12 +145,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 		if (ImGui::InputTextWithHint("Rename Scene", "Scene Name", &newName,
 									 ImGuiInputTextFlags_EnterReturnsTrue)) {
 
-			Editor::get()
-				.getLayerStack()
-				.getLayer<EditorLayer>()
-				->getEditorContext()
-				.getCurrentScene()
-				->rename(newName);
+			Editor::get().getEditorContext().getCurrentScene()->rename(newName);
 			ImGui::CloseCurrentPopup();
 
 			CITRON_CORE_INFO("Renamed scene to {}", newName);

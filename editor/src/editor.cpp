@@ -12,19 +12,15 @@
 #include <serialization.hpp>
 #include <yaml-cpp/yaml.h>
 
-EditorLayer::EditorLayer() : CitronCore::Layer("EditorLayer") {
-	YAML::Node configNode =
-		YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml");
+Editor::Editor(const std::string &projectFilePath)
+	: CitronCore::App(
+		  false, std::make_unique<EditorAssetManager>(projectFilePath.substr(
+					 0, projectFilePath.find_last_of('/') + 1))) {
+	editorContext.projectFilePath = projectFilePath;
+}
 
-	if (!configNode["last_project"].IsNull()) {
-		editorContext.projectFilePath =
-			configNode["last_project"].as<std::string>();
-	} else {
-		CITRON_CORE_WARN(
-			"No last opened project found... creating new project...");
-		while (!createProject()) {
-		}
-	}
+void Editor::init() {
+	App::init();
 
 	try {
 		openProject(editorContext.projectFilePath);
@@ -35,9 +31,11 @@ EditorLayer::EditorLayer() : CitronCore::Layer("EditorLayer") {
 			editorContext.projectFilePath);
 		createProject();
 	}
-}
 
-void EditorLayer::onAttach() {
+	pushLayer<GuiLayer>();
+
+	assetManager->createAssetRegistry();
+
 	YAML::Node projectFileNode = YAML::LoadFile(editorContext.projectFilePath);
 	if (projectFileNode["last_scene"].IsDefined() &&
 		!projectFileNode["last_scene"].IsNull()) {
@@ -55,9 +53,10 @@ void EditorLayer::onAttach() {
 	}
 }
 
-void EditorLayer::onUpdate() {}
+void Editor::update() { App::update(); }
 
-void EditorLayer::onDetach() {
+void Editor::close() {
+	App::close();
 	if (!editorContext.projectFilePath.empty()) {
 		CitronIO::IO::writeFile(
 			std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
@@ -76,7 +75,8 @@ void EditorLayer::onDetach() {
 	}
 }
 
-void EditorLayer::onEvent(CitronCore::Event &e) {
+void Editor::onEvent(CitronCore::Event &e) {
+	App::onEvent(e);
 	if (e.isInCategory(CitronCore::EventCategoryInput)) {
 		if (e.getEventType() == EventType::KeyJustPressed) {
 			KeyJustPressedEvent &event = static_cast<KeyJustPressedEvent &>(e);
@@ -87,7 +87,7 @@ void EditorLayer::onEvent(CitronCore::Event &e) {
 	}
 }
 
-bool EditorLayer::openScene(std::string sceneAssetPath) {
+bool Editor::openScene(std::string sceneAssetPath) {
 	CITRON_CLIENT_INFO("Opening scene file: " + sceneAssetPath);
 
 	if (!CitronIO::IO::fileExists(sceneAssetPath))
@@ -101,7 +101,7 @@ bool EditorLayer::openScene(std::string sceneAssetPath) {
 	return true;
 }
 
-bool EditorLayer::createScene() {
+bool Editor::createScene() {
 	std::string newSceneFile = CitronIO::IO::saveFileDialog(
 		"Scene", CITRON_SCENE_FILE_ENDING, nullptr, 0);
 	if (newSceneFile.empty()) {
@@ -113,7 +113,7 @@ bool EditorLayer::createScene() {
 	return openScene(newSceneFile);
 }
 
-bool EditorLayer::createProject() {
+bool Editor::createProject() {
 	CITRON_CLIENT_INFO("Creating project...");
 	std::string newProjectPath = CitronIO::IO::saveFileDialog(
 		"Project", CITRON_PROJECT_FILE_ENDING, nullptr, 0);
@@ -130,7 +130,7 @@ bool EditorLayer::createProject() {
 	return false;
 }
 
-bool EditorLayer::openProject(std::string projectFilePath) {
+bool Editor::openProject(std::string projectFilePath) {
 	CITRON_CORE_ASSERT(!projectFilePath.empty(), "projectFilePath is empty");
 	if (projectFilePath.empty())
 		return false;
@@ -167,7 +167,7 @@ bool EditorLayer::openProject(std::string projectFilePath) {
 	return true;
 }
 
-void EditorLayer::saveCurrentScene() {
+void Editor::saveCurrentScene() {
 	if (editorContext.currentlyEditedSceneAssetPath.empty() ||
 		!CitronIO::IO::fileExists(
 			editorContext.currentlyEditedSceneAssetPath)) {
@@ -181,9 +181,4 @@ void EditorLayer::saveCurrentScene() {
 	CITRON_CLIENT_INFO(
 		"Scene: {} saved to {}: ", editorContext.getCurrentScene()->getName(),
 		editorContext.currentlyEditedSceneAssetPath);
-}
-
-void Editor::onPushClientLayers() {
-	pushLayer<EditorLayer>();
-	pushLayer<GuiLayer>();
 }

@@ -97,12 +97,6 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
-			if (ImGui::MenuItem("Create New Project")) {
-				Editor::get().createProject();
-
-				assetPanel.currentDirectory = context.projectRootFolderPath;
-				assetPanel.pendingRefreshDirectory = true;
-			}
 			if (ImGui::MenuItem("Open Project")) {
 				std::string projectPath = CitronIO::IO::openFileDialog(
 					"Project", CITRON_PROJECT_FILE_ENDING);

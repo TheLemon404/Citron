@@ -22,15 +22,7 @@ Editor::Editor(const std::string &projectFilePath)
 void Editor::init() {
 	App::init();
 
-	try {
-		openProject(editorContext.projectFilePath);
-	} catch (const std::exception &e) {
-		CITRON_CORE_CRITICAL("Error: {}", e.what());
-		CITRON_CORE_ERROR(
-			"Failed to load last project: {}. Creating new project...",
-			editorContext.projectFilePath);
-		createProject();
-	}
+	openProject(editorContext.projectFilePath);
 
 	pushLayer<GuiLayer>();
 
@@ -111,23 +103,6 @@ bool Editor::createScene() {
 	}
 	CitronIO::IO::createFile(newSceneFile);
 	return openScene(newSceneFile);
-}
-
-bool Editor::createProject() {
-	CITRON_CLIENT_INFO("Creating project...");
-	std::string newProjectPath = CitronIO::IO::saveFileDialog(
-		"Project", CITRON_PROJECT_FILE_ENDING, nullptr, 0);
-	if (!newProjectPath.empty()) {
-		YAML::Node node = YAML::Node();
-		node["name"] =
-			newProjectPath.substr(newProjectPath.find_last_of("\\") + 1,
-								  newProjectPath.find_last_of("."));
-		CitronIO::IO::createFile(newProjectPath);
-		CitronIO::IO::writeFile(newProjectPath, YAML::Dump(node));
-		openProject(newProjectPath);
-		return true;
-	}
-	return false;
 }
 
 bool Editor::openProject(std::string projectFilePath) {

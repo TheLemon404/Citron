@@ -48,7 +48,6 @@ class Editor : public CitronCore::App {
 	bool openScene(std::string sceneAssetPath);
 	bool createScene();
 
-	bool createProject();
 	bool openProject(std::string projectFilePath);
 
 	void saveCurrentScene();

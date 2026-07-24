@@ -44,6 +44,30 @@ void IO::deleteDirectory(const std::string &path) {
 	std::filesystem::remove_all(path);
 }
 
+void IO::deleteFile(const std::string &path) { std::filesystem::remove(path); }
+
+std::vector<std::string> IO::getFilesInDirectory(const std::string &path) {
+	std::vector<std::string> files;
+	for (const auto &entry : std::filesystem::directory_iterator(path)) {
+		if (!isDirectory(entry.path().string()))
+			files.push_back(entry.path().string());
+	}
+	return files;
+}
+
+std::vector<std::string> IO::getAllFilesInDirectory(const std::string &path) {
+	std::vector<std::string> files;
+	for (const auto &entry : std::filesystem::directory_iterator(path)) {
+		if (!isDirectory(entry.path().string()))
+			files.push_back(entry.path().string());
+		else
+			files.insert(files.end(),
+						 getAllFilesInDirectory(entry.path().string()).begin(),
+						 getAllFilesInDirectory(entry.path().string()).end());
+	}
+	return files;
+}
+
 std::string IO::getFileName(const std::string &path, bool includeExtensions) {
 	std::string name = path.substr(path.find_last_of("\\") + 1);
 	if (!includeExtensions)

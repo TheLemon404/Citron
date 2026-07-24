@@ -171,14 +171,14 @@ void AssetPanel::onDraw() {
 			ImGui::SetWindowFontScale(1.0f);
 
 			if (ImGui::BeginDragDropSource()) {
-				ImGui::SetDragDropPayload("ASSET_FILE_REORDER",
+				ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
 										  entry.path.data(), entry.path.size());
-				ImGui::Text("Moving folder: %s", entry.name.c_str());
+				ImGui::Text("Folder: %s", entry.name.c_str());
 				ImGui::EndDragDropSource();
 			}
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload *payload =
-						ImGui::AcceptDragDropPayload("ASSET_FILE_REORDER")) {
+						ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
 					std::string srcPath((const char *)payload->Data,
 										payload->DataSize);
 					if (srcPath != context.currentlyEditedSceneAssetPath) {
@@ -254,9 +254,9 @@ void AssetPanel::onDraw() {
 			ImGui::SetWindowFontScale(1.0f);
 
 			if (ImGui::BeginDragDropSource()) {
-				ImGui::SetDragDropPayload("ASSET_FILE_REORDER",
+				ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
 										  entry.path.data(), entry.path.size());
-				ImGui::Text("Moving file: %s", entry.name.c_str());
+				ImGui::Text("File: %s", entry.name.c_str());
 				ImGui::EndDragDropSource();
 			}
 			if (ImGui::IsItemHovered() &&
@@ -359,6 +359,10 @@ void AssetPanel::refreshDirectoryListings() {
 		card.isDirectory = CitronIO::IO::isDirectory(entry);
 		directoryListings.push_back(card);
 	}
+
+	EditorAssetManager *editorAssetManager = static_cast<EditorAssetManager *>(
+		Editor::get().getAssetManager().get());
+	editorAssetManager->refreshAssetRegistry();
 }
 
 void ConsolePanel::onAttach() {}
@@ -606,8 +610,30 @@ template <typename T>
 	requires std::derived_from<T, Asset>
 void InspectorPanel::drawAssetReferenceComponentGui(
 	const std::string assetName, AssetReference<T> &assetReference) {
-	ImGui::InputText(assetName.c_str(), &assetReference.name,
+
+	EditorContext &context = Editor::get().getEditorContext();
+	EditorAssetManager *editorAssetManager = static_cast<EditorAssetManager *>(
+		Editor::get().getAssetManager().get());
+
+	ImGui::PushID(assetReference.uuid);
+	if (ImGui::Button("Clear")) {
+		assetReference.uuid = UUID::nullID;
+		assetReference.path.clear();
+	}
+	ImGui::SameLine();
+	ImGui::InputText(assetName.c_str(), &assetReference.path,
 					 ImGuiInputTextFlags_ReadOnly);
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload *payload =
+				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
+			std::string srcPath((const char *)payload->Data, payload->DataSize);
+			UUID assetId = editorAssetManager->getAssetId(srcPath);
+			assetReference.uuid = assetId;
+			assetReference.path = srcPath;
+		}
+		ImGui::EndDragDropTarget();
+	}
+	ImGui::PopID();
 }
 
 void InspectorPanel::onDraw() {

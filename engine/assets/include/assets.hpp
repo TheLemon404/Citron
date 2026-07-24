@@ -33,7 +33,7 @@ class Asset {
 template <typename T>
 	requires std::derived_from<T, Asset>
 struct AssetReference {
-	std::string name;
+	std::string path;
 	uint64_t uuid = UUID::nullID;
 	AssetType typeHash = static_cast<AssetType>(typeid(T).hash_code());
 };
@@ -42,7 +42,7 @@ class AssetManager {
   public:
 	AssetManager(bool isRuntime) : isRuntime(isRuntime) {}
 
-	virtual void createAssetRegistry() = 0;
+	virtual void initializeAssetRegistry() = 0;
 
 	template <typename T, typename... Args>
 		requires std::derived_from<T, Asset>
@@ -58,24 +58,32 @@ class AssetManager {
 	std::unordered_map<UUID, std::weak_ptr<Asset>> loadedAssets;
 };
 
-class EditorAssetManager : public AssetManager {
+class EditorAssetManager : public AssetManager,
+						   ISerializable<EditorAssetManager> {
   public:
 	EditorAssetManager(const std::string &projectRootPath)
 		: AssetManager(false), projectRootPath(projectRootPath) {}
 
-	virtual void createAssetRegistry() override;
+	virtual void initializeAssetRegistry() override;
 
-	std::string &getAssetPath(UUID uuid) { return assetPathMap[uuid]; }
+	virtual void serialize(StreamWriter &writer) override;
+	virtual void deserialize(StreamReader &reader) override;
+
+	std::string &getAssetPath(UUID uuid) { return assetIdToPathMap[uuid]; }
+	UUID getAssetId(const std::string &path) { return assetPathToIdMap[path]; }
+
+	void refreshAssetRegistry();
 
   private:
-	std::unordered_map<UUID, std::string> assetPathMap;
+	std::unordered_map<uint64_t, std::string> assetIdToPathMap;
+	std::unordered_map<std::string, uint64_t> assetPathToIdMap;
 	const std::string projectRootPath;
 };
 
 class RuntimeAssetManager : public AssetManager {
   public:
 	RuntimeAssetManager() : AssetManager(true) {}
-	virtual void createAssetRegistry() override;
+	virtual void initializeAssetRegistry() override;
 };
 
 template <typename T, typename... Args>

@@ -14,6 +14,15 @@ class IO {
 	static void renameDirectory(const std::string &oldPath,
 								const std::string &newPath);
 	static void deleteDirectory(const std::string &path);
+	static void deleteFile(const std::string &path);
+
+	// not recursive
+	static std::vector<std::string>
+	getFilesInDirectory(const std::string &path);
+
+	// recursive
+	static std::vector<std::string>
+	getAllFilesInDirectory(const std::string &path);
 
 	static std::string getFileName(const std::string &path,
 								   bool includeExtensions = true);

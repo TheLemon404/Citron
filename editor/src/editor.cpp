@@ -15,7 +15,7 @@
 Editor::Editor(const std::string &projectFilePath)
 	: CitronCore::App(
 		  false, std::make_unique<EditorAssetManager>(projectFilePath.substr(
-					 0, projectFilePath.find_last_of('/') + 1))) {
+					 0, projectFilePath.find_last_of('\\') + 1))) {
 	editorContext.projectFilePath = projectFilePath;
 }
 
@@ -26,7 +26,7 @@ void Editor::init() {
 
 	pushLayer<GuiLayer>();
 
-	assetManager->createAssetRegistry();
+	assetManager->initializeAssetRegistry();
 
 	YAML::Node projectFileNode = YAML::LoadFile(editorContext.projectFilePath);
 	if (projectFileNode["last_scene"].IsDefined() &&

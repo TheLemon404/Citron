@@ -576,7 +576,9 @@ void OutlinerPanel::onDraw() {
 				if (ImGui::MenuItem("Add System")) {
 				}
 				if (ImGui::MenuItem("Create Entity")) {
-					currentEditedScene->createEntity();
+					UUID newEntity = currentEditedScene->createEntity();
+					currentEditedScene->getRegistry().emplace<MeshComponent>(
+						currentEditedScene->getEntity(newEntity));
 				}
 
 				ImGui::EndPopup();
@@ -602,15 +604,27 @@ void InspectorPanel::onDraw() {
 	auto &registry = context.getCurrentScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
-		EntityBaseComponent &entityBase =
-			registry.get<EntityBaseComponent>(selectedEntity);
+		if (registry.all_of<EntityBaseComponent>(selectedEntity)) {
+			EntityBaseComponent &entityBase =
+				registry.get<EntityBaseComponent>(selectedEntity);
+			static bool selection = true;
+			if (CustomCollapsingHeader("Entity Base Component", &selection)) {
+				float width = ImGui::GetContentRegionAvail().x;
 
-		static bool selection = true;
-		if (CustomCollapsingHeader("Entity Base", &selection)) {
-			float width = ImGui::GetContentRegionAvail().x;
-
-			ImGui::InputText("Name", &entityBase.name);
-			ImGui::Text("ID: %u", (unsigned int)entityBase.uuid);
+				ImGui::InputText("Name", &entityBase.name);
+				ImGui::Text("ID: %u", (unsigned int)entityBase.uuid);
+			}
+		}
+		if (registry.all_of<MeshComponent>(selectedEntity)) {
+			MeshComponent &meshComponent =
+				registry.get<MeshComponent>(selectedEntity);
+			static bool selection = true;
+			if (CustomCollapsingHeader("Mesh Component", &selection)) {
+				ImGui::Text("Geometry: %u",
+							(unsigned int)meshComponent.geometryAsset.uuid);
+				ImGui::Text("Material: %u",
+							(unsigned int)meshComponent.materialAsset.uuid);
+			}
 		}
 
 		if (ImGui::Button("Add Component", ImVec2(-FLT_MIN, 0.0f))) {

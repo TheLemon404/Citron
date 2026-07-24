@@ -2,6 +2,7 @@
 
 #include "uuid.hpp"
 #include <concepts>
+#include <cstdint>
 #include <memory>
 #include <serialization.hpp>
 #include <unordered_map>
@@ -29,8 +30,8 @@ class Asset {
 template <typename T>
 	requires std::derived_from<T, Asset>
 struct AssetReference {
-	UUID uuid;
-	std::shared_ptr<T> asset = nullptr;
+	uint64_t uuid = UUID::nullID;
+	std::size_t typeHash = typeid(T).hash_code();
 };
 
 class AssetManager {
@@ -41,7 +42,7 @@ class AssetManager {
 
 	template <typename T, typename... Args>
 		requires std::derived_from<T, Asset>
-	std::shared_ptr<T> get(UUID uuid, Args... args);
+	std::shared_ptr<T> get(AssetReference<T> &assetReference, Args... args);
 
 	const std::unordered_map<UUID, std::weak_ptr<Asset>> &
 	getLoadedAssets() const {

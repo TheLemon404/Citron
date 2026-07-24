@@ -9,9 +9,11 @@ using namespace CitronIO;
 
 template <typename T, typename... Args>
 	requires std::derived_from<T, Asset>
-std::shared_ptr<T> AssetManager::get(UUID uuid, Args... args) {
-	if (loadedAssets.find(uuid) != loadedAssets.end()) {
-		return static_cast<std::shared_ptr<T>>(loadedAssets[uuid].lock());
+std::shared_ptr<T> AssetManager::get(AssetReference<T> &assetReference,
+									 Args... args) {
+	if (loadedAssets.find(assetReference.uuid) != loadedAssets.end()) {
+		return static_cast<std::shared_ptr<T>>(
+			loadedAssets[assetReference.uuid].lock());
 	} else {
 		std::weak_ptr<T> newlyLoadedAsset = nullptr;
 		if (isRuntime) {
@@ -22,12 +24,13 @@ std::shared_ptr<T> AssetManager::get(UUID uuid, Args... args) {
 			newlyLoadedAsset = loader.load(args...);
 		}
 		if (newlyLoadedAsset != nullptr) {
-			loadedAssets[uuid] = newlyLoadedAsset;
+			assetReference.uuid = UUID();
+			loadedAssets[assetReference.uuid] = newlyLoadedAsset;
 			return static_cast<std::shared_ptr<T>>(newlyLoadedAsset.lock());
 		}
 		CITRON_CORE_ERROR("Failed to load asset with UUID {}, it is likely "
 						  "not registered",
-						  uuid);
+						  assetReference.uuid);
 		return nullptr;
 	}
 }

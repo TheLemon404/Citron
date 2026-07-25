@@ -599,7 +599,7 @@ void InspectorPanel::onDetach() {}
 void InspectorPanel::onUpdate() {}
 
 template <typename T>
-	requires std::derived_from<T, Asset>
+	requires std::derived_from<T, AssetBase>
 void InspectorPanel::drawAssetReferenceComponentGui(
 	const std::string assetName, AssetReference<T> &assetReference) {
 
@@ -621,9 +621,11 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
 			if (editorAssetManager->isValidAsset(std::filesystem::path(srcPath))) {
 				AssetMetadata metadata = editorAssetManager->getAssetMetadataByPath(std::filesystem::path(srcPath));
-				assetReference.uuid = metadata.uuid;
-				assetReference.path = metadata.assetPath.string();
-				assetReference.assetType = metadata.assetType;
+				CITRON_CLIENT_INFO(" {} : {} ", to_string(metadata.assetType), to_string(AssetReference<T>::assetType));
+				if (metadata.assetType == AssetReference<T>::assetType) {
+					assetReference.uuid = metadata.uuid;
+					assetReference.path = metadata.assetPath.string();
+				}
 			}
 		}
 		ImGui::EndDragDropTarget();
@@ -653,10 +655,10 @@ void InspectorPanel::onDraw() {
 				registry.get<MeshComponent>(selectedEntity);
 			static bool selection = true;
 			if (CustomCollapsingHeader("Mesh Component", &selection)) {
-				drawAssetReferenceComponentGui("Geometry",
-											   meshComponent.geometryAsset);
-				drawAssetReferenceComponentGui("Material",
-											   meshComponent.materialAsset);
+				drawAssetReferenceComponentGui<Geometry>("Geometry",
+														 meshComponent.geometryAsset);
+				drawAssetReferenceComponentGui<Material>("Material",
+														 meshComponent.materialAsset);
 			}
 		}
 

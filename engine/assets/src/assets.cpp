@@ -93,8 +93,23 @@ void EditorAssetManager::createMetadataForFile(const std::filesystem::path &file
 	YAML::Node metaNode = YAML::LoadFile(metaFile.string());
 	metaNode["uuid"] = (uint64_t)UUID();
 	metaNode["assetPath"] = file.string();
-	metaNode["assetType"] = "UNKNOWN";
+	metaNode["assetType"] = to_string(getAssetTypeFromExtension(file.extension().string()));
 	IO::writeFile(metaFile, YAML::Dump(metaNode));
+}
+
+AssetType EditorAssetManager::getAssetTypeFromExtension(std::string extension) {
+	for (char &c : extension) {
+		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+	}
+	if (extension == ".wgsl")
+		return AssetType::SHADER;
+	else if (extension == ".mat")
+		return AssetType::MATERIAL;
+	else if (extension == ".png" || extension == ".jpg")
+		return AssetType::TEXTURE;
+	else if (extension == ".gltf")
+		return AssetType::MESH;
+	return AssetType::UNKNOWN;
 }
 
 void RuntimeAssetManager::initializeAssetRegistry() {}

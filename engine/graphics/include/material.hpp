@@ -6,9 +6,9 @@ using namespace CitronAssets;
 
 namespace CitronGraphics {
 
-class Material : public Asset {
+class Material : public Asset<Material, AssetType::MATERIAL> {
   public:
-	Material(const UUID uuid) : Asset(uuid) {}
+	Material(const UUID uuid) : Asset<Material, AssetType::MATERIAL>(uuid) {}
 
 	virtual void loadFromFile(const std::string &filepath) override;
 };

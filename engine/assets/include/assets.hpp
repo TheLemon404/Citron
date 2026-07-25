@@ -16,8 +16,26 @@ enum class AssetType : std::size_t {
 	SHADER,
 	MATERIAL,
 	TEXTURE,
+	GEOMETRY,
 	MESH,
 };
+
+constexpr std::string_view to_string(AssetType t) {
+	switch (t) {
+	case AssetType::SHADER:
+		return "SHADER";
+	case AssetType::MATERIAL:
+		return "MATERIAL";
+	case AssetType::TEXTURE:
+		return "TEXTURE";
+	case AssetType::GEOMETRY:
+		return "GEOMETRY";
+	case AssetType::MESH:
+		return "MESH";
+	default:
+		return "UNKNOWN";
+	}
+}
 
 struct AssetMetadata {
 	uint64_t uuid;
@@ -25,41 +43,48 @@ struct AssetMetadata {
 	AssetType assetType;
 };
 
-class Asset {
+class AssetBase {
   public:
-	Asset(const UUID uuid) : uuid(uuid) {}
+	AssetBase(const UUID uuid) : uuid(uuid) {}
 	virtual void loadFromFile(const std::string &filepath) = 0;
 
   protected:
 	const UUID uuid;
 };
 
-template <typename T>
-	requires std::derived_from<T, Asset>
-struct AssetReference {
-	std::string path;
-	uint64_t uuid = UUID::nullID;
-	AssetType assetType = AssetType::UNKNOWN;
+template <typename T, AssetType type>
+class Asset : public AssetBase {
+  public:
+	Asset(const UUID uuid) : AssetBase(uuid) {}
+	static constexpr AssetType GetType() { return type; }
 };
 
 template <typename T>
-	requires std::derived_from<T, Asset>
+	requires std::derived_from<T, AssetBase>
+struct AssetReference {
+	std::string path;
+	uint64_t uuid = UUID::nullID;
+	static constexpr AssetType assetType = T::GetType();
+};
+
+template <typename T>
+	requires std::derived_from<T, AssetBase>
 class RuntimeAssetLoader;
 template <typename T>
-	requires std::derived_from<T, Asset>
+	requires std::derived_from<T, AssetBase>
 class EditorAssetLoader;
 
 class AssetManager {
   public:
 	virtual void initializeAssetRegistry() = 0;
 
-	const std::unordered_map<UUID, std::weak_ptr<Asset>> &
+	const std::unordered_map<UUID, std::weak_ptr<AssetBase>> &
 	getLoadedAssets() const {
 		return loadedAssets;
 	}
 
   protected:
-	std::unordered_map<UUID, std::weak_ptr<Asset>> loadedAssets;
+	std::unordered_map<UUID, std::weak_ptr<AssetBase>> loadedAssets;
 };
 
 class EditorAssetManager : public AssetManager {
@@ -68,7 +93,7 @@ class EditorAssetManager : public AssetManager {
 		: projectRootPath(projectRootPath) {}
 
 	template <typename T>
-		requires std::derived_from<T, Asset>
+		requires std::derived_from<T, AssetBase>
 	std::shared_ptr<T> get(UUID &uuid) {
 		if (loadedAssets.find(uuid) != loadedAssets.end()) {
 			return std::dynamic_pointer_cast<T>(loadedAssets[uuid].lock());
@@ -99,6 +124,8 @@ class EditorAssetManager : public AssetManager {
 
 	AssetMetadata loadMetadataFromFile(const std::filesystem::path &metaFile);
 	void createMetadataForFile(const std::filesystem::path &file, const std::filesystem::path &metaFile);
+
+	AssetType getAssetTypeFromExtension(std::string extension);
 
 	std::unordered_map<uint64_t, AssetMetadata> assetMetadataRegistry;
 	std::unordered_map<std::filesystem::path, AssetMetadata> assetMetadataByPath;

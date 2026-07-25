@@ -1,5 +1,6 @@
 #pragma once
 
+#include "material.hpp"
 #include "serialization.hpp"
 #include <assets.hpp>
 #include <core.hpp>
@@ -8,9 +9,9 @@
 using namespace CitronAssets;
 
 namespace CitronGraphics {
-class Shader : public Asset {
+class Shader : public Asset<Shader, AssetType::SHADER> {
   public:
-	Shader(const UUID uuid) : Asset(uuid) {}
+	Shader(const UUID uuid) : Asset<Shader, AssetType::SHADER>(uuid) {}
 	~Shader() = default;
 
 	const std::string &getSourcePath() const { return sourcePath; }

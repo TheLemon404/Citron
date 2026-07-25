@@ -94,7 +94,7 @@ class InspectorPanel : public Panel {
 
   private:
 	template <typename T>
-		requires std::derived_from<T, Asset>
+		requires std::derived_from<T, AssetBase>
 	void drawAssetReferenceComponentGui(const std::string assetName,
 										AssetReference<T> &assetReference);
 };

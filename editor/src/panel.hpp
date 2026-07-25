@@ -43,7 +43,7 @@ class AssetPanel : public Panel {
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
 
-	std::string currentDirectory = "";
+	std::filesystem::path currentDirectory = "";
 	bool pendingRefreshDirectory = false;
 
   private:

@@ -89,7 +89,9 @@ class EditorAssetManager : public AssetManager,
 	virtual void serialize(StreamWriter &writer) override;
 	virtual void deserialize(StreamReader &reader) override;
 
-	std::string &getAssetPath(UUID uuid) { return assetIdToPathMap[uuid]; }
+	std::filesystem::path &getAssetPath(UUID uuid) {
+		return assetIdToPathMap[uuid];
+	}
 	UUID getAssetId(const std::string &path) { return assetPathToIdMap[path]; }
 
 	void refreshAssetRegistry();
@@ -97,8 +99,8 @@ class EditorAssetManager : public AssetManager,
   private:
 	std::vector<std::string> getRegistryFileAssets();
 
-	std::unordered_map<uint64_t, std::string> assetIdToPathMap;
-	std::unordered_map<std::string, uint64_t> assetPathToIdMap;
+	std::unordered_map<uint64_t, std::filesystem::path> assetIdToPathMap;
+	std::unordered_map<std::filesystem::path, uint64_t> assetPathToIdMap;
 	const std::string registryCacheFilePath;
 	const std::string projectRootPath;
 };

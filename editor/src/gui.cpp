@@ -103,7 +103,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 				if (!projectPath.empty()) {
 					Editor::get().openProject(projectPath);
 
-					assetPanel.currentDirectory = context.projectRootFolderPath;
+					assetPanel.currentDirectory =
+						context.projectFilePath.parent_path();
 					assetPanel.pendingRefreshDirectory = true;
 				}
 			}

@@ -32,7 +32,7 @@ void EditorAssetManager::initializeAssetRegistry() {
 
 void EditorAssetManager::refreshAssetRegistry() {
 	std::vector<std::string> registryFileAssets = getRegistryFileAssets();
-	std::vector<std::string> filesInProject =
+	std::vector<std::filesystem::path> filesInProject =
 		IO::getAllFilesInDirectory(projectRootPath);
 	for (std::string registryFileAsset : registryFileAssets) {
 		if (std::find(filesInProject.begin(), filesInProject.end(),
@@ -43,12 +43,13 @@ void EditorAssetManager::refreshAssetRegistry() {
 		}
 	}
 
-	for (std::string file : filesInProject) {
+	for (std::filesystem::path file : filesInProject) {
 		if (std::find(registryFileAssets.begin(), registryFileAssets.end(),
 					  file) == registryFileAssets.end()) {
-			if (!assetPathToIdMap.contains(file)) {
+			if (!assetPathToIdMap.contains(file.string())) {
 				UUID uuid = UUID();
-				CITRON_CORE_INFO("Asset: {} id {}", file, (uint64_t)uuid);
+				CITRON_CORE_INFO("Asset: {} id {}", file.string(),
+								 (uint64_t)uuid);
 				assetIdToPathMap[uuid] = file;
 				assetPathToIdMap[file] = uuid;
 			}
@@ -79,7 +80,7 @@ void EditorAssetManager::serialize(StreamWriter &writer) {
 	writer.writeData(&numEntries, sizeof(int));
 	for (const auto &[uuid, path] : assetIdToPathMap) {
 		writer.writeData(&uuid, sizeof(uint64_t));
-		writer.writeString(path);
+		writer.writeString(path.string());
 	}
 }
 

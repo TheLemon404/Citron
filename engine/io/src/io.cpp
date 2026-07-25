@@ -12,10 +12,10 @@
 
 using namespace CitronIO;
 
-std::string IO::readFile(const std::string &path) {
+std::string IO::readFile(const std::filesystem::path &path) {
 	if (!fileExists(path))
 		CITRON_CORE_ERROR("File cannot be read from at (does not exist): {}",
-						  path);
+						  path.string());
 
 	std::ifstream file(path);
 	std::string content((std::istreambuf_iterator<char>(file)),
@@ -31,67 +31,61 @@ void IO::createFile(const std::string &path) {
 	file.close();
 }
 
-void IO::createDirectory(const std::string &path) {
+void IO::createDirectory(const std::filesystem::path &path) {
 	std::filesystem::create_directory(path);
 }
 
-void IO::renameDirectory(const std::string &oldPath,
-						 const std::string &newPath) {
+void IO::renameDirectory(const std::filesystem::path &oldPath,
+						 const std::filesystem::path &newPath) {
 	std::filesystem::rename(oldPath, newPath);
 }
 
-void IO::deleteDirectory(const std::string &path) {
+void IO::deleteDirectory(const std::filesystem::path &path) {
 	std::filesystem::remove_all(path);
 }
 
-void IO::deleteFile(const std::string &path) { std::filesystem::remove(path); }
+void IO::deleteFile(const std::filesystem::path &path) {
+	std::filesystem::remove(path);
+}
 
-std::vector<std::string> IO::getFilesInDirectory(const std::string &path) {
-	std::vector<std::string> files;
+std::vector<std::filesystem::path>
+IO::getFilesInDirectory(const std::filesystem::path &path) {
+	std::vector<std::filesystem::path> files;
 	for (const auto &entry : std::filesystem::directory_iterator(path)) {
-		if (!isDirectory(entry.path().string()))
-			files.push_back(entry.path().string());
+		if (!entry.is_directory())
+			files.push_back(entry.path());
 	}
 	return files;
 }
 
-std::vector<std::string> IO::getAllFilesInDirectory(const std::string &path) {
-	std::vector<std::string> files;
+std::vector<std::filesystem::path>
+IO::getAllFilesInDirectory(const std::filesystem::path &path) {
+	std::vector<std::filesystem::path> files;
 	for (const auto &entry : std::filesystem::directory_iterator(path)) {
-		if (!isDirectory(entry.path().string()))
-			files.push_back(entry.path().string());
+		if (!entry.is_directory())
+			files.push_back(entry.path());
 		else
 			files.insert(files.end(),
-						 getAllFilesInDirectory(entry.path().string()).begin(),
-						 getAllFilesInDirectory(entry.path().string()).end());
+						 getAllFilesInDirectory(entry.path()).begin(),
+						 getAllFilesInDirectory(entry.path()).end());
 	}
 	return files;
 }
 
-std::string IO::getFileName(const std::string &path, bool includeExtensions) {
-	std::string name = path.substr(path.find_last_of("\\") + 1);
-	if (!includeExtensions)
-		name = name.substr(0, name.find_last_of("."));
-	return name;
+void IO::moveFileOrFolder(const std::filesystem::path &srcPath,
+						  const std::filesystem::path &dstPath) {
+	std::filesystem::rename(srcPath, dstPath / srcPath.filename());
 }
 
-std::string IO::getFileExtension(const std::string &path) {
-	return path.substr(path.find_last_of("."));
+void IO::openFileExplorer(const std::filesystem::path &path) {
+	std::system(("explorer " + path.string()).c_str());
 }
 
-void IO::moveFileOrFolder(const std::string &srcPath,
-						  const std::string &dstPath) {
-	std::filesystem::rename(srcPath, dstPath + "\\" + getFileName(srcPath));
-}
-
-void IO::openFileExplorer(const std::string &path) {
-	std::system(("explorer " + path).c_str());
-}
-
-void IO::writeFile(const std::string &path, const std::string &content) {
+void IO::writeFile(const std::filesystem::path &path,
+				   const std::string &content) {
 	if (!fileExists(path))
 		CITRON_CORE_ERROR("File cannot be written to at (does not exist): {}",
-						  path);
+						  path.string());
 
 	std::ofstream file(path);
 	file.clear();
@@ -99,14 +93,15 @@ void IO::writeFile(const std::string &path, const std::string &content) {
 	file.close();
 }
 
-bool IO::fileExists(const std::string &path) {
+bool IO::fileExists(const std::filesystem::path &path) {
 	return std::ifstream(path).good();
 }
 
-void IO::cloneFile(const std::string &srcPath, const std::string &dstPath) {
+void IO::cloneFile(const std::filesystem::path &srcPath,
+				   const std::filesystem::path &dstPath) {
 	if (!fileExists(srcPath))
 		CITRON_CORE_ERROR("File cannot be cloned from (does not exist): {}",
-						  srcPath);
+						  srcPath.string());
 
 	std::ifstream srcFile(srcPath);
 	std::ofstream dstFile(dstPath);
@@ -168,22 +163,4 @@ std::string IO::saveFileDialog(const std::string &filtername,
 	NFD_Quit();
 
 	return result;
-}
-
-std::vector<std::string> IO::getDirectoryEntries(const std::string &path) {
-	std::vector<std::string> entries;
-
-	for (const auto &entry : std::filesystem::directory_iterator(path)) {
-		entries.push_back(entry.path().string());
-	}
-
-	return entries;
-}
-
-bool IO::isDirectory(const std::string &path) {
-	return std::filesystem::is_directory(path);
-}
-
-std::string IO::getParentDirectory(const std::string &path) {
-	return std::filesystem::path(path).parent_path().string();
 }

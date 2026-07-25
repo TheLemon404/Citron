@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <ecs.hpp>
 #include <event.hpp>
+#include <filesystem>
 #include <float.h>
 #include <io.hpp>
 #include <logger.hpp>
@@ -57,7 +58,7 @@ bool CustomCollapsingHeader(const char *label, bool *p_open,
 
 void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get().getEditorContext();
-	currentDirectory = context.projectRootFolderPath;
+	currentDirectory = context.projectFilePath.parent_path();
 	refreshDirectoryListings();
 }
 void AssetPanel::onDetach() {}
@@ -73,9 +74,8 @@ void AssetPanel::onDraw() {
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_ARROW_UP)) {
 		if (!currentDirectory.empty() &&
-			currentDirectory != context.projectRootFolderPath) {
-			currentDirectory =
-				CitronIO::IO::getParentDirectory(currentDirectory);
+			currentDirectory != context.projectFilePath.parent_path()) {
+			currentDirectory = currentDirectory.parent_path();
 			refreshDirectoryListings();
 		}
 	}
@@ -84,9 +84,8 @@ void AssetPanel::onDraw() {
 				ImGui::AcceptDragDropPayload("ASSET_FILE_REORDER")) {
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
 			if (srcPath != context.currentlyEditedSceneAssetPath) {
-				CitronIO::IO::moveFileOrFolder(
-					srcPath,
-					srcPath.substr(0, currentDirectory.find_last_of('\\')));
+				CitronIO::IO::moveFileOrFolder(srcPath,
+											   currentDirectory.parent_path());
 
 				pendingRefreshDirectory = true;
 			} else {
@@ -106,7 +105,8 @@ void AssetPanel::onDraw() {
 
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-1.0f);
-	ImGui::InputText("##currentDirectory", &currentDirectory,
+	std::string directoryTempString = currentDirectory.string();
+	ImGui::InputText("##currentDirectory", &directoryTempString,
 					 ImGuiInputTextFlags_ReadOnly);
 
 	ImGui::EndGroup();
@@ -139,9 +139,9 @@ void AssetPanel::onDraw() {
 									 ImGuiInputTextFlags_EnterReturnsTrue)) {
 			ImGui::InputTextWithHint("Directory Name", "Directory Name",
 									 &folderName);
-			CitronIO::IO::createDirectory(currentDirectory + "\\" + folderName);
+			CitronIO::IO::createDirectory(currentDirectory / folderName);
 			CITRON_CLIENT_INFO("Created new directory {}",
-							   currentDirectory + "\\" + folderName);
+							   (currentDirectory / folderName).string());
 			pendingRefreshDirectory = true;
 			ImGui::CloseCurrentPopup();
 		}
@@ -353,14 +353,14 @@ void AssetPanel::onEvent(Event &e) {
 
 void AssetPanel::refreshDirectoryListings() {
 	CITRON_CLIENT_INFO("Refreshed directory listings for: {}",
-					   currentDirectory);
+					   currentDirectory.string());
 	directoryListings.clear();
-	for (std::string &entry :
-		 CitronIO::IO::getDirectoryEntries(currentDirectory)) {
+	for (std::filesystem::path &entry :
+		 CitronIO::IO::getFilesInDirectory(currentDirectory)) {
 		AssetCard card = {};
-		card.path = entry;
-		card.name = entry.substr(entry.find_last_of("\\") + 1);
-		card.isDirectory = CitronIO::IO::isDirectory(entry);
+		card.path = entry.string();
+		card.name = entry.filename().string();
+		card.isDirectory = std::filesystem::is_directory(entry);
 		directoryListings.push_back(card);
 	}
 

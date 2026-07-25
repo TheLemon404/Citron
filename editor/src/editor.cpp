@@ -22,13 +22,14 @@ Editor::Editor(const std::string &projectFilePath)
 void Editor::init() {
 	App::init();
 
-	openProject(editorContext.projectFilePath);
+	openProject(editorContext.projectFilePath.string());
 
 	assetManager->initializeAssetRegistry();
 
 	pushLayer<GuiLayer>();
 
-	YAML::Node projectFileNode = YAML::LoadFile(editorContext.projectFilePath);
+	YAML::Node projectFileNode =
+		YAML::LoadFile(editorContext.projectFilePath.string());
 	if (projectFileNode["last_scene"].IsDefined() &&
 		!projectFileNode["last_scene"].IsNull()) {
 		std::string lastEditedSceneFile =
@@ -50,13 +51,9 @@ void Editor::update() { App::update(); }
 void Editor::close() {
 	App::close();
 	if (!editorContext.projectFilePath.empty()) {
-		CitronIO::IO::writeFile(
-			std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
-			"last_project: " + editorContext.projectFilePath);
-
 		if (!editorContext.currentlyEditedSceneAssetPath.empty()) {
 			YAML::Node projectFileNode =
-				YAML::LoadFile(editorContext.projectFilePath);
+				YAML::LoadFile(editorContext.projectFilePath.string());
 			projectFileNode["last_scene"] =
 				editorContext.currentlyEditedSceneAssetPath;
 			CitronIO::IO::writeFile(editorContext.projectFilePath,
@@ -111,14 +108,9 @@ bool Editor::openProject(std::string projectFilePath) {
 		return false;
 
 	editorContext.projectFilePath = projectFilePath;
-	editorContext.projectRootFolderPath =
-		projectFilePath.substr(0, projectFilePath.find_last_of("\\"));
-
-	YAML::Node node = YAML::LoadFile(projectFilePath);
-	editorContext.projectName = node["name"].as<std::string>();
-
 	editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
 	editorContext.currentlyEditedSceneAssetPath = "";
+	YAML::Node node = YAML::LoadFile(projectFilePath);
 
 	if (node["last_scene"].IsDefined() && !node["last_scene"].IsNull() &&
 		!node["last_scene"].as<std::string>().empty()) {
@@ -128,8 +120,8 @@ bool Editor::openProject(std::string projectFilePath) {
 		editorContext.getCurrentScene()->deserialize(reader);
 	}
 
-	std::string editorTitle =
-		std::string("Citron Editor: ") + editorContext.projectName;
+	std::string editorTitle = std::string("Citron Editor: ") +
+							  editorContext.projectFilePath.filename().string();
 	Editor::get().getWindow().setName(editorTitle);
 
 	YAML::Node citronConfig =

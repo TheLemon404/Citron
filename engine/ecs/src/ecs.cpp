@@ -1,11 +1,14 @@
 #include "ecs.hpp"
 #include "component.hpp"
 #include "entt/entity/fwd.hpp"
+#include "geometry.hpp"
 #include "logger.hpp"
+#include "material.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include <io.hpp>
 #include <memory>
+#include <renderer.hpp>
 
 using namespace CitronECS;
 

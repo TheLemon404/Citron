@@ -43,7 +43,8 @@ class Scene : public ISerializable<Scene> {
 
 	UUID createEntity();
 	entt::entity getEntity(UUID uuid);
-	template <typename T> void addComponent(entt::entity entity, T component);
+	template <typename T>
+	void addComponent(entt::entity entity, T component);
 	void reparentEntity(entt::entity entity, entt::entity parent);
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
@@ -73,6 +74,7 @@ enum class SceneMode {
 
 class SceneManager {
   public:
+	SceneManager(AssetManager &assetManager) : assetManager(assetManager) {}
 	void onAttach();
 	void onDetach();
 	void onUpdate();
@@ -83,6 +85,7 @@ class SceneManager {
 	std::shared_ptr<Scene> &getActiveScene() { return activeScene; }
 
   private:
+	AssetManager &assetManager;
 	SceneMode mode = SceneMode::EDIT;
 	std::shared_ptr<Scene> activeScene;
 };

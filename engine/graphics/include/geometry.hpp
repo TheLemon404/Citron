@@ -18,8 +18,6 @@ class Geometry : public Asset<Geometry, AssetType::MESH> {
   public:
 	Geometry(const UUID uuid) : Asset<Geometry, AssetType::MESH>(uuid) {}
 
-	virtual void loadFromFile(const std::string &filepath) override;
-
   private:
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;

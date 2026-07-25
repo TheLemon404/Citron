@@ -1,10 +1,12 @@
 #pragma once
 
+#include "assets.hpp"
 #include "device.hpp"
+#include "geometry.hpp"
 #include <cstddef>
-#include <cstdint>
 #include <functional>
 #include <layer.hpp>
+#include <material.hpp>
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
@@ -60,13 +62,20 @@ class Frame {
 	wgpu::CommandEncoder encoder;
 };
 
+struct RenderObject {
+	std::shared_ptr<Geometry> geometry;
+	std::shared_ptr<Material> material;
+};
+
 class Renderer {
   public:
-	Renderer(Window &window) : device(window) {}
+	Renderer(Window &window, AssetManager &assetManager) : device(window) {}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
 	Frame beginFrame();
 	void endFrame(Frame &frame);
+
+	void drawRenderData(std::vector<RenderObject> &renderObjects);
 
 	void init();
 	void end();

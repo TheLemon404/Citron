@@ -366,9 +366,7 @@ void AssetPanel::refreshDirectoryListings() {
 		directoryListings.push_back(card);
 	}
 
-	std::shared_ptr<EditorAssetManager> editorAssetManager =
-		Editor::get().getAssetManager();
-	editorAssetManager->refreshAssetRegistry();
+	Editor::get().getAssetManager().refreshAssetRegistry();
 }
 
 void ConsolePanel::onAttach() {}
@@ -604,7 +602,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 	const std::string assetName, AssetReference<T> &assetReference) {
 
 	EditorContext &context = Editor::get().getEditorContext();
-	std::shared_ptr<EditorAssetManager> editorAssetManager =
+	AssetManager &assetManager =
 		Editor::get().getAssetManager();
 
 	ImGui::PushID(&assetReference);
@@ -619,8 +617,8 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 		if (const ImGuiPayload *payload =
 				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
-			if (editorAssetManager->isValidAsset(std::filesystem::path(srcPath))) {
-				AssetMetadata metadata = editorAssetManager->getAssetMetadataByPath(std::filesystem::path(srcPath));
+			AssetMetadata metadata = assetManager.getAssetMetadata(std::filesystem::path(srcPath));
+			if (assetManager.isValidAsset(metadata.uuid)) {
 				if (metadata.assetType == AssetReference<T>::assetType) {
 					assetReference.uuid = metadata.uuid;
 					assetReference.path = metadata.assetPath.string();

@@ -11,16 +11,7 @@ using namespace CitronCore;
 
 namespace {
 
-class AssetBase {
-  public:
-	AssetBase(const UUID uuid) : uuid(uuid) {}
-	virtual void loadFromFile(const std::string &filepath) = 0;
-
-  protected:
-	const UUID uuid;
-};
-
-} // namespace
+}
 
 namespace CitronAssets {
 
@@ -56,6 +47,14 @@ struct AssetMetadata {
 	AssetType assetType;
 };
 
+class AssetBase {
+  public:
+	AssetBase(const UUID uuid) : uuid(uuid) {}
+
+  protected:
+	const UUID uuid;
+};
+
 template <typename T, AssetType type>
 class Asset : public AssetBase {
   public:
@@ -71,53 +70,52 @@ struct AssetReference {
 	static constexpr AssetType assetType = T::GetType();
 };
 
-template <typename T>
-	requires std::derived_from<T, AssetBase>
-class RuntimeAssetLoader;
-template <typename T>
-	requires std::derived_from<T, AssetBase>
-class EditorAssetLoader;
+class AssetImporter {
+  public:
+	std::unordered_map<AssetType, std::function<std::shared_ptr<AssetBase>(UUID, const std::string &)>> assetImportFunctions;
 
-class AssetManager {
+	std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata);
+};
+
+class AssetManagerBase {
   public:
 	virtual void initializeAssetRegistry() = 0;
+	virtual void refreshAssetRegistry() = 0;
+
+	virtual std::shared_ptr<AssetBase> getAsset(const UUID uuid) = 0;
+	virtual bool isValidAsset(const UUID uuid) = 0;
+	virtual AssetType getAssetType(const UUID uuid) = 0;
 
 	const std::unordered_map<UUID, std::weak_ptr<AssetBase>> &
 	getLoadedAssets() const {
 		return loadedAssets;
 	}
 
+	void registerLoadFunction(AssetType type, std::function<std::shared_ptr<AssetBase>(UUID, const std::string &)> function) {
+		assetImporter.assetImportFunctions[type] = function;
+	}
+
   protected:
+	AssetImporter assetImporter;
 	std::unordered_map<UUID, std::weak_ptr<AssetBase>> loadedAssets;
 };
 
-class EditorAssetManager : public AssetManager {
+class EditorAssetManager : public AssetManagerBase {
   public:
 	EditorAssetManager(const std::filesystem::path &projectRootPath)
 		: projectRootPath(projectRootPath) {}
 
-	template <typename T>
-		requires std::derived_from<T, AssetBase>
-	std::shared_ptr<T> get(UUID &uuid) {
-		if (loadedAssets.find(uuid) != loadedAssets.end()) {
-			return std::dynamic_pointer_cast<T>(loadedAssets[uuid].lock());
-		}
-
-		std::shared_ptr<T> asset = std::make_shared<T>(uuid);
-		asset->loadFromFile(assetMetadataRegistry[uuid]);
-		loadedAssets[uuid] = asset;
-		return asset;
-	}
-
 	virtual void initializeAssetRegistry() override;
+	virtual std::shared_ptr<AssetBase> getAsset(const UUID uuid) override;
 
 	const AssetMetadata &getAssetMetadata(UUID uuid) {
 		return assetMetadataRegistry[uuid];
 	}
 
-	void refreshAssetRegistry();
+	virtual void refreshAssetRegistry() override;
 
-	bool isValidAsset(const std::filesystem::path &path);
+	virtual bool isValidAsset(const UUID uuid) override;
+	virtual AssetType getAssetType(const UUID uuid) override;
 
 	AssetMetadata getAssetMetadataByPath(const std::filesystem::path &path) {
 		return assetMetadataByPath[path];
@@ -136,9 +134,60 @@ class EditorAssetManager : public AssetManager {
 	const std::filesystem::path projectRootPath;
 };
 
-class RuntimeAssetManager : public AssetManager {
+class RuntimeAssetManager : public AssetManagerBase {
   public:
-	RuntimeAssetManager() : AssetManager() {}
 	virtual void initializeAssetRegistry() override;
+	virtual void refreshAssetRegistry() override;
+	virtual std::shared_ptr<AssetBase> getAsset(const UUID uuid) override;
+	virtual bool isValidAsset(const UUID uuid) override;
+	virtual AssetType getAssetType(const UUID uuid) override;
+};
+
+class AssetManager {
+  public:
+	AssetManager(const bool isRuntime, std::filesystem::path projectRootPath) : isRuntime(isRuntime) {
+		if (isRuntime) {
+			m_assetManager = std::make_unique<RuntimeAssetManager>();
+		} else {
+			m_assetManager = std::make_unique<EditorAssetManager>(projectRootPath);
+		}
+	}
+
+	void initializeAssetRegistry() {
+		m_assetManager->initializeAssetRegistry();
+	}
+
+	void refreshAssetRegistry() {
+		m_assetManager->refreshAssetRegistry();
+	}
+
+	bool isValidAsset(const UUID uuid) {
+		return m_assetManager->isValidAsset(uuid);
+	}
+
+	AssetType getAssetType(const UUID uuid) {
+		return m_assetManager->getAssetType(uuid);
+	}
+
+	AssetMetadata getAssetMetadata(const std::filesystem::path path) {
+		if (isRuntime) {
+			throw std::runtime_error("getAssetMetadata is not supported in runtime mode");
+		}
+		return ((EditorAssetManager *)(m_assetManager.get()))->getAssetMetadataByPath(path);
+	}
+
+	void registerLoadFunction(AssetType type, std::function<std::shared_ptr<AssetBase>(UUID, const std::string &)> function) {
+		m_assetManager->registerLoadFunction(type, function);
+	}
+
+	template <typename T>
+		requires std::derived_from<T, AssetBase>
+	std::shared_ptr<T> getAsset(const UUID uuid) {
+		return std::dynamic_pointer_cast<T>(m_assetManager->getAsset(uuid));
+	}
+
+  private:
+	const bool isRuntime;
+	std::unique_ptr<AssetManagerBase> m_assetManager;
 };
 } // namespace CitronAssets

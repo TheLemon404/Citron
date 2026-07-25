@@ -55,9 +55,10 @@ void AppLogSink::sink_it_(const spdlog::details::log_msg &msg) {
 		entries.erase(entries.begin());
 }
 
-App::App(bool isRuntime, std::shared_ptr<AssetManager> assetManager)
-	: window("Citron Editor", 1280, 720, CITRON_BIND_EVENT_FN(App::onEvent)),
-	  renderer(window), isRuntimeMode(isRuntime), assetManager(assetManager) {
+App::App(bool isRuntime, std::filesystem::path projectFilePath)
+	: window("Citron Editor", 1280, 720, CITRON_BIND_EVENT_FN(App::onEvent)), assetManager(isRuntime, projectFilePath.parent_path()),
+	  renderer(window, assetManager),
+	  isRuntimeMode(isRuntime), sceneManager(assetManager) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 }

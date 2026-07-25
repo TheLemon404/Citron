@@ -49,10 +49,6 @@ class Editor : public CitronCore::App {
 
 	bool openProject(std::string projectFilePath);
 
-	std::shared_ptr<EditorAssetManager> getAssetManager() {
-		return std::static_pointer_cast<EditorAssetManager>(assetManager);
-	}
-
 	void saveCurrentScene();
 
   private:

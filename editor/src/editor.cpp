@@ -14,8 +14,7 @@
 
 Editor::Editor(const std::string &projectFilePath)
 	: CitronCore::App(
-		  false, std::make_unique<EditorAssetManager>(projectFilePath.substr(
-					 0, projectFilePath.find_last_of('\\') + 1))) {
+		  false, projectFilePath) {
 	editorContext.projectFilePath = projectFilePath;
 }
 
@@ -24,7 +23,7 @@ void Editor::init() {
 
 	openProject(editorContext.projectFilePath.string());
 
-	assetManager->initializeAssetRegistry();
+	assetManager.initializeAssetRegistry();
 
 	pushLayer<GuiLayer>();
 

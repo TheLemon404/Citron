@@ -5,12 +5,17 @@
 #include "yaml-cpp/node/emit.h"
 
 #include <core.hpp>
+#include <cstdint>
 #include <io.hpp>
 #include <memory>
 #include <yaml-cpp/yaml.h>
 
 using namespace CitronAssets;
 using namespace CitronIO;
+
+std::shared_ptr<AssetBase> AssetImporter::importAsset(AssetMetadata metadata) {
+	return assetImportFunctions[metadata.assetType](metadata.uuid, metadata.assetPath.string());
+}
 
 void EditorAssetManager::initializeAssetRegistry() {
 	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
@@ -32,6 +37,16 @@ void EditorAssetManager::initializeAssetRegistry() {
 			assetMetadataRegistry[metadata.uuid] = metadata;
 		}
 	}
+}
+
+std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
+	if (loadedAssets.find(uuid) != loadedAssets.end()) {
+		return loadedAssets[uuid].lock();
+	}
+	AssetMetadata metadata = assetMetadataRegistry[uuid];
+	std::shared_ptr<AssetBase> newlyLoadedAsset = assetImporter.importAsset(metadata);
+	loadedAssets[uuid] = newlyLoadedAsset;
+	return newlyLoadedAsset;
 }
 
 void EditorAssetManager::refreshAssetRegistry() {
@@ -63,8 +78,12 @@ void EditorAssetManager::refreshAssetRegistry() {
 	}
 }
 
-bool EditorAssetManager::isValidAsset(const std::filesystem::path &path) {
-	return assetMetadataByPath.contains(path);
+bool EditorAssetManager::isValidAsset(const UUID uuid) {
+	return assetMetadataRegistry.contains(uuid);
+}
+
+AssetType EditorAssetManager::getAssetType(const UUID uuid) {
+	return assetMetadataRegistry[uuid].assetType;
 }
 
 bool EditorAssetManager::isKnownAssetFileExtension(std::string extension) {
@@ -113,3 +132,7 @@ AssetType EditorAssetManager::getAssetTypeFromExtension(std::string extension) {
 }
 
 void RuntimeAssetManager::initializeAssetRegistry() {}
+void RuntimeAssetManager::refreshAssetRegistry() {}
+std::shared_ptr<AssetBase> RuntimeAssetManager::getAsset(const UUID uuid) {}
+bool RuntimeAssetManager::isValidAsset(const UUID uuid) {}
+AssetType RuntimeAssetManager::getAssetType(const UUID uuid) {}

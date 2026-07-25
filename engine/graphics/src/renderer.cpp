@@ -58,6 +58,13 @@ void Renderer::endFrame(Frame &frame) {
 	device.presentCurrentSurfaceTexture();
 }
 
+void Renderer::drawRenderData(std::vector<RenderObject> &renderObjects) {
+	for (auto &renderObject : renderObjects) {
+		if (renderObject.geometry && renderObject.material) {
+		}
+	}
+}
+
 void Renderer::end() { device.releasePlatformResources(); }
 
 void Renderer::onEvent(Event &e) {}

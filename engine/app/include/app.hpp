@@ -4,6 +4,7 @@
 #include <assets.hpp>
 #include <ecs.hpp>
 #include <event.hpp>
+#include <filesystem>
 #include <layer.hpp>
 #include <layer_stack.hpp>
 #include <logger.hpp>
@@ -60,7 +61,7 @@ class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
 
 class App {
   public:
-	App(bool isRuntime, std::shared_ptr<AssetManager> assetManager);
+	App(bool isRuntime, std::filesystem::path projectFilePath);
 	~App();
 
 	void init();
@@ -88,7 +89,7 @@ class App {
 	Window &getWindow() { return window; }
 	Renderer &getRenderer() { return renderer; }
 	SceneManager &getSceneManager() { return sceneManager; }
-	std::shared_ptr<AssetManager> getAssetManager() { return assetManager; }
+	AssetManager &getAssetManager() { return assetManager; }
 
 	void initLogSink() {
 		sink = std::make_shared<AppLogSink>();
@@ -107,7 +108,9 @@ class App {
 
 	Renderer renderer;
 	SceneManager sceneManager;
-	std::shared_ptr<AssetManager> assetManager;
+	AssetManager assetManager;
+
+	std::vector<CitronGraphics::RenderObject> extractRenderObjects();
 
 	bool onWindowClose(Event &e);
 

@@ -19,6 +19,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
+#include "material.hpp"
 #include "shader.hpp"
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
@@ -622,6 +623,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 				if (metadata.assetType == AssetReference<T>::assetType) {
 					assetReference.uuid = metadata.uuid;
 					assetReference.path = metadata.assetPath.string();
+					Editor::get().getAssetManager().getAsset<Material>(metadata.uuid);
 				}
 			}
 		}

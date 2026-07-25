@@ -50,6 +50,7 @@ struct AssetMetadata {
 class AssetBase {
   public:
 	AssetBase(const UUID uuid) : uuid(uuid) {}
+	virtual ~AssetBase() = default;
 
   protected:
 	const UUID uuid;
@@ -72,9 +73,7 @@ struct AssetReference {
 
 class AssetImporter {
   public:
-	std::unordered_map<AssetType, std::function<std::shared_ptr<AssetBase>(UUID, const std::string &)>> assetImportFunctions;
-
-	std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata);
+	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) = 0;
 };
 
 class AssetManagerBase {
@@ -91,12 +90,12 @@ class AssetManagerBase {
 		return loadedAssets;
 	}
 
-	void registerLoadFunction(AssetType type, std::function<std::shared_ptr<AssetBase>(UUID, const std::string &)> function) {
-		assetImporter.assetImportFunctions[type] = function;
+	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer) {
+		assetImporters[type] = importer;
 	}
 
   protected:
-	AssetImporter assetImporter;
+	std::unordered_map<AssetType, std::shared_ptr<AssetImporter>> assetImporters;
 	std::unordered_map<UUID, std::weak_ptr<AssetBase>> loadedAssets;
 };
 
@@ -176,8 +175,8 @@ class AssetManager {
 		return ((EditorAssetManager *)(m_assetManager.get()))->getAssetMetadataByPath(path);
 	}
 
-	void registerLoadFunction(AssetType type, std::function<std::shared_ptr<AssetBase>(UUID, const std::string &)> function) {
-		m_assetManager->registerLoadFunction(type, function);
+	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer) {
+		m_assetManager->registerAssetImporter(type, importer);
 	}
 
 	template <typename T>

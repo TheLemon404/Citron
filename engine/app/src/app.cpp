@@ -61,6 +61,11 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 	  isRuntimeMode(isRuntime), sceneManager(assetManager) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
+
+	materialImporter = std::make_shared<MaterialImporter>();
+	shaderImporter = std::make_shared<ShaderImporter>(renderer.getDevice());
+	assetManager.registerAssetImporter(AssetType::MATERIAL, materialImporter);
+	assetManager.registerAssetImporter(AssetType::SHADER, shaderImporter);
 }
 
 App::~App() {}

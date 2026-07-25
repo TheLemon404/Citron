@@ -24,13 +24,11 @@ class Shader : public Asset<Shader, AssetType::SHADER> {
 	wgpu::ShaderModule shaderModule;
 };
 
-class ShaderImporter {
+class ShaderImporter : public AssetImporter {
   public:
-	ShaderImporter(AssetManager &assetManager, Device &device) : device(device) {
-		assetManager.registerLoadFunction(AssetType::SHADER, std::bind(&ShaderImporter::loadShader, this, std::placeholders::_1, std::placeholders::_2));
-	}
+	ShaderImporter(Device &device) : device(device) {}
 
-	std::shared_ptr<Shader> loadShader(UUID uuid, const std::string &filepath);
+	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) override;
 
   private:
 	Device &device;

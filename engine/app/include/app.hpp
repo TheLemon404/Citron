@@ -120,6 +120,9 @@ class App {
 	wgpu::Texture colorTarget;
 	wgpu::TextureView colorTargetView;
 
+	std::shared_ptr<MaterialImporter> materialImporter;
+	std::shared_ptr<ShaderImporter> shaderImporter;
+
 	Window window;
 };
 } // namespace CitronCore

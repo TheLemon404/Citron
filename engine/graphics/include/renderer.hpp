@@ -3,10 +3,12 @@
 #include "assets.hpp"
 #include "device.hpp"
 #include "geometry.hpp"
+#include "shader.hpp"
 #include <cstddef>
 #include <functional>
 #include <layer.hpp>
 #include <material.hpp>
+#include <memory>
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
@@ -69,7 +71,8 @@ struct RenderObject {
 
 class Renderer {
   public:
-	Renderer(Window &window, AssetManager &assetManager) : device(window) {}
+	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager) {
+	}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
 	Frame beginFrame();
@@ -88,5 +91,6 @@ class Renderer {
 
   private:
 	Device device;
+	AssetManager &assetManager;
 };
 } // namespace CitronGraphics

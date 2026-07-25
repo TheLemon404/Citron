@@ -14,7 +14,6 @@ using namespace CitronAssets;
 using namespace CitronIO;
 
 std::shared_ptr<AssetBase> AssetImporter::importAsset(AssetMetadata metadata) {
-	return assetImportFunctions[metadata.assetType](metadata.uuid, metadata.assetPath.string());
 }
 
 void EditorAssetManager::initializeAssetRegistry() {
@@ -44,7 +43,10 @@ std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
 		return loadedAssets[uuid].lock();
 	}
 	AssetMetadata metadata = assetMetadataRegistry[uuid];
-	std::shared_ptr<AssetBase> newlyLoadedAsset = assetImporter.importAsset(metadata);
+	if (!assetImporters.contains(metadata.assetType)) {
+		CITRON_CORE_ERROR("No import method exists for asset type: {}", to_string(metadata.assetType));
+	}
+	std::shared_ptr<AssetBase> newlyLoadedAsset = assetImporters[metadata.assetType]->importAsset(metadata);
 	loadedAssets[uuid] = newlyLoadedAsset;
 	return newlyLoadedAsset;
 }

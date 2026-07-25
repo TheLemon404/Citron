@@ -14,13 +14,9 @@ class Material : public Asset<Material, AssetType::MATERIAL> {
 	AssetReference<Shader> shader;
 };
 
-class MaterialImporter {
+class MaterialImporter : public AssetImporter {
   public:
-	MaterialImporter(AssetManager &assetManager) {
-		assetManager.registerLoadFunction(AssetType::MATERIAL, std::bind(&MaterialImporter::loadMaterial, this, std::placeholders::_1, std::placeholders::_2));
-	}
-
-	std::shared_ptr<Material> loadMaterial(UUID uuid, const std::string &filepath);
+	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) override;
 };
 
 } // namespace CitronGraphics

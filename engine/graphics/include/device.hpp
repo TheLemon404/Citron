@@ -38,6 +38,7 @@ class Device {
 	const int getLastSurfaceHeight();
 
 	const wgpu::Queue &getQueue() { return queue; }
+	const wgpu::Instance &getInstance() { return instance; }
 
 	void resizeSurface(int width, int height);
 

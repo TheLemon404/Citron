@@ -25,7 +25,7 @@ struct EntityBaseComponent {
 
 struct MeshComponent {
 	AssetReference<Geometry> geometryAsset;
-	AssetReference<Material> materialAsset;
+	AssetReference<Shader> materialAsset;
 };
 
 } // namespace CitronECS

@@ -623,7 +623,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 				if (metadata.assetType == AssetReference<T>::assetType) {
 					assetReference.uuid = metadata.uuid;
 					assetReference.path = metadata.assetPath.string();
-					Editor::get().getAssetManager().getAsset<Material>(metadata.uuid);
+					Editor::get().getAssetManager().getAsset<T>(metadata.uuid);
 				}
 			}
 		}
@@ -656,8 +656,8 @@ void InspectorPanel::onDraw() {
 			if (CustomCollapsingHeader("Mesh Component", &selection)) {
 				drawAssetReferenceComponentGui<Geometry>("Geometry",
 														 meshComponent.geometryAsset);
-				drawAssetReferenceComponentGui<Material>("Material",
-														 meshComponent.materialAsset);
+				drawAssetReferenceComponentGui<Shader>("Material",
+													   meshComponent.materialAsset);
 			}
 		}
 

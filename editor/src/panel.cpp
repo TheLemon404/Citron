@@ -618,8 +618,6 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
 			UUID assetId = editorAssetManager->getAssetId(srcPath);
-			std::shared_ptr<Shader> shader =
-				editorAssetManager->get<Shader>(assetId);
 		}
 		ImGui::EndDragDropTarget();
 	}

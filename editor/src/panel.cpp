@@ -245,7 +245,9 @@ void AssetPanel::onDraw() {
 								  ImGuiSelectableFlags_AllowDoubleClick,
 								  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-					// TODO add file double click logic
+					std::string command =
+						"start notepad \"" + entry.path + "\"";
+					system(command.c_str());
 				} else {
 					entry.selected = !entry.selected;
 				}

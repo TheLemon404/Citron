@@ -37,20 +37,19 @@ std::shared_ptr<T> AssetManager::get(AssetReference<T> &assetReference,
 }
 
 void EditorAssetManager::initializeAssetRegistry() {
-	std::string registryFile = projectRootPath + "\\registry.citron";
-	if (CitronIO::IO::fileExists(registryFile)) {
+	if (CitronIO::IO::fileExists(registryCacheFilePath)) {
 		try {
-			FileStreamReader reader(registryFile);
+			FileStreamReader reader(registryCacheFilePath);
 			deserialize(reader);
 		} catch (const std::exception &e) {
 			CITRON_CORE_ERROR("Failed to deserialize asset registry: {}. "
 							  "Deleting and recreating registry file...",
 							  e.what());
-			CitronIO::IO::deleteFile(registryFile);
-			CitronIO::IO::createFile(registryFile);
+			CitronIO::IO::deleteFile(registryCacheFilePath);
+			CitronIO::IO::createFile(registryCacheFilePath);
 		}
 	} else {
-		CitronIO::IO::createFile(registryFile);
+		CitronIO::IO::createFile(registryCacheFilePath);
 	}
 
 	std::vector<std::string> filesInProject =
@@ -63,11 +62,52 @@ void EditorAssetManager::initializeAssetRegistry() {
 		}
 	}
 
-	FileStreamWriter writer(registryFile);
+	FileStreamWriter writer(registryCacheFilePath);
 	serialize(writer);
 }
 
-void EditorAssetManager::refreshAssetRegistry() { initializeAssetRegistry(); }
+void EditorAssetManager::refreshAssetRegistry() {
+	std::vector<std::string> registryFileAssets = getRegistryFileAssets();
+	std::vector<std::string> filesInProject =
+		IO::getAllFilesInDirectory(projectRootPath);
+	for (std::string registryFileAsset : registryFileAssets) {
+		if (std::find(filesInProject.begin(), filesInProject.end(),
+					  registryFileAsset) == filesInProject.end()) {
+			uint64_t expiredAssetUUID = assetPathToIdMap[registryFileAsset];
+			assetIdToPathMap.erase(expiredAssetUUID);
+			assetPathToIdMap.erase(registryFileAsset);
+		}
+	}
+
+	for (std::string file : filesInProject) {
+		if (std::find(registryFileAssets.begin(), registryFileAssets.end(),
+					  file) == registryFileAssets.end()) {
+			if (!assetPathToIdMap.contains(file)) {
+				UUID uuid = UUID();
+				assetIdToPathMap[uuid] = file;
+				assetPathToIdMap[file] = uuid;
+			}
+		}
+	}
+
+	FileStreamWriter writer(registryCacheFilePath);
+	serialize(writer);
+}
+
+std::vector<std::string> EditorAssetManager::getRegistryFileAssets() {
+	std::vector<std::string> assets;
+	UUID uuid;
+	std::string path;
+	FileStreamReader reader(registryCacheFilePath);
+	int numEntries;
+	reader.readData(&numEntries, sizeof(int));
+	for (int i = 0; i < numEntries; i++) {
+		reader.readData(&uuid, sizeof(uint64_t));
+		reader.readString(path);
+		assets.push_back(path);
+	}
+	return assets;
+}
 
 void EditorAssetManager::serialize(StreamWriter &writer) {
 	int numEntries = assetIdToPathMap.size();

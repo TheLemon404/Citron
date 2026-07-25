@@ -62,7 +62,12 @@ class EditorAssetManager : public AssetManager,
 						   ISerializable<EditorAssetManager> {
   public:
 	EditorAssetManager(const std::string &projectRootPath)
-		: AssetManager(false), projectRootPath(projectRootPath) {}
+		: AssetManager(false), projectRootPath(projectRootPath),
+		  registryCacheFilePath(projectRootPath + "\\registry.citron") {}
+	~EditorAssetManager() {
+		FileStreamWriter writer(registryCacheFilePath);
+		serialize(writer);
+	}
 
 	virtual void initializeAssetRegistry() override;
 
@@ -75,8 +80,11 @@ class EditorAssetManager : public AssetManager,
 	void refreshAssetRegistry();
 
   private:
+	std::vector<std::string> getRegistryFileAssets();
+
 	std::unordered_map<uint64_t, std::string> assetIdToPathMap;
 	std::unordered_map<std::string, uint64_t> assetPathToIdMap;
+	const std::string registryCacheFilePath;
 	const std::string projectRootPath;
 };
 

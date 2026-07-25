@@ -1,4 +1,5 @@
 #include "assets.hpp"
+#include "logger.hpp"
 #include "serialization.hpp"
 
 #include <core.hpp>
@@ -73,6 +74,7 @@ void EditorAssetManager::refreshAssetRegistry() {
 					  file) == registryFileAssets.end()) {
 			if (!assetPathToIdMap.contains(file)) {
 				UUID uuid = UUID();
+				CITRON_CORE_INFO("Asset: {} id {}", file, (uint64_t)uuid);
 				assetIdToPathMap[uuid] = file;
 				assetPathToIdMap[file] = uuid;
 			}
@@ -115,6 +117,7 @@ void EditorAssetManager::deserialize(StreamReader &reader) {
 	for (int i = 0; i < numEntries; i++) {
 		reader.readData(&uuid, sizeof(uint64_t));
 		reader.readString(path);
+		CITRON_CORE_INFO("Deserialize: uuid={} path={}", path, (uint64_t)uuid);
 		assetIdToPathMap[uuid] = path;
 		assetPathToIdMap[path] = uuid;
 	}

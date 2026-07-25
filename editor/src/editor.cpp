@@ -24,9 +24,9 @@ void Editor::init() {
 
 	openProject(editorContext.projectFilePath);
 
-	pushLayer<GuiLayer>();
-
 	assetManager->initializeAssetRegistry();
+
+	pushLayer<GuiLayer>();
 
 	YAML::Node projectFileNode = YAML::LoadFile(editorContext.projectFilePath);
 	if (projectFileNode["last_scene"].IsDefined() &&

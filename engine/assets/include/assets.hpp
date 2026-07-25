@@ -63,7 +63,7 @@ class EditorAssetManager : public AssetManager,
   public:
 	EditorAssetManager(const std::string &projectRootPath)
 		: AssetManager(false), projectRootPath(projectRootPath),
-		  registryCacheFilePath(projectRootPath + "\\registry.citron") {}
+		  registryCacheFilePath(projectRootPath + "registry.citron") {}
 	~EditorAssetManager() {
 		FileStreamWriter writer(registryCacheFilePath);
 		serialize(writer);

@@ -12,7 +12,8 @@ namespace CitronAssets {
 class StreamReader;
 class StreamWriter;
 
-template <typename T> class ISerializable {
+template <typename T>
+class ISerializable {
   public:
 	virtual void serialize(StreamWriter &writer) = 0;
 	virtual void deserialize(StreamReader &reader) = 0;
@@ -31,7 +32,8 @@ class StreamWriter {
 	void operator()(std::underlying_type_t<entt::entity> size) {
 		writeData(reinterpret_cast<const char *>(&size), sizeof(size));
 	}
-	template <typename T> void operator()(const T &data) {
+	template <typename T>
+	void operator()(const T &data) {
 		std::vector<uint8_t> bytes;
 		alpaca::serialize<alpaca::options::fixed_length_encoding>(data, bytes);
 		uint64_t len = bytes.size();
@@ -80,7 +82,8 @@ class StreamReader {
 	void operator()(std::underlying_type_t<entt::entity> &size) {
 		readData(&size, sizeof(size));
 	}
-	template <typename T> void operator()(T &data) {
+	template <typename T>
+	void operator()(T &data) {
 		uint64_t len;
 		readData(&len, sizeof(len));
 		CITRON_CORE_INFO("About to read component len={}", len); // <-- add this

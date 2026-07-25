@@ -19,7 +19,11 @@ enum class AssetType : std::size_t {
 	MESH,
 };
 
-class AssetManager;
+struct AssetMetadata {
+	uint64_t uuid;
+	std::filesystem::path assetPath;
+	AssetType assetType;
+};
 
 class Asset {
   public:
@@ -47,8 +51,6 @@ class EditorAssetLoader;
 
 class AssetManager {
   public:
-	AssetManager() {}
-
 	virtual void initializeAssetRegistry() = 0;
 
 	const std::unordered_map<UUID, std::weak_ptr<Asset>> &
@@ -60,16 +62,10 @@ class AssetManager {
 	std::unordered_map<UUID, std::weak_ptr<Asset>> loadedAssets;
 };
 
-class EditorAssetManager : public AssetManager,
-						   ISerializable<EditorAssetManager> {
+class EditorAssetManager : public AssetManager {
   public:
-	EditorAssetManager(const std::string &projectRootPath)
-		: projectRootPath(projectRootPath),
-		  registryCacheFilePath(projectRootPath + "registry.citron") {}
-	~EditorAssetManager() {
-		FileStreamWriter writer(registryCacheFilePath);
-		serialize(writer);
-	}
+	EditorAssetManager(const std::filesystem::path &projectRootPath)
+		: projectRootPath(projectRootPath) {}
 
 	template <typename T>
 		requires std::derived_from<T, Asset>
@@ -79,30 +75,34 @@ class EditorAssetManager : public AssetManager,
 		}
 
 		std::shared_ptr<T> asset = std::make_shared<T>(uuid);
-		asset->loadFromFile(assetIdToPathMap[uuid]);
+		asset->loadFromFile(assetMetadataRegistry[uuid]);
 		loadedAssets[uuid] = asset;
 		return asset;
 	}
 
 	virtual void initializeAssetRegistry() override;
 
-	virtual void serialize(StreamWriter &writer) override;
-	virtual void deserialize(StreamReader &reader) override;
-
-	std::filesystem::path &getAssetPath(UUID uuid) {
-		return assetIdToPathMap[uuid];
+	const AssetMetadata &getAssetMetadata(UUID uuid) {
+		return assetMetadataRegistry[uuid];
 	}
-	UUID getAssetId(const std::string &path) { return assetPathToIdMap[path]; }
 
 	void refreshAssetRegistry();
 
-  private:
-	std::vector<std::string> getRegistryFileAssets();
+	bool isValidAsset(const std::filesystem::path &path);
 
-	std::unordered_map<uint64_t, std::filesystem::path> assetIdToPathMap;
-	std::unordered_map<std::filesystem::path, uint64_t> assetPathToIdMap;
-	const std::string registryCacheFilePath;
-	const std::string projectRootPath;
+	AssetMetadata getAssetMetadataByPath(const std::filesystem::path &path) {
+		return assetMetadataByPath[path];
+	}
+
+  private:
+	bool isKnownAssetFileExtension(std::string extension);
+
+	AssetMetadata loadMetadataFromFile(const std::filesystem::path &metaFile);
+	void createMetadataForFile(const std::filesystem::path &file, const std::filesystem::path &metaFile);
+
+	std::unordered_map<uint64_t, AssetMetadata> assetMetadataRegistry;
+	std::unordered_map<std::filesystem::path, AssetMetadata> assetMetadataByPath;
+	const std::filesystem::path projectRootPath;
 };
 
 class RuntimeAssetManager : public AssetManager {

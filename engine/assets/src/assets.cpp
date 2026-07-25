@@ -1,101 +1,100 @@
 #include "assets.hpp"
+#include "alpaca/alpaca.h"
 #include "logger.hpp"
 #include "serialization.hpp"
+#include "yaml-cpp/node/emit.h"
 
 #include <core.hpp>
 #include <io.hpp>
 #include <memory>
+#include <yaml-cpp/yaml.h>
 
 using namespace CitronAssets;
 using namespace CitronIO;
 
 void EditorAssetManager::initializeAssetRegistry() {
-	if (CitronIO::IO::fileExists(registryCacheFilePath)) {
-		try {
-			FileStreamReader reader(registryCacheFilePath);
-			deserialize(reader);
-		} catch (const std::exception &e) {
-			CITRON_CORE_ERROR("Failed to deserialize asset registry: {}. "
-							  "Deleting and recreating registry file...",
-							  e.what());
-			CitronIO::IO::deleteFile(registryCacheFilePath);
-			CitronIO::IO::createFile(registryCacheFilePath);
-			// TODO: remove all AssetReferences in components, since all UUIDs
-			// will now be invalid
+	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
+	std::set<std::filesystem::path> metaFilesInProject;
+	for (const std::filesystem::path &file : filesInProject) {
+		if (file.extension() == ".meta") {
+			metaFilesInProject.insert(file);
 		}
-	} else {
-		CitronIO::IO::createFile(registryCacheFilePath);
 	}
+	for (const std::filesystem::path &file : filesInProject) {
+		if (file.extension() != ".meta" && isKnownAssetFileExtension(file.extension().string())) {
+			if (!metaFilesInProject.contains(file.string() + ".meta")) {
+				IO::createFile(file.string() + ".meta");
+				createMetadataForFile(file, file.string() + ".meta");
+			}
 
-	refreshAssetRegistry();
+			AssetMetadata metadata = loadMetadataFromFile(file.string() + ".meta");
+			assetMetadataByPath[file] = metadata;
+			assetMetadataRegistry[metadata.uuid] = metadata;
+		}
+	}
 }
 
 void EditorAssetManager::refreshAssetRegistry() {
-	std::vector<std::string> registryFileAssets = getRegistryFileAssets();
-	std::vector<std::filesystem::path> filesInProject =
-		IO::getAllFilesInDirectory(projectRootPath);
-	for (std::string registryFileAsset : registryFileAssets) {
-		if (std::find(filesInProject.begin(), filesInProject.end(),
-					  registryFileAsset) == filesInProject.end()) {
-			uint64_t expiredAssetUUID = assetPathToIdMap[registryFileAsset];
-			assetIdToPathMap.erase(expiredAssetUUID);
-			assetPathToIdMap.erase(registryFileAsset);
+	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
+	std::set<std::filesystem::path> metaFilesInProject;
+	for (const std::filesystem::path &file : filesInProject) {
+		if (file.extension() == ".meta") {
+			metaFilesInProject.insert(file);
 		}
 	}
-
-	for (std::filesystem::path file : filesInProject) {
-		if (std::find(registryFileAssets.begin(), registryFileAssets.end(),
-					  file) == registryFileAssets.end()) {
-			if (!assetPathToIdMap.contains(file.string())) {
-				UUID uuid = UUID();
-				CITRON_CORE_INFO("Asset: {} id {}", file.string(),
-								 (uint64_t)uuid);
-				assetIdToPathMap[uuid] = file;
-				assetPathToIdMap[file] = uuid;
+	for (const std::filesystem::path &file : filesInProject) {
+		if (file.extension() != ".meta" && isKnownAssetFileExtension(file.extension().string())) {
+			if (!metaFilesInProject.contains(file.string() + ".meta")) {
+				IO::createFile(file.string() + ".meta");
+				createMetadataForFile(file, file.string() + ".meta");
 			}
+
+			AssetMetadata metadata = loadMetadataFromFile(file.string() + ".meta");
+			assetMetadataByPath[file] = metadata;
+			assetMetadataRegistry[metadata.uuid] = metadata;
 		}
 	}
-
-	FileStreamWriter writer(registryCacheFilePath);
-	serialize(writer);
-}
-
-std::vector<std::string> EditorAssetManager::getRegistryFileAssets() {
-	std::vector<std::string> assets;
-	UUID uuid;
-	std::string path;
-	FileStreamReader reader(registryCacheFilePath);
-	int numEntries;
-	reader.readData(&numEntries, sizeof(int));
-	for (int i = 0; i < numEntries; i++) {
-		reader.readData(&uuid, sizeof(uint64_t));
-		reader.readString(path);
-		assets.push_back(path);
-	}
-	return assets;
-}
-
-void EditorAssetManager::serialize(StreamWriter &writer) {
-	int numEntries = assetIdToPathMap.size();
-	writer.writeData(&numEntries, sizeof(int));
-	for (const auto &[uuid, path] : assetIdToPathMap) {
-		writer.writeData(&uuid, sizeof(uint64_t));
-		writer.writeString(path.string());
+	for (const std::pair<uint64_t, AssetMetadata> &metadata : assetMetadataRegistry) {
+		if (!std::filesystem::exists(metadata.second.assetPath)) {
+			assetMetadataRegistry.erase(metadata.first);
+			assetMetadataByPath.erase(metadata.second.assetPath);
+			IO::deleteFile(metadata.second.assetPath.string() + ".meta");
+		}
 	}
 }
 
-void EditorAssetManager::deserialize(StreamReader &reader) {
-	UUID uuid;
-	std::string path;
-	int numEntries;
-	reader.readData(&numEntries, sizeof(int));
-	for (int i = 0; i < numEntries; i++) {
-		reader.readData(&uuid, sizeof(uint64_t));
-		reader.readString(path);
-		CITRON_CORE_INFO("Deserialize: uuid={} path={}", path, (uint64_t)uuid);
-		assetIdToPathMap[uuid] = path;
-		assetPathToIdMap[path] = uuid;
+bool EditorAssetManager::isValidAsset(const std::filesystem::path &path) {
+	return assetMetadataByPath.contains(path);
+}
+
+bool EditorAssetManager::isKnownAssetFileExtension(std::string extension) {
+	for (char &c : extension) {
+		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
 	}
+	return extension == ".wgsl" || extension == ".mat" || extension == ".png" || extension == ".jpg" || extension == ".gltf";
+}
+
+AssetMetadata EditorAssetManager::loadMetadataFromFile(const std::filesystem::path &metaFile) {
+	YAML::Node metaNode = YAML::LoadFile(metaFile.string());
+	AssetType type = AssetType::UNKNOWN;
+	std::string typeStr = metaNode["assetType"].as<std::string>();
+	if (typeStr == "SHADER")
+		type = AssetType::SHADER;
+	else if (typeStr == "MATERIAL")
+		type = AssetType::MATERIAL;
+	else if (typeStr == "TEXTURE")
+		type = AssetType::TEXTURE;
+	else if (typeStr == "MESH")
+		type = AssetType::MESH;
+	return AssetMetadata(metaNode["uuid"].as<uint64_t>(), metaNode["assetPath"].as<std::string>(), type);
+}
+
+void EditorAssetManager::createMetadataForFile(const std::filesystem::path &file, const std::filesystem::path &metaFile) {
+	YAML::Node metaNode = YAML::LoadFile(metaFile.string());
+	metaNode["uuid"] = (uint64_t)UUID();
+	metaNode["assetPath"] = file.string();
+	metaNode["assetType"] = "UNKNOWN";
+	IO::writeFile(metaFile, YAML::Dump(metaNode));
 }
 
 void RuntimeAssetManager::initializeAssetRegistry() {}

@@ -10,7 +10,7 @@ namespace CitronIO {
 class IO {
   public:
 	static std::string readFile(const std::filesystem::path &path);
-	static void createFile(const std::string &path);
+	static void createFile(const std::filesystem::path &path);
 	static void createDirectory(const std::filesystem::path &path);
 	static void renameDirectory(const std::filesystem::path &oldPath,
 								const std::filesystem::path &newPath);

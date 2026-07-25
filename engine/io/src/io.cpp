@@ -24,7 +24,7 @@ std::string IO::readFile(const std::filesystem::path &path) {
 	return content;
 }
 
-void IO::createFile(const std::string &path) {
+void IO::createFile(const std::filesystem::path &path) {
 	std::ofstream file(path);
 	file.clear();
 	file << "";

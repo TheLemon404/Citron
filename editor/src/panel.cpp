@@ -357,6 +357,8 @@ void AssetPanel::refreshDirectoryListings() {
 	directoryListings.clear();
 	for (std::filesystem::path &entry :
 		 CitronIO::IO::getFilesInDirectory(currentDirectory)) {
+		if (entry.extension() == ".meta")
+			continue;
 		AssetCard card = {};
 		card.path = entry.string();
 		card.name = entry.filename().string();
@@ -617,7 +619,12 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 		if (const ImGuiPayload *payload =
 				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
-			UUID assetId = editorAssetManager->getAssetId(srcPath);
+			if (editorAssetManager->isValidAsset(std::filesystem::path(srcPath))) {
+				AssetMetadata metadata = editorAssetManager->getAssetMetadataByPath(std::filesystem::path(srcPath));
+				assetReference.uuid = metadata.uuid;
+				assetReference.path = metadata.assetPath.string();
+				assetReference.assetType = metadata.assetType;
+			}
 		}
 		ImGui::EndDragDropTarget();
 	}

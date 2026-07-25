@@ -52,18 +52,7 @@ void EditorAssetManager::initializeAssetRegistry() {
 		CitronIO::IO::createFile(registryCacheFilePath);
 	}
 
-	std::vector<std::string> filesInProject =
-		IO::getAllFilesInDirectory(projectRootPath);
-	for (const std::string &file : filesInProject) {
-		if (!assetPathToIdMap.contains(file)) {
-			UUID uuid = UUID();
-			assetIdToPathMap[uuid] = file;
-			assetPathToIdMap[file] = uuid;
-		}
-	}
-
-	FileStreamWriter writer(registryCacheFilePath);
-	serialize(writer);
+	refreshAssetRegistry();
 }
 
 void EditorAssetManager::refreshAssetRegistry() {

@@ -607,7 +607,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 	std::shared_ptr<EditorAssetManager> editorAssetManager =
 		Editor::get().getAssetManager();
 
-	ImGui::PushID(assetReference.uuid);
+	ImGui::PushID(&assetReference);
 	if (ImGui::Button("Clear")) {
 		assetReference.uuid = UUID::nullID;
 		assetReference.path.clear();
@@ -621,7 +621,6 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
 			if (editorAssetManager->isValidAsset(std::filesystem::path(srcPath))) {
 				AssetMetadata metadata = editorAssetManager->getAssetMetadataByPath(std::filesystem::path(srcPath));
-				CITRON_CLIENT_INFO(" {} : {} ", to_string(metadata.assetType), to_string(AssetReference<T>::assetType));
 				if (metadata.assetType == AssetReference<T>::assetType) {
 					assetReference.uuid = metadata.uuid;
 					assetReference.path = metadata.assetPath.string();

@@ -9,6 +9,19 @@
 
 using namespace CitronCore;
 
+namespace {
+
+class AssetBase {
+  public:
+	AssetBase(const UUID uuid) : uuid(uuid) {}
+	virtual void loadFromFile(const std::string &filepath) = 0;
+
+  protected:
+	const UUID uuid;
+};
+
+} // namespace
+
 namespace CitronAssets {
 
 enum class AssetType : std::size_t {
@@ -41,15 +54,6 @@ struct AssetMetadata {
 	uint64_t uuid;
 	std::filesystem::path assetPath;
 	AssetType assetType;
-};
-
-class AssetBase {
-  public:
-	AssetBase(const UUID uuid) : uuid(uuid) {}
-	virtual void loadFromFile(const std::string &filepath) = 0;
-
-  protected:
-	const UUID uuid;
 };
 
 template <typename T, AssetType type>

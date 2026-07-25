@@ -14,9 +14,9 @@ struct Vertex {
 	glm::vec2 uv;
 };
 
-class Geometry : public Asset<Geometry, AssetType::TEXTURE> {
+class Geometry : public Asset<Geometry, AssetType::MESH> {
   public:
-	Geometry(const UUID uuid) : Asset<Geometry, AssetType::TEXTURE>(uuid) {}
+	Geometry(const UUID uuid) : Asset<Geometry, AssetType::MESH>(uuid) {}
 
 	virtual void loadFromFile(const std::string &filepath) override;
 

@@ -86,7 +86,6 @@ class StreamReader {
 	void operator()(T &data) {
 		uint64_t len;
 		readData(&len, sizeof(len));
-		CITRON_CORE_INFO("About to read component len={}", len); // <-- add this
 
 		std::vector<uint8_t> bytes(len);
 		readData(bytes.data(), len);

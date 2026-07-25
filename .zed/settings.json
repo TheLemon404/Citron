@@ -3,4 +3,5 @@
 	"hard_tabs": true,
 	"tab_size": 4,
 	"use_on_type_format": true,
+	"soft_wrap":"editor_width"
 }

@@ -60,7 +60,7 @@ class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
 
 class App {
   public:
-	App(bool isRuntime, std::unique_ptr<AssetManager> assetManager);
+	App(bool isRuntime, std::shared_ptr<AssetManager> assetManager);
 	~App();
 
 	void init();
@@ -88,7 +88,7 @@ class App {
 	Window &getWindow() { return window; }
 	Renderer &getRenderer() { return renderer; }
 	SceneManager &getSceneManager() { return sceneManager; }
-	std::unique_ptr<AssetManager> &getAssetManager() { return assetManager; }
+	std::shared_ptr<AssetManager> getAssetManager() { return assetManager; }
 
 	void initLogSink() {
 		sink = std::make_shared<AppLogSink>();
@@ -107,7 +107,7 @@ class App {
 
 	Renderer renderer;
 	SceneManager sceneManager;
-	std::unique_ptr<AssetManager> assetManager;
+	std::shared_ptr<AssetManager> assetManager;
 
 	bool onWindowClose(Event &e);
 

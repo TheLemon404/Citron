@@ -16,7 +16,9 @@ struct Vertex {
 
 class Geometry : public Asset {
   public:
-	virtual void loadFromFile(const std::string &filepath);
+	Geometry(const UUID uuid) : Asset(uuid) {}
+
+	virtual void loadFromFile(const std::string &filepath) override;
 
   private:
 	std::vector<Vertex> vertices;

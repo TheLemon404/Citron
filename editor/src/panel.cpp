@@ -14,9 +14,11 @@
 #include <logger.hpp>
 
 #include "entt/entity/fwd.hpp"
+#include "geometry.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
+#include "shader.hpp"
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
@@ -362,8 +364,8 @@ void AssetPanel::refreshDirectoryListings() {
 		directoryListings.push_back(card);
 	}
 
-	EditorAssetManager *editorAssetManager = static_cast<EditorAssetManager *>(
-		Editor::get().getAssetManager().get());
+	std::shared_ptr<EditorAssetManager> editorAssetManager =
+		Editor::get().getAssetManager();
 	editorAssetManager->refreshAssetRegistry();
 }
 
@@ -498,9 +500,6 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 		ImGui::EndPopup();
 	}
 
-	ImGui::TableSetColumnIndex(1);
-	ImGui::Text("Entity");
-
 	if (node1_open) {
 		for (UUID childID : entityBase.children) {
 			showEntityChildTree(scene->getEntity(childID), scene);
@@ -539,11 +538,9 @@ void OutlinerPanel::onDraw() {
 	ImGui::InputTextWithHint("##EntitySearch", "Search by entity name",
 							 &entitySearchResult);
 
-	if (ImGui::BeginTable("LogTable", 2,
+	if (ImGui::BeginTable("LogTable", 1,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
 		ImGui::TableSetupColumn("Name");
-		ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed,
-								75.0f);
 		ImGui::TableHeadersRow();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
@@ -555,20 +552,11 @@ void OutlinerPanel::onDraw() {
 				ImGui::PushID(i++);
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-
 				ImGui::Selectable(system->getName().c_str(), false,
 								  ImGuiSelectableFlags_SpanAllColumns);
-				ImGui::TableNextColumn();
-				ImGui::Text("System");
 				ImGui::PopID();
 			}
 		}
-
-		ImGui::TableNextRow();
-		ImGui::TableNextColumn();
-		ImGui::Text("--");
-		ImGui::TableNextColumn();
-		ImGui::Text("--");
 
 		if (currentEditedScene) {
 			const auto &view =
@@ -614,8 +602,8 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 	const std::string assetName, AssetReference<T> &assetReference) {
 
 	EditorContext &context = Editor::get().getEditorContext();
-	EditorAssetManager *editorAssetManager = static_cast<EditorAssetManager *>(
-		Editor::get().getAssetManager().get());
+	std::shared_ptr<EditorAssetManager> editorAssetManager =
+		Editor::get().getAssetManager();
 
 	ImGui::PushID(assetReference.uuid);
 	if (ImGui::Button("Clear")) {
@@ -630,8 +618,8 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
 			UUID assetId = editorAssetManager->getAssetId(srcPath);
-			assetReference.uuid = assetId;
-			assetReference.path = srcPath;
+			std::shared_ptr<Shader> shader =
+				editorAssetManager->get<Shader>(assetId);
 		}
 		ImGui::EndDragDropTarget();
 	}

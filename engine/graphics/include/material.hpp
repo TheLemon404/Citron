@@ -8,7 +8,9 @@ namespace CitronGraphics {
 
 class Material : public Asset {
   public:
-	virtual void loadFromFile(const std::string &filepath);
+	Material(const UUID uuid) : Asset(uuid) {}
+
+	virtual void loadFromFile(const std::string &filepath) override;
 };
 
 } // namespace CitronGraphics

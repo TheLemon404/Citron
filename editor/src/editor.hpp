@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "assets.hpp"
 #include "entt/entity/entity.hpp"
 #include "event.hpp"
 #include <ecs.hpp>
@@ -49,6 +50,10 @@ class Editor : public CitronCore::App {
 	bool createScene();
 
 	bool openProject(std::string projectFilePath);
+
+	std::shared_ptr<EditorAssetManager> getAssetManager() {
+		return std::static_pointer_cast<EditorAssetManager>(assetManager);
+	}
 
 	void saveCurrentScene();
 

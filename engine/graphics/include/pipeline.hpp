@@ -6,15 +6,19 @@
 namespace CitronGraphics {
 class Pipeline {
   public:
-	Pipeline(wgpu::Device &device, wgpu::TextureView &colorTargetView,
-			 Shader &vertexShader, Shader &fragmentShader);
+	Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
+			 std::shared_ptr<Shader> shader);
+	~Pipeline() {
+		pipeline.release();
+	}
+
 	void draw(wgpu::CommandEncoder &encoder);
+
+	wgpu::RenderPipeline &getPipeline() { return pipeline; }
 
   private:
 	wgpu::RenderPipeline pipeline;
 	wgpu::Device &device;
-	wgpu::TextureView &colorTargetView;
-	Shader &vertexShader;
-	Shader &fragmentShader;
+	wgpu::Texture &targetTexture;
 };
 } // namespace CitronGraphics

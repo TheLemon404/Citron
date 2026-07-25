@@ -3,6 +3,7 @@
 #include "assets.hpp"
 #include "device.hpp"
 #include "geometry.hpp"
+#include "pipeline.hpp"
 #include "shader.hpp"
 #include <cstddef>
 #include <functional>
@@ -28,6 +29,12 @@ class RenderPass {
 	RenderPass(RenderPass &&) = default;
 	RenderPass &operator=(RenderPass &&) = default;
 
+	void setPipeline(std::shared_ptr<Pipeline> pipeline) {
+		renderPassEncoder.setPipeline(pipeline->getPipeline());
+	}
+	void draw() {
+		renderPassEncoder.draw(3, 1, 0, 0);
+	}
 	void end();
 
 	wgpu::RenderPassEncoder &getRenderPassEncoder() {
@@ -71,8 +78,7 @@ struct RenderObject {
 
 class Renderer {
   public:
-	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager) {
-	}
+	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager) {}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
 	Frame beginFrame();
@@ -89,8 +95,17 @@ class Renderer {
 	std::function<void(wgpu::TextureView &, RenderPass &)> onGuiDrawCallback =
 		nullptr;
 
+	std::shared_ptr<Pipeline> getPipeline(std::shared_ptr<Shader> shader, wgpu::Texture &targetTexture) {
+		if (!pipelineCache.contains(shader)) {
+			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), targetTexture, shader);
+			pipelineCache[shader] = pipeline;
+		}
+		return pipelineCache[shader];
+	}
+
   private:
 	Device device;
 	AssetManager &assetManager;
+	std::map<std::shared_ptr<Shader>, std::shared_ptr<Pipeline>> pipelineCache;
 };
 } // namespace CitronGraphics

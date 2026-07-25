@@ -11,7 +11,9 @@ namespace CitronGraphics {
 class Shader : public Asset<Shader, AssetType::SHADER> {
   public:
 	Shader(const UUID uuid, wgpu::ShaderModule shaderModule) : Asset<Shader, AssetType::SHADER>(uuid), shaderModule(shaderModule) {}
-	~Shader() = default;
+	~Shader() {
+		shaderModule.release();
+	}
 
 	bool operator==(const Shader &other) const {
 		return shaderModule == other.shaderModule;

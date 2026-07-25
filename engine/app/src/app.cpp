@@ -1,6 +1,7 @@
 #include "app.hpp"
 #include "assets.hpp"
 #include "device.hpp"
+#include "pipeline.hpp"
 #include "spdlog/common.h"
 #include <core.hpp>
 #include <ctime>
@@ -10,6 +11,7 @@
 #include <logger.hpp>
 #include <memory>
 #include <renderer.hpp>
+#include <shader.hpp>
 #include <string>
 #include <string_view>
 #include <webgpu/webgpu.hpp>
@@ -101,6 +103,12 @@ void App::update() {
 			Frame frame = renderer.beginFrame();
 
 			RenderPass colorPass = frame.beginRenderPass(colorTarget);
+			std::shared_ptr<Shader> shader = assetManager.getAsset<Shader>(7422933780722231991);
+			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline(shader, colorTarget);
+			if (pipeline) {
+				colorPass.setPipeline(pipeline);
+				colorPass.draw();
+			}
 			colorPass.end();
 
 			wgpu::Texture swapchainTarget = frame.getSurfaceTexture().texture;

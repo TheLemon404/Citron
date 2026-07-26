@@ -54,8 +54,8 @@ void GuiLayer::onAttach() {
 									  .getWGPUPreferredSurfaceFormat();
 	ImGui_ImplWGPU_Init(&initInfo);
 
-	Editor::get().getRenderer().onGuiDrawCallback = std::bind(
-		&GuiLayer::drawGui, this, std::placeholders::_1, std::placeholders::_2);
+	Editor::get().getRenderer().onGuiDrawCallback = CITRON_BIND_FN(
+		GuiLayer::drawGui, std::placeholders::_1, std::placeholders::_2);
 
 	applyTheme();
 
@@ -151,7 +151,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 		ImGui::EndPopup();
 	}
 
-	ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoTitleBar);
+	ImGui::Begin("Viewport", nullptr);
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	WGPUTextureView view = sceneView;
 	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
@@ -185,7 +185,7 @@ void GuiLayer::applyTheme() {
 
 	style.Alpha = 1.0f;
 	style.DisabledAlpha = 0.6f;
-	style.WindowPadding = ImVec2(7.0f, 7.0f);
+	style.WindowPadding = ImVec2(2.0f, 2.0f);
 	style.WindowRounding = 3.0f;
 	style.WindowBorderSize = 0.0f;
 	style.WindowMinSize = ImVec2(32.0f, 32.0f);

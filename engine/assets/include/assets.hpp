@@ -1,5 +1,6 @@
 #pragma once
 
+#include "event.hpp"
 #include "uuid.hpp"
 #include <concepts>
 #include <cstdint>
@@ -142,9 +143,19 @@ class RuntimeAssetManager : public AssetManagerBase {
 	virtual AssetType getAssetType(const UUID uuid) override;
 };
 
+class AssetRegistryRefreshEvent : public Event {
+  public:
+	AssetRegistryRefreshEvent() : Event(nullptr) {}
+	std::string toString() const override { return "AppRegistryRefreshEvent"; }
+	EVENT_CLASS_TYPE(AssetRegistryRefresh)
+	EVENT_CLASS_CATEGORY(EventCategoryApp)
+};
+
+using EventCallbackFn = std::function<void(Event &)>;
+
 class AssetManager {
   public:
-	AssetManager(const bool isRuntime, std::filesystem::path projectRootPath) : isRuntime(isRuntime) {
+	AssetManager(const bool isRuntime, std::filesystem::path projectRootPath, EventCallbackFn eventCallback) : isRuntime(isRuntime), eventCallback(eventCallback) {
 		if (isRuntime) {
 			m_assetManager = std::make_unique<RuntimeAssetManager>();
 		} else {
@@ -157,6 +168,8 @@ class AssetManager {
 	}
 
 	void refreshAssetRegistry() {
+		AssetRegistryRefreshEvent refreshEvent = AssetRegistryRefreshEvent();
+		eventCallback(refreshEvent);
 		m_assetManager->refreshAssetRegistry();
 	}
 
@@ -184,6 +197,9 @@ class AssetManager {
 	std::shared_ptr<T> getAsset(const UUID uuid) {
 		return std::dynamic_pointer_cast<T>(m_assetManager->getAsset(uuid));
 	}
+
+  protected:
+	EventCallbackFn eventCallback = nullptr;
 
   private:
 	const bool isRuntime;

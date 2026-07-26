@@ -202,6 +202,10 @@ const int Device::getLastSurfaceWidth() { return m_lastSurfaceWidth; }
 
 const int Device::getLastSurfaceHeight() { return m_lastSurfaceHeight; }
 
+GPUBuffer createBuffer() {
+	
+}
+
 void Device::resizeSurface(int width, int height) {
 	wgpu::SurfaceConfiguration surfaceConfiguration = {};
 	surfaceConfiguration.nextInChain = nullptr;

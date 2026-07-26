@@ -2,26 +2,26 @@
 
 namespace CitronCore {} // namespace CitronCore
 
-#define CITRON_CLIENT_ASSERT(x, ...)                                           \
-	{                                                                          \
-		if (!(x)) {                                                            \
-			CITRON_CLIENT_ERROR("assertion failed: {0}", __VA_ARGS__);         \
-			__debugbreak();                                                    \
-		}                                                                      \
+#define CITRON_CLIENT_ASSERT(x, ...)                                   \
+	{                                                                  \
+		if (!(x)) {                                                    \
+			CITRON_CLIENT_ERROR("assertion failed: {0}", __VA_ARGS__); \
+			__debugbreak();                                            \
+		}                                                              \
 	}
 
-#define CITRON_CORE_ASSERT(x, ...)                                             \
-	{                                                                          \
-		if (!(x)) {                                                            \
-			CITRON_CORE_ERROR("assertion failed: {0}", __VA_ARGS__);           \
-			__debugbreak();                                                    \
-		}                                                                      \
+#define CITRON_CORE_ASSERT(x, ...)                                   \
+	{                                                                \
+		if (!(x)) {                                                  \
+			CITRON_CORE_ERROR("assertion failed: {0}", __VA_ARGS__); \
+			__debugbreak();                                          \
+		}                                                            \
 	}
 
 #define BIT(x) (1 << x)
 
 #define CITRON_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
-#define CITRON_BIND_FN(fn) std::bind(&fn, this)
+#define CITRON_BIND_FN(fn, ...) std::bind(&fn, this, __VA_ARGS__)
 
 #define CITRON_PROJECT_FILE_ENDING "project.yaml"
 #define CITRON_SCENE_FILE_ENDING "scene.yaml"

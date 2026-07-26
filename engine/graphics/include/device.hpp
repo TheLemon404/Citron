@@ -2,6 +2,7 @@
 
 #define WEBGPU_BACKEND DAWN
 
+#include "buffer.hpp"
 #include <webgpu/webgpu.hpp>
 #include <window.hpp>
 
@@ -39,6 +40,8 @@ class Device {
 
 	const wgpu::Queue &getQueue() { return queue; }
 	const wgpu::Instance &getInstance() { return instance; }
+
+	GPUBuffer createBuffer();
 
 	void resizeSurface(int width, int height);
 

@@ -17,6 +17,7 @@ enum class EventType {
 	AppTick,
 	AppUpdate,
 	AppRender,
+	AssetRegistryRefresh,
 	KeyTyped,
 	KeyPressed,
 	KeyJustPressed,
@@ -38,16 +39,16 @@ enum EventCategory : int {
 	EventCategoryWindow = BIT(6),
 };
 
-#define EVENT_CLASS_TYPE(type)                                                 \
-	static EventType getStaticType() { return EventType::type; }               \
-	virtual EventType getEventType() const override {                          \
-		return getStaticType();                                                \
-	}                                                                          \
+#define EVENT_CLASS_TYPE(type)                                   \
+	static EventType getStaticType() { return EventType::type; } \
+	virtual EventType getEventType() const override {            \
+		return getStaticType();                                  \
+	}                                                            \
 	virtual const char *getName() const override { return #type; }
 
-#define EVENT_CLASS_CATEGORY(category)                                         \
-	virtual int getCategoryFlags() const override {                            \
-		return EventCategory::category;                                        \
+#define EVENT_CLASS_CATEGORY(category)              \
+	virtual int getCategoryFlags() const override { \
+		return EventCategory::category;             \
 	}
 
 class Event {
@@ -76,7 +77,8 @@ class EventDispatcher {
   public:
 	EventDispatcher(Event &event) : event(event) {};
 
-	template <typename T, typename F> bool dispatch(F &&func) {
+	template <typename T, typename F>
+	bool dispatch(F &&func) {
 		if (event.getEventType() == T::getStaticType()) {
 			event.handled |= func(static_cast<T &>(event));
 			return true;

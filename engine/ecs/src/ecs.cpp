@@ -1,6 +1,9 @@
 #include "ecs.hpp"
+#include "assets.hpp"
 #include "component.hpp"
+#include "core.hpp"
 #include "entt/entity/fwd.hpp"
+#include "event.hpp"
 #include "geometry.hpp"
 #include "logger.hpp"
 #include "material.hpp"
@@ -165,8 +168,24 @@ void SceneManager::onUpdate() {
 }
 
 void SceneManager::onEvent(Event &e) {
+	EventDispatcher dispatcher(e);
+	dispatcher.dispatch<AssetRegistryRefreshEvent>(CITRON_BIND_EVENT_FN(SceneManager::checkAllAssetReferenceValidity));
 	if (activeScene) {
 		if (mode == SceneMode::PLAY)
 			activeScene->onEvent(e);
 	}
+}
+
+bool SceneManager::checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e) {
+	entt::registry &registry = activeScene->getRegistry();
+	for (auto &entity : registry.view<MeshComponent>()) {
+		MeshComponent &comp = registry.get<MeshComponent>(entity);
+		if (!assetManager.isValidAsset(comp.geometryAsset.uuid)) {
+			comp.geometryAsset.uuid = UUID::nullID;
+		}
+		if (!assetManager.isValidAsset(comp.materialAsset.uuid)) {
+			comp.materialAsset.uuid = UUID::nullID;
+		}
+	}
+	return true;
 }

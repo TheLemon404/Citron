@@ -85,6 +85,8 @@ class SceneManager {
 	std::shared_ptr<Scene> &getActiveScene() { return activeScene; }
 
   private:
+	bool checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e);
+
 	AssetManager &assetManager;
 	SceneMode mode = SceneMode::EDIT;
 	std::shared_ptr<Scene> activeScene;

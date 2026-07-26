@@ -34,9 +34,10 @@ class RenderPass {
 	}
 	void setGeometry(std::shared_ptr<Geometry> geometry) {
 		renderPassEncoder.setVertexBuffer(0, geometry->getVertexBuffer().buffer, 0, WGPU_WHOLE_SIZE);
+		renderPassEncoder.setIndexBuffer(geometry->getIndexBuffer().buffer, wgpu::IndexFormat::Uint32, 0, WGPU_WHOLE_SIZE);
 	}
-	void draw() {
-		renderPassEncoder.draw(4, 1, 0, 0);
+	void draw(std::shared_ptr<Geometry> geometry) {
+		renderPassEncoder.drawIndexed(geometry->getIndexBuffer().entryCount, 1, 0, 0, 0);
 	}
 	void end();
 

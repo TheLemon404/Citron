@@ -16,7 +16,18 @@ Geometry::Geometry(std::vector<Vertex> vertices, std::vector<uint32_t> indices, 
 	vertexBuffer.size = vertices.size() * sizeof(Vertex);
 	vertexBuffer.entryCount = vertices.size();
 
+	wgpu::BufferDescriptor indexBufferDesc;
+	indexBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Index;
+	indexBufferDesc.size = indices.size() * sizeof(uint32_t);
+	indexBufferDesc.mappedAtCreation = false;
+
+	indexBuffer.buffer = device.getWGPUDevice().createBuffer(indexBufferDesc);
+	indexBuffer.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Index;
+	indexBuffer.size = indices.size() * sizeof(uint32_t);
+	indexBuffer.entryCount = indices.size();
+
 	device.getQueue().writeBuffer(vertexBuffer.buffer, 0, vertices.data(), vertexBufferDesc.size);
+	device.getQueue().writeBuffer(indexBuffer.buffer, 0, indices.data(), indexBufferDesc.size);
 }
 
 std::shared_ptr<AssetBase> GeometryImporter::importAsset(AssetMetadata metadata) {

@@ -110,6 +110,9 @@ void App::update() {
 		0,
 		1,
 		2,
+		3,
+		4,
+		5,
 	};
 	std::shared_ptr<Geometry> geometry = std::make_shared<Geometry>(triPositions, triIndices, renderer.getDevice());
 
@@ -129,7 +132,7 @@ void App::update() {
 			if (pipeline) {
 				colorPass.setPipeline(pipeline);
 				colorPass.setGeometry(geometry);
-				colorPass.draw();
+				colorPass.draw(geometry);
 			}
 			colorPass.end();
 

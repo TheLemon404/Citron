@@ -22,7 +22,10 @@ class Shader : public Asset<Shader, AssetType::SHADER> {
 	wgpu::ShaderModule &getShaderModule() { return shaderModule; }
 	void setShaderModule(wgpu::ShaderModule &shaderModule) { this->shaderModule = shaderModule; }
 
+	const uint16_t getAttributeCount() { return attributeCount; }
+
   private:
+	const uint16_t attributeCount = 1;
 	wgpu::ShaderModule shaderModule;
 };
 

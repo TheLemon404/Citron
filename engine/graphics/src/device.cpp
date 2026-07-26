@@ -39,6 +39,7 @@ void Device::aquirePlatformResources() {
 					 adapterLimits.maxTextureDimension3D);
 	CITRON_CORE_INFO(" - maxTextureArrayLayers: {0}",
 					 adapterLimits.maxTextureArrayLayers);
+	CITRON_CORE_INFO(" - maxVertexAttributed: {0}", adapterLimits.maxVertexAttributes);
 
 	wgpu::SupportedFeatures supportedFeatures = {};
 	adapter.getFeatures(&supportedFeatures);
@@ -100,6 +101,7 @@ void Device::aquirePlatformResources() {
 					 deviceLimits.maxTextureDimension3D);
 	CITRON_CORE_INFO(" - maxTextureArrayLayers: {0}",
 					 deviceLimits.maxTextureArrayLayers);
+	CITRON_CORE_INFO(" - maxVertexAttributed: {0}", deviceLimits.maxVertexAttributes);
 
 	queue = device.getQueue();
 	wgpu::QueueWorkDoneCallbackInfo eventDoneCallbackInfo = {};
@@ -201,10 +203,6 @@ void Device::presentCurrentSurfaceTexture() { surface.present(); }
 const int Device::getLastSurfaceWidth() { return m_lastSurfaceWidth; }
 
 const int Device::getLastSurfaceHeight() { return m_lastSurfaceHeight; }
-
-GPUBuffer createBuffer() {
-	
-}
 
 void Device::resizeSurface(int width, int height) {
 	wgpu::SurfaceConfiguration surfaceConfiguration = {};

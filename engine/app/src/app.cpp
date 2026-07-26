@@ -1,6 +1,8 @@
 #include "app.hpp"
 #include "assets.hpp"
 #include "device.hpp"
+#include "geometry.hpp"
+#include "glm/fwd.hpp"
 #include "pipeline.hpp"
 #include "spdlog/common.h"
 #include <core.hpp>
@@ -66,8 +68,10 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 
 	materialImporter = std::make_shared<MaterialImporter>();
 	shaderImporter = std::make_shared<ShaderImporter>(renderer.getDevice());
+	meshImporter = std::make_shared<GeometryImporter>(renderer.getDevice());
 	assetManager.registerAssetImporter(AssetType::MATERIAL, materialImporter);
 	assetManager.registerAssetImporter(AssetType::SHADER, shaderImporter);
+	assetManager.registerAssetImporter(AssetType::MESH, meshImporter);
 }
 
 App::~App() {}
@@ -92,6 +96,23 @@ void App::init() {
 }
 
 void App::update() {
+	std::vector<Vertex> triPositions = {
+		// Define a first triangle:
+		Vertex(-0.5, -0.5, 0.0),
+		Vertex(+0.5, -0.5, 0.0),
+		Vertex(+0.0, +0.5, 0.0),
+
+		// Add a second triangle:
+		Vertex(-0.55f, -0.5, 0.0),
+		Vertex(-0.05f, +0.5, 0.0),
+		Vertex(-0.55f, +0.5, 0.0)};
+	std::vector<uint32_t> triIndices = {
+		0,
+		1,
+		2,
+	};
+	std::shared_ptr<Geometry> geometry = std::make_shared<Geometry>(triPositions, triIndices, renderer.getDevice());
+
 	while (running) {
 		window.pollEvents();
 
@@ -107,6 +128,7 @@ void App::update() {
 			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline(shader, colorTarget);
 			if (pipeline) {
 				colorPass.setPipeline(pipeline);
+				colorPass.setGeometry(geometry);
 				colorPass.draw();
 			}
 			colorPass.end();

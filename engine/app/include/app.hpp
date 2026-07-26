@@ -1,5 +1,6 @@
 #pragma once
 
+#include "geometry.hpp"
 #include "spdlog/common.h"
 #include <assets.hpp>
 #include <ecs.hpp>
@@ -122,6 +123,7 @@ class App {
 
 	std::shared_ptr<MaterialImporter> materialImporter;
 	std::shared_ptr<ShaderImporter> shaderImporter;
+	std::shared_ptr<GeometryImporter> meshImporter;
 
 	Window window;
 };

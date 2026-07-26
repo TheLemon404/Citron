@@ -32,8 +32,11 @@ class RenderPass {
 	void setPipeline(std::shared_ptr<Pipeline> pipeline) {
 		renderPassEncoder.setPipeline(pipeline->getPipeline());
 	}
+	void setGeometry(std::shared_ptr<Geometry> geometry) {
+		renderPassEncoder.setVertexBuffer(0, geometry->getVertexBuffer().buffer, 0, WGPU_WHOLE_SIZE);
+	}
 	void draw() {
-		renderPassEncoder.draw(3, 1, 0, 0);
+		renderPassEncoder.draw(4, 1, 0, 0);
 	}
 	void end();
 

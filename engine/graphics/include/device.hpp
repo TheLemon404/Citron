@@ -41,8 +41,6 @@ class Device {
 	const wgpu::Queue &getQueue() { return queue; }
 	const wgpu::Instance &getInstance() { return instance; }
 
-	GPUBuffer createBuffer();
-
 	void resizeSurface(int width, int height);
 
 	wgpu::Texture createEmptyRenderTargetTexture();

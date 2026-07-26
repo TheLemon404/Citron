@@ -1,4 +1,5 @@
 #include "pipeline.hpp"
+#include "geometry.hpp"
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronGraphics;
@@ -7,9 +8,37 @@ Pipeline::Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
 				   std::shared_ptr<Shader> shader)
 	: device(device), targetTexture(targetTexture) {
 
+	wgpu::VertexAttribute positionAttribute;
+	positionAttribute.format = wgpu::VertexFormat::Float32x3;
+	positionAttribute.offset = offsetof(Vertex, position);
+	positionAttribute.shaderLocation = 0;
+
+	wgpu::VertexAttribute normalAttribute;
+	normalAttribute.format = wgpu::VertexFormat::Float32x3;
+	normalAttribute.offset = offsetof(Vertex, normal);
+	normalAttribute.shaderLocation = 1;
+
+	wgpu::VertexAttribute colorAttribute;
+	colorAttribute.format = wgpu::VertexFormat::Float32x3;
+	colorAttribute.offset = offsetof(Vertex, color);
+	colorAttribute.shaderLocation = 2;
+
+	wgpu::VertexAttribute uvAttribute;
+	uvAttribute.format = wgpu::VertexFormat::Float32x2;
+	uvAttribute.offset = offsetof(Vertex, uv);
+	uvAttribute.shaderLocation = 3;
+
+	std::array<wgpu::VertexAttribute, 4> attributes = {positionAttribute, normalAttribute, colorAttribute, uvAttribute};
+
+	wgpu::VertexBufferLayout vertexBufferLayout;
+	vertexBufferLayout.attributes = attributes.data();
+	vertexBufferLayout.attributeCount = static_cast<uint32_t>(attributes.size());
+	vertexBufferLayout.arrayStride = sizeof(Vertex);
+	vertexBufferLayout.stepMode = wgpu::VertexStepMode::Vertex;
+
 	wgpu::RenderPipelineDescriptor pipelineDesc;
-	pipelineDesc.vertex.bufferCount = 0;
-	pipelineDesc.vertex.buffers = nullptr;
+	pipelineDesc.vertex.bufferCount = 1;
+	pipelineDesc.vertex.buffers = &vertexBufferLayout;
 	pipelineDesc.vertex.module = shader->getShaderModule();
 	pipelineDesc.vertex.entryPoint = wgpu::StringView("vs_main");
 	pipelineDesc.vertex.constantCount = 0;

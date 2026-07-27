@@ -11,6 +11,10 @@ using namespace CitronGraphics;
 
 Device::Device(Window &window) : window(window) {}
 
+std::string_view toStringView(wgpu::StringView s) {
+	return s.data ? std::string_view(s.data, s.length) : std::string_view{};
+}
+
 void Device::aquirePlatformResources() {
 	instance = wgpu::createInstance();
 	CITRON_CORE_ASSERT(instance, "Failed to create WGPU instance");
@@ -55,10 +59,10 @@ void Device::aquirePlatformResources() {
 
 	CITRON_CORE_INFO("Adapter limits: ");
 	CITRON_CORE_INFO(" - vendorId: {0}", info.vendorID);
-	CITRON_CORE_INFO(" - vendorName: {0}", info.vendor.data);
-	CITRON_CORE_INFO(" - architecture: {0}", info.architecture.data);
+	CITRON_CORE_INFO(" - vendorName: {0}", toStringView(info.vendor));
+	CITRON_CORE_INFO(" - architecture: {0}", toStringView(info.architecture));
 	CITRON_CORE_INFO(" - deviceId {0}", info.deviceID);
-	CITRON_CORE_INFO(" - driverDescription: {0}", info.description.data);
+	CITRON_CORE_INFO(" - driverDescription: {0}", toStringView(info.description));
 	CITRON_CORE_INFO(" - adapterType: 0x{0}",
 					 static_cast<uint32_t>(info.adapterType));
 	CITRON_CORE_INFO(" - backendType: 0x{0}",

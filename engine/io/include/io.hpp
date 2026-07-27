@@ -22,6 +22,9 @@ class CITRON_IO_API IO {
 	static std::vector<std::filesystem::path>
 	getFilesInDirectory(const std::filesystem::path &path);
 
+	static std::vector<std::filesystem::path>
+	getEntriesInDirectory(const std::filesystem::path &path);
+
 	// recursive
 	static std::vector<std::filesystem::path>
 	getAllFilesInDirectory(const std::filesystem::path &path);

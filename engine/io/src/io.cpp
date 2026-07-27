@@ -59,15 +59,25 @@ IO::getFilesInDirectory(const std::filesystem::path &path) {
 }
 
 std::vector<std::filesystem::path>
+IO::getEntriesInDirectory(const std::filesystem::path &path) {
+	std::vector<std::filesystem::path> entries;
+	for (const auto &entry : std::filesystem::directory_iterator(path)) {
+		entries.push_back(entry.path());
+	}
+	return entries;
+}
+
+std::vector<std::filesystem::path>
 IO::getAllFilesInDirectory(const std::filesystem::path &path) {
 	std::vector<std::filesystem::path> files;
 	for (const auto &entry : std::filesystem::directory_iterator(path)) {
 		if (!entry.is_directory())
 			files.push_back(entry.path());
-		else
-			files.insert(files.end(),
-						 getAllFilesInDirectory(entry.path()).begin(),
-						 getAllFilesInDirectory(entry.path()).end());
+		else {
+			std::vector<std::filesystem::path> subFiles =
+				getAllFilesInDirectory(entry.path());
+			files.insert(files.end(), subFiles.begin(), subFiles.end());
+		}
 	}
 	return files;
 }

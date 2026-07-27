@@ -125,7 +125,7 @@ class CITRON_APP_API App {
 
 	std::shared_ptr<MaterialImporter> materialImporter;
 	std::shared_ptr<ShaderImporter> shaderImporter;
-	std::shared_ptr<GeometryImporter> meshImporter;
+	std::shared_ptr<GeometryImporter> geometryImporter;
 
 	Window window;
 };

@@ -91,7 +91,7 @@ bool EditorAssetManager::isKnownAssetFileExtension(std::string extension) {
 	for (char &c : extension) {
 		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
 	}
-	return extension == ".wgsl" || extension == ".mat" || extension == ".png" || extension == ".jpg" || extension == ".gltf";
+	return extension == ".wgsl" || extension == ".mat" || extension == ".png" || extension == ".jpg" || extension == ".gltf" || extension == ".obj";
 }
 
 AssetMetadata EditorAssetManager::loadMetadataFromFile(const std::filesystem::path &metaFile) {
@@ -106,6 +106,8 @@ AssetMetadata EditorAssetManager::loadMetadataFromFile(const std::filesystem::pa
 		type = AssetType::TEXTURE;
 	else if (typeStr == "MESH")
 		type = AssetType::MESH;
+	else if (typeStr == "GEOMETRY")
+		type = AssetType::GEOMETRY;
 	return AssetMetadata(metaNode["uuid"].as<uint64_t>(), metaNode["assetPath"].as<std::string>(), type);
 }
 
@@ -129,6 +131,8 @@ AssetType EditorAssetManager::getAssetTypeFromExtension(std::string extension) {
 		return AssetType::TEXTURE;
 	else if (extension == ".gltf")
 		return AssetType::MESH;
+	else if (extension == ".obj")
+		return AssetType::GEOMETRY;
 	return AssetType::UNKNOWN;
 }
 

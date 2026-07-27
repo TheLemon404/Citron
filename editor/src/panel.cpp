@@ -357,7 +357,7 @@ void AssetPanel::refreshDirectoryListings() {
 					   currentDirectory.string());
 	directoryListings.clear();
 	for (std::filesystem::path &entry :
-		 CitronIO::IO::getFilesInDirectory(currentDirectory)) {
+		 CitronIO::IO::getEntriesInDirectory(currentDirectory)) {
 		if (entry.extension() == ".meta")
 			continue;
 		AssetCard card = {};

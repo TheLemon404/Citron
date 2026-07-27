@@ -68,10 +68,10 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 
 	materialImporter = std::make_shared<MaterialImporter>();
 	shaderImporter = std::make_shared<ShaderImporter>(renderer.getDevice());
-	meshImporter = std::make_shared<GeometryImporter>(renderer.getDevice());
+	geometryImporter = std::make_shared<GeometryImporter>(renderer.getDevice());
 	assetManager.registerAssetImporter(AssetType::MATERIAL, materialImporter);
 	assetManager.registerAssetImporter(AssetType::SHADER, shaderImporter);
-	assetManager.registerAssetImporter(AssetType::MESH, meshImporter);
+	assetManager.registerAssetImporter(AssetType::GEOMETRY, geometryImporter);
 }
 
 App::~App() {}

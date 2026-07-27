@@ -1,5 +1,7 @@
 #pragma once
 
+#include "citron_exports.hpp"
+
 #include "SDL3/SDL_events.h"
 #include "core.hpp"
 
@@ -51,7 +53,7 @@ enum EventCategory : int {
 		return EventCategory::category;             \
 	}
 
-class Event {
+class CITRON_CORE_API Event {
 	friend class EventDispatcher;
 	SDL_Event *event;
 
@@ -71,7 +73,7 @@ class Event {
 	bool handled = false;
 };
 
-class EventDispatcher {
+class CITRON_CORE_API EventDispatcher {
 	Event &event;
 
   public:

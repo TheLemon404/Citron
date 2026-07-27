@@ -4,6 +4,8 @@
 
 using namespace CitronCore;
 
+uint64_t UUID::nullID = 0;
+
 static std::random_device randomDevice;
 static std::mt19937 randomEngine(randomDevice());
 static std::uniform_int_distribution<uint64_t>

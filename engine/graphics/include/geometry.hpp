@@ -1,4 +1,5 @@
 #pragma once
+#include "citron_exports.hpp"
 
 #include "assets.hpp"
 #include "buffer.hpp"
@@ -10,7 +11,7 @@
 using namespace CitronAssets;
 
 namespace CitronGraphics {
-struct Vertex {
+struct CITRON_GRAPHICS_API Vertex {
 	Vertex(float x, float y, float z) : position(x, y, z) {}
 	glm::vec3 position;
 	glm::vec3 normal = glm::vec3(0.0f);
@@ -18,7 +19,7 @@ struct Vertex {
 	glm::vec2 uv = glm::vec2(0.0f);
 };
 
-class Geometry : public Asset<Geometry, AssetType::GEOMETRY> {
+class CITRON_GRAPHICS_API Geometry : public Asset<Geometry, AssetType::GEOMETRY> {
   public:
 	Geometry(const UUID uuid, Device &device) : Asset<Geometry, AssetType::GEOMETRY>(uuid), device(device) {}
 	Geometry(std::vector<Vertex> vertices, std::vector<uint32_t> indices, Device &device);
@@ -36,7 +37,7 @@ class Geometry : public Asset<Geometry, AssetType::GEOMETRY> {
 	GPUBuffer indexBuffer;
 };
 
-class GeometryImporter : public AssetImporter {
+class CITRON_GRAPHICS_API GeometryImporter : public AssetImporter {
   public:
 	GeometryImporter(Device &device) : AssetImporter(), device(device) {};
 

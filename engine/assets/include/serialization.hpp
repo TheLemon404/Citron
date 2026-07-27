@@ -1,8 +1,8 @@
 #pragma once
 
 #include "alpaca/detail/options.h"
+#include "citron_exports.hpp"
 #include "logger.hpp"
-
 #include <alpaca/alpaca.h>
 #include <entt/entt.hpp>
 #include <fstream>
@@ -12,14 +12,13 @@ namespace CitronAssets {
 class StreamReader;
 class StreamWriter;
 
-template <typename T>
-class ISerializable {
+class CITRON_ASSETS_API ISerializable {
   public:
 	virtual void serialize(StreamWriter &writer) = 0;
 	virtual void deserialize(StreamReader &reader) = 0;
 };
 
-class StreamWriter {
+class CITRON_ASSETS_API StreamWriter {
   public:
 	virtual void writeData(const void *data, size_t size) = 0;
 	virtual void writeString(const std::string &str) = 0;
@@ -42,7 +41,7 @@ class StreamWriter {
 	}
 };
 
-class FileStreamWriter : public StreamWriter {
+class CITRON_ASSETS_API FileStreamWriter : public StreamWriter {
   public:
 	FileStreamWriter(const std::string &filename)
 		: stream(filename, std::ios::binary) {
@@ -58,19 +57,19 @@ class FileStreamWriter : public StreamWriter {
 	std::ofstream stream;
 };
 
-class MemoryStreamWriter : public StreamWriter {
+class CITRON_ASSETS_API CITRON_ASSETS_API MemoryStreamWriter : public StreamWriter {
   public:
 	void writeData(const void *data, size_t size) override;
 	void writeString(const std::string &str) override;
 };
 
-class NetworkStreamWriter : public StreamWriter {
+class CITRON_ASSETS_API NetworkStreamWriter : public StreamWriter {
   public:
 	void writeData(const void *data, size_t size) override;
 	void writeString(const std::string &str) override;
 };
 
-class StreamReader {
+class CITRON_ASSETS_API StreamReader {
   public:
 	virtual void readData(void *data, size_t size) = 0;
 	virtual void readString(std::string &str) = 0;
@@ -99,7 +98,7 @@ class StreamReader {
 	}
 };
 
-class FileStreamReader : public StreamReader {
+class CITRON_ASSETS_API FileStreamReader : public StreamReader {
   public:
 	FileStreamReader(const std::string &filename)
 		: stream(filename, std::ios::binary) {
@@ -115,13 +114,13 @@ class FileStreamReader : public StreamReader {
 	std::ifstream stream;
 };
 
-class MemoryStreamReader : public StreamReader {
+class CITRON_ASSETS_API MemoryStreamReader : public StreamReader {
   public:
 	void readData(void *data, size_t size) override;
 	void readString(std::string &str) override;
 };
 
-class NetworkStreamReader : public StreamReader {
+class CITRON_ASSETS_API NetworkStreamReader : public StreamReader {
   public:
 	void readData(void *data, size_t size) override;
 	void readString(std::string &str) override;

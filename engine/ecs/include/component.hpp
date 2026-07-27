@@ -1,5 +1,6 @@
 #pragma once
 
+#include "citron_exports.hpp"
 #include "uuid.hpp"
 #include <assets.hpp>
 #include <cstdint>
@@ -15,7 +16,7 @@ using namespace CitronGraphics;
 
 namespace CitronECS {
 
-struct EntityBaseComponent {
+struct CITRON_ECS_API EntityBaseComponent {
 	uint64_t uuid;
 	std::string name;
 
@@ -23,7 +24,7 @@ struct EntityBaseComponent {
 	std::vector<uint64_t> children;
 };
 
-struct MeshComponent {
+struct CITRON_ECS_API MeshComponent {
 	AssetReference<Geometry> geometryAsset;
 	AssetReference<Shader> materialAsset;
 };

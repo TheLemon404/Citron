@@ -1,5 +1,6 @@
 #pragma once
 
+#include "citron_exports.hpp"
 #include <core.hpp>
 #include <filesystem>
 #include <string>
@@ -7,7 +8,7 @@
 
 namespace CitronIO {
 
-class IO {
+class CITRON_IO_API IO {
   public:
 	static std::string readFile(const std::filesystem::path &path);
 	static void createFile(const std::filesystem::path &path);

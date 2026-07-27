@@ -1,5 +1,7 @@
 #pragma once
 
+#include "citron_exports.hpp"
+
 #include "assets.hpp"
 #include "device.hpp"
 #include "geometry.hpp"
@@ -16,9 +18,9 @@ using namespace CitronCore;
 
 namespace CitronGraphics {
 
-class Frame;
+class CITRON_GRAPHICS_API Frame;
 
-class RenderPass {
+class CITRON_GRAPHICS_API RenderPass {
   public:
 	RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
 			   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame);
@@ -29,16 +31,9 @@ class RenderPass {
 	RenderPass(RenderPass &&) = default;
 	RenderPass &operator=(RenderPass &&) = default;
 
-	void setPipeline(std::shared_ptr<Pipeline> pipeline) {
-		renderPassEncoder.setPipeline(pipeline->getPipeline());
-	}
-	void setGeometry(std::shared_ptr<Geometry> geometry) {
-		renderPassEncoder.setVertexBuffer(0, geometry->getVertexBuffer().buffer, 0, WGPU_WHOLE_SIZE);
-		renderPassEncoder.setIndexBuffer(geometry->getIndexBuffer().buffer, wgpu::IndexFormat::Uint32, 0, WGPU_WHOLE_SIZE);
-	}
-	void draw(std::shared_ptr<Geometry> geometry) {
-		renderPassEncoder.drawIndexed(geometry->getIndexBuffer().entryCount, 1, 0, 0, 0);
-	}
+	void setPipeline(std::shared_ptr<Pipeline> pipeline);
+	void setGeometry(std::shared_ptr<Geometry> geometry);
+	void draw(std::shared_ptr<Geometry> geometry);
 	void end();
 
 	wgpu::RenderPassEncoder &getRenderPassEncoder() {
@@ -58,7 +53,7 @@ class RenderPass {
 	wgpu::Device &device;
 };
 
-class Frame {
+class CITRON_GRAPHICS_API Frame {
   public:
 	Frame(wgpu::Device &device, wgpu::CommandEncoder encoder,
 		  wgpu::SurfaceTexture &surfaceTexture)
@@ -80,7 +75,7 @@ struct RenderObject {
 	std::shared_ptr<Material> material;
 };
 
-class Renderer {
+class CITRON_GRAPHICS_API Renderer {
   public:
 	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager) {}
 

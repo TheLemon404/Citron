@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace CitronCore {
-class LayerStack {
+class CITRON_CORE_API LayerStack {
   public:
 	template <typename T>
 		requires std::derived_from<T, Layer>

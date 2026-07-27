@@ -5,14 +5,14 @@
 #include <sstream>
 
 namespace CitronCore {
-class MouseEvent : public Event {
+class CITRON_CORE_API MouseEvent : public Event {
   public:
 	MouseEvent(SDL_Event *e) : Event(e) {}
 
 	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 };
 
-class MouseScrolledEvent : public MouseEvent {
+class CITRON_CORE_API MouseScrolledEvent : public MouseEvent {
   public:
 	MouseScrolledEvent(SDL_Event *e, double dx, double dy)
 		: MouseEvent(e), dx(dx), dy(dy) {}
@@ -33,7 +33,7 @@ class MouseScrolledEvent : public MouseEvent {
 	double dy;
 };
 
-class MouseMovedEvent : public MouseEvent {
+class CITRON_CORE_API MouseMovedEvent : public MouseEvent {
   public:
 	MouseMovedEvent(SDL_Event *e, double dx, double dy)
 		: MouseEvent(e), dx(dx), dy(dy) {}
@@ -54,7 +54,7 @@ class MouseMovedEvent : public MouseEvent {
 	double dy;
 };
 
-class MouseButtonEvent : public MouseEvent {
+class CITRON_CORE_API MouseButtonEvent : public MouseEvent {
   public:
 	MouseButtonEvent(SDL_Event *e) : MouseEvent(e) {}
 
@@ -62,7 +62,7 @@ class MouseButtonEvent : public MouseEvent {
 						 EventCategoryInput)
 };
 
-class MouseButtonPressedEvent : public MouseButtonEvent {
+class CITRON_CORE_API MouseButtonPressedEvent : public MouseButtonEvent {
   public:
 	MouseButtonPressedEvent(SDL_Event *e, int button)
 		: MouseButtonEvent(e), button(button) {}
@@ -81,7 +81,7 @@ class MouseButtonPressedEvent : public MouseButtonEvent {
 	int button;
 };
 
-class MouseButtonReleasedEvent : public MouseButtonEvent {
+class CITRON_CORE_API MouseButtonReleasedEvent : public MouseButtonEvent {
   public:
 	MouseButtonReleasedEvent(SDL_Event *e, int button)
 		: MouseButtonEvent(e), button(button) {}

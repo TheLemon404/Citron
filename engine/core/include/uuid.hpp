@@ -1,17 +1,19 @@
 #pragma once
 
+#include "citron_exports.hpp"
+
 #include <cstdint>
 #include <iostream>
 
 namespace CitronCore {
 
-class UUID {
+class CITRON_CORE_API UUID {
   public:
 	UUID();
 	UUID(uint64_t uuid);
 	UUID(const UUID &other) = default;
 
-	inline static uint64_t nullID = 0;
+	static uint64_t nullID;
 
 	bool operator==(const uint64_t uuid) const { return m_uuid == uuid; }
 	bool operator==(const int uuid) const { return m_uuid == (uint64_t)uuid; }
@@ -28,7 +30,8 @@ class UUID {
 } // namespace CitronCore
 
 namespace std {
-template <> struct hash<CitronCore::UUID> {
+template <>
+struct hash<CitronCore::UUID> {
 	std::size_t operator()(const CitronCore::UUID &uuid) const {
 		return std::hash<uint64_t>()((uint64_t)uuid);
 	}

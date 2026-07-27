@@ -1,5 +1,7 @@
 #pragma once
 
+#include "citron_exports.hpp"
+
 #include "event.hpp"
 #include "uuid.hpp"
 #include <concepts>
@@ -9,10 +11,6 @@
 #include <unordered_map>
 
 using namespace CitronCore;
-
-namespace {
-
-}
 
 namespace CitronAssets {
 
@@ -42,13 +40,13 @@ constexpr std::string_view to_string(AssetType t) {
 	}
 }
 
-struct AssetMetadata {
+struct CITRON_ASSETS_API AssetMetadata {
 	uint64_t uuid;
 	std::filesystem::path assetPath;
 	AssetType assetType;
 };
 
-class AssetBase {
+class CITRON_ASSETS_API AssetBase {
   public:
 	AssetBase(const UUID uuid) : uuid(uuid) {}
 	virtual ~AssetBase() = default;
@@ -72,12 +70,12 @@ struct AssetReference {
 	static constexpr AssetType assetType = T::GetType();
 };
 
-class AssetImporter {
+class CITRON_ASSETS_API AssetImporter {
   public:
 	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) = 0;
 };
 
-class AssetManagerBase {
+class CITRON_ASSETS_API AssetManagerBase {
   public:
 	virtual void initializeAssetRegistry() = 0;
 	virtual void refreshAssetRegistry() = 0;
@@ -100,7 +98,7 @@ class AssetManagerBase {
 	std::unordered_map<UUID, std::weak_ptr<AssetBase>> loadedAssets;
 };
 
-class EditorAssetManager : public AssetManagerBase {
+class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase {
   public:
 	EditorAssetManager(const std::filesystem::path &projectRootPath)
 		: projectRootPath(projectRootPath) {}
@@ -134,7 +132,7 @@ class EditorAssetManager : public AssetManagerBase {
 	const std::filesystem::path projectRootPath;
 };
 
-class RuntimeAssetManager : public AssetManagerBase {
+class CITRON_ASSETS_API RuntimeAssetManager : public AssetManagerBase {
   public:
 	virtual void initializeAssetRegistry() override;
 	virtual void refreshAssetRegistry() override;
@@ -143,7 +141,7 @@ class RuntimeAssetManager : public AssetManagerBase {
 	virtual AssetType getAssetType(const UUID uuid) override;
 };
 
-class AssetRegistryRefreshEvent : public Event {
+class CITRON_ASSETS_API AssetRegistryRefreshEvent : public Event {
   public:
 	AssetRegistryRefreshEvent() : Event(nullptr) {}
 	std::string toString() const override { return "AppRegistryRefreshEvent"; }
@@ -153,7 +151,7 @@ class AssetRegistryRefreshEvent : public Event {
 
 using EventCallbackFn = std::function<void(Event &)>;
 
-class AssetManager {
+class CITRON_ASSETS_API AssetManager {
   public:
 	AssetManager(const bool isRuntime, std::filesystem::path projectRootPath, EventCallbackFn eventCallback) : isRuntime(isRuntime), eventCallback(eventCallback) {
 		if (isRuntime) {

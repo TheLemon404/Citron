@@ -4,8 +4,8 @@
 
 using namespace CitronCore;
 
-std::shared_ptr<spdlog::logger> Logger::coreLogger = nullptr;
-std::shared_ptr<spdlog::logger> Logger::clientLogger = nullptr;
+std::shared_ptr<spdlog::logger> Logger::coreLogger;
+std::shared_ptr<spdlog::logger> Logger::clientLogger;
 
 void Logger::init() {
 	spdlog::set_pattern("%^[%T] [Thread: %t] %n: %v%$");

@@ -1,4 +1,7 @@
 #include "geometry.hpp"
+#include "assimp/Importer.hpp"
+#include "assimp/postprocess.h"
+#include "assimp/scene.h"
 #include "buffer.hpp"
 #include "glm/fwd.hpp"
 #include <webgpu/webgpu.hpp>
@@ -31,5 +34,4 @@ Geometry::Geometry(std::vector<Vertex> vertices, std::vector<uint32_t> indices, 
 }
 
 std::shared_ptr<AssetBase> GeometryImporter::importAsset(AssetMetadata metadata) {
-	return nullptr;
 }

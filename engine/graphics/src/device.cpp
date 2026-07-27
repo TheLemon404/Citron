@@ -1,11 +1,9 @@
-#include "SDL3/SDL_video.h"
 #include <cstddef>
 
 #define WEBGPU_CPP_IMPLEMENTATION
 
 #include "device.hpp"
 #include <logger.hpp>
-#include <sdl3webgpu.h>
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
@@ -18,10 +16,13 @@ void Device::aquirePlatformResources() {
 	CITRON_CORE_ASSERT(instance, "Failed to create WGPU instance");
 	CITRON_CORE_INFO("WGPU instance created");
 
+	surface = window.getSDL_WGPUSurface(instance);
+	CITRON_CORE_ASSERT(surface, "Failed to get WGPU surface");
+	CITRON_CORE_INFO("WGPU surface obtained");
+
 	wgpu::RequestAdapterOptions adapterOptions = {};
 	adapterOptions.nextInChain = nullptr;
-	adapterOptions.compatibleSurface =
-		SDL_GetWGPUSurface(instance, (SDL_Window *)window.getSDLWindow());
+	adapterOptions.compatibleSurface = surface;
 	adapter = instance.requestAdapter(adapterOptions);
 	CITRON_CORE_ASSERT(adapter, "Failed to obtained WGPU adapter");
 	CITRON_CORE_INFO("WGPU adapter obtained");
@@ -118,7 +119,6 @@ void Device::aquirePlatformResources() {
 	};
 	queue.onSubmittedWorkDone(eventDoneCallbackInfo);
 
-	surface = SDL_GetWGPUSurface(instance, (SDL_Window *)window.getSDLWindow());
 	wgpu::SurfaceConfiguration surfaceConfiguration = {};
 	surfaceConfiguration.nextInChain = nullptr;
 	surfaceConfiguration.width = window.getWidth();

@@ -1,5 +1,7 @@
 add_library(citron_ecs SHARED)
 
+target_compile_definitions(citron_ecs PRIVATE CITRON_ECS_BUILD_DLL)
+
 file(GLOB_RECURSE src CONFIGURE_DEPENDS  src/*.cpp)
 
 target_sources(citron_ecs PRIVATE ${src})

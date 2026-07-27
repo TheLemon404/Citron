@@ -1,5 +1,6 @@
 #pragma once
 
+#include "citron_exports.hpp"
 #include "entt/entity/fwd.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
@@ -14,9 +15,9 @@ using namespace CitronCore;
 
 namespace CitronECS {
 
-class Scene;
+class CITRON_ECS_API Scene;
 
-class System {
+class CITRON_ECS_API System {
   public:
 	System(const std::string name) : name(name) {}
 	virtual void init(Scene &activeScene) {};
@@ -30,7 +31,7 @@ class System {
 	const std::string name;
 };
 
-class Scene : public ISerializable<Scene> {
+class CITRON_ECS_API Scene : public ISerializable {
   public:
 	Scene(std::string name) : name(name) {}
 
@@ -72,7 +73,7 @@ enum class SceneMode {
 	PAUSE = 2,
 };
 
-class SceneManager {
+class CITRON_ECS_API SceneManager {
   public:
 	SceneManager(AssetManager &assetManager) : assetManager(assetManager) {}
 	void onAttach();

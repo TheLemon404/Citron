@@ -8,7 +8,7 @@
 using namespace CitronAssets;
 
 namespace CitronGraphics {
-class Shader : public Asset<Shader, AssetType::SHADER> {
+class CITRON_GRAPHICS_API Shader : public Asset<Shader, AssetType::SHADER> {
   public:
 	Shader(const UUID uuid, wgpu::ShaderModule shaderModule) : Asset<Shader, AssetType::SHADER>(uuid), shaderModule(shaderModule) {}
 	~Shader() {
@@ -29,7 +29,7 @@ class Shader : public Asset<Shader, AssetType::SHADER> {
 	wgpu::ShaderModule shaderModule;
 };
 
-class ShaderImporter : public AssetImporter {
+class CITRON_GRAPHICS_API ShaderImporter : public AssetImporter {
   public:
 	ShaderImporter(Device &device) : device(device) {}
 

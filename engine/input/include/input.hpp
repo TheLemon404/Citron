@@ -1,5 +1,6 @@
 #pragma once
 
+#include "citron_exports.hpp"
 #include "layer.hpp"
 #include <SDL3/SDL.h>
 #include <event.hpp>
@@ -17,7 +18,7 @@ enum class PressableInputState {
 	JUST_RELEASED
 };
 
-class InputLayer : public Layer {
+class CITRON_INPUT_API InputLayer : public Layer {
   public:
 	InputLayer() : Layer("InputLayer") {}
 	~InputLayer() override = default;

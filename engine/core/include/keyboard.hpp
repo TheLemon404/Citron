@@ -1,10 +1,12 @@
 #pragma once
 
+#include "citron_exports.hpp"
+
 #include "event.hpp"
 #include <sstream>
 
 namespace CitronCore {
-class KeyEvent : public Event {
+class CITRON_CORE_API KeyEvent : public Event {
   public:
 	inline int getKeycode() const { return keycode; }
 	EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
@@ -14,7 +16,7 @@ class KeyEvent : public Event {
 	int keycode;
 };
 
-class KeyTypedEvent : public KeyEvent {
+class CITRON_CORE_API KeyTypedEvent : public KeyEvent {
   public:
 	KeyTypedEvent(SDL_Event *e, const char *text)
 		: KeyEvent(e, e->key.key), text(text) {}
@@ -31,7 +33,7 @@ class KeyTypedEvent : public KeyEvent {
 	const char *text;
 };
 
-class KeyPressedEvent : public KeyEvent {
+class CITRON_CORE_API KeyPressedEvent : public KeyEvent {
   public:
 	KeyPressedEvent(SDL_Event *e, int keycode, int repeatCount, int mods)
 		: KeyEvent(e, keycode), repeatCount(repeatCount), mods(mods) {}
@@ -54,7 +56,7 @@ class KeyPressedEvent : public KeyEvent {
 	int repeatCount;
 };
 
-class KeyJustPressedEvent : public KeyEvent {
+class CITRON_CORE_API KeyJustPressedEvent : public KeyEvent {
   public:
 	KeyJustPressedEvent(SDL_Event *e, int keycode, int mods)
 		: KeyEvent(e, keycode), mods(mods) {}
@@ -73,7 +75,7 @@ class KeyJustPressedEvent : public KeyEvent {
 	int mods;
 };
 
-class KeyReleasedEvent : public KeyEvent {
+class CITRON_CORE_API KeyReleasedEvent : public KeyEvent {
   public:
 	KeyReleasedEvent(SDL_Event *e, int keycode) : KeyEvent(e, keycode) {}
 
@@ -86,7 +88,7 @@ class KeyReleasedEvent : public KeyEvent {
 	EVENT_CLASS_TYPE(KeyReleased);
 };
 
-class KeyJustReleasedEvent : public KeyEvent {
+class CITRON_CORE_API KeyJustReleasedEvent : public KeyEvent {
   public:
 	KeyJustReleasedEvent(SDL_Event *e, int keycode) : KeyEvent(e, keycode) {}
 

@@ -31,6 +31,19 @@ RenderPass::RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
 
 RenderPass::~RenderPass() { targetView.release(); }
 
+void RenderPass::setPipeline(std::shared_ptr<Pipeline> pipeline) {
+	renderPassEncoder.setPipeline(pipeline->getPipeline());
+}
+
+void RenderPass::setGeometry(std::shared_ptr<Geometry> geometry) {
+	renderPassEncoder.setVertexBuffer(0, geometry->getVertexBuffer().buffer, 0, WGPU_WHOLE_SIZE);
+	renderPassEncoder.setIndexBuffer(geometry->getIndexBuffer().buffer, wgpu::IndexFormat::Uint32, 0, WGPU_WHOLE_SIZE);
+}
+
+void RenderPass::draw(std::shared_ptr<Geometry> geometry) {
+	renderPassEncoder.drawIndexed(geometry->getIndexBuffer().entryCount, 1, 0, 0, 0);
+}
+
 void RenderPass::end() {
 	renderPassEncoder.end();
 	renderPassEncoder.release();

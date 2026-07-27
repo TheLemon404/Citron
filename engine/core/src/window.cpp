@@ -6,7 +6,10 @@
 #include "SDL3/SDL_video.h"
 #include "keyboard.hpp"
 #include "mouse.hpp"
+#include <any>
 #include <logger.hpp>
+#include <sdl3webgpu.h>
+#include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
 
@@ -148,4 +151,8 @@ void Window::close() {
 	}
 
 	SDL_Quit();
+}
+
+wgpu::Surface Window::getSDL_WGPUSurface(wgpu::Instance &instance) {
+	return SDL_GetWGPUSurface(instance, sdl_window);
 }

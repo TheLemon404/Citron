@@ -1,18 +1,19 @@
 #pragma once
 
-#include <spdlog/logger.h>
+#include "citron_exports.hpp"
+
 #include <spdlog/spdlog.h>
 
 namespace CitronCore {
 
-class Logger {
+class CITRON_CORE_API Logger {
   public:
 	static void init();
 
-	inline static std::shared_ptr<spdlog::logger> &getCoreLogger() {
+	static std::shared_ptr<spdlog::logger> &getCoreLogger() {
 		return coreLogger;
 	}
-	inline static std::shared_ptr<spdlog::logger> &getClientLogger() {
+	static std::shared_ptr<spdlog::logger> &getClientLogger() {
 		return clientLogger;
 	}
 
@@ -24,29 +25,29 @@ class Logger {
 } // namespace CitronCore
 
 // core macros
-#define CITRON_CORE_CRITICAL(...)                                              \
+#define CITRON_CORE_CRITICAL(...) \
 	::CitronCore::Logger::getCoreLogger()->critical(__VA_ARGS__)
-#define CITRON_CORE_ERROR(...)                                                 \
+#define CITRON_CORE_ERROR(...) \
 	::CitronCore::Logger::getCoreLogger()->error(__VA_ARGS__)
-#define CITRON_CORE_WARN(...)                                                  \
+#define CITRON_CORE_WARN(...) \
 	::CitronCore::Logger::getCoreLogger()->warn(__VA_ARGS__)
-#define CITRON_CORE_INFO(...)                                                  \
+#define CITRON_CORE_INFO(...) \
 	::CitronCore::Logger::getCoreLogger()->info(__VA_ARGS__)
-#define CITRON_CORE_DEBUG(...)                                                 \
+#define CITRON_CORE_DEBUG(...) \
 	::CitronCore::Logger::getCoreLogger()->debug(__VA_ARGS__)
-#define CITRON_CORE_TRACE(...)                                                 \
+#define CITRON_CORE_TRACE(...) \
 	::CitronCore::Logger::getCoreLogger()->trace(__VA_ARGS__)
 
 // client macros
-#define CITRON_CLIENT_CRITICAL(...)                                            \
+#define CITRON_CLIENT_CRITICAL(...) \
 	::CitronCore::Logger::getClientLogger()->critical(__VA_ARGS__)
-#define CITRON_CLIENT_ERROR(...)                                               \
+#define CITRON_CLIENT_ERROR(...) \
 	::CitronCore::Logger::getClientLogger()->error(__VA_ARGS__)
-#define CITRON_CLIENT_WARN(...)                                                \
+#define CITRON_CLIENT_WARN(...) \
 	::CitronCore::Logger::getClientLogger()->warn(__VA_ARGS__)
-#define CITRON_CLIENT_INFO(...)                                                \
+#define CITRON_CLIENT_INFO(...) \
 	::CitronCore::Logger::getClientLogger()->info(__VA_ARGS__)
-#define CITRON_CLIENT_DEBUG(...)                                               \
+#define CITRON_CLIENT_DEBUG(...) \
 	::CitronCore::Logger::getClientLogger()->debug(__VA_ARGS__)
-#define CITRON_CLIENT_TRACE(...)                                               \
+#define CITRON_CLIENT_TRACE(...) \
 	::CitronCore::Logger::getClientLogger()->trace(__VA_ARGS__)

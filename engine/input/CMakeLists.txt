@@ -1,5 +1,8 @@
 add_library(citron_input SHARED)
 
+target_compile_definitions(citron_input PRIVATE CITRON_INPUT_BUILD_DLL)
+
+
 file(GLOB_RECURSE src CONFIGURE_DEPENDS  src/*.cpp)
 
 target_sources(citron_input PRIVATE ${src})

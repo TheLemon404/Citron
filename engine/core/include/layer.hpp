@@ -4,7 +4,7 @@
 #include <string>
 
 namespace CitronCore {
-class Layer {
+class CITRON_CORE_API Layer {
   public:
 	Layer(const std::string &debugName) : debugName(debugName) {};
 	virtual ~Layer() = default;

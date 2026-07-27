@@ -6,37 +6,38 @@
 #include <event.hpp>
 #include <functional>
 #include <sstream>
+#include <webgpu/webgpu.hpp>
 
 namespace CitronCore {
 
-class WindowEvent : public Event {
+class CITRON_CORE_API WindowEvent : public Event {
   public:
 	WindowEvent(SDL_Event *e) : Event(e) {}
 	EVENT_CLASS_CATEGORY(EventCategoryWindow)
 };
 
-class WindowFocusEvent : public WindowEvent {
+class CITRON_CORE_API WindowFocusEvent : public WindowEvent {
   public:
 	WindowFocusEvent(SDL_Event *e) : WindowEvent(e) {}
 	std::string toString() const override { return "WindowFocusEvent"; }
 	EVENT_CLASS_TYPE(WindowFocus)
 };
 
-class WindowLostFocusEvent : public WindowEvent {
+class CITRON_CORE_API WindowLostFocusEvent : public WindowEvent {
   public:
 	WindowLostFocusEvent(SDL_Event *e) : WindowEvent(e) {}
 	std::string toString() const override { return "WindowLostFocusEvent"; }
 	EVENT_CLASS_TYPE(WindowLostFocus)
 };
 
-class WindowCloseEvent : public WindowEvent {
+class CITRON_CORE_API WindowCloseEvent : public WindowEvent {
   public:
 	WindowCloseEvent(SDL_Event *e) : WindowEvent(e) {}
 	std::string toString() const override { return "WindowCloseEvent"; }
 	EVENT_CLASS_TYPE(WindowClose)
 };
 
-class WindowResizeEvent : public WindowEvent {
+class CITRON_CORE_API WindowResizeEvent : public WindowEvent {
   public:
 	WindowResizeEvent(SDL_Event *e, int width, int height)
 		: WindowEvent(e), width(width), height(height) {}
@@ -56,7 +57,7 @@ class WindowResizeEvent : public WindowEvent {
 	int width, height;
 };
 
-class WindowMovedEvent : public WindowEvent {
+class CITRON_CORE_API WindowMovedEvent : public WindowEvent {
   public:
 	WindowMovedEvent(SDL_Event *e, int dx, int dy)
 		: WindowEvent(e), dx(dx), dy(dy) {}
@@ -75,7 +76,7 @@ class WindowMovedEvent : public WindowEvent {
 	int dx, dy;
 };
 
-class Window {
+class CITRON_CORE_API Window {
 	SDL_Window *sdl_window = nullptr;
 	SDL_Surface *sdl_surface = nullptr;
 	const char *title = nullptr;
@@ -102,6 +103,7 @@ class Window {
 	void swapBuffers();
 	void close();
 
+	wgpu::Surface getSDL_WGPUSurface(wgpu::Instance &instance);
 	void *getSDLWindow() const { return sdl_window; }
 	void *getSDLSurface() const { return sdl_surface; }
 

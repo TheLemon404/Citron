@@ -72,3 +72,7 @@ Pipeline::Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
 
 	pipeline = device.createRenderPipeline(pipelineDesc);
 }
+
+Pipeline::~Pipeline() {
+	pipeline.release();
+}

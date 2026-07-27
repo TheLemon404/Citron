@@ -1,5 +1,7 @@
 #pragma once
 
+#include "citron_exports.hpp"
+
 #include "geometry.hpp"
 #include "spdlog/common.h"
 #include <assets.hpp>
@@ -21,37 +23,37 @@ using namespace CitronECS;
 using namespace CitronAssets;
 
 namespace CitronCore {
-class AppEvent : public Event {
+class CITRON_APP_API AppEvent : public Event {
   public:
 	EVENT_CLASS_CATEGORY(EventCategoryApp)
 };
 
-class AppRenderEvent : public AppEvent {
+class CITRON_APP_API AppRenderEvent : public AppEvent {
   public:
 	std::string toString() const override { return "AppRenderEvent"; }
 	EVENT_CLASS_TYPE(AppRender)
 };
 
-class AppTickEvent : public AppEvent {
+class CITRON_APP_API AppTickEvent : public AppEvent {
   public:
 	std::string toString() const override { return "AppTickEvent"; }
 	EVENT_CLASS_TYPE(AppTick)
 };
 
-class AppUpdateEvent : public AppEvent {
+class CITRON_APP_APIAppUpdateEvent : public AppEvent {
   public:
 	std::string toString() const override { return "AppUpdateEvent"; }
 	EVENT_CLASS_TYPE(AppUpdate)
 };
 
-struct LogEntry {
+struct CITRON_APP_API LogEntry {
 	std::string message;
 	uint32_t timestamp;
 	std::string type;
 	spdlog::level::level_enum logLevel;
 };
 
-class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
+class CITRON_APP_API AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
   public:
 	std::vector<LogEntry> entries;
 
@@ -60,7 +62,7 @@ class AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
 	void flush_() override {}
 };
 
-class App {
+class CITRON_APP_API App {
   public:
 	App(bool isRuntime, std::filesystem::path projectFilePath);
 	~App();
@@ -83,8 +85,8 @@ class App {
 		layerStack.popLayer<T>();
 	}
 
-	inline static App &get() { return *instance; }
-	inline bool isRunning() const { return running; }
+	static App &get() { return *instance; }
+	bool isRunning() const { return running; }
 
 	LayerStack &getLayerStack() { return layerStack; }
 	Window &getWindow() { return window; }

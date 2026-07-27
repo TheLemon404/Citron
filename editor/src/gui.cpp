@@ -40,7 +40,6 @@ void GuiLayer::onAttach() {
 						   "/EngineResources/Fonts/" + FONT_ICON_FILE_NAME_FAS;
 	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), iconFontSize, &icons_config,
 								 icons_ranges);
-	// use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(

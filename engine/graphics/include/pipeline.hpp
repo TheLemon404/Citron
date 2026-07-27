@@ -4,14 +4,11 @@
 #include <webgpu/webgpu.hpp>
 
 namespace CitronGraphics {
-class Pipeline {
+class CITRON_GRAPHICS_API Pipeline {
   public:
 	Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
 			 std::shared_ptr<Shader> shader);
-	~Pipeline() {
-		pipeline.release();
-	}
-
+	~Pipeline();
 	void draw(wgpu::CommandEncoder &encoder);
 
 	wgpu::RenderPipeline &getPipeline() { return pipeline; }

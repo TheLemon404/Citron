@@ -3,6 +3,7 @@
 #define WEBGPU_BACKEND DAWN
 
 #include "buffer.hpp"
+#include "citron_exports.hpp"
 #include <webgpu/webgpu.hpp>
 #include <window.hpp>
 
@@ -10,7 +11,7 @@ using namespace CitronCore;
 
 namespace CitronGraphics {
 
-class Device {
+class CITRON_GRAPHICS_API Device {
   public:
 	Device(Window &window);
 	~Device() = default;

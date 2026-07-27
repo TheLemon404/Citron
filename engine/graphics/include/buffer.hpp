@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <webgpu/webgpu.hpp>
+
 namespace CitronGraphics {
 struct GPUBuffer {
 	~GPUBuffer() {

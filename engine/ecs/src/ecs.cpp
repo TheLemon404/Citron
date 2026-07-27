@@ -4,9 +4,9 @@
 #include "core.hpp"
 #include "entt/entity/fwd.hpp"
 #include "event.hpp"
-#include "geometry.hpp"
 #include "logger.hpp"
 #include "material.hpp"
+#include "mesh.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include <io.hpp>
@@ -180,8 +180,8 @@ bool SceneManager::checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e) 
 	entt::registry &registry = activeScene->getRegistry();
 	for (auto &entity : registry.view<MeshComponent>()) {
 		MeshComponent &comp = registry.get<MeshComponent>(entity);
-		if (!assetManager.isValidAsset(comp.geometryAsset.uuid)) {
-			comp.geometryAsset.uuid = UUID::nullID;
+		if (!assetManager.isValidAsset(comp.meshAsset.uuid)) {
+			comp.meshAsset.uuid = UUID::nullID;
 		}
 		if (!assetManager.isValidAsset(comp.materialAsset.uuid)) {
 			comp.materialAsset.uuid = UUID::nullID;

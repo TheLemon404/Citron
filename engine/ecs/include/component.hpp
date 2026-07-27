@@ -5,9 +5,9 @@
 #include <assets.hpp>
 #include <cstdint>
 #include <entt/entt.hpp>
-#include <geometry.hpp>
 #include <layer.hpp>
 #include <material.hpp>
+#include <mesh.hpp>
 #include <serialization.hpp>
 
 using namespace CitronCore;
@@ -25,7 +25,7 @@ struct CITRON_ECS_API EntityBaseComponent {
 };
 
 struct CITRON_ECS_API MeshComponent {
-	AssetReference<Geometry> geometryAsset;
+	AssetReference<Mesh> meshAsset;
 	AssetReference<Shader> materialAsset;
 };
 

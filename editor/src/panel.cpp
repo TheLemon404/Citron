@@ -15,11 +15,11 @@
 #include <logger.hpp>
 
 #include "entt/entity/fwd.hpp"
-#include "geometry.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
 #include "material.hpp"
+#include "mesh.hpp"
 #include "shader.hpp"
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
@@ -654,8 +654,8 @@ void InspectorPanel::onDraw() {
 				registry.get<MeshComponent>(selectedEntity);
 			static bool selection = true;
 			if (CustomCollapsingHeader("Mesh Component", &selection)) {
-				drawAssetReferenceComponentGui<Geometry>("Geometry",
-														 meshComponent.geometryAsset);
+				drawAssetReferenceComponentGui<Mesh>("Geometry",
+													 meshComponent.meshAsset);
 				drawAssetReferenceComponentGui<Shader>("Material",
 													   meshComponent.materialAsset);
 			}

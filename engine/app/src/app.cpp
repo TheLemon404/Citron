@@ -1,8 +1,8 @@
 #include "app.hpp"
 #include "assets.hpp"
 #include "device.hpp"
-#include "geometry.hpp"
 #include "glm/fwd.hpp"
+#include "mesh.hpp"
 #include "pipeline.hpp"
 #include "spdlog/common.h"
 #include <core.hpp>
@@ -68,10 +68,10 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 
 	materialImporter = std::make_shared<MaterialImporter>();
 	shaderImporter = std::make_shared<ShaderImporter>(renderer.getDevice());
-	geometryImporter = std::make_shared<GeometryImporter>(renderer.getDevice());
+	meshImporter = std::make_shared<MeshImporter>(renderer.getDevice());
 	assetManager.registerAssetImporter(AssetType::MATERIAL, materialImporter);
 	assetManager.registerAssetImporter(AssetType::SHADER, shaderImporter);
-	assetManager.registerAssetImporter(AssetType::GEOMETRY, geometryImporter);
+	assetManager.registerAssetImporter(AssetType::MESH, meshImporter);
 }
 
 App::~App() {}
@@ -114,7 +114,7 @@ void App::update() {
 		4,
 		5,
 	};
-	std::shared_ptr<Geometry> geometry = std::make_shared<Geometry>(triPositions, triIndices, renderer.getDevice());
+	std::shared_ptr<Mesh> geometry = std::make_shared<Mesh>(triPositions, triIndices, renderer.getDevice());
 
 	while (running) {
 		window.pollEvents();

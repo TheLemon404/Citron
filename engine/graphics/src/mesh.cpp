@@ -1,4 +1,4 @@
-#include "geometry.hpp"
+#include "mesh.hpp"
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 #include "assimp/scene.h"
@@ -8,7 +8,7 @@
 
 using namespace CitronGraphics;
 
-Geometry::Geometry(std::vector<Vertex> vertices, std::vector<uint32_t> indices, Device &device) : Asset<Geometry, AssetType::GEOMETRY>(UUID()), vertices(vertices), indices(indices), device(device) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, Device &device) : Asset<Mesh, AssetType::MESH>(UUID()), vertices(vertices), indices(indices), device(device) {
 	wgpu::BufferDescriptor vertexBufferDesc;
 	vertexBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Vertex;
 	vertexBufferDesc.size = vertices.size() * sizeof(Vertex);
@@ -33,7 +33,7 @@ Geometry::Geometry(std::vector<Vertex> vertices, std::vector<uint32_t> indices, 
 	device.getQueue().writeBuffer(indexBuffer.buffer, 0, indices.data(), indexBufferDesc.size);
 }
 
-std::shared_ptr<AssetBase> GeometryImporter::importAsset(AssetMetadata metadata) {
+std::shared_ptr<AssetBase> MeshImporter::importAsset(AssetMetadata metadata) {
 	CITRON_CORE_INFO("Importing geometry asset {}", metadata.assetPath.string());
 
 	Assimp::Importer importer;
@@ -42,6 +42,8 @@ std::shared_ptr<AssetBase> GeometryImporter::importAsset(AssetMetadata metadata)
 		CITRON_CORE_ERROR("Assimp failed to load scene: {}", importer.GetErrorString());
 		return nullptr;
 	}
+
+	CITRON_CORE_ASSERT(scene->mRootNode->mNumMeshes > 0, "Mesh scene does not contain any meshes");
 	aiMesh *mesh = scene->mMeshes[scene->mRootNode->mMeshes[0]];
 
 	std::vector<CitronGraphics::Vertex> vertices;
@@ -60,5 +62,5 @@ std::shared_ptr<AssetBase> GeometryImporter::importAsset(AssetMetadata metadata)
 		}
 	}
 
-	return std::make_shared<Geometry>(vertices, indices, device);
+	return std::make_shared<Mesh>(vertices, indices, device);
 }

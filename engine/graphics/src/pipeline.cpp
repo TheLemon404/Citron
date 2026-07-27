@@ -1,5 +1,5 @@
 #include "pipeline.hpp"
-#include "geometry.hpp"
+#include "mesh.hpp"
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronGraphics;

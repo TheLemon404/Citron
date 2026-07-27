@@ -19,10 +19,10 @@ struct CITRON_GRAPHICS_API Vertex {
 	glm::vec2 uv = glm::vec2(0.0f);
 };
 
-class CITRON_GRAPHICS_API Geometry : public Asset<Geometry, AssetType::GEOMETRY> {
+class CITRON_GRAPHICS_API Mesh : public Asset<Mesh, AssetType::MESH> {
   public:
-	Geometry(const UUID uuid, Device &device) : Asset<Geometry, AssetType::GEOMETRY>(uuid), device(device) {}
-	Geometry(std::vector<Vertex> vertices, std::vector<uint32_t> indices, Device &device);
+	Mesh(const UUID uuid, Device &device) : Asset<Mesh, AssetType::MESH>(uuid), device(device) {}
+	Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, Device &device);
 
 	const GPUBuffer &getVertexBuffer() const { return vertexBuffer; }
 	const GPUBuffer &getIndexBuffer() const { return indexBuffer; }
@@ -37,9 +37,9 @@ class CITRON_GRAPHICS_API Geometry : public Asset<Geometry, AssetType::GEOMETRY>
 	GPUBuffer indexBuffer;
 };
 
-class CITRON_GRAPHICS_API GeometryImporter : public AssetImporter {
+class CITRON_GRAPHICS_API MeshImporter : public AssetImporter {
   public:
-	GeometryImporter(Device &device) : AssetImporter(), device(device) {};
+	MeshImporter(Device &device) : AssetImporter({".fbx", ".glb", ".gltf"}), device(device) {};
 
 	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) override;
 

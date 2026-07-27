@@ -19,7 +19,6 @@ enum class AssetType : std::size_t {
 	SHADER,
 	MATERIAL,
 	TEXTURE,
-	GEOMETRY,
 	MESH,
 };
 
@@ -31,8 +30,6 @@ constexpr std::string_view to_string(AssetType t) {
 		return "MATERIAL";
 	case AssetType::TEXTURE:
 		return "TEXTURE";
-	case AssetType::GEOMETRY:
-		return "GEOMETRY";
 	case AssetType::MESH:
 		return "MESH";
 	default:
@@ -72,7 +69,16 @@ struct AssetReference {
 
 class CITRON_ASSETS_API AssetImporter {
   public:
+	AssetImporter(std::set<std::string> assetFileExtensions) : assetFileExtensions(assetFileExtensions) {}
+
 	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) = 0;
+
+	const std::set<std::string> &getAssetFileExtensions() const {
+		return assetFileExtensions;
+	}
+
+  protected:
+	std::set<std::string> assetFileExtensions;
 };
 
 class CITRON_ASSETS_API AssetManagerBase {

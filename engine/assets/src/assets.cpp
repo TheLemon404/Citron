@@ -88,10 +88,12 @@ AssetType EditorAssetManager::getAssetType(const UUID uuid) {
 }
 
 bool EditorAssetManager::isKnownAssetFileExtension(std::string extension) {
-	for (char &c : extension) {
-		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+	for (auto importer : assetImporters) {
+		if (importer.second->getAssetFileExtensions().contains(extension))
+			return true;
 	}
-	return extension == ".wgsl" || extension == ".mat" || extension == ".png" || extension == ".jpg" || extension == ".gltf" || extension == ".obj";
+
+	return false;
 }
 
 AssetMetadata EditorAssetManager::loadMetadataFromFile(const std::filesystem::path &metaFile) {
@@ -106,8 +108,6 @@ AssetMetadata EditorAssetManager::loadMetadataFromFile(const std::filesystem::pa
 		type = AssetType::TEXTURE;
 	else if (typeStr == "MESH")
 		type = AssetType::MESH;
-	else if (typeStr == "GEOMETRY")
-		type = AssetType::GEOMETRY;
 	return AssetMetadata(metaNode["uuid"].as<uint64_t>(), metaNode["assetPath"].as<std::string>(), type);
 }
 
@@ -120,19 +120,11 @@ void EditorAssetManager::createMetadataForFile(const std::filesystem::path &file
 }
 
 AssetType EditorAssetManager::getAssetTypeFromExtension(std::string extension) {
-	for (char &c : extension) {
-		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+	for (auto importer : assetImporters) {
+		if (importer.second->getAssetFileExtensions().contains(extension))
+			return importer.first;
 	}
-	if (extension == ".wgsl")
-		return AssetType::SHADER;
-	else if (extension == ".mat")
-		return AssetType::MATERIAL;
-	else if (extension == ".png" || extension == ".jpg")
-		return AssetType::TEXTURE;
-	else if (extension == ".gltf")
-		return AssetType::MESH;
-	else if (extension == ".obj")
-		return AssetType::GEOMETRY;
+
 	return AssetType::UNKNOWN;
 }
 

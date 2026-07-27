@@ -2,7 +2,7 @@
 
 #include "citron_exports.hpp"
 
-#include "geometry.hpp"
+#include "mesh.hpp"
 #include "spdlog/common.h"
 #include <assets.hpp>
 #include <ecs.hpp>
@@ -125,7 +125,7 @@ class CITRON_APP_API App {
 
 	std::shared_ptr<MaterialImporter> materialImporter;
 	std::shared_ptr<ShaderImporter> shaderImporter;
-	std::shared_ptr<GeometryImporter> geometryImporter;
+	std::shared_ptr<MeshImporter> meshImporter;
 
 	Window window;
 };

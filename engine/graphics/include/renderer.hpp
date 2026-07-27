@@ -4,7 +4,7 @@
 
 #include "assets.hpp"
 #include "device.hpp"
-#include "geometry.hpp"
+#include "mesh.hpp"
 #include "pipeline.hpp"
 #include "shader.hpp"
 #include <cstddef>
@@ -32,8 +32,8 @@ class CITRON_GRAPHICS_API RenderPass {
 	RenderPass &operator=(RenderPass &&) = default;
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
-	void setGeometry(std::shared_ptr<Geometry> geometry);
-	void draw(std::shared_ptr<Geometry> geometry);
+	void setGeometry(std::shared_ptr<Mesh> geometry);
+	void draw(std::shared_ptr<Mesh> geometry);
 	void end();
 
 	wgpu::RenderPassEncoder &getRenderPassEncoder() {
@@ -71,7 +71,7 @@ class CITRON_GRAPHICS_API Frame {
 };
 
 struct RenderObject {
-	std::shared_ptr<Geometry> geometry;
+	std::shared_ptr<Mesh> geometry;
 	std::shared_ptr<Material> material;
 };
 

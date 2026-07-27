@@ -16,6 +16,8 @@ class CITRON_GRAPHICS_API Material : public Asset<Material, AssetType::MATERIAL>
 
 class CITRON_GRAPHICS_API MaterialImporter : public AssetImporter {
   public:
+	MaterialImporter() : AssetImporter({".mat"}) {}
+
 	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) override;
 };
 

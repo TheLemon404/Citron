@@ -31,7 +31,7 @@ class CITRON_GRAPHICS_API Shader : public Asset<Shader, AssetType::SHADER> {
 
 class CITRON_GRAPHICS_API ShaderImporter : public AssetImporter {
   public:
-	ShaderImporter(Device &device) : device(device) {}
+	ShaderImporter(Device &device) : AssetImporter({".wgsl"}), device(device) {}
 
 	virtual std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) override;
 

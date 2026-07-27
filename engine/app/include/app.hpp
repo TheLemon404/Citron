@@ -4,6 +4,7 @@
 
 #include "mesh.hpp"
 #include "spdlog/common.h"
+#include "texture.hpp"
 #include <assets.hpp>
 #include <ecs.hpp>
 #include <event.hpp>
@@ -126,6 +127,7 @@ class CITRON_APP_API App {
 	std::shared_ptr<MaterialImporter> materialImporter;
 	std::shared_ptr<ShaderImporter> shaderImporter;
 	std::shared_ptr<MeshImporter> meshImporter;
+	std::shared_ptr<TextureImporter> textureImporter;
 
 	Window window;
 };

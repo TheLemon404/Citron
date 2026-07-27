@@ -61,7 +61,10 @@ void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get().getEditorContext();
 	currentDirectory = context.projectFilePath.parent_path();
 	refreshDirectoryListings();
+
+	folderIconTexture = Texture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", Editor::get().getRenderer().getDevice());
 }
+
 void AssetPanel::onDetach() {}
 void AssetPanel::onUpdate() {}
 void AssetPanel::onDraw() {
@@ -115,224 +118,223 @@ void AssetPanel::onDraw() {
 	ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(20.0f, 20.0f));
 	ImGui::BeginChild("AssetList");
 
-	bool createFolder = false;
+	WGPUTextureView view = folderIconTexture->getTextureView();
+	if (ImGui::BeginTable("##AssetBrowserTable", std::max((int)(ImGui::GetCurrentWindow()->Size.x / zoomLevel), 1), ImGuiTableFlags_ScrollY)) {
 
-	if (ImGui::BeginPopupContextWindow(
-			"AssetBrowserPopup", ImGuiPopupFlags_NoOpenOverExistingPopup)) {
-		if (ImGui::MenuItem("Create Folder")) {
-			createFolder = true;
-		}
-		if (ImGui::MenuItem("Open in File Explorer")) {
-			CitronIO::IO::openFileExplorer(currentDirectory.c_str());
-		}
+		bool createFolder = false;
 
-		ImGui::EndPopup();
-	}
-
-	if (createFolder) {
-		ImGui::OpenPopup("CreateFolderPopup");
-	}
-
-	static std::string folderName;
-	if (ImGui::BeginPopup("CreateFolderPopup")) {
-		if (ImGui::InputTextWithHint("Create Folder", "Folder Name",
-									 &folderName,
-									 ImGuiInputTextFlags_EnterReturnsTrue)) {
-			ImGui::InputTextWithHint("Directory Name", "Directory Name",
-									 &folderName);
-			CitronIO::IO::createDirectory(currentDirectory / folderName);
-			CITRON_CLIENT_INFO("Created new directory {}",
-							   (currentDirectory / folderName).string());
-			pendingRefreshDirectory = true;
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
-
-	ImGui::Dummy(ImVec2(0.0f, 4.0f));
-	int i = 0;
-	for (auto &entry : directoryListings) {
-		ImGui::Columns(ImGui::GetCurrentWindow()->Size.x / zoomLevel, nullptr,
-					   false);
-		ImGui::PushID(i++);
-
-		if (entry.isDirectory) {
-			ImGui::SetWindowFontScale(5.0f * zoomLevel / 150.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
-								ImVec2(0.5f, 0.5f));
-			if (ImGui::Selectable(ICON_FA_FOLDER, &entry.selected,
-								  ImGuiSelectableFlags_AllowDoubleClick,
-								  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
-				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-					currentDirectory = entry.path;
-					pendingRefreshDirectory = true;
-				} else {
-					entry.selected = !entry.selected;
-				}
+		if (ImGui::BeginPopupContextWindow(
+				"AssetBrowserPopup", ImGuiPopupFlags_NoOpenOverExistingPopup)) {
+			if (ImGui::MenuItem("Create Folder")) {
+				createFolder = true;
 			}
-			ImGui::PopStyleVar();
-			ImGui::SetWindowFontScale(1.0f);
-
-			if (ImGui::BeginDragDropSource()) {
-				ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
-										  entry.path.data(), entry.path.size());
-				ImGui::Text("Folder: %s", entry.name.c_str());
-				ImGui::EndDragDropSource();
+			if (ImGui::MenuItem("Open in File Explorer")) {
+				CitronIO::IO::openFileExplorer(currentDirectory.c_str());
 			}
-			if (ImGui::BeginDragDropTarget()) {
-				if (const ImGuiPayload *payload =
-						ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
-					std::string srcPath((const char *)payload->Data,
-										payload->DataSize);
-					if (srcPath != context.currentlyEditedSceneAssetPath) {
-						CitronIO::IO::moveFileOrFolder(srcPath, entry.path);
+
+			ImGui::EndPopup();
+		}
+
+		if (createFolder) {
+			ImGui::OpenPopup("CreateFolderPopup");
+		}
+
+		static std::string folderName;
+		if (ImGui::BeginPopup("CreateFolderPopup")) {
+			if (ImGui::InputTextWithHint("Create Folder", "Folder Name",
+										 &folderName,
+										 ImGuiInputTextFlags_EnterReturnsTrue)) {
+				ImGui::InputTextWithHint("Directory Name", "Directory Name",
+										 &folderName);
+				CitronIO::IO::createDirectory(currentDirectory / folderName);
+				CITRON_CLIENT_INFO("Created new directory {}",
+								   (currentDirectory / folderName).string());
+				pendingRefreshDirectory = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::Dummy(ImVec2(0.0f, 4.0f));
+		int i = 0;
+
+		for (auto &entry : directoryListings) {
+			ImGui::TableNextColumn();
+			ImGui::PushID(i++);
+
+			if (entry.isDirectory) {
+				if (ImGui::Selectable("##Folder", &entry.selected,
+									  ImGuiSelectableFlags_AllowDoubleClick | ImGuiSelectableFlags_AllowOverlap,
+									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+						currentDirectory = entry.path;
 						pendingRefreshDirectory = true;
-						ImGui::PopID();
-						continue;
 					} else {
-						CITRON_CLIENT_ERROR(
-							"Cannot move currently opened Scene file");
+						entry.selected = !entry.selected;
 					}
 				}
-				ImGui::EndDragDropTarget();
-			}
-			if (ImGui::IsItemHovered() &&
-				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
-				ImGui::OpenPopup("FolderPopup");
-			}
+				ImVec2 rect_min = ImGui::GetItemRectMin();
+				ImVec2 rect_max = ImGui::GetItemRectMax();
+				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)view, rect_min, rect_max);
 
-			bool renameFolder = false;
-
-			if (ImGui::BeginPopup("FolderPopup")) {
-				if (ImGui::MenuItem("Rename")) {
-					renameFolder = true;
-				} else if (ImGui::MenuItem("Delete")) {
-					CitronIO::IO::deleteDirectory(entry.path);
-					ImGui::CloseCurrentPopup();
-					pendingRefreshDirectory = true;
+				if (ImGui::BeginDragDropSource()) {
+					ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
+											  entry.path.data(), entry.path.size());
+					ImGui::Text("Folder: %s", entry.name.c_str());
+					ImGui::EndDragDropSource();
+				}
+				if (ImGui::BeginDragDropTarget()) {
+					if (const ImGuiPayload *payload =
+							ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
+						std::string srcPath((const char *)payload->Data,
+											payload->DataSize);
+						if (srcPath != context.currentlyEditedSceneAssetPath) {
+							CitronIO::IO::moveFileOrFolder(srcPath, entry.path);
+							pendingRefreshDirectory = true;
+							ImGui::PopID();
+							continue;
+						} else {
+							CITRON_CLIENT_ERROR(
+								"Cannot move currently opened Scene file");
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+				if (ImGui::IsItemHovered() &&
+					ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+					ImGui::OpenPopup("FolderPopup");
 				}
 
-				ImGui::EndPopup();
+				bool renameFolder = false;
+
+				if (ImGui::BeginPopup("FolderPopup")) {
+					if (ImGui::MenuItem("Rename")) {
+						renameFolder = true;
+					} else if (ImGui::MenuItem("Delete")) {
+						CitronIO::IO::deleteDirectory(entry.path);
+						ImGui::CloseCurrentPopup();
+						pendingRefreshDirectory = true;
+					}
+
+					ImGui::EndPopup();
+				}
+
+				if (renameFolder) {
+					ImGui::OpenPopup("FolderRenamePopup");
+				}
+
+				static std::string folderName;
+				if (ImGui::BeginPopup("FolderRenamePopup")) {
+					if (ImGui::InputTextWithHint(
+							"Rename Folder", "Folder Name", &folderName,
+							ImGuiInputTextFlags_EnterReturnsTrue)) {
+						std::string newPath =
+							entry.path.substr(0,
+											  entry.path.find_last_of('\\') + 1) +
+							folderName;
+						CitronIO::IO::renameDirectory(entry.path, newPath);
+						ImGui::CloseCurrentPopup();
+						pendingRefreshDirectory = true;
+
+						CITRON_CORE_INFO("Renamed folder {} to {}", entry.path,
+										 newPath);
+					}
+					if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::EndPopup();
+				}
+			} else {
+				ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
+				ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
+									ImVec2(0.5f, 0.5f));
+				if (ImGui::Selectable(ICON_FA_FILE, &entry.selected,
+									  ImGuiSelectableFlags_AllowDoubleClick,
+									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+						std::string command =
+							"start notepad \"" + entry.path + "\"";
+						system(command.c_str());
+					} else {
+						entry.selected = !entry.selected;
+					}
+				}
+				ImGui::PopStyleVar();
+				ImGui::SetWindowFontScale(1.0f);
+
+				if (ImGui::BeginDragDropSource()) {
+					ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
+											  entry.path.data(), entry.path.size());
+					ImGui::Text("File: %s", entry.name.c_str());
+					ImGui::EndDragDropSource();
+				}
+				if (ImGui::IsItemHovered() &&
+					ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+					ImGui::OpenPopup("FilePopup");
+				}
+
+				bool renameFile = false;
+
+				if (ImGui::BeginPopup("FilePopup")) {
+					if (ImGui::MenuItem("Rename")) {
+						renameFile = true;
+					} else if (ImGui::MenuItem("Delete")) {
+						if (context.currentlyEditedSceneAssetPath == entry.path) {
+							context.currentlyEditedSceneAssetPath = "";
+						}
+
+						CitronIO::IO::deleteDirectory(entry.path);
+						ImGui::CloseCurrentPopup();
+						pendingRefreshDirectory = true;
+					}
+
+					ImGui::EndPopup();
+				}
+
+				if (renameFile) {
+					ImGui::OpenPopup("FileRenamePopup");
+				}
+
+				static std::string fileName;
+				if (ImGui::BeginPopup("FileRenamePopup")) {
+					if (ImGui::InputTextWithHint(
+							"Rename Folder", "Folder Name", &fileName,
+							ImGuiInputTextFlags_EnterReturnsTrue)) {
+						std::string fileExtension =
+							entry.path.substr(entry.path.find_last_of('.'));
+						std::string newPath =
+							entry.path.substr(0,
+											  entry.path.find_last_of('\\') + 1) +
+							fileName + fileExtension;
+						if (context.currentlyEditedSceneAssetPath == entry.path) {
+							context.currentlyEditedSceneAssetPath = newPath;
+							context.getCurrentScene()->rename(fileName);
+						}
+
+						CitronIO::IO::renameDirectory(entry.path, newPath);
+						ImGui::CloseCurrentPopup();
+
+						CITRON_CORE_INFO("Renamed file {} to {}", entry.path,
+										 newPath);
+
+						pendingRefreshDirectory = true;
+					}
+					if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::EndPopup();
+				}
 			}
 
-			if (renameFolder) {
-				ImGui::OpenPopup("FolderRenamePopup");
-			}
-
-			static std::string folderName;
-			if (ImGui::BeginPopup("FolderRenamePopup")) {
-				if (ImGui::InputTextWithHint(
-						"Rename Folder", "Folder Name", &folderName,
-						ImGuiInputTextFlags_EnterReturnsTrue)) {
-					std::string newPath =
-						entry.path.substr(0,
-										  entry.path.find_last_of('\\') + 1) +
-						folderName;
-					CitronIO::IO::renameDirectory(entry.path, newPath);
-					ImGui::CloseCurrentPopup();
-					pendingRefreshDirectory = true;
-
-					CITRON_CORE_INFO("Renamed folder {} to {}", entry.path,
-									 newPath);
-				}
-				if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
-		} else {
-			ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
-								ImVec2(0.5f, 0.5f));
-			if (ImGui::Selectable(ICON_FA_FILE, &entry.selected,
-								  ImGuiSelectableFlags_AllowDoubleClick,
-								  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
-				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-					std::string command =
-						"start notepad \"" + entry.path + "\"";
-					system(command.c_str());
-				} else {
-					entry.selected = !entry.selected;
-				}
-			}
-			ImGui::PopStyleVar();
 			ImGui::SetWindowFontScale(1.0f);
-
-			if (ImGui::BeginDragDropSource()) {
-				ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
-										  entry.path.data(), entry.path.size());
-				ImGui::Text("File: %s", entry.name.c_str());
-				ImGui::EndDragDropSource();
-			}
-			if (ImGui::IsItemHovered() &&
-				ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
-				ImGui::OpenPopup("FilePopup");
-			}
-
-			bool renameFile = false;
-
-			if (ImGui::BeginPopup("FilePopup")) {
-				if (ImGui::MenuItem("Rename")) {
-					renameFile = true;
-				} else if (ImGui::MenuItem("Delete")) {
-					if (context.currentlyEditedSceneAssetPath == entry.path) {
-						context.currentlyEditedSceneAssetPath = "";
-					}
-
-					CitronIO::IO::deleteDirectory(entry.path);
-					ImGui::CloseCurrentPopup();
-					pendingRefreshDirectory = true;
-				}
-
-				ImGui::EndPopup();
-			}
-
-			if (renameFile) {
-				ImGui::OpenPopup("FileRenamePopup");
-			}
-
-			static std::string fileName;
-			if (ImGui::BeginPopup("FileRenamePopup")) {
-				if (ImGui::InputTextWithHint(
-						"Rename Folder", "Folder Name", &fileName,
-						ImGuiInputTextFlags_EnterReturnsTrue)) {
-					std::string fileExtension =
-						entry.path.substr(entry.path.find_last_of('.'));
-					std::string newPath =
-						entry.path.substr(0,
-										  entry.path.find_last_of('\\') + 1) +
-						fileName + fileExtension;
-					if (context.currentlyEditedSceneAssetPath == entry.path) {
-						context.currentlyEditedSceneAssetPath = newPath;
-						context.getCurrentScene()->rename(fileName);
-					}
-
-					CitronIO::IO::renameDirectory(entry.path, newPath);
-					ImGui::CloseCurrentPopup();
-
-					CITRON_CORE_INFO("Renamed file {} to {}", entry.path,
-									 newPath);
-
-					pendingRefreshDirectory = true;
-				}
-				if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
+			ImGui::Text("%s", entry.name.c_str());
+			ImGui::PopID();
 		}
-
-		ImGui::SetWindowFontScale(1.0f);
-
-		ImGui::Text("%s", entry.name.c_str());
-
-		ImGui::PopID();
-		ImGui::NextColumn();
+		ImGui::EndTable();
 	}
 
 	ImGui::EndChild();
 	ImGui::PopStyleVar();
-
 	ImGui::End();
 
 	if (pendingRefreshDirectory) {

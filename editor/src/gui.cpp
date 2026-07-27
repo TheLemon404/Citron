@@ -47,10 +47,11 @@ void GuiLayer::onAttach() {
 	ImGui_ImplWGPU_InitInfo initInfo = {};
 	initInfo.Device =
 		(WGPUDevice)editorApp.getRenderer().getDevice().getWGPUDevice();
-	initInfo.NumFramesInFlight = 2;
+	initInfo.NumFramesInFlight = 3;
 	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getRenderer()
 									  .getDevice()
 									  .getWGPUPreferredSurfaceFormat();
+	initInfo.DepthStencilFormat = WGPUTextureFormat_Undefined;
 	ImGui_ImplWGPU_Init(&initInfo);
 
 	Editor::get().getRenderer().onGuiDrawCallback = CITRON_BIND_FN(

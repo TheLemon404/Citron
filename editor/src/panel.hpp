@@ -1,10 +1,12 @@
 #pragma once
 
-#include "assets.hpp"
 #include <app.hpp>
+#include <assets.hpp>
 #include <concepts>
 #include <ecs.hpp>
 #include <event.hpp>
+#include <texture.hpp>
+#include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
 using namespace CitronECS;
@@ -47,10 +49,13 @@ class AssetPanel : public Panel {
 	bool pendingRefreshDirectory = false;
 
   private:
+	std::shared_ptr<Texture> folderIconTexture = nullptr;
+	wgpu::TextureView folderIconTextureView = nullptr;
+
 	void refreshDirectoryListings();
 	std::vector<AssetCard> directoryListings;
 
-	int zoomLevel = 150;
+	int zoomLevel = 200;
 };
 
 class ConsolePanel : public Panel {

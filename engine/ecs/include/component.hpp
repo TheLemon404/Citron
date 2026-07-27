@@ -26,7 +26,7 @@ struct CITRON_ECS_API EntityBaseComponent {
 
 struct CITRON_ECS_API MeshComponent {
 	AssetReference<Mesh> meshAsset;
-	AssetReference<Shader> materialAsset;
+	AssetReference<Material> materialAsset;
 };
 
 } // namespace CitronECS

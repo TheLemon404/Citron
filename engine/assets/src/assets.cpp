@@ -13,6 +13,15 @@
 using namespace CitronAssets;
 using namespace CitronIO;
 
+const std::unordered_map<UUID, std::shared_ptr<AssetBase>> &
+AssetManagerBase::getLoadedAssets() {
+	return loadedAssets;
+}
+
+void AssetManagerBase::registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer) {
+	assetImporters[type] = importer;
+}
+
 void EditorAssetManager::initializeAssetRegistry() {
 	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
 	std::set<std::filesystem::path> metaFilesInProject;
@@ -36,8 +45,13 @@ void EditorAssetManager::initializeAssetRegistry() {
 }
 
 std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
-	if (loadedAssets.find(uuid) != loadedAssets.end()) {
-		return loadedAssets[uuid].lock();
+	if (loadedAssets.contains(uuid)) {
+		return loadedAssets[uuid];
+	}
+
+	if (!assetMetadataRegistry.contains(uuid)) {
+		CITRON_CORE_ERROR("Asset registry does not contain metadata for uuid: {}", (uint64_t)uuid);
+		return nullptr;
 	}
 	AssetMetadata metadata = assetMetadataRegistry[uuid];
 	if (!assetImporters.contains(metadata.assetType)) {

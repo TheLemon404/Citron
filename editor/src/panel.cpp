@@ -308,7 +308,7 @@ void AssetPanel::onDraw() {
 							fileName + fileExtension;
 						if (context.currentlyEditedSceneAssetPath == entry.path) {
 							context.currentlyEditedSceneAssetPath = newPath;
-							context.getCurrentScene()->rename(fileName);
+							Editor::get().getSceneManager().getActiveScene()->rename(fileName);
 						}
 
 						CitronIO::IO::renameDirectory(entry.path, newPath);
@@ -436,7 +436,7 @@ void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {
 	std::shared_ptr<Scene> currentEditedScene =
-		Editor::get().getEditorContext().getCurrentScene();
+		Editor::get().getSceneManager().getActiveScene();
 	if (pendingCreateEntity) {
 		pendingCreateEntity = false;
 		UUID newEntity = currentEditedScene->createEntity();
@@ -478,7 +478,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 				ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
 			uint64_t *childEntityUUID = (uint64_t *)payload->Data;
 			UUID newChildUUID = *childEntityUUID;
-			std::shared_ptr<Scene> &currentScene = context.getCurrentScene();
+			std::shared_ptr<Scene> currentScene = Editor::get().getSceneManager().getActiveScene();
 			currentScene->reparentEntity(
 				currentScene->getEntity(newChildUUID),
 				currentScene->getEntity(entityBase.uuid));
@@ -516,7 +516,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 void OutlinerPanel::onDraw() {
 	EditorContext &context = Editor::get().getEditorContext();
-	std::shared_ptr<Scene> currentEditedScene = context.getCurrentScene();
+	std::shared_ptr<Scene> currentEditedScene = Editor::get().getSceneManager().getActiveScene();
 
 	ImGui::Begin("Outliner");
 	if (ImGui::Button(ICON_FA_PLUS_CIRCLE)) {
@@ -637,7 +637,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 void InspectorPanel::onDraw() {
 	ImGui::Begin("Inspector");
 	EditorContext &context = Editor::get().getEditorContext();
-	auto &registry = context.getCurrentScene()->getRegistry();
+	auto &registry = Editor::get().getSceneManager().getActiveScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
 		if (registry.all_of<EntityBaseComponent>(selectedEntity)) {
@@ -658,8 +658,8 @@ void InspectorPanel::onDraw() {
 			if (CustomCollapsingHeader("Mesh Component", &selection)) {
 				drawAssetReferenceComponentGui<Mesh>("Geometry",
 													 meshComponent.meshAsset);
-				drawAssetReferenceComponentGui<Shader>("Material",
-													   meshComponent.materialAsset);
+				drawAssetReferenceComponentGui<Material>("Material",
+														 meshComponent.materialAsset);
 			}
 		}
 

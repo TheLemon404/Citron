@@ -4,9 +4,9 @@
 
 using namespace CitronGraphics;
 
-Pipeline::Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
-				   std::shared_ptr<Shader> shader)
-	: device(device), targetTexture(targetTexture) {
+Pipeline::Pipeline(wgpu::Device &device,
+				   std::shared_ptr<Shader> shader, wgpu::TextureFormat format)
+	: device(device) {
 
 	wgpu::VertexAttribute positionAttribute;
 	positionAttribute.format = wgpu::VertexFormat::Float32x3;
@@ -58,7 +58,7 @@ Pipeline::Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
 	blendState.alpha.dstFactor = wgpu::BlendFactor::One;
 	blendState.alpha.operation = wgpu::BlendOperation::Add;
 	wgpu::ColorTargetState colorTarget;
-	colorTarget.format = targetTexture.getFormat();
+	colorTarget.format = format;
 	colorTarget.blend = &blendState;
 	colorTarget.writeMask = wgpu::ColorWriteMask::All;
 	fragmentState.targetCount = 1;

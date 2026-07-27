@@ -16,7 +16,6 @@ class EditorContext {
   public:
 	std::string currentlyEditedSceneAssetPath = "";
 
-	std::shared_ptr<Scene> &getCurrentScene() { return currentScene; }
 	const entt::entity getCurrentSelectedEntity() {
 		return currentSelectedEntity;
 	}
@@ -24,12 +23,10 @@ class EditorContext {
 		currentSelectedEntity = entity;
 	}
 
-	void setCurrentScene(std::shared_ptr<Scene> scene) { currentScene = scene; }
 	std::filesystem::path projectFilePath = "";
 
   private:
 	entt::entity currentSelectedEntity = entt::null;
-	std::shared_ptr<Scene> currentScene = nullptr;
 };
 
 class Editor : public CitronCore::App {

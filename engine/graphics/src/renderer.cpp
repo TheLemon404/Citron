@@ -6,9 +6,9 @@
 
 using namespace CitronGraphics;
 
-RenderPass::RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
+RenderPass::RenderPass(Renderer &renderer, Device &device, wgpu::Texture &targetTexture,
 					   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame)
-	: device(device), commandEncoder(commandEncoder),
+	: renderer(renderer), device(device), commandEncoder(commandEncoder),
 	  targetTexture(targetTexture), parentFrame(parentFrame) {
 
 	targetView = targetTexture.createView();
@@ -31,11 +31,25 @@ RenderPass::RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
 
 RenderPass::~RenderPass() { targetView.release(); }
 
+void RenderPass::drawRenderData(std::vector<RenderObject> &renderObjects) {
+	for (auto &renderObject : renderObjects) {
+		if (renderObject.mesh && renderObject.shader) {
+			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline(renderObject.shader, device.getWGPUPreferredSurfaceFormat());
+			if (!pipeline)
+				continue;
+
+			setPipeline(pipeline);
+			setMesh(renderObject.mesh);
+			draw(renderObject.mesh);
+		}
+	}
+}
+
 void RenderPass::setPipeline(std::shared_ptr<Pipeline> pipeline) {
 	renderPassEncoder.setPipeline(pipeline->getPipeline());
 }
 
-void RenderPass::setGeometry(std::shared_ptr<Mesh> geometry) {
+void RenderPass::setMesh(std::shared_ptr<Mesh> geometry) {
 	renderPassEncoder.setVertexBuffer(0, geometry->getVertexBuffer().buffer, 0, WGPU_WHOLE_SIZE);
 	renderPassEncoder.setIndexBuffer(geometry->getIndexBuffer().buffer, wgpu::IndexFormat::Uint32, 0, WGPU_WHOLE_SIZE);
 }
@@ -50,13 +64,13 @@ void RenderPass::end() {
 }
 
 RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
-	return RenderPass(device, targetTexture, encoder, *this);
+	return RenderPass(renderer, device, targetTexture, encoder, *this);
 }
 
 void Renderer::init() { device.aquirePlatformResources(); }
 
 Frame Renderer::beginFrame() {
-	return Frame(device.getWGPUDevice(),
+	return Frame(*this, device,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());
 }
@@ -69,13 +83,6 @@ void Renderer::endFrame(Frame &frame) {
 	commandBuffer.release();
 
 	device.presentCurrentSurfaceTexture();
-}
-
-void Renderer::drawRenderData(std::vector<RenderObject> &renderObjects) {
-	for (auto &renderObject : renderObjects) {
-		if (renderObject.geometry && renderObject.material) {
-		}
-	}
 }
 
 void Renderer::end() { device.releasePlatformResources(); }

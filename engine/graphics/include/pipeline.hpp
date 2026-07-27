@@ -6,8 +6,8 @@
 namespace CitronGraphics {
 class CITRON_GRAPHICS_API Pipeline {
   public:
-	Pipeline(wgpu::Device &device, wgpu::Texture &targetTexture,
-			 std::shared_ptr<Shader> shader);
+	Pipeline(wgpu::Device &device,
+			 std::shared_ptr<Shader> shader, wgpu::TextureFormat format);
 	~Pipeline();
 	void draw(wgpu::CommandEncoder &encoder);
 
@@ -16,6 +16,5 @@ class CITRON_GRAPHICS_API Pipeline {
   private:
 	wgpu::RenderPipeline pipeline;
 	wgpu::Device &device;
-	wgpu::Texture &targetTexture;
 };
 } // namespace CitronGraphics

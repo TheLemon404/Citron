@@ -20,9 +20,16 @@ namespace CitronGraphics {
 
 class CITRON_GRAPHICS_API Frame;
 
+struct CITRON_GRAPHICS_API RenderObject {
+	std::shared_ptr<Mesh> mesh;
+	std::shared_ptr<Shader> shader;
+};
+
+class CITRON_GRAPHICS_API Renderer;
+
 class CITRON_GRAPHICS_API RenderPass {
   public:
-	RenderPass(wgpu::Device &device, wgpu::Texture &targetTexture,
+	RenderPass(Renderer &renderer, Device &device, wgpu::Texture &targetTexture,
 			   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame);
 	~RenderPass();
 	RenderPass(const RenderPass &) = delete;
@@ -31,8 +38,10 @@ class CITRON_GRAPHICS_API RenderPass {
 	RenderPass(RenderPass &&) = default;
 	RenderPass &operator=(RenderPass &&) = default;
 
+	void drawRenderData(std::vector<RenderObject> &renderObjects);
+
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
-	void setGeometry(std::shared_ptr<Mesh> geometry);
+	void setMesh(std::shared_ptr<Mesh> geometry);
 	void draw(std::shared_ptr<Mesh> geometry);
 	void end();
 
@@ -45,34 +54,33 @@ class CITRON_GRAPHICS_API RenderPass {
 	Frame &getParentFrame() { return parentFrame; }
 
   private:
+	Renderer &renderer;
 	Frame &parentFrame;
 	wgpu::Texture &targetTexture;
 	wgpu::CommandEncoder &commandEncoder;
 	wgpu::TextureView targetView;
 	wgpu::RenderPassEncoder renderPassEncoder;
-	wgpu::Device &device;
+	Device &device;
 };
 
 class CITRON_GRAPHICS_API Frame {
   public:
-	Frame(wgpu::Device &device, wgpu::CommandEncoder encoder,
+	Frame(Renderer &renderer, Device &device, wgpu::CommandEncoder encoder,
 		  wgpu::SurfaceTexture &surfaceTexture)
-		: device(device), encoder(encoder), surfaceTexture(surfaceTexture) {}
+		: renderer(renderer), device(device), encoder(encoder), surfaceTexture(surfaceTexture) {}
 
 	RenderPass beginRenderPass(wgpu::Texture &tartetTexture);
+
+	void drawRenderData(std::vector<RenderObject> &renderObjects);
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 	wgpu::SurfaceTexture &getSurfaceTexture() { return surfaceTexture; }
 
   private:
+	Renderer &renderer;
 	wgpu::SurfaceTexture &surfaceTexture;
-	wgpu::Device &device;
+	Device &device;
 	wgpu::CommandEncoder encoder;
-};
-
-struct RenderObject {
-	std::shared_ptr<Mesh> geometry;
-	std::shared_ptr<Material> material;
 };
 
 class CITRON_GRAPHICS_API Renderer {
@@ -83,8 +91,6 @@ class CITRON_GRAPHICS_API Renderer {
 	Frame beginFrame();
 	void endFrame(Frame &frame);
 
-	void drawRenderData(std::vector<RenderObject> &renderObjects);
-
 	void init();
 	void end();
 	void onEvent(Event &e);
@@ -94,9 +100,9 @@ class CITRON_GRAPHICS_API Renderer {
 	std::function<void(wgpu::TextureView &, RenderPass &)> onGuiDrawCallback =
 		nullptr;
 
-	std::shared_ptr<Pipeline> getPipeline(std::shared_ptr<Shader> shader, wgpu::Texture &targetTexture) {
+	std::shared_ptr<Pipeline> getPipeline(std::shared_ptr<Shader> shader, wgpu::TextureFormat format) {
 		if (!pipelineCache.contains(shader)) {
-			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), targetTexture, shader);
+			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), shader, format);
 			pipelineCache[shader] = pipeline;
 		}
 		return pipelineCache[shader];

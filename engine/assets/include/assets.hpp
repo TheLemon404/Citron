@@ -3,6 +3,7 @@
 #include "citron_exports.hpp"
 
 #include "event.hpp"
+#include "logger.hpp"
 #include "uuid.hpp"
 #include <concepts>
 #include <cstdint>
@@ -90,18 +91,14 @@ class CITRON_ASSETS_API AssetManagerBase {
 	virtual bool isValidAsset(const UUID uuid) = 0;
 	virtual AssetType getAssetType(const UUID uuid) = 0;
 
-	const std::unordered_map<UUID, std::weak_ptr<AssetBase>> &
-	getLoadedAssets() const {
-		return loadedAssets;
-	}
+	const std::unordered_map<UUID, std::shared_ptr<AssetBase>> &
+	getLoadedAssets();
 
-	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer) {
-		assetImporters[type] = importer;
-	}
+	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer);
 
   protected:
 	std::unordered_map<AssetType, std::shared_ptr<AssetImporter>> assetImporters;
-	std::unordered_map<UUID, std::weak_ptr<AssetBase>> loadedAssets;
+	std::unordered_map<UUID, std::shared_ptr<AssetBase>> loadedAssets;
 };
 
 class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase {

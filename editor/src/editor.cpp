@@ -37,11 +37,11 @@ void Editor::init() {
 		if (!openScene(lastEditedSceneFile)) {
 			CITRON_CLIENT_ERROR("Failed to load last edited scene file: {}",
 								lastEditedSceneFile);
-			editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
+			Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
 		}
 
 	} else {
-		editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
+		Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
 	}
 }
 
@@ -82,8 +82,8 @@ bool Editor::openScene(std::string sceneAssetPath) {
 		return false;
 
 	FileStreamReader reader = FileStreamReader(sceneAssetPath);
-	editorContext.setCurrentScene(std::make_shared<Scene>(""));
-	editorContext.getCurrentScene()->deserialize(reader);
+	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
+	Editor::get().sceneManager.getActiveScene()->deserialize(reader);
 	editorContext.currentlyEditedSceneAssetPath = sceneAssetPath;
 
 	return true;
@@ -94,7 +94,7 @@ bool Editor::createScene() {
 		"Scene", CITRON_SCENE_FILE_ENDING, nullptr, 0);
 	if (newSceneFile.empty()) {
 		CITRON_CLIENT_WARN("Scene: {} was not saved",
-						   editorContext.getCurrentScene()->getName());
+						   Editor::get().sceneManager.getActiveScene()->getName());
 		return false;
 	}
 	CitronIO::IO::createFile(newSceneFile);
@@ -107,7 +107,7 @@ bool Editor::openProject(std::string projectFilePath) {
 		return false;
 
 	editorContext.projectFilePath = projectFilePath;
-	editorContext.setCurrentScene(std::make_shared<Scene>("Scene"));
+	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
 	editorContext.currentlyEditedSceneAssetPath = "";
 	YAML::Node node = YAML::LoadFile(projectFilePath);
 
@@ -116,7 +116,7 @@ bool Editor::openProject(std::string projectFilePath) {
 		editorContext.currentlyEditedSceneAssetPath =
 			node["last_scene"].as<std::string>();
 		FileStreamReader reader(editorContext.currentlyEditedSceneAssetPath);
-		editorContext.getCurrentScene()->deserialize(reader);
+		Editor::get().sceneManager.getActiveScene()->deserialize(reader);
 	}
 
 	std::string editorTitle = std::string("Citron Editor: ") +
@@ -142,9 +142,9 @@ void Editor::saveCurrentScene() {
 
 	FileStreamWriter fwriter =
 		FileStreamWriter(editorContext.currentlyEditedSceneAssetPath);
-	editorContext.getCurrentScene()->serialize(fwriter);
+	Editor::get().sceneManager.getActiveScene()->serialize(fwriter);
 
 	CITRON_CLIENT_INFO(
-		"Scene: {} saved to {}: ", editorContext.getCurrentScene()->getName(),
+		"Scene: {} saved to {}: ", Editor::get().sceneManager.getActiveScene()->getName(),
 		editorContext.currentlyEditedSceneAssetPath);
 }

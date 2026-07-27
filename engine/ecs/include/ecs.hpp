@@ -2,6 +2,7 @@
 
 #include "citron_exports.hpp"
 #include "entt/entity/fwd.hpp"
+#include "renderer.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include <assets.hpp>
@@ -50,6 +51,8 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
 
+	std::vector<CitronGraphics::RenderObject> extractRenderObjects(AssetManager *assetManager);
+
 	void rename(const std::string &name) { this->name = name; }
 
 	void init();
@@ -83,7 +86,8 @@ class CITRON_ECS_API SceneManager {
 
 	void switchScene(std::shared_ptr<Scene> newScene);
 
-	std::shared_ptr<Scene> &getActiveScene() { return activeScene; }
+	std::shared_ptr<Scene> getActiveScene() { return activeScene; }
+	void setActiveScene(std::shared_ptr<Scene> newScene);
 
   private:
 	bool checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e);

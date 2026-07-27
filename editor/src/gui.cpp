@@ -140,7 +140,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 		if (ImGui::InputTextWithHint("Rename Scene", "Scene Name", &newName,
 									 ImGuiInputTextFlags_EnterReturnsTrue)) {
 
-			Editor::get().getEditorContext().getCurrentScene()->rename(newName);
+			Editor::get().getSceneManager().getActiveScene()->rename(newName);
 			ImGui::CloseCurrentPopup();
 
 			CITRON_CORE_INFO("Renamed scene to {}", newName);

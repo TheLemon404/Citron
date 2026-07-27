@@ -49,8 +49,6 @@ std::shared_ptr<AssetBase> MeshImporter::importAsset(AssetMetadata metadata) {
 	std::vector<CitronGraphics::Vertex> vertices;
 	std::vector<uint32_t> indices;
 
-	CITRON_CORE_INFO("Attempting to load asset data {}", metadata.assetPath.string());
-
 	for (size_t i = 0; i < mesh->mNumVertices; i++) {
 		CitronGraphics::Vertex v = CitronGraphics::Vertex(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 		vertices.push_back(v);
@@ -61,6 +59,8 @@ std::shared_ptr<AssetBase> MeshImporter::importAsset(AssetMetadata metadata) {
 			indices.push_back(face.mIndices[j]);
 		}
 	}
+
+	CITRON_CORE_INFO("Mesh {} loaded: {} vertices, {} indices", metadata.assetPath.string(), vertices.size(), indices.size());
 
 	return std::make_shared<Mesh>(vertices, indices, device);
 }

@@ -2,12 +2,12 @@
 #include "assets.hpp"
 #include "component.hpp"
 #include "core.hpp"
-#include "entt/entity/fwd.hpp"
 #include "event.hpp"
 #include "logger.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
 #include "serialization.hpp"
+#include "shader.hpp"
 #include "uuid.hpp"
 #include <io.hpp>
 #include <memory>
@@ -101,6 +101,27 @@ void Scene::deleteEntity(entt::entity entity) {
 	entityMap.erase(uuid);
 }
 
+std::vector<CitronGraphics::RenderObject> Scene::extractRenderObjects(AssetManager *assetManager) {
+	std::vector<CitronGraphics::RenderObject> renderObjects;
+	for (auto &entity : registry.view<MeshComponent>()) {
+		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
+		if (!assetManager->isValidAsset(meshComponent.meshAsset.uuid) || !assetManager->isValidAsset(meshComponent.materialAsset.uuid))
+			continue;
+		CitronGraphics::RenderObject renderObject;
+		renderObject.mesh = assetManager->getAsset<Mesh>(meshComponent.meshAsset.uuid);
+
+		std::shared_ptr<Material> mat = assetManager->getAsset<Material>(meshComponent.materialAsset.uuid);
+
+		if (!mat || !assetManager->isValidAsset(mat->shader.uuid))
+			continue;
+
+		renderObject.shader = assetManager->getAsset<Shader>(mat->shader.uuid);
+
+		renderObjects.push_back(renderObject);
+	}
+	return renderObjects;
+}
+
 void Scene::deleteEntity(UUID uuid) {
 	entt::entity e = entityMap[uuid];
 	deleteEntity(e);
@@ -174,6 +195,10 @@ void SceneManager::onEvent(Event &e) {
 		if (mode == SceneMode::PLAY)
 			activeScene->onEvent(e);
 	}
+}
+
+void SceneManager::setActiveScene(std::shared_ptr<Scene> newScene) {
+	activeScene = newScene;
 }
 
 bool SceneManager::checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e) {

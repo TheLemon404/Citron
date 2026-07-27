@@ -127,16 +127,12 @@ void App::update() {
 
 		if (renderer.frameReady()) {
 			Frame frame = renderer.beginFrame();
-
-			RenderPass colorPass = frame.beginRenderPass(colorTarget);
-			std::shared_ptr<Shader> shader = assetManager.getAsset<Shader>(7422933780722231991);
-			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline(shader, colorTarget);
-			if (pipeline) {
-				colorPass.setPipeline(pipeline);
-				colorPass.setGeometry(geometry);
-				colorPass.draw(geometry);
+			if (sceneManager.getActiveScene()) {
+				RenderPass colorPass = frame.beginRenderPass(colorTarget);
+				std::vector<RenderObject> renderObjects = sceneManager.getActiveScene()->extractRenderObjects(&assetManager);
+				colorPass.drawRenderData(renderObjects);
+				colorPass.end();
 			}
-			colorPass.end();
 
 			wgpu::Texture swapchainTarget = frame.getSurfaceTexture().texture;
 			RenderPass uiPass = frame.beginRenderPass(swapchainTarget);

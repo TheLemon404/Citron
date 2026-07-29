@@ -48,9 +48,9 @@ void GuiLayer::onAttach() {
 		(SDL_Window *)editorApp.getContext().window.getSDLWindow());
 	ImGui_ImplWGPU_InitInfo initInfo = {};
 	initInfo.Device =
-		(WGPUDevice)editorApp.getContext().renderer.getDevice().getWGPUDevice();
+		(WGPUDevice)editorApp.getContext().renderer.getContext().device.getWGPUDevice();
 	initInfo.NumFramesInFlight = 2;
-	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getContext().renderer.getDevice().getWGPUPreferredSurfaceFormat();
+	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getContext().renderer.getContext().device.getWGPUPreferredSurfaceFormat();
 	initInfo.DepthStencilFormat = WGPUTextureFormat_Undefined;
 	ImGui_ImplWGPU_Init(&initInfo);
 

@@ -125,7 +125,7 @@ void RenderPass::end() {
 
 Frame::Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
 			 wgpu::SurfaceTexture &surfaceTexture)
-	: renderer(renderer), encoder(encoder), surfaceTexture(surfaceTexture) {
+	: renderer(renderer), encoder(encoder) {
 }
 
 RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
@@ -141,6 +141,9 @@ void Renderer::init() {
 	frameUniformBufferDesc.size = sizeof(FrameUniforms);
 	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
 	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, sizeof(FrameUniforms));
+
+	colorTarget = device.createEmptyRenderTargetTexture();
+	colorTargetView = device.createTextureView(colorTarget);
 }
 
 Frame Renderer::beginFrame() {

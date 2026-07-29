@@ -62,7 +62,7 @@ void AssetPanel::onAttach() {
 	currentDirectory = context.projectFilePath.parent_path();
 	refreshDirectoryListings();
 
-	folderIconTexture = Texture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getDevice());
+	folderIconTexture = Texture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getContext().device);
 }
 
 void AssetPanel::onDetach() {}

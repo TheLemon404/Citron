@@ -66,10 +66,11 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 
-	assetManager.registerAssetImporter(AssetType::MATERIAL, std::make_shared<MaterialImporter>(renderer.getDevice()));
-	assetManager.registerAssetImporter(AssetType::SHADER, std::make_shared<ShaderImporter>(renderer.getDevice()));
-	assetManager.registerAssetImporter(AssetType::MESH, std::make_shared<MeshImporter>(renderer.getDevice()));
-	assetManager.registerAssetImporter(AssetType::TEXTURE, std::make_shared<TextureImporter>(renderer.getDevice()));
+	RendererContext rendererContext = renderer.getContext();
+	assetManager.registerAssetImporter(AssetType::MATERIAL, std::make_shared<MaterialImporter>(rendererContext.device));
+	assetManager.registerAssetImporter(AssetType::SHADER, std::make_shared<ShaderImporter>(rendererContext.device));
+	assetManager.registerAssetImporter(AssetType::MESH, std::make_shared<MeshImporter>(rendererContext.device));
+	assetManager.registerAssetImporter(AssetType::TEXTURE, std::make_shared<TextureImporter>(rendererContext.device));
 }
 
 App::~App() {}
@@ -89,8 +90,7 @@ void App::init() {
 
 	pushLayer<InputLayer>();
 
-	colorTarget = renderer.getDevice().createEmptyRenderTargetTexture();
-	colorTargetView = renderer.getDevice().createTextureView(colorTarget);
+	RendererContext rendererContext = renderer.getContext();
 }
 
 void App::update() {
@@ -112,10 +112,11 @@ void App::update() {
 		4,
 		5,
 	};
-	std::shared_ptr<Mesh> geometry = std::make_shared<Mesh>(triPositions, triIndices, renderer.getDevice());
+	std::shared_ptr<Mesh> geometry = std::make_shared<Mesh>(triPositions, triIndices, renderer.getContext().device);
 
 	while (running) {
 		window.pollEvents();
+		sceneManager.onUpdate();
 
 		for (auto &layer : layerStack) {
 			layer->onUpdate();
@@ -124,17 +125,17 @@ void App::update() {
 		if (renderer.frameReady()) {
 			Frame frame = renderer.beginFrame();
 			if (sceneManager.getActiveScene()) {
-				RenderPass colorPass = frame.beginRenderPass(colorTarget);
+				RenderPass colorPass = frame.beginRenderPass(renderer.getColorTarget());
 				std::vector<uint64_t> meshUUIDs = sceneManager.getActiveScene()->extractMeshes(assetManager);
 				std::vector<uint64_t> materialUUIDs = sceneManager.getActiveScene()->extractMaterials(assetManager);
 				colorPass.drawRenderData(meshUUIDs, materialUUIDs);
 				colorPass.end();
 			}
 
-			wgpu::Texture swapchainTarget = frame.getSurfaceTexture().texture;
-			RenderPass uiPass = frame.beginRenderPass(swapchainTarget);
+			wgpu::Texture surfaceTexture = renderer.getContext().device.getCurrentSurfaceTexture().texture;
+			RenderPass uiPass = frame.beginRenderPass(surfaceTexture);
 			if (renderer.onGuiDrawCallback)
-				renderer.onGuiDrawCallback(colorTargetView, uiPass);
+				renderer.onGuiDrawCallback(renderer.getColorTargetView(), uiPass);
 			uiPass.end();
 
 			renderer.endFrame(frame);
@@ -165,6 +166,7 @@ void App::onEvent(Event &e) {
 			break;
 	}
 
+	sceneManager.onEvent(e);
 	renderer.onEvent(e);
 }
 

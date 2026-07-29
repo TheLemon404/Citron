@@ -119,10 +119,10 @@ class CITRON_APP_API App {
 
 	std::shared_ptr<AppLogSink> sink = nullptr;
 
-	Renderer renderer;
-	SceneManager sceneManager;
-	AssetManager assetManager;
 	Window window;
+	AssetManager assetManager;
+	SceneManager sceneManager;
+	Renderer renderer;
 
 	std::vector<CitronGraphics::RenderObject> extractRenderObjects();
 
@@ -131,7 +131,5 @@ class CITRON_APP_API App {
 	bool running = true;
 	LayerStack layerStack;
 	static App *instance;
-	wgpu::Texture colorTarget;
-	wgpu::TextureView colorTargetView;
 };
 } // namespace CitronCore

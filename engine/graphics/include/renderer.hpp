@@ -81,11 +81,9 @@ class CITRON_GRAPHICS_API Frame {
 	void drawRenderData(std::vector<RenderObject> &renderObjects);
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
-	wgpu::SurfaceTexture &getSurfaceTexture() { return surfaceTexture; }
 
   private:
 	Renderer &renderer;
-	wgpu::SurfaceTexture &surfaceTexture;
 	wgpu::CommandEncoder encoder;
 };
 
@@ -172,8 +170,6 @@ class CITRON_GRAPHICS_API Renderer {
 	void end();
 	void onEvent(Event &e);
 
-	Device &getDevice() { return device; }
-
 	std::function<void(wgpu::TextureView &, RenderPass &)> onGuiDrawCallback =
 		nullptr;
 
@@ -211,7 +207,6 @@ class CITRON_GRAPHICS_API Renderer {
 	}
 
 	GPUBuffer &getFrameUniformBuffer() { return frameUniformBuffer; }
-	FrameUniforms &getFrameUniforms() { return frameUniforms; }
 
 	RendererContext getContext() {
 		return {
@@ -223,8 +218,14 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
+	wgpu::Texture &getColorTarget() { return colorTarget; }
+	wgpu::TextureView &getColorTargetView() { return colorTargetView; }
+
   private:
 	AssetManager &assetManager;
+
+	wgpu::Texture colorTarget;
+	wgpu::TextureView colorTargetView;
 
 	Device device;
 	std::map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;

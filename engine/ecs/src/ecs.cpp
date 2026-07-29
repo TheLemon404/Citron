@@ -105,18 +105,27 @@ std::vector<CitronGraphics::RenderObject> Scene::extractRenderObjects(AssetManag
 	std::vector<CitronGraphics::RenderObject> renderObjects;
 	for (auto &entity : registry.view<MeshComponent>()) {
 		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
-		if (!assetManager->isValidAsset(meshComponent.meshAsset.uuid) || !assetManager->isValidAsset(meshComponent.materialAsset.uuid))
+
+		if (!assetManager->isValidAsset(meshComponent.meshAsset.uuid) ||
+			!assetManager->isValidAsset(meshComponent.materialAsset.uuid))
 			continue;
+
+		std::shared_ptr<Mesh> mesh = assetManager->getAsset<Mesh>(meshComponent.meshAsset.uuid);
+		std::shared_ptr<Material> material = assetManager->getAsset<Material>(meshComponent.materialAsset.uuid);
+		if (!mesh || !material)
+			continue;
+
+		if (!assetManager->isValidAsset(material->shader.uuid))
+			continue;
+
+		std::shared_ptr<Shader> shader = assetManager->getAsset<Shader>(material->shader.uuid);
+		if (!shader)
+			continue;
+
 		CitronGraphics::RenderObject renderObject;
-		renderObject.mesh = assetManager->getAsset<Mesh>(meshComponent.meshAsset.uuid);
-
-		std::shared_ptr<Material> mat = assetManager->getAsset<Material>(meshComponent.materialAsset.uuid);
-
-		if (!mat || !assetManager->isValidAsset(mat->shader.uuid))
-			continue;
-
-		renderObject.shader = assetManager->getAsset<Shader>(mat->shader.uuid);
-
+		renderObject.mesh = mesh;
+		renderObject.shader = shader;
+		renderObject.material = material;
 		renderObjects.push_back(renderObject);
 	}
 	return renderObjects;

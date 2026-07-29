@@ -47,7 +47,7 @@ void GuiLayer::onAttach() {
 	ImGui_ImplWGPU_InitInfo initInfo = {};
 	initInfo.Device =
 		(WGPUDevice)editorApp.getRenderer().getDevice().getWGPUDevice();
-	initInfo.NumFramesInFlight = 3;
+	initInfo.NumFramesInFlight = 2;
 	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getRenderer()
 									  .getDevice()
 									  .getWGPUPreferredSurfaceFormat();

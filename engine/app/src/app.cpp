@@ -66,7 +66,7 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 
-	materialImporter = std::make_shared<MaterialImporter>();
+	materialImporter = std::make_shared<MaterialImporter>(renderer.getDevice());
 	shaderImporter = std::make_shared<ShaderImporter>(renderer.getDevice());
 	meshImporter = std::make_shared<MeshImporter>(renderer.getDevice());
 	textureImporter = std::make_shared<TextureImporter>(renderer.getDevice());

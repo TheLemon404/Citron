@@ -1,5 +1,7 @@
 #include "pipeline.hpp"
+#include "material.hpp"
 #include "mesh.hpp"
+#include "renderer.hpp"
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronGraphics;
@@ -8,6 +10,7 @@ Pipeline::Pipeline(wgpu::Device &device,
 				   std::shared_ptr<Shader> shader, wgpu::TextureFormat format)
 	: device(device) {
 
+	// render pipeline
 	wgpu::VertexAttribute positionAttribute;
 	positionAttribute.format = wgpu::VertexFormat::Float32x3;
 	positionAttribute.offset = offsetof(Vertex, position);
@@ -30,13 +33,13 @@ Pipeline::Pipeline(wgpu::Device &device,
 
 	std::array<wgpu::VertexAttribute, 4> attributes = {positionAttribute, normalAttribute, colorAttribute, uvAttribute};
 
-	wgpu::VertexBufferLayout vertexBufferLayout;
+	wgpu::VertexBufferLayout vertexBufferLayout = {};
 	vertexBufferLayout.attributes = attributes.data();
 	vertexBufferLayout.attributeCount = static_cast<uint32_t>(attributes.size());
 	vertexBufferLayout.arrayStride = sizeof(Vertex);
 	vertexBufferLayout.stepMode = wgpu::VertexStepMode::Vertex;
 
-	wgpu::RenderPipelineDescriptor pipelineDesc;
+	wgpu::RenderPipelineDescriptor pipelineDesc = {};
 	pipelineDesc.vertex.bufferCount = 1;
 	pipelineDesc.vertex.buffers = &vertexBufferLayout;
 	pipelineDesc.vertex.module = shader->getShaderModule();
@@ -48,7 +51,7 @@ Pipeline::Pipeline(wgpu::Device &device,
 	pipelineDesc.primitive.frontFace = wgpu::FrontFace::CCW;
 	pipelineDesc.primitive.cullMode = wgpu::CullMode::Back;
 
-	wgpu::FragmentState fragmentState;
+	wgpu::FragmentState fragmentState = {};
 	fragmentState.module = shader->getShaderModule();
 	fragmentState.entryPoint = wgpu::StringView("fs_main");
 	fragmentState.constantCount = 0;
@@ -69,6 +72,7 @@ Pipeline::Pipeline(wgpu::Device &device,
 	pipelineDesc.multisample.count = 1;
 	pipelineDesc.multisample.mask = ~0u;
 	pipelineDesc.multisample.alphaToCoverageEnabled = false;
+	pipelineDesc.layout = shader->getPipelineLayout();
 
 	pipeline = device.createRenderPipeline(pipelineDesc);
 }

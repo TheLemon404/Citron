@@ -1,18 +1,20 @@
 #pragma once
 
+#include "citron_exports.hpp"
 #include <cstdint>
 #include <webgpu/webgpu.hpp>
 
 namespace CitronGraphics {
-struct GPUBuffer {
-	~GPUBuffer() {
-		if (buffer)
-			buffer.release();
-	}
+struct CITRON_GRAPHICS_API GPUBuffer {
+	~GPUBuffer();
 
 	wgpu::Buffer buffer;
 	wgpu::BufferUsage usage;
 	uint32_t size;
 	uint32_t entryCount;
+
+	bool operator==(const GPUBuffer &other) const {
+		return buffer == other.buffer && usage == other.usage && size == other.size && entryCount == other.entryCount;
+	}
 };
 } // namespace CitronGraphics

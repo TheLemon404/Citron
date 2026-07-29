@@ -22,6 +22,7 @@ class CITRON_GRAPHICS_API Texture : public Asset<Texture, AssetType::TEXTURE> {
 
 	wgpu::TextureView &getTextureView() { return textureView; }
 	wgpu::TextureView textureView;
+	wgpu::Sampler sampler;
 };
 
 class CITRON_GRAPHICS_API TextureImporter : public AssetImporter {

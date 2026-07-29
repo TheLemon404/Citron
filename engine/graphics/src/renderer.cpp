@@ -1,5 +1,6 @@
 #include "renderer.hpp"
-#include "window.hpp"
+#include "buffer.hpp"
+#include "material.hpp"
 #include <event.hpp>
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
@@ -11,6 +12,7 @@ RenderPass::RenderPass(Renderer &renderer, Device &device, wgpu::Texture &target
 	: renderer(renderer), device(device), commandEncoder(commandEncoder),
 	  targetTexture(targetTexture), parentFrame(parentFrame) {
 
+	// Render pass encoder setup
 	targetView = targetTexture.createView();
 
 	wgpu::RenderPassColorAttachment colorAttachment = {};
@@ -25,7 +27,6 @@ RenderPass::RenderPass(Renderer &renderer, Device &device, wgpu::Texture &target
 	renderPassDescriptor.nextInChain = nullptr;
 	renderPassDescriptor.colorAttachmentCount = 1;
 	renderPassDescriptor.colorAttachments = &colorAttachment;
-
 	renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 }
 
@@ -34,12 +35,41 @@ RenderPass::~RenderPass() { targetView.release(); }
 void RenderPass::drawRenderData(std::vector<RenderObject> &renderObjects) {
 	for (auto &renderObject : renderObjects) {
 		if (renderObject.mesh && renderObject.shader) {
-			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline(renderObject.shader, device.getWGPUPreferredSurfaceFormat());
-			if (!pipeline)
+			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObject.shader, device.getWGPUPreferredSurfaceFormat()});
+			if (!pipeline) {
+				CITRON_CORE_ERROR("Failed to get pipeline for render object");
 				continue;
+			}
+
+			std::vector<BindGroupEntry> entries;
+			entries.push_back({.binding = 0,
+							   .resource = renderer.getFrameUniformBuffer().buffer,
+							   .offset = 0,
+							   .size = Shader::getShaderPaddedBindingSize<FrameUniforms>()});
+			wgpu::BindGroup frameBindGroup = renderer.getBindGroup({
+				.layout = renderObject.shader->getBindGroupLayout(0),
+				.entries = entries,
+			});
+
+			entries.clear();
+			entries.push_back({.binding = 0,
+							   .resource = renderObject.material->getMaterialUniformBuffer().buffer,
+							   .offset = 0,
+							   .size = Shader::getShaderPaddedBindingSize<MaterialUniforms>()});
+			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
+				.layout = renderObject.shader->getBindGroupLayout(1),
+				.entries = entries,
+			});
+
+			if (!frameBindGroup || !materialBindGroup) {
+				CITRON_CORE_ERROR("Failed to get bind groups from cache for render object");
+				continue;
+			}
 
 			setPipeline(pipeline);
 			setMesh(renderObject.mesh);
+			setBindGroup(0, frameBindGroup);
+			setBindGroup(1, materialBindGroup);
 			draw(renderObject.mesh);
 		}
 	}
@@ -54,6 +84,10 @@ void RenderPass::setMesh(std::shared_ptr<Mesh> geometry) {
 	renderPassEncoder.setIndexBuffer(geometry->getIndexBuffer().buffer, wgpu::IndexFormat::Uint32, 0, WGPU_WHOLE_SIZE);
 }
 
+void RenderPass::setBindGroup(int index, wgpu::BindGroup bindGroup) {
+	renderPassEncoder.setBindGroup(index, bindGroup, 0, nullptr);
+}
+
 void RenderPass::draw(std::shared_ptr<Mesh> geometry) {
 	renderPassEncoder.drawIndexed(geometry->getIndexBuffer().entryCount, 1, 0, 0, 0);
 }
@@ -63,11 +97,25 @@ void RenderPass::end() {
 	renderPassEncoder.release();
 }
 
+Frame::Frame(Renderer &renderer, Device &device, wgpu::CommandEncoder encoder,
+			 wgpu::SurfaceTexture &surfaceTexture)
+	: renderer(renderer), device(device), encoder(encoder), surfaceTexture(surfaceTexture) {
+}
+
 RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
 	return RenderPass(renderer, device, targetTexture, encoder, *this);
 }
 
-void Renderer::init() { device.aquirePlatformResources(); }
+void Renderer::init() {
+	device.aquirePlatformResources();
+
+	wgpu::BufferDescriptor frameUniformBufferDesc = {};
+	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
+	frameUniformBufferDesc.mappedAtCreation = false;
+	frameUniformBufferDesc.size = sizeof(FrameUniforms);
+	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
+	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, sizeof(FrameUniforms));
+}
 
 Frame Renderer::beginFrame() {
 	return Frame(*this, device,
@@ -85,6 +133,8 @@ void Renderer::endFrame(Frame &frame) {
 	device.presentCurrentSurfaceTexture();
 }
 
-void Renderer::end() { device.releasePlatformResources(); }
+void Renderer::end() {
+	device.releasePlatformResources();
+}
 
 void Renderer::onEvent(Event &e) {}

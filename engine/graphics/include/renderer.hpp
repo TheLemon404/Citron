@@ -1,9 +1,9 @@
 #pragma once
 
+#include "assets.hpp"
 #include "buffer.hpp"
 #include "citron_exports.hpp"
 
-#include "assets.hpp"
 #include "device.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <functional>
 #include <layer.hpp>
+#include <map>
 #include <material.hpp>
 #include <memory>
 #include <unordered_map>
@@ -29,15 +30,15 @@ class CITRON_GRAPHICS_API Frame;
 
 struct CITRON_GRAPHICS_API RenderObject {
 	std::shared_ptr<Mesh> mesh;
-	std::shared_ptr<Shader> shader;
 	std::shared_ptr<Material> material;
+	std::shared_ptr<Shader> shader;
 };
 
 class CITRON_GRAPHICS_API Renderer;
 
 class CITRON_GRAPHICS_API RenderPass {
   public:
-	RenderPass(Renderer &renderer, Device &device, wgpu::Texture &targetTexture,
+	RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
 			   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame);
 	~RenderPass();
 	RenderPass(const RenderPass &) = delete;
@@ -45,7 +46,7 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawRenderData(std::vector<RenderObject> &renderObjects);
+	void drawRenderData(std::vector<uint64_t> meshUUIDs, std::vector<uint64_t> materialUUIDs);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);
@@ -68,12 +69,11 @@ class CITRON_GRAPHICS_API RenderPass {
 	wgpu::CommandEncoder &commandEncoder;
 	wgpu::TextureView targetView;
 	wgpu::RenderPassEncoder renderPassEncoder;
-	Device &device;
 };
 
 class CITRON_GRAPHICS_API Frame {
   public:
-	Frame(Renderer &renderer, Device &device, wgpu::CommandEncoder encoder,
+	Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
 		  wgpu::SurfaceTexture &surfaceTexture);
 
 	RenderPass beginRenderPass(wgpu::Texture &tartetTexture);
@@ -86,7 +86,6 @@ class CITRON_GRAPHICS_API Frame {
   private:
 	Renderer &renderer;
 	wgpu::SurfaceTexture &surfaceTexture;
-	Device &device;
 	wgpu::CommandEncoder encoder;
 };
 
@@ -153,6 +152,14 @@ struct CITRON_GRAPHICS_API BindGroupKey {
 	}
 };
 
+struct RendererContext {
+	Device &device;
+	FrameUniforms &frameUniforms;
+	AssetManager &assetManager;
+	std::map<PipelineKey, std::shared_ptr<Pipeline>> &pipelineCache;
+	std::map<BindGroupKey, wgpu::BindGroup> &bindGroupCache;
+};
+
 class CITRON_GRAPHICS_API Renderer {
   public:
 	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager) {}
@@ -206,9 +213,20 @@ class CITRON_GRAPHICS_API Renderer {
 	GPUBuffer &getFrameUniformBuffer() { return frameUniformBuffer; }
 	FrameUniforms &getFrameUniforms() { return frameUniforms; }
 
+	RendererContext getContext() {
+		return {
+			device,
+			frameUniforms,
+			assetManager,
+			pipelineCache,
+			bindGroupCache,
+		};
+	}
+
   private:
-	Device device;
 	AssetManager &assetManager;
+
+	Device device;
 	std::map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
 

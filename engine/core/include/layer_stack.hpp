@@ -11,10 +11,10 @@
 namespace CitronCore {
 class CITRON_CORE_API LayerStack {
   public:
-	template <typename T>
+	template <typename T, typename... Args>
 		requires std::derived_from<T, Layer>
-	void pushLayer() {
-		layers.push_back(std::make_unique<T>());
+	void pushLayer(Args &&...args) {
+		layers.push_back(std::make_unique<T>(std::forward<Args>(args)...));
 		layerMap[typeid(T)] = layers.size() - 1;
 	}
 

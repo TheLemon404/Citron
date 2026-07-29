@@ -87,7 +87,6 @@ class CITRON_CORE_API Window {
 
 	Window(const char *title, int width, int height,
 		   EventCallbackFn eventCallback);
-	Window(const Window &) = delete;
 	Window &operator=(const Window &) = delete;
 	~Window();
 

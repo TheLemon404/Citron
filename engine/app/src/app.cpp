@@ -66,14 +66,10 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 	CITRON_CORE_ASSERT(!instance, "App already exists");
 	instance = this;
 
-	materialImporter = std::make_shared<MaterialImporter>(renderer.getDevice());
-	shaderImporter = std::make_shared<ShaderImporter>(renderer.getDevice());
-	meshImporter = std::make_shared<MeshImporter>(renderer.getDevice());
-	textureImporter = std::make_shared<TextureImporter>(renderer.getDevice());
-	assetManager.registerAssetImporter(AssetType::MATERIAL, materialImporter);
-	assetManager.registerAssetImporter(AssetType::SHADER, shaderImporter);
-	assetManager.registerAssetImporter(AssetType::MESH, meshImporter);
-	assetManager.registerAssetImporter(AssetType::TEXTURE, textureImporter);
+	assetManager.registerAssetImporter(AssetType::MATERIAL, std::make_shared<MaterialImporter>(renderer.getDevice()));
+	assetManager.registerAssetImporter(AssetType::SHADER, std::make_shared<ShaderImporter>(renderer.getDevice()));
+	assetManager.registerAssetImporter(AssetType::MESH, std::make_shared<MeshImporter>(renderer.getDevice()));
+	assetManager.registerAssetImporter(AssetType::TEXTURE, std::make_shared<TextureImporter>(renderer.getDevice()));
 }
 
 App::~App() {}
@@ -129,8 +125,9 @@ void App::update() {
 			Frame frame = renderer.beginFrame();
 			if (sceneManager.getActiveScene()) {
 				RenderPass colorPass = frame.beginRenderPass(colorTarget);
-				std::vector<RenderObject> renderObjects = sceneManager.getActiveScene()->extractRenderObjects(&assetManager);
-				colorPass.drawRenderData(renderObjects);
+				std::vector<uint64_t> meshUUIDs = sceneManager.getActiveScene()->extractMeshes(assetManager);
+				std::vector<uint64_t> materialUUIDs = sceneManager.getActiveScene()->extractMaterials(assetManager);
+				colorPass.drawRenderData(meshUUIDs, materialUUIDs);
 				colorPass.end();
 			}
 

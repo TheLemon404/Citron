@@ -13,7 +13,7 @@ using namespace CitronECS;
 
 class Panel {
   public:
-	Panel(const std::string &name) : name(name) {};
+	Panel(const std::string &name, AppContext appContext) : name(name), appContext(appContext) {};
 	virtual ~Panel() = default;
 
 	virtual void onAttach() {};
@@ -25,6 +25,7 @@ class Panel {
 	inline const std::string &getName() const { return name; }
 
   protected:
+	AppContext appContext;
 	const std::string name;
 };
 
@@ -37,7 +38,7 @@ struct AssetCard {
 
 class AssetPanel : public Panel {
   public:
-	AssetPanel() : Panel("Assets") {}
+	AssetPanel(AppContext appContext) : Panel("Assets", appContext) {}
 
 	virtual void onAttach() override;
 	virtual void onDetach() override;
@@ -60,7 +61,7 @@ class AssetPanel : public Panel {
 
 class ConsolePanel : public Panel {
   public:
-	ConsolePanel() : Panel("Console") {}
+	ConsolePanel(AppContext appContext) : Panel("Console", appContext) {}
 
 	virtual void onAttach() override;
 	virtual void onDetach() override;
@@ -71,7 +72,7 @@ class ConsolePanel : public Panel {
 
 class OutlinerPanel : public Panel {
   public:
-	OutlinerPanel() : Panel("Outliner") {}
+	OutlinerPanel(AppContext appContext) : Panel("Outliner", appContext) {}
 
 	virtual void onAttach() override;
 	virtual void onDetach() override;
@@ -89,7 +90,7 @@ class OutlinerPanel : public Panel {
 
 class InspectorPanel : public Panel {
   public:
-	InspectorPanel() : Panel("Inspector") {}
+	InspectorPanel(AppContext appContext) : Panel("Inspector", appContext) {}
 
 	virtual void onAttach() override;
 	virtual void onDetach() override;

@@ -1,5 +1,4 @@
 #include "app.hpp"
-#include "assets.hpp"
 #include "entt/entity/entity.hpp"
 #include "event.hpp"
 #include <ecs.hpp>

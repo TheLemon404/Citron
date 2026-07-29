@@ -101,34 +101,28 @@ void Scene::deleteEntity(entt::entity entity) {
 	entityMap.erase(uuid);
 }
 
-std::vector<CitronGraphics::RenderObject> Scene::extractRenderObjects(AssetManager *assetManager) {
-	std::vector<CitronGraphics::RenderObject> renderObjects;
+std::vector<uint64_t> Scene::extractMeshes(AssetManager &assetManager) {
+	std::vector<uint64_t> renderData;
 	for (auto &entity : registry.view<MeshComponent>()) {
 		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
-
-		if (!assetManager->isValidAsset(meshComponent.meshAsset.uuid) ||
-			!assetManager->isValidAsset(meshComponent.materialAsset.uuid))
+		if (!assetManager.isValidAsset(meshComponent.meshAsset.uuid))
 			continue;
 
-		std::shared_ptr<Mesh> mesh = assetManager->getAsset<Mesh>(meshComponent.meshAsset.uuid);
-		std::shared_ptr<Material> material = assetManager->getAsset<Material>(meshComponent.materialAsset.uuid);
-		if (!mesh || !material)
-			continue;
-
-		if (!assetManager->isValidAsset(material->shader.uuid))
-			continue;
-
-		std::shared_ptr<Shader> shader = assetManager->getAsset<Shader>(material->shader.uuid);
-		if (!shader)
-			continue;
-
-		CitronGraphics::RenderObject renderObject;
-		renderObject.mesh = mesh;
-		renderObject.shader = shader;
-		renderObject.material = material;
-		renderObjects.push_back(renderObject);
+		renderData.push_back(meshComponent.meshAsset.uuid);
 	}
-	return renderObjects;
+	return renderData;
+}
+
+std::vector<uint64_t> Scene::extractMaterials(AssetManager &assetManager) {
+	std::vector<uint64_t> renderData;
+	for (auto &entity : registry.view<MeshComponent>()) {
+		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
+		if (!assetManager.isValidAsset(meshComponent.materialAsset.uuid))
+			continue;
+
+		renderData.push_back(meshComponent.materialAsset.uuid);
+	}
+	return renderData;
 }
 
 void Scene::deleteEntity(UUID uuid) {

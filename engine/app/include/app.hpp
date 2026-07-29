@@ -63,6 +63,13 @@ class CITRON_APP_API AppLogSink : public spdlog::sinks::base_sink<std::mutex> {
 	void flush_() override {}
 };
 
+struct CITRON_APP_API AppContext {
+	CitronCore::Window &window;
+	CitronGraphics::Renderer &renderer;
+	CitronAssets::AssetManager &assetManager;
+	CitronECS::SceneManager &sceneManager;
+};
+
 class CITRON_APP_API App {
   public:
 	App(bool isRuntime, std::filesystem::path projectFilePath);
@@ -73,10 +80,10 @@ class CITRON_APP_API App {
 	void close();
 	void onEvent(Event &e);
 
-	template <typename T>
+	template <typename T, typename... Args>
 		requires std::derived_from<T, Layer>
-	void pushLayer() {
-		layerStack.pushLayer<T>();
+	void pushLayer(Args &&...args) {
+		layerStack.pushLayer<T>(std::forward<Args>(args)...);
 		layerStack.getLayer<T>()->onAttach();
 	}
 	template <typename T>
@@ -85,15 +92,17 @@ class CITRON_APP_API App {
 		layerStack.getLayer<T>()->onDetach();
 		layerStack.popLayer<T>();
 	}
+	template <typename T>
+	T *getLayer() {
+		return static_cast<T *>(layerStack.getLayer<T>());
+	}
 
 	static App &get() { return *instance; }
 	bool isRunning() const { return running; }
 
-	LayerStack &getLayerStack() { return layerStack; }
-	Window &getWindow() { return window; }
-	Renderer &getRenderer() { return renderer; }
-	SceneManager &getSceneManager() { return sceneManager; }
-	AssetManager &getAssetManager() { return assetManager; }
+	AppContext getContext() {
+		return {window, renderer, assetManager, sceneManager};
+	}
 
 	void initLogSink() {
 		sink = std::make_shared<AppLogSink>();
@@ -113,6 +122,7 @@ class CITRON_APP_API App {
 	Renderer renderer;
 	SceneManager sceneManager;
 	AssetManager assetManager;
+	Window window;
 
 	std::vector<CitronGraphics::RenderObject> extractRenderObjects();
 
@@ -123,12 +133,5 @@ class CITRON_APP_API App {
 	static App *instance;
 	wgpu::Texture colorTarget;
 	wgpu::TextureView colorTargetView;
-
-	std::shared_ptr<MaterialImporter> materialImporter;
-	std::shared_ptr<ShaderImporter> shaderImporter;
-	std::shared_ptr<MeshImporter> meshImporter;
-	std::shared_ptr<TextureImporter> textureImporter;
-
-	Window window;
 };
 } // namespace CitronCore

@@ -10,9 +10,9 @@
 
 using namespace CitronGraphics;
 
-RenderPass::RenderPass(Renderer &renderer, Device &device, wgpu::Texture &targetTexture,
+RenderPass::RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
 					   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame)
-	: renderer(renderer), device(device), commandEncoder(commandEncoder),
+	: renderer(renderer), commandEncoder(commandEncoder),
 	  targetTexture(targetTexture), parentFrame(parentFrame) {
 
 	// Render pass encoder setup
@@ -35,10 +35,33 @@ RenderPass::RenderPass(Renderer &renderer, Device &device, wgpu::Texture &target
 
 RenderPass::~RenderPass() { targetView.release(); }
 
-void RenderPass::drawRenderData(std::vector<RenderObject> &renderObjects) {
+void RenderPass::drawRenderData(std::vector<uint64_t> meshUUIDs, std::vector<uint64_t> materialUUIDs) {
+	if (meshUUIDs.size() != materialUUIDs.size()) {
+		CITRON_CORE_ERROR("You must provide the same number of mesh and material UUIDs to draw render data");
+		return;
+	}
+
+	std::vector<RenderObject> renderObjects(meshUUIDs.size());
+	RendererContext context = renderer.getContext();
+
+	for (size_t i = 0; i < meshUUIDs.size(); i++) {
+		std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(meshUUIDs[i]);
+		std::shared_ptr<Material> material = context.assetManager.getAsset<Material>(materialUUIDs[i]);
+		std::shared_ptr<Shader> shader = context.assetManager.getAsset<Shader>(material->shader.uuid);
+		if (!mesh || !material || !shader) {
+			CITRON_CORE_ERROR("Failed to get mesh, material, or shader for render object");
+			continue;
+		}
+		renderObjects[i] = {
+			mesh,
+			material,
+			shader,
+		};
+	}
+
 	for (auto &renderObject : renderObjects) {
 		if (renderObject.mesh && renderObject.shader) {
-			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObject.shader, device.getWGPUPreferredSurfaceFormat()});
+			std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObject.shader, context.device.getWGPUPreferredSurfaceFormat()});
 			if (!pipeline) {
 				CITRON_CORE_ERROR("Failed to get pipeline for render object");
 				continue;
@@ -100,13 +123,13 @@ void RenderPass::end() {
 	renderPassEncoder.release();
 }
 
-Frame::Frame(Renderer &renderer, Device &device, wgpu::CommandEncoder encoder,
+Frame::Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
 			 wgpu::SurfaceTexture &surfaceTexture)
-	: renderer(renderer), device(device), encoder(encoder), surfaceTexture(surfaceTexture) {
+	: renderer(renderer), encoder(encoder), surfaceTexture(surfaceTexture) {
 }
 
 RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
-	return RenderPass(renderer, device, targetTexture, encoder, *this);
+	return RenderPass(renderer, targetTexture, encoder, *this);
 }
 
 void Renderer::init() {
@@ -123,7 +146,7 @@ void Renderer::init() {
 Frame Renderer::beginFrame() {
 	frameUniforms.mvp = glm::rotate(frameUniforms.mvp, glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
-	return Frame(*this, device,
+	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());
 }

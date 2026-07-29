@@ -1,5 +1,6 @@
 #pragma once
 
+#include "app.hpp"
 #include "panel.hpp"
 #include <layer.hpp>
 #include <renderer.hpp>
@@ -9,7 +10,7 @@ using namespace CitronCore;
 
 class GuiLayer : public Layer {
   public:
-	GuiLayer() : Layer("GuiLayer") {};
+	GuiLayer(AppContext appContext);
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
@@ -22,4 +23,7 @@ class GuiLayer : public Layer {
 	ConsolePanel consolePanel;
 	InspectorPanel inspectorPanel;
 	void applyTheme();
+
+  private:
+	AppContext appContext;
 };

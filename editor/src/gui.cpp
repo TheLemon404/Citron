@@ -15,6 +15,8 @@
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
+GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"), appContext(appContext), assetPanel(appContext), outlinerPanel(appContext), consolePanel(appContext), inspectorPanel(appContext) {}
+
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -43,18 +45,16 @@ void GuiLayer::onAttach() {
 
 	App &editorApp = Editor::get();
 	ImGui_ImplSDL3_InitForOther(
-		(SDL_Window *)editorApp.getWindow().getSDLWindow());
+		(SDL_Window *)editorApp.getContext().window.getSDLWindow());
 	ImGui_ImplWGPU_InitInfo initInfo = {};
 	initInfo.Device =
-		(WGPUDevice)editorApp.getRenderer().getDevice().getWGPUDevice();
+		(WGPUDevice)editorApp.getContext().renderer.getDevice().getWGPUDevice();
 	initInfo.NumFramesInFlight = 2;
-	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getRenderer()
-									  .getDevice()
-									  .getWGPUPreferredSurfaceFormat();
+	initInfo.RenderTargetFormat = (WGPUTextureFormat)editorApp.getContext().renderer.getDevice().getWGPUPreferredSurfaceFormat();
 	initInfo.DepthStencilFormat = WGPUTextureFormat_Undefined;
 	ImGui_ImplWGPU_Init(&initInfo);
 
-	Editor::get().getRenderer().onGuiDrawCallback = CITRON_BIND_FN(
+	appContext.renderer.onGuiDrawCallback = CITRON_BIND_FN(
 		GuiLayer::drawGui, std::placeholders::_1, std::placeholders::_2);
 
 	applyTheme();
@@ -140,7 +140,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 		if (ImGui::InputTextWithHint("Rename Scene", "Scene Name", &newName,
 									 ImGuiInputTextFlags_EnterReturnsTrue)) {
 
-			Editor::get().getSceneManager().getActiveScene()->rename(newName);
+			appContext.sceneManager.getActiveScene()->rename(newName);
 			ImGui::CloseCurrentPopup();
 
 			CITRON_CORE_INFO("Renamed scene to {}", newName);

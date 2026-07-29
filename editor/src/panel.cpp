@@ -62,7 +62,7 @@ void AssetPanel::onAttach() {
 	currentDirectory = context.projectFilePath.parent_path();
 	refreshDirectoryListings();
 
-	folderIconTexture = Texture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", Editor::get().getRenderer().getDevice());
+	folderIconTexture = Texture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getDevice());
 }
 
 void AssetPanel::onDetach() {}
@@ -308,7 +308,7 @@ void AssetPanel::onDraw() {
 							fileName + fileExtension;
 						if (context.currentlyEditedSceneAssetPath == entry.path) {
 							context.currentlyEditedSceneAssetPath = newPath;
-							Editor::get().getSceneManager().getActiveScene()->rename(fileName);
+							appContext.sceneManager.getActiveScene()->rename(fileName);
 						}
 
 						CitronIO::IO::renameDirectory(entry.path, newPath);
@@ -369,7 +369,7 @@ void AssetPanel::refreshDirectoryListings() {
 		directoryListings.push_back(card);
 	}
 
-	Editor::get().getAssetManager().refreshAssetRegistry();
+	appContext.assetManager.refreshAssetRegistry();
 }
 
 void ConsolePanel::onAttach() {}
@@ -436,7 +436,7 @@ void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {
 	std::shared_ptr<Scene> currentEditedScene =
-		Editor::get().getSceneManager().getActiveScene();
+		appContext.sceneManager.getActiveScene();
 	if (pendingCreateEntity) {
 		pendingCreateEntity = false;
 		UUID newEntity = currentEditedScene->createEntity();
@@ -478,7 +478,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 				ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
 			uint64_t *childEntityUUID = (uint64_t *)payload->Data;
 			UUID newChildUUID = *childEntityUUID;
-			std::shared_ptr<Scene> currentScene = Editor::get().getSceneManager().getActiveScene();
+			std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
 			currentScene->reparentEntity(
 				currentScene->getEntity(newChildUUID),
 				currentScene->getEntity(entityBase.uuid));
@@ -516,7 +516,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 void OutlinerPanel::onDraw() {
 	EditorContext &context = Editor::get().getEditorContext();
-	std::shared_ptr<Scene> currentEditedScene = Editor::get().getSceneManager().getActiveScene();
+	std::shared_ptr<Scene> currentEditedScene = appContext.sceneManager.getActiveScene();
 
 	ImGui::Begin("Outliner");
 	if (ImGui::Button(ICON_FA_PLUS_CIRCLE)) {
@@ -606,7 +606,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 
 	EditorContext &context = Editor::get().getEditorContext();
 	AssetManager &assetManager =
-		Editor::get().getAssetManager();
+		appContext.assetManager;
 
 	ImGui::PushID(&assetReference);
 	if (ImGui::Button("Clear")) {
@@ -625,7 +625,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 				if (metadata.assetType == AssetReference<T>::assetType) {
 					assetReference.uuid = metadata.uuid;
 					assetReference.path = metadata.assetPath.string();
-					Editor::get().getAssetManager().getAsset<T>(metadata.uuid);
+					appContext.assetManager.getAsset<T>(metadata.uuid);
 				}
 			}
 		}
@@ -637,7 +637,7 @@ void InspectorPanel::drawAssetReferenceComponentGui(
 void InspectorPanel::onDraw() {
 	ImGui::Begin("Inspector");
 	EditorContext &context = Editor::get().getEditorContext();
-	auto &registry = Editor::get().getSceneManager().getActiveScene()->getRegistry();
+	auto &registry = appContext.sceneManager.getActiveScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
 		if (registry.all_of<EntityBaseComponent>(selectedEntity)) {

@@ -25,7 +25,7 @@ void Editor::init() {
 
 	assetManager.initializeAssetRegistry();
 
-	pushLayer<GuiLayer>();
+	pushLayer<GuiLayer>(getContext());
 
 	YAML::Node projectFileNode =
 		YAML::LoadFile(editorContext.projectFilePath.string());
@@ -37,11 +37,11 @@ void Editor::init() {
 		if (!openScene(lastEditedSceneFile)) {
 			CITRON_CLIENT_ERROR("Failed to load last edited scene file: {}",
 								lastEditedSceneFile);
-			Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
+			sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
 		}
 
 	} else {
-		Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
+		sceneManager.setActiveScene(std::make_shared<Scene>("Scene"));
 	}
 }
 
@@ -121,7 +121,7 @@ bool Editor::openProject(std::string projectFilePath) {
 
 	std::string editorTitle = std::string("Citron Editor: ") +
 							  editorContext.projectFilePath.filename().string();
-	Editor::get().getWindow().setName(editorTitle);
+	Editor::get().getContext().window.setName(editorTitle);
 
 	YAML::Node citronConfig =
 		YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml");

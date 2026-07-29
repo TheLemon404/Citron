@@ -2,10 +2,10 @@
 
 #include "citron_exports.hpp"
 #include "entt/entity/fwd.hpp"
-#include "renderer.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include <assets.hpp>
+#include <cstdint>
 #include <entt/entt.hpp>
 #include <layer.hpp>
 #include <map>
@@ -17,6 +17,11 @@ using namespace CitronCore;
 namespace CitronECS {
 
 class CITRON_ECS_API Scene;
+
+struct CITRON_ECS_API RenderableData {
+	uint64_t meshUUID;
+	uint64_t materialUUID;
+};
 
 class CITRON_ECS_API System {
   public:
@@ -51,7 +56,8 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
 
-	std::vector<CitronGraphics::RenderObject> extractRenderObjects(AssetManager *assetManager);
+	std::vector<uint64_t> extractMeshes(AssetManager &assetManager);
+	std::vector<uint64_t> extractMaterials(AssetManager &assetManager);
 
 	void rename(const std::string &name) { this->name = name; }
 

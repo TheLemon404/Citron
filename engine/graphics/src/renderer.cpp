@@ -5,6 +5,9 @@
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtc/matrix_transform.hpp>
+
 using namespace CitronGraphics;
 
 RenderPass::RenderPass(Renderer &renderer, Device &device, wgpu::Texture &targetTexture,
@@ -118,6 +121,8 @@ void Renderer::init() {
 }
 
 Frame Renderer::beginFrame() {
+	frameUniforms.mvp = glm::rotate(frameUniforms.mvp, glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::getShaderPaddedBindingSize<FrameUniforms>());
 	return Frame(*this, device,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());

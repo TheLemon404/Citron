@@ -9,10 +9,10 @@ Material::Material(const UUID uuid, Device &device) : Asset<Material, AssetType:
 	wgpu::BufferDescriptor materialUniformBufferDesc = {};
 	materialUniformBufferDesc.nextInChain = nullptr;
 	materialUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
-	materialUniformBufferDesc.size = Shader::getShaderPaddedBindingSize<MaterialUniforms>();
+	materialUniformBufferDesc.size = Shader::paddedSizeof<MaterialUniforms>();
 	materialUniformBuffer.buffer = device.getWGPUDevice().createBuffer(materialUniformBufferDesc);
 
-	device.getQueue().writeBuffer(materialUniformBuffer.buffer, 0, &materialUniforms, Shader::getShaderPaddedBindingSize<MaterialUniforms>());
+	device.getQueue().writeBuffer(materialUniformBuffer.buffer, 0, &materialUniforms, Shader::paddedSizeof<MaterialUniforms>());
 }
 
 std::shared_ptr<AssetBase> MaterialImporter::importAsset(AssetMetadata metadata) {

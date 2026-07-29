@@ -23,9 +23,9 @@ class CITRON_GRAPHICS_API Shader : public Asset<Shader, AssetType::SHADER> {
 	void setShaderModule(wgpu::ShaderModule &shaderModule) { this->shaderModule = shaderModule; }
 
 	template <typename T>
-	static size_t getShaderPaddedBindingSize() { return round(sizeof(T) / 16.0f) * 16; }
+	static size_t paddedSizeof() { return round(sizeof(T) / 16.0f) * 16; }
 
-	static size_t getShaderPaddedBindingSize(std::size_t size) { return round(size / 16.0f) * 16; }
+	static size_t paddedSizeof(std::size_t size) { return round(size / 16.0f) * 16; }
 
 	wgpu::PipelineLayout &getPipelineLayout() { return pipelineLayout; }
 	wgpu::BindGroupLayout &getBindGroupLayout(const uint16_t index) { return bindGroupLayouts[index]; }

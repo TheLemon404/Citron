@@ -48,7 +48,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> &renderObjects) {
 			entries.push_back({.binding = 0,
 							   .resource = renderer.getFrameUniformBuffer().buffer,
 							   .offset = 0,
-							   .size = Shader::getShaderPaddedBindingSize<FrameUniforms>()});
+							   .size = Shader::paddedSizeof<FrameUniforms>()});
 			wgpu::BindGroup frameBindGroup = renderer.getBindGroup({
 				.layout = renderObject.shader->getBindGroupLayout(0),
 				.entries = entries,
@@ -58,7 +58,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> &renderObjects) {
 			entries.push_back({.binding = 0,
 							   .resource = renderObject.material->getMaterialUniformBuffer().buffer,
 							   .offset = 0,
-							   .size = Shader::getShaderPaddedBindingSize<MaterialUniforms>()});
+							   .size = Shader::paddedSizeof<MaterialUniforms>()});
 			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
 				.layout = renderObject.shader->getBindGroupLayout(1),
 				.entries = entries,
@@ -122,7 +122,7 @@ void Renderer::init() {
 
 Frame Renderer::beginFrame() {
 	frameUniforms.mvp = glm::rotate(frameUniforms.mvp, glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::getShaderPaddedBindingSize<FrameUniforms>());
+	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 	return Frame(*this, device,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());

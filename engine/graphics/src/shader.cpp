@@ -17,7 +17,7 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	frameUniformBindingLayout.binding = 0;
 	frameUniformBindingLayout.visibility = wgpu::ShaderStage::Vertex;
 	frameUniformBindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-	frameUniformBindingLayout.buffer.minBindingSize = Shader::getShaderPaddedBindingSize<FrameUniforms>();
+	frameUniformBindingLayout.buffer.minBindingSize = Shader::paddedSizeof<FrameUniforms>();
 	// IMPORTANT: THIS IS A BUG IN WGPU. setDefault() sets types to Undefine, not BindingNotUsed, which causes mysterous runtime errors
 	frameUniformBindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
 	frameUniformBindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
@@ -35,7 +35,7 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	materialUniformBindingLayout.binding = 0;
 	materialUniformBindingLayout.visibility = wgpu::ShaderStage::Fragment;
 	materialUniformBindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-	materialUniformBindingLayout.buffer.minBindingSize = Shader::getShaderPaddedBindingSize<MaterialUniforms>();
+	materialUniformBindingLayout.buffer.minBindingSize = Shader::paddedSizeof<MaterialUniforms>();
 	materialUniformBindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
 	materialUniformBindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
 	materialUniformBindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;

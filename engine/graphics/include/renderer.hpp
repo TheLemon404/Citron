@@ -109,7 +109,7 @@ struct CITRON_GRAPHICS_API BindGroupEntry {
 	// IN THE FUTURE: std::variant<wgpu::Buffer, wgpu::TextureView, wgpu::Sampler> resource;
 	std::variant<wgpu::Buffer> resource;
 	uint64_t offset;
-	uint64_t size = WGPU_WHOLE_SIZE;
+	size_t size = WGPU_WHOLE_SIZE;
 
 	bool operator==(const BindGroupEntry &other) const {
 		return binding == other.binding && resource == other.resource && offset == other.offset && size == other.size;

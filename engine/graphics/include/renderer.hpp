@@ -44,7 +44,7 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<glm::mat4> &transforms, std::vector<uint64_t> &meshUUIDs, std::vector<uint64_t> &materialUUIDs);
+	void drawRenderData(std::vector<RenderableReferenceData> renderableReferenceData);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);

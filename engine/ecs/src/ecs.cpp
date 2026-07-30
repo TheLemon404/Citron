@@ -105,50 +105,31 @@ void Scene::deleteEntity(entt::entity entity) {
 	entityMap.erase(uuid);
 }
 
-std::vector<uint64_t> Scene::extractDrawableEntityUUIDs() {
-	std::vector<uint64_t> entities;
-	for (auto &entity : registry.view<MeshComponent, EntityBaseComponent>()) {
-		entities.push_back(registry.get<EntityBaseComponent>(entity).uuid);
-	}
-	return entities;
-}
+std::vector<CitronGraphics::RenderableReferenceData> Scene::extractRenderableData(AssetManager &assetManager) {
+	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
+	for (auto &entity : registry.view<MeshComponent, TransformComponent, EntityBaseComponent>()) {
+		CitronGraphics::RenderableReferenceData data;
+		data.entityUUID = registry.get<EntityBaseComponent>(entity).uuid;
 
-std::vector<glm::mat4> Scene::extractDrawableEntityTransforms() {
-	std::vector<glm::mat4> transforms;
-	for (auto &entity : registry.view<MeshComponent, TransformComponent>()) {
 		TransformComponent &t = registry.get<TransformComponent>(entity);
 		t.rotationQuat = glm::quat(t.rotation);
 		t.matrix = glm::identity<glm::mat4>();
 		t.matrix = glm::translate(t.matrix, t.position);
 		t.matrix *= glm::mat4(t.rotationQuat);
 		t.matrix = glm::scale(t.matrix, t.scale);
-		transforms.push_back(t.matrix);
-	}
-	return transforms;
-}
+		data.transform = t.matrix;
 
-std::vector<uint64_t> Scene::extractMeshes(AssetManager &assetManager) {
-	std::vector<uint64_t> renderData;
-	for (auto &entity : registry.view<MeshComponent>()) {
 		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
 		if (!assetManager.isValidAsset(meshComponent.meshAsset.uuid))
 			continue;
-
-		renderData.push_back(meshComponent.meshAsset.uuid);
-	}
-	return renderData;
-}
-
-std::vector<uint64_t> Scene::extractMaterials(AssetManager &assetManager) {
-	std::vector<uint64_t> renderData;
-	for (auto &entity : registry.view<MeshComponent>()) {
-		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
 		if (!assetManager.isValidAsset(meshComponent.materialAsset.uuid))
 			continue;
 
-		renderData.push_back(meshComponent.materialAsset.uuid);
+		data.meshUUID = meshComponent.meshAsset.uuid;
+		data.materialUUID = meshComponent.materialAsset.uuid;
+		renderableData.push_back(data);
 	}
-	return renderData;
+	return renderableData;
 }
 
 void Scene::deleteEntity(UUID uuid) {

@@ -3,6 +3,7 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
+#include "resources.hpp"
 #include <event.hpp>
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
@@ -37,18 +38,13 @@ RenderPass::RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
 
 RenderPass::~RenderPass() { targetView.release(); }
 
-void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<glm::mat4> &transforms, std::vector<uint64_t> &meshUUIDs, std::vector<uint64_t> &materialUUIDs) {
-	if (meshUUIDs.size() != materialUUIDs.size() || entityUUIDs.size() != transforms.size() || entityUUIDs.size() != meshUUIDs.size()) {
-		CITRON_CORE_ERROR("You must provide the same number of mesh and material UUIDs to draw render data");
-		return;
-	}
-
-	std::vector<RenderObject> renderObjects(meshUUIDs.size());
+void RenderPass::drawRenderData(std::vector<RenderableReferenceData> renderableReferenceData) {
+	std::vector<RenderObject> renderObjects(renderableReferenceData.size());
 	RendererContext context = renderer.getContext();
 
-	for (size_t i = 0; i < meshUUIDs.size(); i++) {
-		std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(meshUUIDs[i]);
-		std::shared_ptr<Material> material = context.assetManager.getAsset<Material>(materialUUIDs[i]);
+	for (size_t i = 0; i < renderableReferenceData.size(); i++) {
+		std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(renderableReferenceData[i].meshUUID);
+		std::shared_ptr<Material> material = context.assetManager.getAsset<Material>(renderableReferenceData[i].materialUUID);
 		std::shared_ptr<Shader> shader = context.assetManager.getAsset<Shader>(material->shader.uuid);
 
 		if (!mesh || !material || !shader) {
@@ -57,8 +53,8 @@ void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<
 		}
 
 		renderObjects[i] = {
-			entityUUIDs[i],
-			{.transform = transforms[i]},
+			renderableReferenceData[i].entityUUID,
+			{.transform = renderableReferenceData[i].transform},
 			mesh,
 			material,
 			shader,

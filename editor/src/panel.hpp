@@ -56,7 +56,7 @@ class AssetPanel : public Panel {
 	void refreshDirectoryListings();
 	std::vector<AssetCard> directoryListings;
 
-	int zoomLevel = 200;
+	int zoomLevel = 100;
 };
 
 class ConsolePanel : public Panel {

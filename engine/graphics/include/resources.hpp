@@ -11,6 +11,13 @@
 
 namespace CitronGraphics {
 
+struct CITRON_GRAPHICS_API RenderableReferenceData {
+	uint64_t entityUUID;
+	glm::mat4 transform;
+	uint64_t meshUUID;
+	uint64_t materialUUID;
+};
+
 struct CITRON_GRAPHICS_API ModelUniforms {
 	glm::mat4 transform = glm::identity<glm::mat4>();
 };

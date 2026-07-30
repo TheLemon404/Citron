@@ -11,6 +11,7 @@
 #include <layer.hpp>
 #include <map>
 #include <memory>
+#include <resources.hpp>
 
 using namespace CitronAssets;
 using namespace CitronCore;
@@ -18,11 +19,6 @@ using namespace CitronCore;
 namespace CitronECS {
 
 class CITRON_ECS_API Scene;
-
-struct CITRON_ECS_API RenderableData {
-	uint64_t meshUUID;
-	uint64_t materialUUID;
-};
 
 class CITRON_ECS_API System {
   public:
@@ -56,6 +52,8 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void reparentEntity(entt::entity entity, entt::entity parent);
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
+
+	std::vector<CitronGraphics::RenderableReferenceData> extractRenderableData(AssetManager &assetManager);
 
 	std::vector<uint64_t> extractDrawableEntityUUIDs();
 	std::vector<glm::mat4> extractDrawableEntityTransforms();

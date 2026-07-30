@@ -4,6 +4,8 @@ set(DAWN_FETCH_DEPENDENCIES ON)
 
 set(YAML_BUILD_SHARED_LIBS ON)
 
+add_compile_definitions(WEBGPU_BACKEND=DAWN)
+
 add_subdirectory(Box3D)
 add_subdirectory(EnTT)
 add_subdirectory(GLM)

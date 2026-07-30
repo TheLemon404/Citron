@@ -11,6 +11,14 @@
 
 namespace CitronGraphics {
 
+struct CITRON_GRAPHICS_API ModelUniforms {
+	glm::mat4 transform = glm::identity<glm::mat4>();
+};
+
+struct CITRON_GRAPHICS_API FrameUniforms {
+	glm::mat4 viewProjection = glm::identity<glm::mat4>();
+};
+
 struct CITRON_GRAPHICS_API PipelineKey {
 	std::shared_ptr<Shader> shader;
 	wgpu::TextureFormat textureFormat;
@@ -77,11 +85,15 @@ struct CITRON_GRAPHICS_API BindGroupKey {
 class CITRON_GRAPHICS_API RendererResourceManager {
   public:
 	RendererResourceManager(Device &device) : device(device) {}
+	void initResources();
 	GPUBuffer &getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
 
 	std::map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
 	std::map<uint64_t, GPUBuffer> entityModelUniformBufferCache;
+
+	FrameUniforms frameUniforms;
+	GPUBuffer frameUniformBuffer;
 
   private:
 	Device &device;

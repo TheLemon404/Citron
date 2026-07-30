@@ -22,10 +22,6 @@ using namespace CitronCore;
 
 namespace CitronGraphics {
 
-struct CITRON_GRAPHICS_API FrameUniforms {
-	glm::mat4 viewProjection = glm::identity<glm::mat4>();
-};
-
 class CITRON_GRAPHICS_API Frame;
 
 struct CITRON_GRAPHICS_API RenderObject {
@@ -91,7 +87,6 @@ class CITRON_GRAPHICS_API Frame {
 
 struct RendererContext {
 	Device &device;
-	FrameUniforms &frameUniforms;
 	AssetManager &assetManager;
 	RendererResourceManager &rendererResourcesManager;
 };
@@ -144,12 +139,9 @@ class CITRON_GRAPHICS_API Renderer {
 		return rendererResourcesManager.bindGroupCache[key];
 	}
 
-	GPUBuffer &getFrameUniformBuffer() { return frameUniformBuffer; }
-
 	RendererContext getContext() {
 		return {
 			device,
-			frameUniforms,
 			assetManager,
 			rendererResourcesManager,
 		};
@@ -166,10 +158,6 @@ class CITRON_GRAPHICS_API Renderer {
 	wgpu::TextureView colorTargetView;
 
 	Device device;
-
-	// frame uniforms
-	FrameUniforms frameUniforms;
-	GPUBuffer frameUniformBuffer;
 };
 
 } // namespace CitronGraphics

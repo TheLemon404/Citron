@@ -4,6 +4,15 @@
 
 using namespace CitronGraphics;
 
+void RendererResourceManager::initResources() {
+	wgpu::BufferDescriptor frameUniformBufferDesc = {};
+	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
+	frameUniformBufferDesc.mappedAtCreation = false;
+	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
+	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
+	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
+}
+
 GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
 	wgpu::Device &wgpuDevice = device.getWGPUDevice();
 	if (!entityModelUniformBufferCache.contains(entityUUID)) {

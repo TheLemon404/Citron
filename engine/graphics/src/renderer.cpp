@@ -75,7 +75,7 @@ void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<
 
 			std::vector<BindGroupEntry> entries;
 			entries.push_back({.binding = 0,
-							   .resource = renderer.getFrameUniformBuffer().buffer,
+							   .resource = renderer.getContext().rendererResourcesManager.frameUniformBuffer.buffer,
 							   .offset = 0,
 							   .size = Shader::paddedSizeof<FrameUniforms>()});
 			wgpu::BindGroup frameBindGroup = renderer.getBindGroup({
@@ -152,12 +152,7 @@ RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
 void Renderer::init() {
 	device.aquirePlatformResources();
 
-	wgpu::BufferDescriptor frameUniformBufferDesc = {};
-	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
-	frameUniformBufferDesc.mappedAtCreation = false;
-	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
-	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
-	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
+	rendererResourcesManager.initResources();
 
 	colorTarget = device.createEmptyRenderTargetTexture();
 	colorTargetView = device.createTextureView(colorTarget);

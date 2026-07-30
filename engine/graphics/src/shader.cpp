@@ -30,6 +30,25 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	frameBindGroupLayoutDesc.entries = &frameUniformBindingLayout;
 	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(frameBindGroupLayoutDesc));
 
+	/*
+	wgpu::BindGroupLayoutEntry modelUniformBindingLayout = {};
+	modelUniformBindingLayout.setDefault();
+	modelUniformBindingLayout.binding = 0;
+	modelUniformBindingLayout.visibility = wgpu::ShaderStage::Vertex;
+	modelUniformBindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
+	modelUniformBindingLayout.buffer.minBindingSize = Shader::paddedSizeof<FrameUniforms>();
+	// IMPORTANT: THIS IS A BUG IN WGPU. setDefault() sets types to Undefine, not BindingNotUsed, which causes mysterous runtime errors
+	modelUniformBindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
+	modelUniformBindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
+	modelUniformBindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;
+	modelUniformBindingLayout.storageTexture.access = wgpu::StorageTextureAccess::BindingNotUsed;
+
+	wgpu::BindGroupLayoutDescriptor modelBindGroupLayoutDesc = {};
+	modelBindGroupLayoutDesc.nextInChain = nullptr;
+	modelBindGroupLayoutDesc.entryCount = 1;
+	modelBindGroupLayoutDesc.entries = &modelUniformBindingLayout;
+	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(modelBindGroupLayoutDesc));
+ */
 	wgpu::BindGroupLayoutEntry materialUniformBindingLayout = {};
 	materialUniformBindingLayout.setDefault();
 	materialUniformBindingLayout.binding = 0;

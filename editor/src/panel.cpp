@@ -580,6 +580,8 @@ void OutlinerPanel::onDraw() {
 					UUID newEntity = currentEditedScene->createEntity();
 					currentEditedScene->getRegistry().emplace<MeshComponent>(
 						currentEditedScene->getEntity(newEntity));
+					currentEditedScene->getRegistry().emplace<TransformComponent>(
+						currentEditedScene->getEntity(newEntity));
 				}
 
 				ImGui::EndPopup();

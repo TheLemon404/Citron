@@ -40,3 +40,9 @@
 [submodule "vendor/stb"]
 	path = vendor/stb
 	url = https://github.com/TheLemon404/stb.git
+[submodule "vendor/cereal"]
+	path = vendor/cereal
+	url = https://github.com/USCiLab/cereal.git
+[submodule "vendor/cereal-yaml"]
+	path = vendor/cereal-yaml
+	url = https://github.com/mattcontinisio/cereal-yaml.git

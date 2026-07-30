@@ -2,6 +2,7 @@
 
 #include "citron_exports.hpp"
 #include "entt/entity/fwd.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include <assets.hpp>
@@ -56,6 +57,8 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
 
+	std::vector<uint64_t> extractDrawableEntityUUIDs();
+	std::vector<glm::mat4> extractDrawableEntityTransforms();
 	std::vector<uint64_t> extractMeshes(AssetManager &assetManager);
 	std::vector<uint64_t> extractMaterials(AssetManager &assetManager);
 

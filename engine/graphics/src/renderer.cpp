@@ -1,6 +1,8 @@
 #include "renderer.hpp"
 #include "buffer.hpp"
+#include "glm/ext/matrix_transform.hpp"
 #include "material.hpp"
+#include "mesh.hpp"
 #include <event.hpp>
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
@@ -35,7 +37,7 @@ RenderPass::RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
 
 RenderPass::~RenderPass() { targetView.release(); }
 
-void RenderPass::drawRenderData(std::vector<uint64_t> meshUUIDs, std::vector<uint64_t> materialUUIDs) {
+void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<glm::mat4> &transforms, std::vector<uint64_t> &meshUUIDs, std::vector<uint64_t> &materialUUIDs) {
 	if (meshUUIDs.size() != materialUUIDs.size()) {
 		CITRON_CORE_ERROR("You must provide the same number of mesh and material UUIDs to draw render data");
 		return;
@@ -48,11 +50,15 @@ void RenderPass::drawRenderData(std::vector<uint64_t> meshUUIDs, std::vector<uin
 		std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(meshUUIDs[i]);
 		std::shared_ptr<Material> material = context.assetManager.getAsset<Material>(materialUUIDs[i]);
 		std::shared_ptr<Shader> shader = context.assetManager.getAsset<Shader>(material->shader.uuid);
+
 		if (!mesh || !material || !shader) {
 			CITRON_CORE_ERROR("Failed to get mesh, material, or shader for render object");
 			continue;
 		}
+
 		renderObjects[i] = {
+			0,
+			{.transform = glm::identity<glm::mat4>()},
 			mesh,
 			material,
 			shader,
@@ -76,6 +82,20 @@ void RenderPass::drawRenderData(std::vector<uint64_t> meshUUIDs, std::vector<uin
 				.layout = renderObject.shader->getBindGroupLayout(0),
 				.entries = entries,
 			});
+
+			/*
+
+			entries.clear();
+			entries.push_back({.binding = 0,
+							   .resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms).buffer,
+							   .offset = 0,
+							   .size = Shader::paddedSizeof<ModelUniforms>()});
+			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
+				.layout = renderObject.shader->getBindGroupLayout(1),
+				.entries = entries,
+			});
+
+*/
 
 			entries.clear();
 			entries.push_back({.binding = 0,
@@ -138,17 +158,15 @@ void Renderer::init() {
 	wgpu::BufferDescriptor frameUniformBufferDesc = {};
 	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
 	frameUniformBufferDesc.mappedAtCreation = false;
-	frameUniformBufferDesc.size = sizeof(FrameUniforms);
+	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
 	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
-	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, sizeof(FrameUniforms));
+	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 
 	colorTarget = device.createEmptyRenderTargetTexture();
 	colorTargetView = device.createTextureView(colorTarget);
 }
 
 Frame Renderer::beginFrame() {
-	frameUniforms.mvp = glm::rotate(frameUniforms.mvp, glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());

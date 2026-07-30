@@ -1,11 +1,12 @@
 #pragma once
 
-#include "alpaca/detail/options.h"
 #include "citron_exports.hpp"
 #include "logger.hpp"
-#include <alpaca/alpaca.h>
+#include <cereal-yaml/archives/yaml.hpp>
+#include <cereal/cereal.hpp>
 #include <entt/entt.hpp>
 #include <fstream>
+#include <sstream>
 
 namespace CitronAssets {
 
@@ -33,11 +34,12 @@ class CITRON_ASSETS_API StreamWriter {
 	}
 	template <typename T>
 	void operator()(const T &data) {
-		std::vector<uint8_t> bytes;
-		alpaca::serialize<alpaca::options::fixed_length_encoding>(data, bytes);
-		uint64_t len = bytes.size();
-		writeData(&len, sizeof(len));
-		writeData(bytes.data(), len);
+		std::stringstream os;
+		{
+			cereal::YAMLOutputArchive archive(os);
+			archive(data);
+		}
+		writeString(os.str());
 	}
 };
 
@@ -83,17 +85,12 @@ class CITRON_ASSETS_API StreamReader {
 	}
 	template <typename T>
 	void operator()(T &data) {
-		uint64_t len;
-		readData(&len, sizeof(len));
-
-		std::vector<uint8_t> bytes(len);
-		readData(bytes.data(), len);
-		std::error_code ec;
-		data = alpaca::deserialize<alpaca::options::fixed_length_encoding, T>(
-			bytes, ec);
-		if (ec) {
-			CITRON_CORE_ERROR("Serialization failed with error: {}",
-							  ec.message());
+		std::string str;
+		readString(str);
+		std::stringstream ss(str);
+		{
+			cereal::YAMLInputArchive archive(ss);
+			archive(data);
 		}
 	}
 };

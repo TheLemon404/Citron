@@ -4,11 +4,16 @@
 #include "assets.hpp"
 #include "buffer.hpp"
 #include "device.hpp"
+#include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
 using namespace CitronAssets;
+
+struct CITRON_GRAPHICS_API ModelUniforms {
+	glm::mat4 transform = glm::identity<glm::mat4>();
+};
 
 namespace CitronGraphics {
 struct CITRON_GRAPHICS_API Vertex {

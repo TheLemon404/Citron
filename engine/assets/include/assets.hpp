@@ -3,12 +3,13 @@
 #include "citron_exports.hpp"
 
 #include "event.hpp"
-#include "logger.hpp"
 #include "uuid.hpp"
 #include <concepts>
 #include <cstdint>
+#include <filesystem>
 #include <memory>
 #include <serialization.hpp>
+#include <set>
 #include <unordered_map>
 
 using namespace CitronCore;
@@ -66,6 +67,12 @@ struct AssetReference {
 	std::string path;
 	uint64_t uuid = UUID::nullID;
 	static constexpr AssetType assetType = T::GetType();
+
+	template <class Archive>
+	void serialize(Archive &archive) {
+		AssetType t = assetType;
+		archive(path, uuid, t);
+	}
 };
 
 class CITRON_ASSETS_API AssetImporter {

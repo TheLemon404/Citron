@@ -101,6 +101,22 @@ void Scene::deleteEntity(entt::entity entity) {
 	entityMap.erase(uuid);
 }
 
+std::vector<uint64_t> Scene::extractDrawableEntityUUIDs() {
+	std::vector<uint64_t> entities;
+	for (auto &entity : registry.view<MeshComponent, EntityBaseComponent>()) {
+		entities.push_back(registry.get<EntityBaseComponent>(entity).uuid);
+	}
+	return entities;
+}
+
+std::vector<glm::mat4> Scene::extractDrawableEntityTransforms() {
+	std::vector<glm::mat4> transforms;
+	for (auto &entity : registry.view<MeshComponent, TransformComponent>()) {
+		transforms.push_back(registry.get<TransformComponent>(entity).matrix);
+	}
+	return transforms;
+}
+
 std::vector<uint64_t> Scene::extractMeshes(AssetManager &assetManager) {
 	std::vector<uint64_t> renderData;
 	for (auto &entity : registry.view<MeshComponent>()) {

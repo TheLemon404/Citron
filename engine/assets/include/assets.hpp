@@ -106,19 +106,28 @@ class CITRON_ASSETS_API AssetManagerBase {
 	bool isKnownAssetFileExtension(std::string extension);
 	AssetType getAssetTypeFromExtension(std::string extension);
 
+	std::map<uint64_t, AssetMetadata> &getAssetMetadataRegistry() {
+		return assetMetadataRegistry;
+	}
+
   protected:
+	std::map<uint64_t, AssetMetadata> assetMetadataRegistry;
+
 	std::unordered_map<std::string, AssetType> fileExtensionToAssetType;
 	std::unordered_map<AssetType, std::shared_ptr<AssetImporter>> assetImporters;
 	std::unordered_map<UUID, std::shared_ptr<AssetBase>> loadedAssets;
 };
 
-class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase {
+class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase, public ISerializable {
   public:
 	EditorAssetManager(const std::filesystem::path &projectRootPath)
 		: projectRootPath(projectRootPath) {}
 
 	virtual void initializeAssetRegistry() override;
 	virtual std::shared_ptr<AssetBase> getAsset(const UUID uuid) override;
+
+	virtual void serialize(StreamWriter &writer) override;
+	virtual void deserialize(StreamReader &reader) override;
 
 	const AssetMetadata &getAssetMetadata(UUID uuid) {
 		return assetMetadataRegistry[uuid];
@@ -130,7 +139,7 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase {
 	virtual AssetType getAssetType(const UUID uuid) override;
 
 	AssetMetadata getAssetMetadataByPath(const std::filesystem::path &path) {
-		return assetMetadataByPath[path];
+		return assetMetadataRegistry[filepathToUUID[path]];
 	}
 
 	AssetMetadata getAssetMetadataByUUID(const UUID uuid) {
@@ -140,13 +149,9 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase {
   private:
 	bool isKnownAssetFileExtension(std::string extension);
 
-	AssetMetadata loadMetadataFromFile(const std::filesystem::path &metaFile);
-	void createMetadataForFile(const std::filesystem::path &file, const std::filesystem::path &metaFile);
-
 	AssetType getAssetTypeFromExtension(std::string extension);
 
-	std::unordered_map<uint64_t, AssetMetadata> assetMetadataRegistry;
-	std::unordered_map<std::filesystem::path, AssetMetadata> assetMetadataByPath;
+	std::unordered_map<std::filesystem::path, uint64_t> filepathToUUID;
 	const std::filesystem::path projectRootPath;
 };
 
@@ -171,17 +176,10 @@ using EventCallbackFn = std::function<void(Event &)>;
 
 class CITRON_ASSETS_API AssetManager {
   public:
-	AssetManager(const bool isRuntime, std::filesystem::path projectRootPath, EventCallbackFn eventCallback) : isRuntime(isRuntime), eventCallback(eventCallback) {
-		if (isRuntime) {
-			m_assetManager = std::make_unique<RuntimeAssetManager>();
-		} else {
-			m_assetManager = std::make_unique<EditorAssetManager>(projectRootPath);
-		}
-	}
+	AssetManager(const bool isRuntime, std::filesystem::path projectRootPath, EventCallbackFn eventCallback);
+	~AssetManager();
 
-	void initializeAssetRegistry() {
-		m_assetManager->initializeAssetRegistry();
-	}
+	void initializeAssetRegistry();
 
 	void refreshAssetRegistry() {
 		AssetRegistryRefreshEvent refreshEvent = AssetRegistryRefreshEvent();
@@ -229,10 +227,15 @@ class CITRON_ASSETS_API AssetManager {
 		return std::dynamic_pointer_cast<T>(m_assetManager->getAsset(uuid));
 	}
 
+	std::map<uint64_t, AssetMetadata> &getAssetMetadataRegistry() {
+		return m_assetManager->getAssetMetadataRegistry();
+	}
+
   protected:
 	EventCallbackFn eventCallback = nullptr;
 
   private:
+	const std::filesystem::path projectRootPath;
 	const bool isRuntime;
 	std::unique_ptr<AssetManagerBase> m_assetManager;
 };

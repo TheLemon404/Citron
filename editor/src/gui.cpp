@@ -15,7 +15,7 @@
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
-GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"), appContext(appContext), assetPropertiesPanel(appContext), assetPanel(appContext, assetPropertiesPanel), outlinerPanel(appContext), consolePanel(appContext), inspectorPanel(appContext) {}
+GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"), appContext(appContext), assetPropertiesPanel(appContext), assetPanel(appContext, assetPropertiesPanel), assetRegistryPanel(appContext), outlinerPanel(appContext), consolePanel(appContext), inspectorPanel(appContext) {}
 
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
@@ -64,6 +64,7 @@ void GuiLayer::onAttach() {
 	outlinerPanel.onAttach();
 	consolePanel.onAttach();
 	inspectorPanel.onAttach();
+	assetRegistryPanel.onAttach();
 }
 
 void GuiLayer::onDetach() {
@@ -76,6 +77,7 @@ void GuiLayer::onDetach() {
 	outlinerPanel.onDetach();
 	consolePanel.onDetach();
 	inspectorPanel.onDetach();
+	assetRegistryPanel.onDetach();
 }
 
 void GuiLayer::onUpdate() {
@@ -84,6 +86,7 @@ void GuiLayer::onUpdate() {
 	outlinerPanel.onUpdate();
 	consolePanel.onUpdate();
 	inspectorPanel.onUpdate();
+	assetRegistryPanel.onUpdate();
 }
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView,
@@ -131,6 +134,12 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("View")) {
+			if (ImGui::MenuItem("Asset Registry")) {
+				assetRegistryPanel.showWindow = true;
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
 	}
 
@@ -165,6 +174,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	outlinerPanel.onDraw();
 	consolePanel.onDraw();
 	inspectorPanel.onDraw();
+	assetRegistryPanel.onDraw();
 
 	ImGui::EndFrame();
 	ImGui::Render();
@@ -178,6 +188,7 @@ void GuiLayer::onEvent(Event &e) {
 	outlinerPanel.onEvent(e);
 	consolePanel.onEvent(e);
 	inspectorPanel.onEvent(e);
+	assetRegistryPanel.onEvent(e);
 	if (SDL_Event *sdlEvent = (SDL_Event *)e.getInternalEvent())
 		ImGui_ImplSDL3_ProcessEvent(sdlEvent);
 }

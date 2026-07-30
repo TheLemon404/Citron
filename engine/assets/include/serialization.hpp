@@ -5,6 +5,7 @@
 #include <cereal-yaml/archives/yaml.hpp>
 #include <cereal/cereal.hpp>
 #include <entt/entt.hpp>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 
@@ -45,7 +46,7 @@ class CITRON_ASSETS_API StreamWriter {
 
 class CITRON_ASSETS_API FileStreamWriter : public StreamWriter {
   public:
-	FileStreamWriter(const std::string &filename)
+	FileStreamWriter(const std::filesystem::path &filename)
 		: stream(filename, std::ios::binary) {
 		stream.clear();
 		stream.seekp(0);
@@ -97,10 +98,10 @@ class CITRON_ASSETS_API StreamReader {
 
 class CITRON_ASSETS_API FileStreamReader : public StreamReader {
   public:
-	FileStreamReader(const std::string &filename)
+	FileStreamReader(const std::filesystem::path &filename)
 		: stream(filename, std::ios::binary) {
 		if (!stream.is_open()) {
-			CITRON_CORE_ERROR("Failed to open file: {}", filename);
+			CITRON_CORE_ERROR("Failed to open file: {}", filename.string());
 		}
 	}
 

@@ -11,6 +11,34 @@
 using namespace CitronAssets;
 using namespace CitronIO;
 
+void EditorAssetManager::serialize(StreamWriter &writer) {
+	int count = assetMetadataRegistry.size();
+	writer.writeData(&count, sizeof(int));
+	for (const auto &pair : assetMetadataRegistry) {
+		writer.writeData(&pair.first, sizeof(uint64_t));
+		writer.writeData(&pair.second, sizeof(AssetMetadata));
+	}
+}
+
+void EditorAssetManager::deserialize(StreamReader &reader) {
+	try {
+		int count;
+		reader.readData(&count, sizeof(int));
+		assetMetadataRegistry.clear();
+		for (int i = 0; i < count; i++) {
+			uint64_t uuid;
+			reader.readData(&uuid, sizeof(uint64_t));
+			AssetMetadata metadata = {};
+			reader.readData(&metadata, sizeof(AssetMetadata));
+			assetMetadataRegistry[uuid] = metadata;
+		}
+	} catch (const std::exception &e) {
+		CITRON_CORE_ERROR("Failed to deserialize asset registry cache with error: {}", e.what());
+		CITRON_CORE_ERROR("Deleting corrupted registry cache...");
+		CitronIO::IO::writeFile(projectRootPath / "registry.cache", "");
+	}
+}
+
 const std::unordered_map<UUID, std::shared_ptr<AssetBase>> &
 AssetManagerBase::getLoadedAssets() {
 	return loadedAssets;
@@ -29,25 +57,11 @@ AssetType AssetManagerBase::getAssetTypeFromExtension(std::string extension) {
 }
 
 void EditorAssetManager::initializeAssetRegistry() {
-	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
-	std::set<std::filesystem::path> metaFilesInProject;
-	for (const std::filesystem::path &file : filesInProject) {
-		if (file.extension() == ".meta") {
-			metaFilesInProject.insert(file);
-		}
+	if (!std::filesystem::exists(projectRootPath / "registry.cache")) {
+		FileStreamReader fileStreamReader(projectRootPath / "registry.cache");
+		deserialize(fileStreamReader);
 	}
-	for (const std::filesystem::path &file : filesInProject) {
-		if (file.extension() != ".meta" && isKnownAssetFileExtension(file.extension().string())) {
-			if (!metaFilesInProject.contains(file.string() + ".meta")) {
-				IO::createFile(file.string() + ".meta");
-				createMetadataForFile(file, file.string() + ".meta");
-			}
-
-			AssetMetadata metadata = loadMetadataFromFile(file.string() + ".meta");
-			assetMetadataByPath[file] = metadata;
-			assetMetadataRegistry[metadata.uuid] = metadata;
-		}
-	}
+	refreshAssetRegistry();
 }
 
 std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
@@ -72,29 +86,22 @@ std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
 
 void EditorAssetManager::refreshAssetRegistry() {
 	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
-	std::set<std::filesystem::path> metaFilesInProject;
 	for (const std::filesystem::path &file : filesInProject) {
-		if (file.extension() == ".meta") {
-			metaFilesInProject.insert(file);
-		}
-	}
-	for (const std::filesystem::path &file : filesInProject) {
-		if (file.extension() != ".meta" && isKnownAssetFileExtension(file.extension().string())) {
-			if (!metaFilesInProject.contains(file.string() + ".meta")) {
-				IO::createFile(file.string() + ".meta");
-				createMetadataForFile(file, file.string() + ".meta");
+		if (isKnownAssetFileExtension(file.extension().string())) {
+			if (!filepathToUUID.contains(file) || !assetMetadataRegistry.contains(filepathToUUID[file])) {
+				AssetMetadata metadata = {};
+				metadata.uuid = (uint64_t)UUID();
+				metadata.assetPath = file;
+				metadata.assetType = getAssetTypeFromExtension(file.extension().string());
+				assetMetadataRegistry[metadata.uuid] = metadata;
+				filepathToUUID[file] = metadata.uuid;
 			}
-
-			AssetMetadata metadata = loadMetadataFromFile(file.string() + ".meta");
-			assetMetadataByPath[file] = metadata;
-			assetMetadataRegistry[metadata.uuid] = metadata;
 		}
 	}
 	for (const std::pair<uint64_t, AssetMetadata> &metadata : assetMetadataRegistry) {
 		if (!std::filesystem::exists(metadata.second.assetPath)) {
 			assetMetadataRegistry.erase(metadata.first);
-			assetMetadataByPath.erase(metadata.second.assetPath);
-			IO::deleteFile(metadata.second.assetPath.string() + ".meta");
+			filepathToUUID.erase(metadata.second.assetPath);
 		}
 	}
 }
@@ -116,29 +123,6 @@ bool EditorAssetManager::isKnownAssetFileExtension(std::string extension) {
 	return false;
 }
 
-AssetMetadata EditorAssetManager::loadMetadataFromFile(const std::filesystem::path &metaFile) {
-	YAML::Node metaNode = YAML::LoadFile(metaFile.string());
-	AssetType type = AssetType::UNKNOWN;
-	std::string typeStr = metaNode["assetType"].as<std::string>();
-	if (typeStr == "SHADER")
-		type = AssetType::SHADER;
-	else if (typeStr == "MATERIAL")
-		type = AssetType::MATERIAL;
-	else if (typeStr == "TEXTURE")
-		type = AssetType::TEXTURE;
-	else if (typeStr == "MESH")
-		type = AssetType::MESH;
-	return AssetMetadata(metaNode["uuid"].as<uint64_t>(), metaNode["assetPath"].as<std::string>(), type);
-}
-
-void EditorAssetManager::createMetadataForFile(const std::filesystem::path &file, const std::filesystem::path &metaFile) {
-	YAML::Node metaNode = YAML::LoadFile(metaFile.string());
-	metaNode["uuid"] = (uint64_t)UUID();
-	metaNode["assetPath"] = file.string();
-	metaNode["assetType"] = to_string(getAssetTypeFromExtension(file.extension().string()));
-	IO::writeFile(metaFile, YAML::Dump(metaNode));
-}
-
 AssetType EditorAssetManager::getAssetTypeFromExtension(std::string extension) {
 	for (auto importer : assetImporters) {
 		if (importer.second->getAssetFileExtensions().contains(extension))
@@ -153,3 +137,25 @@ void RuntimeAssetManager::refreshAssetRegistry() {}
 std::shared_ptr<AssetBase> RuntimeAssetManager::getAsset(const UUID uuid) {}
 bool RuntimeAssetManager::isValidAsset(const UUID uuid) {}
 AssetType RuntimeAssetManager::getAssetType(const UUID uuid) {}
+
+AssetManager::AssetManager(const bool isRuntime, std::filesystem::path projectRootPath, EventCallbackFn eventCallback) : isRuntime(isRuntime), projectRootPath(projectRootPath), eventCallback(eventCallback) {
+	if (isRuntime) {
+		m_assetManager = std::make_unique<RuntimeAssetManager>();
+	} else {
+		m_assetManager = std::make_unique<EditorAssetManager>(projectRootPath);
+	}
+}
+
+void AssetManager::initializeAssetRegistry() {
+	m_assetManager->initializeAssetRegistry();
+}
+
+AssetManager::~AssetManager() {
+	if (!isRuntime) {
+		if (!std::filesystem::exists(projectRootPath / "registry.cache")) {
+			IO::createFile(projectRootPath / "registry.cache");
+		}
+		FileStreamWriter fileStreamWriter(projectRootPath / "registry.cache");
+		((EditorAssetManager *)(m_assetManager.get()))->serialize(fileStreamWriter);
+	}
+}

@@ -54,7 +54,7 @@ class AssetPropertiesPanel : public Panel {
 	void drawMaterialProperties(std::shared_ptr<Material> material);
 	void drawTextureProperties(std::shared_ptr<Texture> texture);
 	void drawMeshProperties(std::shared_ptr<Mesh> mesh);
-	void drawDefaultProperties(AssetMetadata metadata);
+	void drawGenericProperties(AssetMetadata metadata);
 
 	UUID currentlySelectedAsset = UUID::nullID;
 	AssetType currentlySelectedAssetType = CitronAssets::AssetType::UNKNOWN;
@@ -129,4 +129,21 @@ class InspectorPanel : public Panel {
 	static void drawAssetReferenceComponentGui(const std::string assetName,
 											   AssetReference<T> &assetReference,
 											   AppContext appContext);
+
+	static bool collapsingHeader(const char *label, bool *p_open,
+								 const char *icon_open,
+								 const char *icon_closed);
+};
+
+class AssetRegistryPanel : public Panel {
+  public:
+	AssetRegistryPanel(AppContext appContext) : Panel("Asset Registry", appContext) {}
+
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onDraw() override;
+	virtual void onEvent(Event &e) override;
+
+	bool showWindow = false;
 };

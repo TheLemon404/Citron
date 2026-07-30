@@ -30,9 +30,9 @@
 using namespace CitronCore;
 using namespace CitronECS;
 
-bool CustomCollapsingHeader(const char *label, bool *p_open,
-							const char *icon_open = ICON_FA_SQUARE_MINUS,
-							const char *icon_closed = ICON_FA_SQUARE_PLUS) {
+bool InspectorPanel::collapsingHeader(const char *label, bool *p_open,
+									  const char *icon_open = ICON_FA_SQUARE_MINUS,
+									  const char *icon_closed = ICON_FA_SQUARE_PLUS) {
 	ImGuiWindow *window = ImGui::GetCurrentWindow();
 	if (window->SkipItems)
 		return false;
@@ -381,7 +381,7 @@ void AssetPropertiesPanel::onDraw() {
 	if (currentlySelectedAsset != UUID::nullID && currentlySelectedAssetType != CitronAssets::AssetType::UNKNOWN) {
 		AssetMetadata metadata = appContext.assetManager.getAssetMetadata(currentlySelectedAssetPath);
 		std::shared_ptr<CitronAssets::AssetBase> asset = appContext.assetManager.getAsset<CitronAssets::AssetBase>(currentlySelectedAsset);
-		drawDefaultProperties(metadata);
+		drawGenericProperties(metadata);
 		switch (currentlySelectedAssetType) {
 		case CitronAssets::AssetType::SHADER:
 			drawShaderProperties(std::static_pointer_cast<Shader>(asset));
@@ -416,7 +416,10 @@ void AssetPropertiesPanel::drawShaderProperties(std::shared_ptr<Shader> shader) 
 }
 
 void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> material) {
-	InspectorPanel::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
+	static bool open = true;
+	if (InspectorPanel::collapsingHeader("Material", &open)) {
+		InspectorPanel::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
+	}
 }
 
 void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<Texture> texture) {
@@ -425,10 +428,13 @@ void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<Texture> textur
 void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {
 }
 
-void AssetPropertiesPanel::drawDefaultProperties(AssetMetadata metadata) {
-	ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
-	std::string assetType = std::string(to_string(metadata.assetType));
-	ImGui::Text("Asset Type: %s", assetType.c_str());
+void AssetPropertiesPanel::drawGenericProperties(AssetMetadata metadata) {
+	static bool open = true;
+	if (InspectorPanel::collapsingHeader("Generic", &open)) {
+		ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
+		std::string assetType = std::string(to_string(metadata.assetType));
+		ImGui::Text("Asset Type: %s", assetType.c_str());
+	}
 }
 
 void ConsolePanel::onAttach() {}
@@ -665,7 +671,7 @@ template <typename T>
 void InspectorPanel::drawAssetReferenceComponentGui(
 	const std::string assetName, AssetReference<T> &assetReference, AppContext appContext) {
 
-	if (assetReference.path == "" && assetReference.uuid != UUID::nullID) {
+	if (assetReference.path == "" && assetReference.uuid != UUID::nullID && appContext.assetManager.isValidAsset(assetReference.uuid)) {
 		assetReference.path = appContext.assetManager.getAssetMetadata(assetReference.uuid).assetPath.string();
 	}
 
@@ -709,7 +715,7 @@ void InspectorPanel::onDraw() {
 			EntityBaseComponent &entityBase =
 				registry.get<EntityBaseComponent>(selectedEntity);
 			static bool selection = true;
-			if (CustomCollapsingHeader("Entity Base Component", &selection)) {
+			if (collapsingHeader("Entity Base Component", &selection)) {
 				float width = ImGui::GetContentRegionAvail().x;
 
 				ImGui::InputText("Name", &entityBase.name);
@@ -727,7 +733,7 @@ void InspectorPanel::onDraw() {
 			MeshComponent &meshComponent =
 				registry.get<MeshComponent>(selectedEntity);
 			static bool selection = true;
-			if (CustomCollapsingHeader("Mesh Component", &selection)) {
+			if (collapsingHeader("Mesh Component", &selection)) {
 				drawAssetReferenceComponentGui<Mesh>("Geometry",
 													 meshComponent.meshAsset, appContext);
 				drawAssetReferenceComponentGui<Material>("Material",
@@ -749,3 +755,29 @@ void InspectorPanel::onDraw() {
 	ImGui::End();
 }
 void InspectorPanel::onEvent(Event &e) {}
+
+void AssetRegistryPanel::onAttach() {
+}
+
+void AssetRegistryPanel::onDetach() {
+}
+
+void AssetRegistryPanel::onUpdate() {
+}
+
+void AssetRegistryPanel::onDraw() {
+	if (ImGui::Begin("Asset Registry", &showWindow)) {
+		for (const auto &[id, AssetMetadata] : appContext.assetManager.getAssetMetadataRegistry()) {
+			ImGui::Dummy(ImVec2(0, 10));
+			ImGui::BeginChild("##asset_registry_item");
+			ImGui::Text("Asset Type: %s", std::string(to_string(AssetMetadata.assetType)).c_str());
+			ImGui::Text("Asset Path: %s", AssetMetadata.assetPath.string().c_str());
+			ImGui::Text("Asset UUID: %llu", id);
+			ImGui::EndChild();
+		}
+		ImGui::End();
+	}
+}
+
+void AssetRegistryPanel::onEvent(Event &e) {
+}

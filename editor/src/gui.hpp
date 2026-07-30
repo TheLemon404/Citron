@@ -20,6 +20,7 @@ class GuiLayer : public Layer {
 
 	AssetPanel assetPanel;
 	AssetPropertiesPanel assetPropertiesPanel;
+	AssetRegistryPanel assetRegistryPanel;
 	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;
 	InspectorPanel inspectorPanel;

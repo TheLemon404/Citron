@@ -103,7 +103,11 @@ class CITRON_ASSETS_API AssetManagerBase {
 
 	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer);
 
+	bool isKnownAssetFileExtension(std::string extension);
+	AssetType getAssetTypeFromExtension(std::string extension);
+
   protected:
+	std::unordered_map<std::string, AssetType> fileExtensionToAssetType;
 	std::unordered_map<AssetType, std::shared_ptr<AssetImporter>> assetImporters;
 	std::unordered_map<UUID, std::shared_ptr<AssetBase>> loadedAssets;
 };
@@ -127,6 +131,10 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase {
 
 	AssetMetadata getAssetMetadataByPath(const std::filesystem::path &path) {
 		return assetMetadataByPath[path];
+	}
+
+	AssetMetadata getAssetMetadataByUUID(const UUID uuid) {
+		return assetMetadataRegistry[uuid];
 	}
 
   private:
@@ -196,8 +204,23 @@ class CITRON_ASSETS_API AssetManager {
 		return ((EditorAssetManager *)(m_assetManager.get()))->getAssetMetadataByPath(path);
 	}
 
+	AssetMetadata getAssetMetadata(const UUID uuid) {
+		if (isRuntime) {
+			throw std::runtime_error("getAssetMetadataByUUID is not supported in runtime mode");
+		}
+		return ((EditorAssetManager *)(m_assetManager.get()))->getAssetMetadataByUUID(uuid);
+	}
+
 	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer) {
 		m_assetManager->registerAssetImporter(type, importer);
+	}
+
+	bool isKnownAssetFileExtension(std::string extension) {
+		return m_assetManager->isKnownAssetFileExtension(extension);
+	}
+
+	AssetType getAssetTypeFromExtension(std::string extension) {
+		return m_assetManager->getAssetTypeFromExtension(extension);
 	}
 
 	template <typename T>

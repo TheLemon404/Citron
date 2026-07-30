@@ -101,10 +101,10 @@ void AssetPanel::onDraw() {
 	}
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_MAGNIFYING_GLASS_PLUS))
-		zoomLevel += 50;
+		zoomLevel += 25;
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_MAGNIFYING_GLASS_MINUS))
-		zoomLevel -= 50;
+		zoomLevel -= 25;
 	zoomLevel = std::max(100, zoomLevel);
 
 	ImGui::SameLine();
@@ -251,6 +251,7 @@ void AssetPanel::onDraw() {
 				if (ImGui::Selectable(ICON_FA_FILE, &entry.selected,
 									  ImGuiSelectableFlags_AllowDoubleClick,
 									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+					assetPropertiesPanel.setSelectedAsset(entry.path);
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						std::string command =
 							"start notepad \"" + entry.path + "\"";
@@ -370,6 +371,64 @@ void AssetPanel::refreshDirectoryListings() {
 	}
 
 	appContext.assetManager.refreshAssetRegistry();
+}
+
+void AssetPropertiesPanel::onAttach() {}
+void AssetPropertiesPanel::onDetach() {}
+void AssetPropertiesPanel::onUpdate() {}
+void AssetPropertiesPanel::onDraw() {
+	ImGui::Begin("Asset Properties");
+	if (currentlySelectedAsset != UUID::nullID && currentlySelectedAssetType != CitronAssets::AssetType::UNKNOWN) {
+		AssetMetadata metadata = appContext.assetManager.getAssetMetadata(currentlySelectedAssetPath);
+		std::shared_ptr<CitronAssets::AssetBase> asset = appContext.assetManager.getAsset<CitronAssets::AssetBase>(currentlySelectedAsset);
+		drawDefaultProperties(metadata);
+		switch (currentlySelectedAssetType) {
+		case CitronAssets::AssetType::SHADER:
+			drawShaderProperties(std::static_pointer_cast<Shader>(asset));
+			break;
+		case CitronAssets::AssetType::MATERIAL:
+			drawMaterialProperties(std::static_pointer_cast<Material>(asset));
+			break;
+		case CitronAssets::AssetType::TEXTURE:
+			drawTextureProperties(std::static_pointer_cast<Texture>(asset));
+			break;
+		case CitronAssets::AssetType::MESH:
+			drawMeshProperties(std::static_pointer_cast<Mesh>(asset));
+			break;
+		default:
+			break;
+		}
+	}
+	ImGui::End();
+}
+void AssetPropertiesPanel::onEvent(Event &e) {
+}
+
+void AssetPropertiesPanel::setSelectedAsset(const std::filesystem::path &path) {
+	AssetMetadata metadata = appContext.assetManager.getAssetMetadata(path);
+
+	currentlySelectedAsset = metadata.uuid;
+	currentlySelectedAssetType = metadata.assetType;
+	currentlySelectedAssetPath = path;
+}
+
+void AssetPropertiesPanel::drawShaderProperties(std::shared_ptr<Shader> shader) {
+}
+
+void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> material) {
+	InspectorPanel::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
+}
+
+void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<Texture> texture) {
+}
+
+void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {
+}
+
+void AssetPropertiesPanel::drawDefaultProperties(AssetMetadata metadata) {
+	ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
+	std::string assetType = std::string(to_string(metadata.assetType));
+	ImGui::Text("Asset Type: %s", assetType.c_str());
 }
 
 void ConsolePanel::onAttach() {}
@@ -604,7 +663,11 @@ void InspectorPanel::onUpdate() {}
 template <typename T>
 	requires std::derived_from<T, AssetBase>
 void InspectorPanel::drawAssetReferenceComponentGui(
-	const std::string assetName, AssetReference<T> &assetReference) {
+	const std::string assetName, AssetReference<T> &assetReference, AppContext appContext) {
+
+	if (assetReference.path == "" && assetReference.uuid != UUID::nullID) {
+		assetReference.path = appContext.assetManager.getAssetMetadata(assetReference.uuid).assetPath.string();
+	}
 
 	EditorContext &context = Editor::get().getEditorContext();
 	AssetManager &assetManager =
@@ -666,9 +729,9 @@ void InspectorPanel::onDraw() {
 			static bool selection = true;
 			if (CustomCollapsingHeader("Mesh Component", &selection)) {
 				drawAssetReferenceComponentGui<Mesh>("Geometry",
-													 meshComponent.meshAsset);
+													 meshComponent.meshAsset, appContext);
 				drawAssetReferenceComponentGui<Material>("Material",
-														 meshComponent.materialAsset);
+														 meshComponent.materialAsset, appContext);
 			}
 		}
 

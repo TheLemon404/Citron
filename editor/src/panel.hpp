@@ -1,5 +1,6 @@
 #pragma once
 
+#include "shader.hpp"
 #include <app.hpp>
 #include <assets.hpp>
 #include <concepts>
@@ -36,9 +37,33 @@ struct AssetCard {
 	bool selected;
 };
 
+class AssetPropertiesPanel : public Panel {
+  public:
+	AssetPropertiesPanel(AppContext appContext) : Panel("Asset Properties", appContext) {}
+
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onDraw() override;
+	virtual void onEvent(Event &e) override;
+
+	void setSelectedAsset(const std::filesystem::path &path);
+
+  private:
+	void drawShaderProperties(std::shared_ptr<Shader> shader);
+	void drawMaterialProperties(std::shared_ptr<Material> material);
+	void drawTextureProperties(std::shared_ptr<Texture> texture);
+	void drawMeshProperties(std::shared_ptr<Mesh> mesh);
+	void drawDefaultProperties(AssetMetadata metadata);
+
+	UUID currentlySelectedAsset = UUID::nullID;
+	AssetType currentlySelectedAssetType = CitronAssets::AssetType::UNKNOWN;
+	std::filesystem::path currentlySelectedAssetPath = "";
+};
+
 class AssetPanel : public Panel {
   public:
-	AssetPanel(AppContext appContext) : Panel("Assets", appContext) {}
+	AssetPanel(AppContext appContext, AssetPropertiesPanel &assetPropertiesPanel) : Panel("Assets", appContext), assetPropertiesPanel(assetPropertiesPanel) {}
 
 	virtual void onAttach() override;
 	virtual void onDetach() override;
@@ -50,6 +75,7 @@ class AssetPanel : public Panel {
 	bool pendingRefreshDirectory = false;
 
   private:
+	AssetPropertiesPanel &assetPropertiesPanel;
 	std::shared_ptr<Texture> folderIconTexture = nullptr;
 	wgpu::TextureView folderIconTextureView = nullptr;
 
@@ -98,9 +124,9 @@ class InspectorPanel : public Panel {
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
 
-  private:
 	template <typename T>
 		requires std::derived_from<T, AssetBase>
-	void drawAssetReferenceComponentGui(const std::string assetName,
-										AssetReference<T> &assetReference);
+	static void drawAssetReferenceComponentGui(const std::string assetName,
+											   AssetReference<T> &assetReference,
+											   AppContext appContext);
 };

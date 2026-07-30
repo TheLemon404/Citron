@@ -20,6 +20,14 @@ void AssetManagerBase::registerAssetImporter(AssetType type, std::shared_ptr<Ass
 	assetImporters[type] = importer;
 }
 
+bool AssetManagerBase::isKnownAssetFileExtension(std::string extension) {
+	return fileExtensionToAssetType.contains(extension);
+}
+
+AssetType AssetManagerBase::getAssetTypeFromExtension(std::string extension) {
+	return fileExtensionToAssetType[extension];
+}
+
 void EditorAssetManager::initializeAssetRegistry() {
 	std::vector<std::filesystem::path> filesInProject = IO::getAllFilesInDirectory(projectRootPath);
 	std::set<std::filesystem::path> metaFilesInProject;

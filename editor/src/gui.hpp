@@ -19,6 +19,7 @@ class GuiLayer : public Layer {
 	void onEvent(Event &e) override;
 
 	AssetPanel assetPanel;
+	AssetPropertiesPanel assetPropertiesPanel;
 	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;
 	InspectorPanel inspectorPanel;

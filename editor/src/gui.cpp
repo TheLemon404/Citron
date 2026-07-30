@@ -15,7 +15,7 @@
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
-GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"), appContext(appContext), assetPanel(appContext), outlinerPanel(appContext), consolePanel(appContext), inspectorPanel(appContext) {}
+GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"), appContext(appContext), assetPropertiesPanel(appContext), assetPanel(appContext, assetPropertiesPanel), outlinerPanel(appContext), consolePanel(appContext), inspectorPanel(appContext) {}
 
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
@@ -60,6 +60,7 @@ void GuiLayer::onAttach() {
 	applyTheme();
 
 	assetPanel.onAttach();
+	assetPropertiesPanel.onAttach();
 	outlinerPanel.onAttach();
 	consolePanel.onAttach();
 	inspectorPanel.onAttach();
@@ -71,6 +72,7 @@ void GuiLayer::onDetach() {
 	ImGui::DestroyContext();
 
 	assetPanel.onDetach();
+	assetPropertiesPanel.onDetach();
 	outlinerPanel.onDetach();
 	consolePanel.onDetach();
 	inspectorPanel.onDetach();
@@ -78,6 +80,7 @@ void GuiLayer::onDetach() {
 
 void GuiLayer::onUpdate() {
 	assetPanel.onUpdate();
+	assetPropertiesPanel.onUpdate();
 	outlinerPanel.onUpdate();
 	consolePanel.onUpdate();
 	inspectorPanel.onUpdate();
@@ -158,6 +161,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui::End();
 
 	assetPanel.onDraw();
+	assetPropertiesPanel.onDraw();
 	outlinerPanel.onDraw();
 	consolePanel.onDraw();
 	inspectorPanel.onDraw();

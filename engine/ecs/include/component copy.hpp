@@ -1,7 +1,6 @@
 #pragma once
 
 #include "citron_exports.hpp"
-#include "glm/ext/matrix_transform.hpp"
 #include "uuid.hpp"
 #include <assets.hpp>
 #include <cereal/types/vector.hpp>
@@ -36,11 +35,6 @@ void serialize(Archive &archive, glm::vec4 &vec) {
 }
 
 template <class Archive>
-void serialize(Archive &archive, glm::quat &quat) {
-	archive(quat.x, quat.y, quat.z, quat.w);
-}
-
-template <class Archive>
 void serialize(Archive &archive, glm::mat4 &mat) {
 	archive(mat[0], mat[1], mat[2], mat[3]);
 }
@@ -62,17 +56,16 @@ struct CITRON_ECS_API EntityBaseComponent {
 };
 
 struct CITRON_ECS_API TransformComponent {
-	glm::vec3 position = glm::vec3(0.0f);
-	glm::vec3 rotation = glm::vec3(0.0f);
-	glm::vec3 scale = glm::vec3(1.0f);
+	glm::vec3 position;
+	glm::quat rotation;
+	glm::vec3 scale;
 
 	// DO NOT DISPLAY THIS MEMBER IN EDITOR
-	glm::quat rotationQuat = glm::identity<glm::quat>();
-	glm::mat4 matrix = glm::identity<glm::mat4>();
+	glm::mat4 matrix;
 
 	template <class Archive>
 	void serialize(Archive &archive) {
-		archive(position, rotation, scale, rotationQuat, matrix);
+		archive(position, rotation, scale, matrix);
 	}
 };
 

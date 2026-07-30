@@ -3,6 +3,8 @@
 #include "component.hpp"
 #include "core.hpp"
 #include "event.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
+#include "glm/ext/matrix_transform.hpp"
 #include "logger.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
@@ -20,7 +22,8 @@ void Scene::serialize(StreamWriter &writer) {
 	entt::snapshot{registry}
 		.get<entt::entity>(writer)
 		.get<EntityBaseComponent>(writer)
-		.get<MeshComponent>(writer);
+		.get<MeshComponent>(writer)
+		.get<TransformComponent>(writer);
 }
 
 void Scene::deserialize(StreamReader &reader) {
@@ -30,6 +33,7 @@ void Scene::deserialize(StreamReader &reader) {
 		.get<entt::entity>(reader)
 		.get<EntityBaseComponent>(reader)
 		.get<MeshComponent>(reader)
+		.get<TransformComponent>(reader)
 		.orphans();
 	for (auto [entity, baseComponent] :
 		 registry.view<EntityBaseComponent>().each()) {
@@ -112,7 +116,13 @@ std::vector<uint64_t> Scene::extractDrawableEntityUUIDs() {
 std::vector<glm::mat4> Scene::extractDrawableEntityTransforms() {
 	std::vector<glm::mat4> transforms;
 	for (auto &entity : registry.view<MeshComponent, TransformComponent>()) {
-		transforms.push_back(registry.get<TransformComponent>(entity).matrix);
+		TransformComponent &t = registry.get<TransformComponent>(entity);
+		t.rotationQuat = glm::quat(t.rotation);
+		t.matrix = glm::identity<glm::mat4>();
+		t.matrix = glm::translate(t.matrix, t.position);
+		t.matrix *= glm::mat4(t.rotationQuat);
+		t.matrix = glm::scale(t.matrix, t.scale);
+		transforms.push_back(t.matrix);
 	}
 	return transforms;
 }

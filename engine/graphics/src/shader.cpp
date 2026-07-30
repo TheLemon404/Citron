@@ -30,7 +30,6 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	frameBindGroupLayoutDesc.entries = &frameUniformBindingLayout;
 	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(frameBindGroupLayoutDesc));
 
-	/*
 	wgpu::BindGroupLayoutEntry modelUniformBindingLayout = {};
 	modelUniformBindingLayout.setDefault();
 	modelUniformBindingLayout.binding = 0;
@@ -48,7 +47,7 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	modelBindGroupLayoutDesc.entryCount = 1;
 	modelBindGroupLayoutDesc.entries = &modelUniformBindingLayout;
 	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(modelBindGroupLayoutDesc));
- */
+
 	wgpu::BindGroupLayoutEntry materialUniformBindingLayout = {};
 	materialUniformBindingLayout.setDefault();
 	materialUniformBindingLayout.binding = 0;

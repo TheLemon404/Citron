@@ -126,8 +126,8 @@ void App::update() {
 			Frame frame = renderer.beginFrame();
 			if (sceneManager.getActiveScene()) {
 				RenderPass colorPass = frame.beginRenderPass(renderer.getColorTarget());
-				std::vector<uint64_t> entityUUIDs;
-				std::vector<glm::mat4> transforms;
+				std::vector<uint64_t> entityUUIDs = sceneManager.getActiveScene()->extractDrawableEntityUUIDs();
+				std::vector<glm::mat4> transforms = sceneManager.getActiveScene()->extractDrawableEntityTransforms();
 				std::vector<uint64_t> meshUUIDs = sceneManager.getActiveScene()->extractMeshes(assetManager);
 				std::vector<uint64_t> materialUUIDs = sceneManager.getActiveScene()->extractMaterials(assetManager);
 				colorPass.drawRenderData(entityUUIDs, transforms, meshUUIDs, materialUUIDs);

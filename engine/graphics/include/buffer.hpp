@@ -6,8 +6,6 @@
 
 namespace CitronGraphics {
 struct CITRON_GRAPHICS_API GPUBuffer {
-	~GPUBuffer();
-
 	wgpu::Buffer buffer;
 	uint32_t size;
 	uint32_t entryCount;

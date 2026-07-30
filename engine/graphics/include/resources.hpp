@@ -77,7 +77,7 @@ struct CITRON_GRAPHICS_API BindGroupKey {
 class CITRON_GRAPHICS_API RendererResourceManager {
   public:
 	RendererResourceManager(Device &device) : device(device) {}
-	GPUBuffer getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
+	GPUBuffer &getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
 
 	std::map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::map<BindGroupKey, wgpu::BindGroup> bindGroupCache;

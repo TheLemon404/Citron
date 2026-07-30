@@ -653,6 +653,13 @@ void InspectorPanel::onDraw() {
 				ImGui::Text("ID: %u", (unsigned int)entityBase.uuid);
 			}
 		}
+		if (registry.all_of<TransformComponent>(selectedEntity)) {
+			TransformComponent &transformComponent =
+				registry.get<TransformComponent>(selectedEntity);
+			ImGui::DragFloat3("Position", &transformComponent.position[0]);
+			ImGui::DragFloat3("Rotation", &transformComponent.rotation[0]);
+			ImGui::DragFloat3("Scale", &transformComponent.scale[0]);
+		}
 		if (registry.all_of<MeshComponent>(selectedEntity)) {
 			MeshComponent &meshComponent =
 				registry.get<MeshComponent>(selectedEntity);

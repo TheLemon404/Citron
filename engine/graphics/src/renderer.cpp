@@ -38,7 +38,7 @@ RenderPass::RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
 RenderPass::~RenderPass() { targetView.release(); }
 
 void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<glm::mat4> &transforms, std::vector<uint64_t> &meshUUIDs, std::vector<uint64_t> &materialUUIDs) {
-	if (meshUUIDs.size() != materialUUIDs.size()) {
+	if (meshUUIDs.size() != materialUUIDs.size() || entityUUIDs.size() != transforms.size() || entityUUIDs.size() != meshUUIDs.size()) {
 		CITRON_CORE_ERROR("You must provide the same number of mesh and material UUIDs to draw render data");
 		return;
 	}
@@ -57,8 +57,8 @@ void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<
 		}
 
 		renderObjects[i] = {
-			0,
-			{.transform = glm::identity<glm::mat4>()},
+			entityUUIDs[i],
+			{.transform = transforms[i]},
 			mesh,
 			material,
 			shader,
@@ -83,11 +83,9 @@ void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<
 				.entries = entries,
 			});
 
-			/*
-
 			entries.clear();
 			entries.push_back({.binding = 0,
-							   .resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms).buffer,
+							   .resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms, true).buffer,
 							   .offset = 0,
 							   .size = Shader::paddedSizeof<ModelUniforms>()});
 			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
@@ -95,15 +93,13 @@ void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<
 				.entries = entries,
 			});
 
-*/
-
 			entries.clear();
 			entries.push_back({.binding = 0,
 							   .resource = renderObject.material->getMaterialUniformBuffer().buffer,
 							   .offset = 0,
 							   .size = Shader::paddedSizeof<MaterialUniforms>()});
 			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
-				.layout = renderObject.shader->getBindGroupLayout(1),
+				.layout = renderObject.shader->getBindGroupLayout(2),
 				.entries = entries,
 			});
 
@@ -115,7 +111,8 @@ void RenderPass::drawRenderData(std::vector<uint64_t> &entityUUIDs, std::vector<
 			setPipeline(pipeline);
 			setMesh(renderObject.mesh);
 			setBindGroup(0, frameBindGroup);
-			setBindGroup(1, materialBindGroup);
+			setBindGroup(1, modelBindGroup);
+			setBindGroup(2, materialBindGroup);
 			draw(renderObject.mesh);
 		}
 	}

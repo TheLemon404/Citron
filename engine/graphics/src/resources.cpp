@@ -4,7 +4,7 @@
 
 using namespace CitronGraphics;
 
-GPUBuffer RendererResourceManager::getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
+GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
 	wgpu::Device &wgpuDevice = device.getWGPUDevice();
 	if (!entityModelUniformBufferCache.contains(entityUUID)) {
 		wgpu::BufferDescriptor modelUniformBufferDesc = {};
@@ -12,13 +12,12 @@ GPUBuffer RendererResourceManager::getEntityModelUniformBuffer(uint64_t entityUU
 		modelUniformBufferDesc.mappedAtCreation = false;
 		modelUniformBufferDesc.size = Shader::paddedSizeof<ModelUniforms>();
 
-		GPUBuffer modelUniformBuffer = {};
-		modelUniformBuffer.buffer = wgpuDevice.createBuffer(modelUniformBufferDesc);
-		modelUniformBuffer.size = modelUniformBufferDesc.size;
-		modelUniformBuffer.entryCount = 1;
+		entityModelUniformBufferCache[entityUUID] = {};
+		entityModelUniformBufferCache[entityUUID].buffer = wgpuDevice.createBuffer(modelUniformBufferDesc);
+		entityModelUniformBufferCache[entityUUID].size = modelUniformBufferDesc.size;
+		entityModelUniformBufferCache[entityUUID].entryCount = 1;
 
-		device.getQueue().writeBuffer(modelUniformBuffer.buffer, 0, &modelUniforms, Shader::paddedSizeof<ModelUniforms>());
-		entityModelUniformBufferCache[entityUUID] = modelUniformBuffer;
+		device.getQueue().writeBuffer(entityModelUniformBufferCache[entityUUID].buffer, 0, &modelUniforms, Shader::paddedSizeof<ModelUniforms>());
 	}
 
 	if (isDirty) {

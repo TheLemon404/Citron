@@ -24,6 +24,10 @@ struct CITRON_GRAPHICS_API ModelUniforms {
 
 struct CITRON_GRAPHICS_API FrameUniforms {
 	glm::mat4 viewProjection = glm::identity<glm::mat4>();
+
+	bool operator==(const FrameUniforms &other) const {
+		return viewProjection == other.viewProjection;
+	}
 };
 
 struct CITRON_GRAPHICS_API PipelineKey {

@@ -5,6 +5,7 @@
 #include "event.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/geometric.hpp"
 #include "logger.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
@@ -115,7 +116,7 @@ std::vector<CitronGraphics::RenderableReferenceData> Scene::extractRenderableDat
 		t.rotationQuat = glm::quat(t.rotation);
 		t.matrix = glm::identity<glm::mat4>();
 		t.matrix = glm::translate(t.matrix, t.position);
-		t.matrix *= glm::mat4(t.rotationQuat);
+		t.matrix *= glm::mat4_cast(glm::normalize(t.rotationQuat));
 		t.matrix = glm::scale(t.matrix, t.scale);
 		data.transform = t.matrix;
 

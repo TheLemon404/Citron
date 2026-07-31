@@ -9,6 +9,7 @@
 #include "pipeline.hpp"
 #include "resources.hpp"
 #include "shader.hpp"
+#include "view.hpp"
 #include <cstddef>
 #include <functional>
 #include <layer.hpp>
@@ -72,7 +73,7 @@ class CITRON_GRAPHICS_API RenderPass {
 class CITRON_GRAPHICS_API Frame {
   public:
 	Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
-		  wgpu::SurfaceTexture &surfaceTexture);
+		  wgpu::SurfaceTexture &surfaceTexture, View &view);
 
 	RenderPass beginRenderPass(wgpu::Texture &tartetTexture);
 
@@ -80,7 +81,12 @@ class CITRON_GRAPHICS_API Frame {
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 
+	void setView(View &view) { this->view = view; }
+
+	View &getView() { return view; }
+
   private:
+	View &view;
 	Renderer &renderer;
 	wgpu::CommandEncoder encoder;
 };
@@ -155,6 +161,8 @@ class CITRON_GRAPHICS_API Renderer {
 	wgpu::TextureView &getColorTargetView() { return colorTargetView; }
 
   private:
+	PerspectiveView tempView = PerspectiveView();
+
 	RendererResourceManager rendererResourcesManager;
 	AssetManager &assetManager;
 

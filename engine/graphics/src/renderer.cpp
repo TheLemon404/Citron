@@ -4,6 +4,7 @@
 #include "material.hpp"
 #include "mesh.hpp"
 #include "resources.hpp"
+#include "view.hpp"
 #include <event.hpp>
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
@@ -73,9 +74,14 @@ void RenderPass::drawRenderData(std::vector<RenderableReferenceData> renderableR
 	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObjects[0].shader, context.device.getWGPUPreferredSurfaceFormat()});
 	setPipeline(pipeline);
 
+	FrameUniforms lastFrameUniforms = context.rendererResourcesManager.frameUniforms;
+	context.rendererResourcesManager.frameUniforms.viewProjection = getParentFrame().getView().getProjectionMatrix() * getParentFrame().getView().getViewMatrix();
+	if (lastFrameUniforms != context.rendererResourcesManager.frameUniforms) {
+		context.device.getWGPUDevice().getQueue().writeBuffer(context.rendererResourcesManager.frameUniformBuffer.buffer, 0, &context.rendererResourcesManager.frameUniforms, Shader::paddedSizeof<FrameUniforms>());
+	}
 	std::vector<BindGroupEntry> bindGroupEntries;
 	bindGroupEntries.push_back({.binding = 0,
-								.resource = renderer.getContext().rendererResourcesManager.frameUniformBuffer.buffer,
+								.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
 								.offset = 0,
 								.size = Shader::paddedSizeof<FrameUniforms>()});
 	wgpu::BindGroup frameBindGroup = renderer.getBindGroup({
@@ -152,8 +158,8 @@ void RenderPass::end() {
 }
 
 Frame::Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
-			 wgpu::SurfaceTexture &surfaceTexture)
-	: renderer(renderer), encoder(encoder) {
+			 wgpu::SurfaceTexture &surfaceTexture, View &view)
+	: renderer(renderer), encoder(encoder), view(view) {
 }
 
 RenderPass Frame::beginRenderPass(wgpu::Texture &targetTexture) {
@@ -172,7 +178,7 @@ void Renderer::init() {
 Frame Renderer::beginFrame() {
 	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
-				 device.getCurrentSurfaceTexture());
+				 device.getCurrentSurfaceTexture(), tempView);
 }
 
 void Renderer::endFrame(Frame &frame) {

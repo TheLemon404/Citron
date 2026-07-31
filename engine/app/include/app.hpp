@@ -5,6 +5,7 @@
 #include "mesh.hpp"
 #include "spdlog/common.h"
 #include "texture.hpp"
+#include "view.hpp"
 #include <assets.hpp>
 #include <ecs.hpp>
 #include <event.hpp>

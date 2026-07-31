@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-31T10:39:55.878335-05:00",
+  "date": "2026-07-31T13:40:38.713298500-05:00",
   "data": {
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake": [
       {
@@ -397,172 +397,6 @@
         "kind": 12,
         "detail": "Value",
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library"
-      }
-    ],
-    "C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt": [
-      {
-        "label": "CEREAL_MASTER_PROJECT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PORTABILITY_TEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_REQUIRED_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PORTABILITY_TEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_DOC",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_SANDBOX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PERFORMANCE_COMPARISON",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "JUST_INSTALL_CEREAL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\ninstalling cereal requires INTERFACE lib"
-      },
-      {
-        "label": "CEREAL_THREAD_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "THREAD_SAFE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CEREAL_THREAD_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "WITH_WERROR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CLANG_USE_LIBCPP",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_EXE_LINKER_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\nTODO: use add_link_options(-stdlib=libc++ -lc++abi\") bud this needs cmake 3.13! CK"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD_REQUIRED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CEREAL_INSTALL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "configFile",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "versionFile",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "configInstallDestination",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "Boost::serialization",
-        "kind": 6,
-        "detail": "Variable",
-        "documentation": "package from: Boost"
-      },
-      {
-        "label": "Boost_LIBRARIES",
-        "kind": 6,
-        "detail": "Variable",
-        "documentation": "package: Boost"
-      },
-      {
-        "label": "Boost_INCLUDE_DIRS",
-        "kind": 6,
-        "detail": "Variable",
-        "documentation": "package: Boost"
-      },
-      {
-        "label": "BUILD_TESTS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\CMakeLists.txt": [
-      {
-        "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD_REQUIRED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
       }
     ],
     "C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt": [
@@ -1387,6 +1221,172 @@
         "kind": 12,
         "detail": "Value",
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\CMakeLists.txt": [
+      {
+        "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_REQUIRED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt": [
+      {
+        "label": "CEREAL_MASTER_PROJECT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PORTABILITY_TEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_REQUIRED_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PORTABILITY_TEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_DOC",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_SANDBOX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PERFORMANCE_COMPARISON",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "JUST_INSTALL_CEREAL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\ninstalling cereal requires INTERFACE lib"
+      },
+      {
+        "label": "CEREAL_THREAD_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "THREAD_SAFE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CEREAL_THREAD_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "WITH_WERROR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CLANG_USE_LIBCPP",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_EXE_LINKER_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\nTODO: use add_link_options(-stdlib=libc++ -lc++abi\") bud this needs cmake 3.13! CK"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_REQUIRED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CEREAL_INSTALL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "configFile",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "versionFile",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "configInstallDestination",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "Boost::serialization",
+        "kind": 6,
+        "detail": "Variable",
+        "documentation": "package from: Boost"
+      },
+      {
+        "label": "Boost_LIBRARIES",
+        "kind": 6,
+        "detail": "Variable",
+        "documentation": "package: Boost"
+      },
+      {
+        "label": "Boost_INCLUDE_DIRS",
+        "kind": 6,
+        "detail": "Variable",
+        "documentation": "package: Boost"
+      },
+      {
+        "label": "BUILD_TESTS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       }
     ]
   }

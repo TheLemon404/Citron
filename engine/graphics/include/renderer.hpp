@@ -139,6 +139,10 @@ class CITRON_GRAPHICS_API Renderer {
 		return rendererResourcesManager.bindGroupCache[key];
 	}
 
+	static std::vector<RenderObject> sortByShader(std::vector<RenderObject> &renderables, int start = 0, int end = -1);
+	static std::vector<RenderObject> sortByMesh(std::vector<RenderObject> &renderables, int start = 0, int end = -1);
+	static std::vector<RenderObject> sortByMaterial(std::vector<RenderObject> &renderables, int start = 0, int end = -1);
+
 	RendererContext getContext() {
 		return {
 			device,

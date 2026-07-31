@@ -424,9 +424,9 @@ void AssetPropertiesPanel::drawGenericProperties(AssetMetadata metadata) {
 		return;
 	static bool open = true;
 	if (InspectorPanel::collapsingHeader("Generic", &open)) {
+		ImGui::Text("Asset Type: %s", std::string(to_string(metadata.assetType)).c_str());
+		ImGui::Text("Asset Path: %s", metadata.assetPath.string().c_str());
 		ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
-		std::string assetType = std::string(to_string(metadata.assetType));
-		ImGui::Text("Asset Type: %s", assetType.c_str());
 	}
 }
 
@@ -763,7 +763,7 @@ void AssetRegistryPanel::onDraw() {
 		for (const auto &[id, AssetMetadata] : appContext.assetManager.getAssetMetadataRegistry()) {
 			ImGui::Text("Asset Type: %s", std::string(to_string(AssetMetadata.assetType)).c_str());
 			ImGui::Text("Asset Path: %s", AssetMetadata.assetPath.string().c_str());
-			ImGui::Text("Asset UUID: %llu", id);
+			ImGui::Text("Asset UUID: %u", (unsigned int)id);
 		}
 	}
 	ImGui::End();

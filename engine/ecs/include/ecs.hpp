@@ -55,11 +55,6 @@ class CITRON_ECS_API Scene : public ISerializable {
 
 	std::vector<CitronGraphics::RenderableReferenceData> extractRenderableData(AssetManager &assetManager);
 
-	std::vector<uint64_t> extractDrawableEntityUUIDs();
-	std::vector<glm::mat4> extractDrawableEntityTransforms();
-	std::vector<uint64_t> extractMeshes(AssetManager &assetManager);
-	std::vector<uint64_t> extractMaterials(AssetManager &assetManager);
-
 	void rename(const std::string &name) { this->name = name; }
 
 	void init();

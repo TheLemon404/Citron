@@ -92,8 +92,6 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 	void initResources();
 	GPUBuffer &getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
 
-	static std::vector<RenderableReferenceData> sortRenderablesByMaterial(std::vector<RenderableReferenceData> &renderables);
-
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
 	std::unordered_map<uint64_t, GPUBuffer> entityModelUniformBufferCache;

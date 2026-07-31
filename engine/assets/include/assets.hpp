@@ -50,6 +50,8 @@ class CITRON_ASSETS_API AssetBase {
 	AssetBase(const UUID uuid) : uuid(uuid) {}
 	virtual ~AssetBase() = default;
 
+	const UUID getUUID() { return uuid; }
+
   protected:
 	const UUID uuid;
 };

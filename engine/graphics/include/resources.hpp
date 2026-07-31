@@ -50,20 +50,6 @@ struct CITRON_GRAPHICS_API BindGroupEntry {
 	bool operator==(const BindGroupEntry &other) const {
 		return binding == other.binding && resource == other.resource && offset == other.offset && size == other.size;
 	}
-
-	bool operator<(const BindGroupEntry &other) const {
-		if (binding != other.binding)
-			return binding < other.binding;
-		if (offset != other.offset)
-			return offset < other.offset;
-		if (size != other.size)
-			return size < other.size;
-
-		// Extract raw underlying C pointers for stable handle ordering
-		auto thisPtr = static_cast<WGPUBuffer>(std::get<wgpu::Buffer>(resource));
-		auto otherPtr = static_cast<WGPUBuffer>(std::get<wgpu::Buffer>(other.resource));
-		return thisPtr < otherPtr;
-	}
 };
 
 struct CITRON_GRAPHICS_API BindGroupKey {
@@ -73,21 +59,32 @@ struct CITRON_GRAPHICS_API BindGroupKey {
 	bool operator==(const BindGroupKey &other) const {
 		return layout == other.layout && entries == other.entries;
 	}
+};
 
-	bool operator<(const BindGroupKey &other) const {
-		// Compare raw layout handles
-		auto thisLayoutPtr = static_cast<WGPUBindGroupLayout>(layout);
-		auto otherLayoutPtr = static_cast<WGPUBindGroupLayout>(other.layout);
-		if (thisLayoutPtr != otherLayoutPtr) {
-			return thisLayoutPtr < otherLayoutPtr;
-		}
+} // namespace CitronGraphics
 
-		// Deep array comparison instead of just checking array size
-		return std::lexicographical_compare(
-			entries.begin(), entries.end(),
-			other.entries.begin(), other.entries.end());
+// TODO: Test for hash collisions... implement better has functions
+namespace std {
+template <>
+struct hash<CitronGraphics::BindGroupKey> {
+	std::size_t operator()(const CitronGraphics::BindGroupKey &key) const {
+		size_t resourceHash = hash<size_t>()(key.entries[0].resource.index());
+		size_t resourceNumHash = hash<size_t>()(key.entries.size());
+		return resourceHash ^ (resourceNumHash << 1);
 	}
 };
+
+template <>
+struct hash<CitronGraphics::PipelineKey> {
+	std::size_t operator()(const CitronGraphics::PipelineKey &key) const {
+		size_t vertexShaderHash = hash<std::shared_ptr<CitronGraphics::Shader>>()(key.shader);
+		size_t fragmentShaderHash = hash<wgpu::TextureFormat::W>()(key.textureFormat.m_raw);
+		return vertexShaderHash ^ (fragmentShaderHash << 1);
+	}
+};
+} // namespace std
+
+namespace CitronGraphics {
 
 class CITRON_GRAPHICS_API RendererResourceManager {
   public:
@@ -95,9 +92,11 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 	void initResources();
 	GPUBuffer &getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
 
-	std::map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
-	std::map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
-	std::map<uint64_t, GPUBuffer> entityModelUniformBufferCache;
+	static std::vector<RenderableReferenceData> sortRenderablesByMaterial(std::vector<RenderableReferenceData> &renderables);
+
+	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
+	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
+	std::unordered_map<uint64_t, GPUBuffer> entityModelUniformBufferCache;
 
 	FrameUniforms frameUniforms;
 	GPUBuffer frameUniformBuffer;

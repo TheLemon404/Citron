@@ -1,7 +1,10 @@
 #include "assets.hpp"
+#include "cereal-yaml/archives/yaml.hpp"
 #include "logger.hpp"
+#include "serialization.hpp"
 #include "yaml-cpp/node/emit.h"
 
+#include <concepts>
 #include <core.hpp>
 #include <cstdint>
 #include <io.hpp>
@@ -16,7 +19,8 @@ void EditorAssetManager::serialize(StreamWriter &writer) {
 	writer.writeData(&count, sizeof(int));
 	for (const auto &pair : assetMetadataRegistry) {
 		writer.writeData(&pair.first, sizeof(uint64_t));
-		writer.writeData(&pair.second, sizeof(AssetMetadata));
+		writer.writeString(pair.second.assetPath.string());
+		writer.writeData(&pair.second.assetType, sizeof(AssetType));
 	}
 }
 
@@ -28,9 +32,16 @@ void EditorAssetManager::deserialize(StreamReader &reader) {
 		for (int i = 0; i < count; i++) {
 			uint64_t uuid;
 			reader.readData(&uuid, sizeof(uint64_t));
+			std::string path;
+			reader.readString(path);
+			AssetType assetType = AssetType::UNKNOWN;
+			reader.readData(&assetType, sizeof(AssetType));
 			AssetMetadata metadata = {};
-			reader.readData(&metadata, sizeof(AssetMetadata));
+			metadata.uuid = uuid;
+			metadata.assetPath = std::filesystem::path(path);
+			metadata.assetType = assetType;
 			assetMetadataRegistry[uuid] = metadata;
+			filepathToUUID[metadata.assetPath] = uuid;
 		}
 	} catch (const std::exception &e) {
 		CITRON_CORE_ERROR("Failed to deserialize asset registry cache with error: {}", e.what());
@@ -46,6 +57,9 @@ AssetManagerBase::getLoadedAssets() {
 
 void AssetManagerBase::registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer) {
 	assetImporters[type] = importer;
+	for (auto ext : importer->getAssetFileExtensions()) {
+		fileExtensionToAssetType[ext] = type;
+	}
 }
 
 bool AssetManagerBase::isKnownAssetFileExtension(std::string extension) {
@@ -57,7 +71,7 @@ AssetType AssetManagerBase::getAssetTypeFromExtension(std::string extension) {
 }
 
 void EditorAssetManager::initializeAssetRegistry() {
-	if (!std::filesystem::exists(projectRootPath / "registry.cache")) {
+	if (std::filesystem::exists(projectRootPath / "registry.cache")) {
 		FileStreamReader fileStreamReader(projectRootPath / "registry.cache");
 		deserialize(fileStreamReader);
 	}
@@ -82,6 +96,17 @@ std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
 		loadedAssets[uuid] = newlyLoadedAsset;
 	}
 	return newlyLoadedAsset;
+}
+
+void EditorAssetManager::serializeAssets() {
+	CITRON_CORE_INFO("Serializing {} loaded assets", loadedAssets.size());
+	for (const auto &[uuid, asset] : loadedAssets) {
+		std::shared_ptr<ISerializable> serializableAsset = std::dynamic_pointer_cast<ISerializable>(asset);
+		if (serializableAsset && assetMetadataRegistry.contains(uuid)) {
+			FileStreamWriter writer(assetMetadataRegistry[uuid].assetPath);
+			serializableAsset->serialize(writer);
+		}
+	}
 }
 
 void EditorAssetManager::refreshAssetRegistry() {
@@ -132,6 +157,7 @@ AssetType EditorAssetManager::getAssetTypeFromExtension(std::string extension) {
 	return AssetType::UNKNOWN;
 }
 
+void RuntimeAssetManager::serializeAssets() {}
 void RuntimeAssetManager::initializeAssetRegistry() {}
 void RuntimeAssetManager::refreshAssetRegistry() {}
 std::shared_ptr<AssetBase> RuntimeAssetManager::getAsset(const UUID uuid) {}

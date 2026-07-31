@@ -5,6 +5,7 @@
 #include "device.hpp"
 #include "editor.hpp"
 #include "event.hpp"
+#include "keyboard.hpp"
 #include "renderer.hpp"
 #include "window.hpp"
 #include <IconsFontAwesome6.h>
@@ -184,6 +185,17 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 }
 
 void GuiLayer::onEvent(Event &e) {
+	if (e.isInCategory(CitronCore::EventCategoryInput)) {
+		if (e.getEventType() == EventType::KeyJustPressed) {
+			KeyJustPressedEvent &event = static_cast<KeyJustPressedEvent &>(e);
+			if (event.getKeycode() == SDLK_S && event.getMods() & SDLK_LCTRL) {
+				CITRON_CORE_INFO("Serializing assets...");
+
+				appContext.assetManager.serializeAssets();
+				Editor::get().saveCurrentScene();
+			}
+		}
+	}
 	assetPanel.onEvent(e);
 	outlinerPanel.onEvent(e);
 	consolePanel.onEvent(e);

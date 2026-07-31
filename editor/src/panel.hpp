@@ -32,7 +32,7 @@ class Panel {
 
 struct AssetCard {
 	std::string name;
-	std::string path;
+	std::filesystem::path path;
 	bool isDirectory;
 	bool selected;
 };

@@ -15,11 +15,14 @@ struct CITRON_GRAPHICS_API MaterialUniforms {
 	glm::vec3 diffuse = glm::vec3(1.0f);
 };
 
-class CITRON_GRAPHICS_API Material : public Asset<Material, AssetType::MATERIAL> {
+class CITRON_GRAPHICS_API Material : public Asset<Material, AssetType::MATERIAL>, public ISerializable {
   public:
 	Material(const UUID uuid, Device &device);
 
 	AssetReference<Shader> shader;
+
+	virtual void serialize(StreamWriter &archive) override;
+	virtual void deserialize(StreamReader &archive) override;
 
 	GPUBuffer &getMaterialUniformBuffer() { return materialUniformBuffer; }
 	MaterialUniforms &getMaterialUniforms() { return materialUniforms; }

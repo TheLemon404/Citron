@@ -179,7 +179,7 @@ void AssetPanel::onDraw() {
 
 				if (ImGui::BeginDragDropSource()) {
 					ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
-											  entry.path.data(), entry.path.size());
+											  entry.path.string().data(), entry.path.string().size());
 					ImGui::Text("Folder: %s", entry.name.c_str());
 					ImGui::EndDragDropSource();
 				}
@@ -228,16 +228,13 @@ void AssetPanel::onDraw() {
 					if (ImGui::InputTextWithHint(
 							"Rename Folder", "Folder Name", &folderName,
 							ImGuiInputTextFlags_EnterReturnsTrue)) {
-						std::string newPath =
-							entry.path.substr(0,
-											  entry.path.find_last_of('\\') + 1) +
-							folderName;
+						std::filesystem::path newPath = entry.path.parent_path() / folderName;
 						CitronIO::IO::renameDirectory(entry.path, newPath);
 						ImGui::CloseCurrentPopup();
 						pendingRefreshDirectory = true;
 
-						CITRON_CORE_INFO("Renamed folder {} to {}", entry.path,
-										 newPath);
+						CITRON_CORE_INFO("Renamed folder {} to {}", entry.path.string(),
+										 newPath.string());
 					}
 					if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
 						ImGui::CloseCurrentPopup();
@@ -251,10 +248,11 @@ void AssetPanel::onDraw() {
 				if (ImGui::Selectable(ICON_FA_FILE, &entry.selected,
 									  ImGuiSelectableFlags_AllowDoubleClick,
 									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
-					assetPropertiesPanel.setSelectedAsset(entry.path);
+					if (appContext.assetManager.isKnownAssetFileExtension(entry.path.extension().string()))
+						assetPropertiesPanel.setSelectedAsset(entry.path);
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						std::string command =
-							"start notepad \"" + entry.path + "\"";
+							"start notepad \"" + entry.path.string() + "\"";
 						system(command.c_str());
 					} else {
 						entry.selected = !entry.selected;
@@ -265,7 +263,7 @@ void AssetPanel::onDraw() {
 
 				if (ImGui::BeginDragDropSource()) {
 					ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
-											  entry.path.data(), entry.path.size());
+											  entry.path.string().data(), entry.path.string().size());
 					ImGui::Text("File: %s", entry.name.c_str());
 					ImGui::EndDragDropSource();
 				}
@@ -301,12 +299,8 @@ void AssetPanel::onDraw() {
 					if (ImGui::InputTextWithHint(
 							"Rename Folder", "Folder Name", &fileName,
 							ImGuiInputTextFlags_EnterReturnsTrue)) {
-						std::string fileExtension =
-							entry.path.substr(entry.path.find_last_of('.'));
-						std::string newPath =
-							entry.path.substr(0,
-											  entry.path.find_last_of('\\') + 1) +
-							fileName + fileExtension;
+						std::filesystem::path newPath =
+							entry.path.parent_path() / (fileName + entry.path.extension().string());
 						if (context.currentlyEditedSceneAssetPath == entry.path) {
 							context.currentlyEditedSceneAssetPath = newPath;
 							appContext.sceneManager.getActiveScene()->rename(fileName);
@@ -315,8 +309,8 @@ void AssetPanel::onDraw() {
 						CitronIO::IO::renameDirectory(entry.path, newPath);
 						ImGui::CloseCurrentPopup();
 
-						CITRON_CORE_INFO("Renamed file {} to {}", entry.path,
-										 newPath);
+						CITRON_CORE_INFO("Renamed file {} to {}", entry.path.string(),
+										 newPath.string());
 
 						pendingRefreshDirectory = true;
 					}
@@ -416,6 +410,8 @@ void AssetPropertiesPanel::drawShaderProperties(std::shared_ptr<Shader> shader) 
 }
 
 void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> material) {
+	if (!material)
+		return;
 	static bool open = true;
 	if (InspectorPanel::collapsingHeader("Material", &open)) {
 		InspectorPanel::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
@@ -429,6 +425,8 @@ void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {
 }
 
 void AssetPropertiesPanel::drawGenericProperties(AssetMetadata metadata) {
+	if (!appContext.assetManager.isValidAsset(metadata.uuid))
+		return;
 	static bool open = true;
 	if (InspectorPanel::collapsingHeader("Generic", &open)) {
 		ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
@@ -768,15 +766,12 @@ void AssetRegistryPanel::onUpdate() {
 void AssetRegistryPanel::onDraw() {
 	if (ImGui::Begin("Asset Registry", &showWindow)) {
 		for (const auto &[id, AssetMetadata] : appContext.assetManager.getAssetMetadataRegistry()) {
-			ImGui::Dummy(ImVec2(0, 10));
-			ImGui::BeginChild("##asset_registry_item");
 			ImGui::Text("Asset Type: %s", std::string(to_string(AssetMetadata.assetType)).c_str());
 			ImGui::Text("Asset Path: %s", AssetMetadata.assetPath.string().c_str());
 			ImGui::Text("Asset UUID: %llu", id);
-			ImGui::EndChild();
 		}
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void AssetRegistryPanel::onEvent(Event &e) {

@@ -13,7 +13,7 @@ constexpr const char *CITRON_PROGRAM_FOLDER = "C:/Citron";
 
 class EditorContext {
   public:
-	std::string currentlyEditedSceneAssetPath = "";
+	std::filesystem::path currentlyEditedSceneAssetPath = "";
 
 	const entt::entity getCurrentSelectedEntity() {
 		return currentSelectedEntity;
@@ -38,7 +38,6 @@ class Editor : public CitronCore::App {
 	void init();
 	void close();
 	void update();
-	void onEvent(CitronCore::Event &e);
 
 	bool openScene(std::string sceneAssetPath);
 	bool createScene();

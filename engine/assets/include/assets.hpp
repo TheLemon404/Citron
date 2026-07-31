@@ -106,6 +106,8 @@ class CITRON_ASSETS_API AssetManagerBase {
 	bool isKnownAssetFileExtension(std::string extension);
 	AssetType getAssetTypeFromExtension(std::string extension);
 
+	virtual void serializeAssets() = 0;
+
 	std::map<uint64_t, AssetMetadata> &getAssetMetadataRegistry() {
 		return assetMetadataRegistry;
 	}
@@ -133,6 +135,8 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase, public ISe
 		return assetMetadataRegistry[uuid];
 	}
 
+	virtual void serializeAssets() override;
+
 	virtual void refreshAssetRegistry() override;
 
 	virtual bool isValidAsset(const UUID uuid) override;
@@ -157,6 +161,7 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase, public ISe
 
 class CITRON_ASSETS_API RuntimeAssetManager : public AssetManagerBase {
   public:
+	virtual void serializeAssets() override;
 	virtual void initializeAssetRegistry() override;
 	virtual void refreshAssetRegistry() override;
 	virtual std::shared_ptr<AssetBase> getAsset(const UUID uuid) override;
@@ -180,6 +185,10 @@ class CITRON_ASSETS_API AssetManager {
 	~AssetManager();
 
 	void initializeAssetRegistry();
+
+	void serializeAssets() {
+		m_assetManager->serializeAssets();
+	}
 
 	void refreshAssetRegistry() {
 		AssetRegistryRefreshEvent refreshEvent = AssetRegistryRefreshEvent();

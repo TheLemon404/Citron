@@ -54,23 +54,11 @@ void Editor::close() {
 			YAML::Node projectFileNode =
 				YAML::LoadFile(editorContext.projectFilePath.string());
 			projectFileNode["last_scene"] =
-				editorContext.currentlyEditedSceneAssetPath;
+				editorContext.currentlyEditedSceneAssetPath.string();
 			CitronIO::IO::writeFile(editorContext.projectFilePath,
 									YAML::Dump(projectFileNode));
 
 			saveCurrentScene();
-		}
-	}
-}
-
-void Editor::onEvent(CitronCore::Event &e) {
-	App::onEvent(e);
-	if (e.isInCategory(CitronCore::EventCategoryInput)) {
-		if (e.getEventType() == EventType::KeyJustPressed) {
-			KeyJustPressedEvent &event = static_cast<KeyJustPressedEvent &>(e);
-			if (event.getKeycode() == SDLK_S && event.getMods() & SDLK_LCTRL) {
-				saveCurrentScene();
-			}
 		}
 	}
 }
@@ -146,5 +134,5 @@ void Editor::saveCurrentScene() {
 
 	CITRON_CLIENT_INFO(
 		"Scene: {} saved to {}: ", Editor::get().sceneManager.getActiveScene()->getName(),
-		editorContext.currentlyEditedSceneAssetPath);
+		editorContext.currentlyEditedSceneAssetPath.string());
 }

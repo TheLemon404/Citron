@@ -103,12 +103,16 @@ class CITRON_ASSETS_API FileStreamReader : public StreamReader {
 		if (!stream.is_open()) {
 			CITRON_CORE_ERROR("Failed to open file: {}", filename.string());
 		}
+
+		totalFileBytes = stream.seekg(0, std::ios::end).tellg();
+		stream.seekg(0, std::ios::beg);
 	}
 
 	void readData(void *data, size_t size) override;
 	void readString(std::string &str) override;
 
   private:
+	size_t totalFileBytes = 0;
 	std::ifstream stream;
 };
 

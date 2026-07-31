@@ -1,9 +1,25 @@
 #include "material.hpp"
 #include "logger.hpp"
+#include "serialization.hpp"
+#include "yaml-cpp/node/node.h"
 #include <webgpu/webgpu.hpp>
 #include <yaml-cpp/yaml.h>
 
 using namespace CitronGraphics;
+
+void Material::serialize(StreamWriter &writer) {
+	CITRON_CORE_INFO("Serializing material asset: {}", (uint64_t)uuid);
+	writer.writeData(&shader.uuid, sizeof(shader.uuid));
+}
+
+void Material::deserialize(StreamReader &reader) {
+	CITRON_CORE_INFO("Deserializing material asset: {}", (uint64_t)uuid);
+	try {
+		reader.readData(&shader.uuid, sizeof(shader.uuid));
+	} catch (const std::exception &e) {
+		CITRON_CORE_ERROR("Failed to deserialize material asset: {}", e.what());
+	}
+}
 
 Material::Material(const UUID uuid, Device &device) : Asset<Material, AssetType::MATERIAL>(uuid), device(device) {
 	wgpu::BufferDescriptor materialUniformBufferDesc = {};
@@ -16,10 +32,8 @@ Material::Material(const UUID uuid, Device &device) : Asset<Material, AssetType:
 }
 
 std::shared_ptr<AssetBase> MaterialImporter::importAsset(AssetMetadata metadata) {
-	CITRON_CORE_INFO("Loading material: {}", metadata.assetPath.string());
-
 	std::shared_ptr<Material> material = std::make_shared<Material>(metadata.uuid, device);
-	YAML::Node materialNode = YAML::LoadFile(metadata.assetPath.string());
-	material->shader.uuid = materialNode["shader"].as<uint64_t>();
+	FileStreamReader reader(metadata.assetPath);
+	material->deserialize(reader);
 	return material;
 }

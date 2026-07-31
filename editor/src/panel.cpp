@@ -85,12 +85,12 @@ void AssetPanel::onDraw() {
 	}
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload *payload =
-				ImGui::AcceptDragDropPayload("ASSET_FILE_REORDER")) {
+				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
 			std::string srcPath((const char *)payload->Data, payload->DataSize);
 			if (srcPath != context.currentlyEditedSceneAssetPath) {
 				CitronIO::IO::moveFileOrFolder(srcPath,
 											   currentDirectory.parent_path());
-
+				appContext.assetManager.moveAsset(srcPath, currentDirectory.parent_path());
 				pendingRefreshDirectory = true;
 			} else {
 				CITRON_CLIENT_ERROR(
@@ -177,12 +177,6 @@ void AssetPanel::onDraw() {
 				ImVec2 rect_max = ImGui::GetItemRectMax();
 				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)view, rect_min, rect_max);
 
-				if (ImGui::BeginDragDropSource()) {
-					ImGui::SetDragDropPayload("ASSET_FILE_TRANSFER",
-											  entry.path.string().data(), entry.path.string().size());
-					ImGui::Text("Folder: %s", entry.name.c_str());
-					ImGui::EndDragDropSource();
-				}
 				if (ImGui::BeginDragDropTarget()) {
 					if (const ImGuiPayload *payload =
 							ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
@@ -190,6 +184,7 @@ void AssetPanel::onDraw() {
 											payload->DataSize);
 						if (srcPath != context.currentlyEditedSceneAssetPath) {
 							CitronIO::IO::moveFileOrFolder(srcPath, entry.path);
+							appContext.assetManager.moveAsset(srcPath, entry.path);
 							pendingRefreshDirectory = true;
 							ImGui::PopID();
 							continue;

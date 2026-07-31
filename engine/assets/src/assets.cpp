@@ -139,6 +139,12 @@ AssetType EditorAssetManager::getAssetType(const UUID uuid) {
 	return assetMetadataRegistry[uuid].assetType;
 }
 
+void EditorAssetManager::moveAsset(const std::filesystem::path &srcPath, const std::filesystem::path &dstPath) {
+	assetMetadataRegistry[filepathToUUID[srcPath]].assetPath = dstPath;
+	filepathToUUID[dstPath] = filepathToUUID[srcPath];
+	filepathToUUID.erase(srcPath);
+}
+
 bool EditorAssetManager::isKnownAssetFileExtension(std::string extension) {
 	for (auto importer : assetImporters) {
 		if (importer.second->getAssetFileExtensions().contains(extension))

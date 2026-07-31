@@ -142,11 +142,13 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase, public ISe
 	virtual bool isValidAsset(const UUID uuid) override;
 	virtual AssetType getAssetType(const UUID uuid) override;
 
-	AssetMetadata getAssetMetadataByPath(const std::filesystem::path &path) {
+	void moveAsset(const std::filesystem::path &srcPath, const std::filesystem::path &dstPath);
+
+	AssetMetadata &getAssetMetadataByPath(const std::filesystem::path &path) {
 		return assetMetadataRegistry[filepathToUUID[path]];
 	}
 
-	AssetMetadata getAssetMetadataByUUID(const UUID uuid) {
+	AssetMetadata &getAssetMetadataByUUID(const UUID uuid) {
 		return assetMetadataRegistry[uuid];
 	}
 
@@ -204,14 +206,14 @@ class CITRON_ASSETS_API AssetManager {
 		return m_assetManager->getAssetType(uuid);
 	}
 
-	AssetMetadata getAssetMetadata(const std::filesystem::path path) {
+	AssetMetadata &getAssetMetadata(const std::filesystem::path path) {
 		if (isRuntime) {
 			throw std::runtime_error("getAssetMetadata is not supported in runtime mode");
 		}
 		return ((EditorAssetManager *)(m_assetManager.get()))->getAssetMetadataByPath(path);
 	}
 
-	AssetMetadata getAssetMetadata(const UUID uuid) {
+	AssetMetadata &getAssetMetadata(const UUID uuid) {
 		if (isRuntime) {
 			throw std::runtime_error("getAssetMetadataByUUID is not supported in runtime mode");
 		}
@@ -228,6 +230,13 @@ class CITRON_ASSETS_API AssetManager {
 
 	AssetType getAssetTypeFromExtension(std::string extension) {
 		return m_assetManager->getAssetTypeFromExtension(extension);
+	}
+
+	void moveAsset(const std::filesystem::path &srcPath, const std::filesystem::path &dstPath) {
+		if (isRuntime) {
+			throw std::runtime_error("moveAsset is not supported in runtime mode");
+		}
+		((EditorAssetManager *)m_assetManager.get())->moveAsset(srcPath, dstPath / srcPath.filename());
 	}
 
 	template <typename T>

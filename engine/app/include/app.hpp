@@ -115,6 +115,8 @@ class CITRON_APP_API App {
 
 	const bool isRuntime() { return isRuntimeMode; }
 
+	virtual View &getActiveView() { return sceneManager.getActiveScene()->getActiveView(); }
+
   protected:
 	const bool isRuntimeMode = false;
 

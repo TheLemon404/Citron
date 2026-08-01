@@ -1,6 +1,8 @@
 #pragma once
 
+#include "IconsFontAwesome6.h"
 #include "shader.hpp"
+#include "view.hpp"
 #include <app.hpp>
 #include <assets.hpp>
 #include <concepts>
@@ -17,17 +19,45 @@ class Panel {
 	Panel(const std::string &name, AppContext appContext) : name(name), appContext(appContext) {};
 	virtual ~Panel() = default;
 
-	virtual void onAttach() {};
-	virtual void onDetach() {};
-	virtual void onUpdate() {};
-	virtual void onDraw() {};
-	virtual void onEvent(Event &e) {};
+	virtual void onAttach() = 0;
+	virtual void onDetach() = 0;
+	virtual void onUpdate() = 0;
+	virtual void onDraw() = 0;
+	virtual void onEvent(Event &e) = 0;
 
 	inline const std::string &getName() const { return name; }
 
   protected:
 	AppContext appContext;
 	const std::string name;
+};
+
+struct ViewportMotionSettings {
+	float moveSpeed = 0.5f;
+	float fastMoveSpeed = 1.0f;
+	float lookSpeed = 0.005f;
+};
+
+class ViewPanel : public Panel {
+  public:
+	ViewPanel(AppContext appContext, PerspectiveView &editorView) : Panel("Viewport", appContext), editorView(editorView) {};
+
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onDraw() override;
+	virtual void onEvent(Event &e) override;
+
+	void setView(wgpu::TextureView sceneView) {
+		this->sceneView = sceneView;
+	}
+
+  private:
+	bool focused = false;
+	ViewportMotionSettings motionSettings;
+	PerspectiveView &editorView;
+	bool viewportMovementActive = false;
+	wgpu::TextureView sceneView;
 };
 
 struct AssetCard {
@@ -131,8 +161,8 @@ class InspectorPanel : public Panel {
 											   AppContext appContext);
 
 	static bool collapsingHeader(const char *label, bool *p_open,
-								 const char *icon_open,
-								 const char *icon_closed);
+								 const char *icon_open = ICON_FA_SQUARE_MINUS,
+								 const char *icon_closed = ICON_FA_SQUARE_PLUS);
 };
 
 class AssetRegistryPanel : public Panel {

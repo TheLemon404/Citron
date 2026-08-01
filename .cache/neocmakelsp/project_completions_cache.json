@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-31T13:40:38.713298500-05:00",
+  "date": "2026-07-31T20:58:18.719358800-05:00",
   "data": {
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake": [
       {
@@ -399,72 +399,488 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library"
       }
     ],
-    "C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt": [
       {
-        "label": "JUST_INSTALL_CEREAL_YAML",
+        "label": "add_sources",
+        "kind": 3,
+        "detail": "Function",
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\ninto a single list"
+      },
+      {
+        "label": "YAML_CPP_VERSION_MAJOR",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt\n\ninstalling cereal-yaml requires INTERFACE lib"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "YAML_CPP_VERSION_MINOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "YAML_CPP_VERSION_PATCH",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "YAML_CPP_VERSION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "YAML_CPP_BUILD_TOOLS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n# Project stuff"
+      },
+      {
+        "label": "YAML_CPP_BUILD_CONTRIB",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_SHARED_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nhttp://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library"
+      },
+      {
+        "label": "APPLE_UNIVERSAL_BIN",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n--> Apple"
+      },
+      {
+        "label": "MSVC_SHARED_RT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nhttp://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.71).aspx"
+      },
+      {
+        "label": "MSVC_STHREADED_RT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "SRCS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nmake absolute paths"
+      },
+      {
+        "label": "header_directory",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "library_sources",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "yaml_c_flags",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n##"
+      },
+      {
+        "label": "yaml_cxx_flags",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "LABEL_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "LABEL_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_OSX_ARCHITECTURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_OSX_SYSROOT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_OSX_ARCHITECTURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_INSTALL_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_SHARED_LIBRARY_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_IMPORT_LIBRARY_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nDLLs do not have a \"lib\" prefix"
+      },
+      {
+        "label": "CMAKE_LINK_DEF_FILE_FLAG",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nsame for DLL import libs"
+      },
+      {
+        "label": "CMAKE_BUILD_TYPE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_FLAGS_RELEASE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
+      },
+      {
+        "label": "CMAKE_CXX_FLAGS_RELWITHDEBINFO",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_FLAGS_DEBUG",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_FLAGS_MINSIZEREL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "GCC_EXTRA_OPTIONS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
+      },
+      {
+        "label": "GCC_EXTRA_OPTIONS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "FLAG_TESTED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
+      },
+      {
+        "label": "GCC_EXTRA_OPTIONS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "yaml_cxx_flags",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
+      },
+      {
+        "label": "LIB_RT_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nhttp://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.71).aspx"
+      },
+      {
+        "label": "LIB_RT_OPTION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nCMake defaults to /MD for MSVC"
+      },
+      {
+        "label": "LIB_RT_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nUser wants to have old single-threaded static runtime libraries"
+      },
+      {
+        "label": "LIB_RT_OPTION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "LIB_RT_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "LIB_RT_OPTION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "var_name",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "var_name",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "${var_name}",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "LABEL_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
+      },
+      {
+        "label": "CMAKE_STATIC_LIBRARY_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nb) Change prefix for static libraries"
+      },
+      {
+        "label": "LIB_TARGET_SUFFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n## General stuff"
+      },
+      {
+        "label": "yaml_cxx_flags",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n/wd4355 = disable warning C4355 \"'this' : used in base member initializer list\"; http://msdn.microsoft.com/en-us/library/3c594ae3.aspx"
+      },
+      {
+        "label": "_library_dir",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "_library_dir",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "INCLUDE_INSTALL_ROOT_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "INCLUDE_INSTALL_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "LIB_INSTALL_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "_INSTALL_DESTINATIONS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "EXPORT_TARGETS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CONFIG_INCLUDE_DIRS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "INSTALL_CMAKE_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "INSTALL_CMAKE_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "CONFIG_INCLUDE_DIRS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      },
+      {
+        "label": "PC_FILE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt": [
+      {
+        "label": "CEREAL_MASTER_PROJECT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PORTABILITY_TEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_REQUIRED_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PORTABILITY_TEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_DOC",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_SANDBOX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PERFORMANCE_COMPARISON",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "JUST_INSTALL_CEREAL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\ninstalling cereal requires INTERFACE lib"
+      },
+      {
+        "label": "CEREAL_THREAD_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
         "label": "THREAD_SAFE",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "CEREAL_YAML_THREAD_LIBS",
+        "label": "CEREAL_THREAD_LIBS",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
-      },
-      {
-        "label": "CEREAL_YAML_THREAD_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
         "label": "WITH_WERROR",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "CMAKE_CXX_FLAGS",
+        "label": "CLANG_USE_LIBCPP",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "CMAKE_CXX_FLAGS",
+        "label": "CMAKE_EXE_LINKER_FLAGS",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\nTODO: use add_link_options(-stdlib=libc++ -lc++abi\") bud this needs cmake 3.13! CK"
       },
       {
         "label": "CMAKE_CXX_STANDARD",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
         "label": "CMAKE_CXX_STANDARD_REQUIRED",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CEREAL_INSTALL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "configFile",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "versionFile",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "configInstallDestination",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
         "label": "Boost::serialization",
@@ -483,6 +899,26 @@
         "kind": 6,
         "detail": "Variable",
         "documentation": "package: Boost"
+      },
+      {
+        "label": "BUILD_TESTS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\vendor\\CMakeLists.txt": [
+      {
+        "label": "DAWN_FETCH_DEPENDENCIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
+      },
+      {
+        "label": "YAML_BUILD_SHARED_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
       }
     ],
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake": [
@@ -847,382 +1283,6 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake"
       }
     ],
-    "C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt": [
-      {
-        "label": "add_sources",
-        "kind": 3,
-        "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\ninto a single list"
-      },
-      {
-        "label": "YAML_CPP_VERSION_MAJOR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "YAML_CPP_VERSION_MINOR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "YAML_CPP_VERSION_PATCH",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "YAML_CPP_VERSION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "YAML_CPP_BUILD_TOOLS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n# Project stuff"
-      },
-      {
-        "label": "YAML_CPP_BUILD_CONTRIB",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_SHARED_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nhttp://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library"
-      },
-      {
-        "label": "APPLE_UNIVERSAL_BIN",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n--> Apple"
-      },
-      {
-        "label": "MSVC_SHARED_RT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nhttp://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.71).aspx"
-      },
-      {
-        "label": "MSVC_STHREADED_RT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "SRCS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nmake absolute paths"
-      },
-      {
-        "label": "header_directory",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "library_sources",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "yaml_c_flags",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n##"
-      },
-      {
-        "label": "yaml_cxx_flags",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "LABEL_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "LABEL_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_OSX_ARCHITECTURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_OSX_SYSROOT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_OSX_ARCHITECTURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_INSTALL_PREFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_SHARED_LIBRARY_PREFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_IMPORT_LIBRARY_PREFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nDLLs do not have a \"lib\" prefix"
-      },
-      {
-        "label": "CMAKE_LINK_DEF_FILE_FLAG",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nsame for DLL import libs"
-      },
-      {
-        "label": "CMAKE_BUILD_TYPE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_FLAGS_RELEASE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
-      },
-      {
-        "label": "CMAKE_CXX_FLAGS_RELWITHDEBINFO",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_FLAGS_DEBUG",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_FLAGS_MINSIZEREL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "GCC_EXTRA_OPTIONS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
-      },
-      {
-        "label": "GCC_EXTRA_OPTIONS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "FLAG_TESTED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
-      },
-      {
-        "label": "GCC_EXTRA_OPTIONS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "yaml_cxx_flags",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
-      },
-      {
-        "label": "LIB_RT_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nhttp://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.71).aspx"
-      },
-      {
-        "label": "LIB_RT_OPTION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nCMake defaults to /MD for MSVC"
-      },
-      {
-        "label": "LIB_RT_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nUser wants to have old single-threaded static runtime libraries"
-      },
-      {
-        "label": "LIB_RT_OPTION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "LIB_RT_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "LIB_RT_OPTION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "var_name",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "var_name",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "${var_name}",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "LABEL_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n"
-      },
-      {
-        "label": "CMAKE_STATIC_LIBRARY_PREFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\nb) Change prefix for static libraries"
-      },
-      {
-        "label": "LIB_TARGET_SUFFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n## General stuff"
-      },
-      {
-        "label": "yaml_cxx_flags",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt\n\n/wd4355 = disable warning C4355 \"'this' : used in base member initializer list\"; http://msdn.microsoft.com/en-us/library/3c594ae3.aspx"
-      },
-      {
-        "label": "_library_dir",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "_library_dir",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "INCLUDE_INSTALL_ROOT_DIR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "INCLUDE_INSTALL_DIR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "LIB_INSTALL_DIR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "_INSTALL_DESTINATIONS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "EXPORT_TARGETS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CONFIG_INCLUDE_DIRS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "INSTALL_CMAKE_DIR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "INSTALL_CMAKE_DIR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "CONFIG_INCLUDE_DIRS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      },
-      {
-        "label": "PC_FILE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\vendor\\CMakeLists.txt": [
-      {
-        "label": "DAWN_FETCH_DEPENDENCIES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
-      },
-      {
-        "label": "YAML_BUILD_SHARED_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
-      }
-    ],
     "C:\\Dev\\citron\\CMakeLists.txt": [
       {
         "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
@@ -1243,126 +1303,72 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
       }
     ],
-    "C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt": [
       {
-        "label": "CEREAL_MASTER_PROJECT",
+        "label": "JUST_INSTALL_CEREAL_YAML",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PORTABILITY_TEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_REQUIRED_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PORTABILITY_TEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_DOC",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_SANDBOX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PERFORMANCE_COMPARISON",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "JUST_INSTALL_CEREAL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\ninstalling cereal requires INTERFACE lib"
-      },
-      {
-        "label": "CEREAL_THREAD_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt\n\ninstalling cereal-yaml requires INTERFACE lib"
       },
       {
         "label": "THREAD_SAFE",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
-        "label": "CEREAL_THREAD_LIBS",
+        "label": "CEREAL_YAML_THREAD_LIBS",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+      },
+      {
+        "label": "CEREAL_YAML_THREAD_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
         "label": "WITH_WERROR",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
-        "label": "CLANG_USE_LIBCPP",
+        "label": "CMAKE_CXX_FLAGS",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
-        "label": "CMAKE_EXE_LINKER_FLAGS",
+        "label": "CMAKE_CXX_FLAGS",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\nTODO: use add_link_options(-stdlib=libc++ -lc++abi\") bud this needs cmake 3.13! CK"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
         "label": "CMAKE_CXX_STANDARD",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
         "label": "CMAKE_CXX_STANDARD_REQUIRED",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CEREAL_INSTALL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "configFile",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "versionFile",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "configInstallDestination",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt"
       },
       {
         "label": "Boost::serialization",
@@ -1381,12 +1387,6 @@
         "kind": 6,
         "detail": "Variable",
         "documentation": "package: Boost"
-      },
-      {
-        "label": "BUILD_TESTS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       }
     ]
   }

@@ -175,10 +175,10 @@ void Renderer::init() {
 	colorTargetView = device.createTextureView(colorTarget);
 }
 
-Frame Renderer::beginFrame() {
+Frame Renderer::beginFrame(View &view) {
 	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
-				 device.getCurrentSurfaceTexture(), tempView);
+				 device.getCurrentSurfaceTexture(), view);
 }
 
 void Renderer::endFrame(Frame &frame) {

@@ -1,6 +1,7 @@
 #include "app.hpp"
 #include "entt/entity/entity.hpp"
 #include "event.hpp"
+#include "view.hpp"
 #include <ecs.hpp>
 #include <layer.hpp>
 #include <logger.hpp>
@@ -45,6 +46,10 @@ class Editor : public CitronCore::App {
 	bool openProject(std::string projectFilePath);
 
 	void saveCurrentScene();
+
+	PerspectiveView editorView;
+
+	View &getActiveView() override { return editorView; }
 
   private:
 	EditorContext editorContext;

@@ -81,8 +81,6 @@ class CITRON_GRAPHICS_API Frame {
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 
-	void setView(View &view) { this->view = view; }
-
 	View &getView() { return view; }
 
   private:
@@ -102,7 +100,7 @@ class CITRON_GRAPHICS_API Renderer {
 	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager), rendererResourcesManager(device) {}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
-	Frame beginFrame();
+	Frame beginFrame(View &view);
 	void endFrame(Frame &frame);
 
 	void init();
@@ -161,8 +159,6 @@ class CITRON_GRAPHICS_API Renderer {
 	wgpu::TextureView &getColorTargetView() { return colorTargetView; }
 
   private:
-	PerspectiveView tempView = PerspectiveView();
-
 	RendererResourceManager rendererResourcesManager;
 	AssetManager &assetManager;
 

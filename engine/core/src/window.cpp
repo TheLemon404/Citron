@@ -98,11 +98,11 @@ void Window::pollEvents() {
 				KeyJustPressedEvent pressedEvent =
 					KeyJustPressedEvent(&event, event.key.key, event.key.mod);
 				eventCallback(pressedEvent);
-			} else {
-				KeyPressedEvent pressedEvent = KeyPressedEvent(
-					&event, event.key.key, event.key.repeat, event.key.mod);
-				eventCallback(pressedEvent);
 			}
+
+			KeyPressedEvent pressedEvent = KeyPressedEvent(
+				&event, event.key.key, event.key.repeat, event.key.mod);
+			eventCallback(pressedEvent);
 			break;
 		}
 		case SDL_EVENT_KEY_UP: {
@@ -114,7 +114,7 @@ void Window::pollEvents() {
 		}
 		case SDL_EVENT_MOUSE_MOTION: {
 			MouseMovedEvent motionEvent =
-				MouseMovedEvent(&event, event.motion.x, event.motion.y);
+				MouseMovedEvent(&event, event.motion.xrel, event.motion.yrel);
 			eventCallback(motionEvent);
 			break;
 		}

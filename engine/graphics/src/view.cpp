@@ -12,9 +12,5 @@ glm::mat4 View::getViewMatrix() {
 }
 
 glm::mat4 PerspectiveView::getProjectionMatrix() {
-	return glm::perspective(fov, 1.2f, near, far);
-}
-
-glm::mat4 PerspectiveView::getProjectionMatrix(float aspect) {
 	return glm::perspective(fov, aspect, near, far);
 }

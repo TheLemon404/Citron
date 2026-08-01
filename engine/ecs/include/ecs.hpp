@@ -5,6 +5,7 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
+#include "view.hpp"
 #include <assets.hpp>
 #include <cstdint>
 #include <entt/entt.hpp>
@@ -65,7 +66,12 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void end();
 	std::vector<std::shared_ptr<System>> systems;
 
+	CitronGraphics::View &getActiveView() { return tempPerspectiveView; }
+
   private:
+	// needs to be swapped out later with current scene camera
+	CitronGraphics::PerspectiveView tempPerspectiveView;
+
 	std::map<UUID, entt::entity> entityMap;
 
 	std::string name;

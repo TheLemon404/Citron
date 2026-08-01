@@ -15,11 +15,11 @@ class CITRON_GRAPHICS_API View {
 
 class CITRON_GRAPHICS_API PerspectiveView : public View {
   public:
-	float fov = 60.0f;
+	float fov = 100.0f;
 	float near = 0.01f;
 	float far = 20000.0f;
+	float aspect = 1.2f;
 	glm::mat4 getProjectionMatrix() override;
-	glm::mat4 getProjectionMatrix(float aspect);
 };
 
 } // namespace CitronGraphics

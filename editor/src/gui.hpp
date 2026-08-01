@@ -18,6 +18,7 @@ class GuiLayer : public Layer {
 				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;
 
+	ViewPanel viewPanel;
 	AssetPanel assetPanel;
 	AssetPropertiesPanel assetPropertiesPanel;
 	AssetRegistryPanel assetRegistryPanel;

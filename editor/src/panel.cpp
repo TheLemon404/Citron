@@ -1,8 +1,11 @@
 #include "panel.hpp"
 
 #include "IconsFontAwesome5.h"
+#include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
 #include "editor.hpp"
+#include "input.hpp"
 #include <cfloat>
 #include <component.hpp>
 #include <concepts>
@@ -14,47 +17,97 @@
 #include <io.hpp>
 #include <logger.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include "entt/entity/fwd.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
+#include "mouse.hpp"
 #include "shader.hpp"
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
+#include <glm/gtx/rotate_vector.hpp> // Required extension
 #include <imgui_stdlib.h>
 #include <memory>
+
+constexpr glm::vec3 globalUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 using namespace CitronCore;
 using namespace CitronECS;
 
-bool InspectorPanel::collapsingHeader(const char *label, bool *p_open,
-									  const char *icon_open = ICON_FA_SQUARE_MINUS,
-									  const char *icon_closed = ICON_FA_SQUARE_PLUS) {
-	ImGuiWindow *window = ImGui::GetCurrentWindow();
-	if (window->SkipItems)
-		return false;
+void ViewPanel::onAttach() {
+}
 
-	ImGuiContext &g = *GImGui;
-	const ImGuiStyle &style = g.Style;
+void ViewPanel::onDetach() {
+}
 
-	// Align button text to the left
-	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.5f));
+void ViewPanel::onUpdate() {
+	if (!focused)
+		return;
 
-	// Format full-width label with your custom trailing/leading icons
-	char buf[128];
-	snprintf(buf, sizeof(buf), "%s  %s", (*p_open ? icon_open : icon_closed),
-			 label);
-
-	// Draw full-width style frame
-	if (ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))) {
-		*p_open = !*p_open;
+	CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
+	if (inputLayer->isPressed(SDLK_W)) {
+		editorView.position += editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
 	}
+	if (inputLayer->isPressed(SDLK_S)) {
+		editorView.position -= editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+	}
+	if (inputLayer->isPressed(SDLK_A)) {
+		editorView.position += glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+	}
+	if (inputLayer->isPressed(SDLK_D)) {
+		editorView.position -= glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+	}
+	if (inputLayer->isPressed(SDLK_Q)) {
+		editorView.position += globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+	}
+	if (inputLayer->isPressed(SDLK_E)) {
+		editorView.position -= globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+	}
+}
 
-	ImGui::PopStyleVar();
-	return *p_open;
+void ViewPanel::onDraw() {
+	ImGui::Begin("Viewport", nullptr);
+	focused = ImGui::IsWindowFocused();
+	if (viewportMovementActive)
+		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
+	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+	WGPUTextureView view = sceneView;
+	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
+	editorView.aspect = viewportSize.x / viewportSize.y;
+	ImGui::End();
+}
+
+void ViewPanel::onEvent(Event &e) {
+	if (!focused)
+		return;
+
+	if (e.isInCategory(EventCategoryMouse)) {
+		if (e.getEventType() == EventType::MouseMoved && viewportMovementActive) {
+			MouseMovedEvent &mouseEvent = static_cast<MouseMovedEvent &>(e);
+			float dx = mouseEvent.getDx() * motionSettings.lookSpeed;
+			float dy = mouseEvent.getDy() * motionSettings.lookSpeed;
+			editorView.forward = glm::rotate(editorView.forward, dx, globalUp);
+			glm::vec3 localRightVector = glm::normalize(glm::cross(editorView.forward, globalUp));
+			editorView.forward = glm::rotate(editorView.forward, dy, localRightVector);
+		}
+		if (e.getEventType() == EventType::MouseButtonPressed) {
+			MouseButtonPressedEvent &mouseEvent = static_cast<MouseButtonPressedEvent &>(e);
+			if (mouseEvent.getButton() == SDL_BUTTON_RIGHT) {
+				viewportMovementActive = true;
+			}
+		}
+		if (e.getEventType() == EventType::MouseButtonReleased) {
+			MouseButtonReleasedEvent &mouseEvent = static_cast<MouseButtonReleasedEvent &>(e);
+			if (mouseEvent.getButton() == SDL_BUTTON_RIGHT) {
+				viewportMovementActive = false;
+			}
+		}
+	}
 }
 
 void AssetPanel::onAttach() {
@@ -654,6 +707,33 @@ void OutlinerPanel::onDraw() {
 	ImGui::End();
 }
 void OutlinerPanel::onEvent(Event &e) {}
+
+bool InspectorPanel::collapsingHeader(const char *label, bool *p_open,
+									  const char *icon_open,
+									  const char *icon_closed) {
+	ImGuiWindow *window = ImGui::GetCurrentWindow();
+	if (window->SkipItems)
+		return false;
+
+	ImGuiContext &g = *GImGui;
+	const ImGuiStyle &style = g.Style;
+
+	// Align button text to the left
+	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.5f));
+
+	// Format full-width label with your custom trailing/leading icons
+	char buf[128];
+	snprintf(buf, sizeof(buf), "%s  %s", (*p_open ? icon_open : icon_closed),
+			 label);
+
+	// Draw full-width style frame
+	if (ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))) {
+		*p_open = !*p_open;
+	}
+
+	ImGui::PopStyleVar();
+	return *p_open;
+}
 
 void InspectorPanel::onAttach() {}
 void InspectorPanel::onDetach() {}

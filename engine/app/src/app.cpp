@@ -123,7 +123,7 @@ void App::update() {
 		}
 
 		if (renderer.frameReady()) {
-			Frame frame = renderer.beginFrame();
+			Frame frame = renderer.beginFrame(getActiveView());
 			if (sceneManager.getActiveScene()) {
 				RenderPass colorPass = frame.beginRenderPass(renderer.getColorTarget());
 				std::vector<CitronGraphics::RenderableReferenceData> renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);

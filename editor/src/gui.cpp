@@ -6,6 +6,7 @@
 #include "editor.hpp"
 #include "event.hpp"
 #include "keyboard.hpp"
+#include "panel.hpp"
 #include "renderer.hpp"
 #include "window.hpp"
 #include <IconsFontAwesome6.h>
@@ -16,7 +17,15 @@
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
-GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"), appContext(appContext), assetPropertiesPanel(appContext), assetPanel(appContext, assetPropertiesPanel), assetRegistryPanel(appContext), outlinerPanel(appContext), consolePanel(appContext), inspectorPanel(appContext) {}
+GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
+											viewPanel(appContext, Editor::get().editorView),
+											appContext(appContext),
+											assetPropertiesPanel(appContext),
+											assetPanel(appContext, assetPropertiesPanel),
+											assetRegistryPanel(appContext),
+											outlinerPanel(appContext),
+											consolePanel(appContext),
+											inspectorPanel(appContext) {}
 
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
@@ -60,6 +69,7 @@ void GuiLayer::onAttach() {
 
 	applyTheme();
 
+	viewPanel.onAttach();
 	assetPanel.onAttach();
 	assetPropertiesPanel.onAttach();
 	outlinerPanel.onAttach();
@@ -73,6 +83,7 @@ void GuiLayer::onDetach() {
 	ImGui_ImplWGPU_Shutdown();
 	ImGui::DestroyContext();
 
+	viewPanel.onDetach();
 	assetPanel.onDetach();
 	assetPropertiesPanel.onDetach();
 	outlinerPanel.onDetach();
@@ -82,6 +93,7 @@ void GuiLayer::onDetach() {
 }
 
 void GuiLayer::onUpdate() {
+	viewPanel.onUpdate();
 	assetPanel.onUpdate();
 	assetPropertiesPanel.onUpdate();
 	outlinerPanel.onUpdate();
@@ -164,12 +176,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 		ImGui::EndPopup();
 	}
 
-	ImGui::Begin("Viewport", nullptr);
-	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-	WGPUTextureView view = sceneView;
-	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
-	ImGui::End();
-
+	viewPanel.setView(sceneView);
+	viewPanel.onDraw();
 	assetPanel.onDraw();
 	assetPropertiesPanel.onDraw();
 	outlinerPanel.onDraw();
@@ -196,6 +204,8 @@ void GuiLayer::onEvent(Event &e) {
 			}
 		}
 	}
+
+	viewPanel.onEvent(e);
 	assetPanel.onEvent(e);
 	outlinerPanel.onEvent(e);
 	consolePanel.onEvent(e);

@@ -34,8 +34,11 @@ class CITRON_INPUT_API InputLayer : public Layer {
 	bool isJustReleased(uint32_t pressable);
 
   private:
-	bool processKeyEvent(Event &e);
+	bool processKeyPressedEvent(Event &e);
+	bool processKeyReleasedEvent(Event &e);
 	bool processMouseEvent(Event &e);
+
+	static std::unordered_map<uint64_t, PressableInputState> pressedInputs;
 };
 
 } // namespace CitronInput

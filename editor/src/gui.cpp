@@ -17,6 +17,10 @@
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
+constexpr ImVec4 xColor = ImVec4(1, 0.373, 0.373, 1.0f);
+constexpr ImVec4 yColor = ImVec4(0.655, 0.949, 0.267, 1.0f);
+constexpr ImVec4 zColor = ImVec4(0.337, 0.596, 0.988, 1.0f);
+
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
 											viewPanel(appContext, Editor::get().getEditorContext().getCurrentSelectedEntity(), Editor::get().editorView),
 											appContext(appContext),
@@ -364,4 +368,19 @@ void GuiLayer::applyTheme() {
 		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
 	style.Colors[ImGuiCol_DockingEmptyBg] =
 		ImVec4(0.15686275f, 0.15686275f, 0.15686275f, 1.0f);
+
+	ImGuizmo::Style &guizmoStyle = ImGuizmo::GetStyle();
+	guizmoStyle.Colors[ImGuizmo::COLOR::DIRECTION_X] = xColor;
+	guizmoStyle.Colors[ImGuizmo::COLOR::DIRECTION_Y] = yColor;
+	guizmoStyle.Colors[ImGuizmo::COLOR::DIRECTION_Z] = zColor;
+	guizmoStyle.Colors[ImGuizmo::COLOR::PLANE_X] = xColor;
+	guizmoStyle.Colors[ImGuizmo::COLOR::PLANE_Y] = yColor;
+	guizmoStyle.Colors[ImGuizmo::COLOR::PLANE_Z] = zColor;
+
+	guizmoStyle.RotationLineThickness = 3.0f;
+	guizmoStyle.RotationOuterLineThickness = 3.0f;
+	guizmoStyle.HatchedAxisLineThickness = 0.0f;
+	guizmoStyle.ScaleLineThickness = 3.0f;
+	guizmoStyle.ScaleLineCircleSize = 6.0f;
+	guizmoStyle.TranslationLineArrowSize = 6.0f;
 }

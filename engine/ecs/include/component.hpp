@@ -63,16 +63,15 @@ struct CITRON_ECS_API EntityBaseComponent {
 
 struct CITRON_ECS_API TransformComponent {
 	glm::vec3 position = glm::vec3(0.0f);
-	glm::vec3 rotation = glm::vec3(0.0f);
+	glm::quat rotation = glm::identity<glm::quat>();
 	glm::vec3 scale = glm::vec3(1.0f);
 
 	// DO NOT DISPLAY THIS MEMBER IN EDITOR
-	glm::quat rotationQuat = glm::identity<glm::quat>();
 	glm::mat4 matrix = glm::identity<glm::mat4>();
 
 	template <class Archive>
 	void serialize(Archive &archive) {
-		archive(position, rotation, scale, rotationQuat, matrix);
+		archive(position, rotation, scale, matrix);
 	}
 };
 

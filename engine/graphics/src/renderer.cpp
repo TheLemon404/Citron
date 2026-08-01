@@ -28,7 +28,7 @@ RenderPass::RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
 	colorAttachment.resolveTarget = nullptr;
 	colorAttachment.loadOp = wgpu::LoadOp::Clear;
 	colorAttachment.storeOp = wgpu::StoreOp::Store;
-	colorAttachment.clearValue = {1.0, 0.0, 1.0, 1.0};
+	colorAttachment.clearValue = {0.247, 0.247, 0.247, 1.0};
 
 	wgpu::RenderPassDescriptor renderPassDescriptor = {};
 	renderPassDescriptor.nextInChain = nullptr;

@@ -9,6 +9,9 @@ struct ViewportMotionSettings {
 	float moveSpeed = 0.5f;
 	float fastMoveSpeed = 1.0f;
 	float lookSpeed = 0.005f;
+	float snapTranslation = 0.25f;
+	float snapRotation = 0.0001f;
+	float snapScale = 0.25f;
 };
 
 class ViewPanel : public Panel {

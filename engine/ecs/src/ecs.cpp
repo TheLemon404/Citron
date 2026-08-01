@@ -113,11 +113,8 @@ std::vector<CitronGraphics::RenderableReferenceData> Scene::extractRenderableDat
 		data.entityUUID = registry.get<EntityBaseComponent>(entity).uuid;
 
 		TransformComponent &t = registry.get<TransformComponent>(entity);
-		t.rotationQuat = glm::quat(t.rotation);
 		t.matrix = glm::identity<glm::mat4>();
-		t.matrix = glm::translate(t.matrix, t.position);
-		t.matrix *= glm::mat4_cast(glm::normalize(t.rotationQuat));
-		t.matrix = glm::scale(t.matrix, t.scale);
+		t.matrix = glm::translate(glm::mat4(1.0f), t.position) * glm::mat4_cast(glm::normalize(t.rotation)) * glm::scale(glm::mat4(1.0f), t.scale);
 		data.transform = t.matrix;
 
 		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);

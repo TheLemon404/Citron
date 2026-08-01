@@ -17,6 +17,7 @@
 #include <logger.hpp>
 
 #include "entt/entity/fwd.hpp"
+#include "glm/trigonometric.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
@@ -718,7 +719,10 @@ void InspectorPanel::onDraw() {
 			TransformComponent &transformComponent =
 				registry.get<TransformComponent>(selectedEntity);
 			ImGui::DragFloat3("Position", &transformComponent.position[0]);
-			ImGui::DragFloat3("Rotation", &transformComponent.rotation[0]);
+			glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(transformComponent.rotation));
+			if (ImGui::DragFloat3("Rotation", &eulerRotation[0])) {
+				transformComponent.rotation = glm::quat(glm::radians(eulerRotation));
+			}
 			ImGui::DragFloat3("Scale", &transformComponent.scale[0]);
 		}
 		if (registry.all_of<MeshComponent>(selectedEntity)) {
@@ -746,6 +750,7 @@ void InspectorPanel::onDraw() {
 	}
 	ImGui::End();
 }
+
 void InspectorPanel::onEvent(Event &e) {}
 
 void AssetRegistryPanel::onAttach() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IconsFontAwesome6.h"
+#include "entt/entity/entity.hpp"
 #include "shader.hpp"
 #include "view.hpp"
 #include <app.hpp>
@@ -30,34 +31,6 @@ class Panel {
   protected:
 	AppContext appContext;
 	const std::string name;
-};
-
-struct ViewportMotionSettings {
-	float moveSpeed = 0.5f;
-	float fastMoveSpeed = 1.0f;
-	float lookSpeed = 0.005f;
-};
-
-class ViewPanel : public Panel {
-  public:
-	ViewPanel(AppContext appContext, PerspectiveView &editorView) : Panel("Viewport", appContext), editorView(editorView) {};
-
-	virtual void onAttach() override;
-	virtual void onDetach() override;
-	virtual void onUpdate() override;
-	virtual void onDraw() override;
-	virtual void onEvent(Event &e) override;
-
-	void setView(wgpu::TextureView sceneView) {
-		this->sceneView = sceneView;
-	}
-
-  private:
-	bool focused = false;
-	ViewportMotionSettings motionSettings;
-	PerspectiveView &editorView;
-	bool viewportMovementActive = false;
-	wgpu::TextureView sceneView;
 };
 
 struct AssetCard {

@@ -10,7 +10,7 @@
 #include "renderer.hpp"
 #include "window.hpp"
 #include <IconsFontAwesome6.h>
-#include <cstdint>
+#include <ImGuizmo.h>
 #include <imgui.h>
 #include <imgui_stdlib.h>
 #include <io.hpp>
@@ -18,7 +18,7 @@
 #include <webgpu/webgpu.hpp>
 
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
-											viewPanel(appContext, Editor::get().editorView),
+											viewPanel(appContext, Editor::get().getEditorContext().getCurrentSelectedEntity(), Editor::get().editorView),
 											appContext(appContext),
 											assetPropertiesPanel(appContext),
 											assetPanel(appContext, assetPropertiesPanel),
@@ -109,6 +109,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 
 	ImGui::DockSpaceOverViewport();
 

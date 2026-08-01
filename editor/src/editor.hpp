@@ -1,6 +1,5 @@
 #include "app.hpp"
 #include "entt/entity/entity.hpp"
-#include "event.hpp"
 #include "view.hpp"
 #include <ecs.hpp>
 #include <layer.hpp>
@@ -16,7 +15,7 @@ class EditorContext {
   public:
 	std::filesystem::path currentlyEditedSceneAssetPath = "";
 
-	const entt::entity getCurrentSelectedEntity() {
+	entt::entity &getCurrentSelectedEntity() {
 		return currentSelectedEntity;
 	}
 	void setCurrentSelectedEntity(const entt::entity entity) {

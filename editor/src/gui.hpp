@@ -2,6 +2,7 @@
 
 #include "app.hpp"
 #include "panel.hpp"
+#include "view_panel.hpp"
 #include <layer.hpp>
 #include <renderer.hpp>
 #include <webgpu/webgpu.hpp>

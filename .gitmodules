@@ -46,3 +46,6 @@
 [submodule "vendor/cereal-yaml"]
 	path = vendor/cereal-yaml
 	url = https://github.com/mattcontinisio/cereal-yaml.git
+[submodule "vendor/imguizmo"]
+	path = vendor/imguizmo
+	url = https://github.com/TheLemon404/ImGuizmo.git

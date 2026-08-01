@@ -5,7 +5,6 @@
 #include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
 #include "editor.hpp"
-#include "input.hpp"
 #include <cfloat>
 #include <component.hpp>
 #include <concepts>
@@ -17,98 +16,18 @@
 #include <io.hpp>
 #include <logger.hpp>
 
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include "entt/entity/fwd.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
-#include "mouse.hpp"
 #include "shader.hpp"
 #include "spdlog/common.h"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
-#include <glm/gtx/rotate_vector.hpp> // Required extension
 #include <imgui_stdlib.h>
 #include <memory>
-
-constexpr glm::vec3 globalUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-using namespace CitronCore;
-using namespace CitronECS;
-
-void ViewPanel::onAttach() {
-}
-
-void ViewPanel::onDetach() {
-}
-
-void ViewPanel::onUpdate() {
-	if (!focused)
-		return;
-
-	CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
-	if (inputLayer->isPressed(SDLK_W)) {
-		editorView.position += editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
-	}
-	if (inputLayer->isPressed(SDLK_S)) {
-		editorView.position -= editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
-	}
-	if (inputLayer->isPressed(SDLK_A)) {
-		editorView.position += glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
-	}
-	if (inputLayer->isPressed(SDLK_D)) {
-		editorView.position -= glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
-	}
-	if (inputLayer->isPressed(SDLK_Q)) {
-		editorView.position += globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
-	}
-	if (inputLayer->isPressed(SDLK_E)) {
-		editorView.position -= globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
-	}
-}
-
-void ViewPanel::onDraw() {
-	ImGui::Begin("Viewport", nullptr);
-	focused = ImGui::IsWindowFocused();
-	if (viewportMovementActive)
-		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
-	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-	WGPUTextureView view = sceneView;
-	ImGui::Image((ImTextureID)(uintptr_t)view, viewportSize);
-	editorView.aspect = viewportSize.x / viewportSize.y;
-	ImGui::End();
-}
-
-void ViewPanel::onEvent(Event &e) {
-	if (!focused)
-		return;
-
-	if (e.isInCategory(EventCategoryMouse)) {
-		if (e.getEventType() == EventType::MouseMoved && viewportMovementActive) {
-			MouseMovedEvent &mouseEvent = static_cast<MouseMovedEvent &>(e);
-			float dx = mouseEvent.getDx() * motionSettings.lookSpeed;
-			float dy = mouseEvent.getDy() * motionSettings.lookSpeed;
-			editorView.forward = glm::rotate(editorView.forward, dx, globalUp);
-			glm::vec3 localRightVector = glm::normalize(glm::cross(editorView.forward, globalUp));
-			editorView.forward = glm::rotate(editorView.forward, dy, localRightVector);
-		}
-		if (e.getEventType() == EventType::MouseButtonPressed) {
-			MouseButtonPressedEvent &mouseEvent = static_cast<MouseButtonPressedEvent &>(e);
-			if (mouseEvent.getButton() == SDL_BUTTON_RIGHT) {
-				viewportMovementActive = true;
-			}
-		}
-		if (e.getEventType() == EventType::MouseButtonReleased) {
-			MouseButtonReleasedEvent &mouseEvent = static_cast<MouseButtonReleasedEvent &>(e);
-			if (mouseEvent.getButton() == SDL_BUTTON_RIGHT) {
-				viewportMovementActive = false;
-			}
-		}
-	}
-}
 
 void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get().getEditorContext();

@@ -142,14 +142,14 @@ void ViewPanel::onEvent(Event &e) {
 }
 
 void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity entity) {
-	if (ImGui::IsKeyPressed(ImGuiKey_T) && !viewportMovementActive)
+	if (ImGui::IsKeyPressed(ImGuiKey_T) && !viewportMovementActive && focused)
 		manipulationSettings.currentGizmoOperation = ImGuizmo::TRANSLATE;
-	if (ImGui::IsKeyPressed(ImGuiKey_E) && !viewportMovementActive)
+	if (ImGui::IsKeyPressed(ImGuiKey_E) && !viewportMovementActive && focused)
 		manipulationSettings.currentGizmoOperation = ImGuizmo::ROTATE;
-	if (ImGui::IsKeyPressed(ImGuiKey_R) && !viewportMovementActive)
+	if (ImGui::IsKeyPressed(ImGuiKey_R) && !viewportMovementActive && focused)
 		manipulationSettings.currentGizmoOperation = ImGuizmo::SCALE;
 
-	if (ImGui::IsKeyPressed(ImGuiKey_S) && !viewportMovementActive)
+	if (ImGui::IsKeyPressed(ImGuiKey_S) && !viewportMovementActive && focused)
 		manipulationSettings.snap = !manipulationSettings.snap;
 	glm::vec3 snap;
 	switch (manipulationSettings.currentGizmoOperation) {

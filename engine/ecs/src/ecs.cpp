@@ -1,7 +1,12 @@
-#include "ecs.hpp"
+
+#include "entt/entity/fwd.hpp"
+#include "glm/ext/vector_float3.hpp"
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 #include "assets.hpp"
 #include "component.hpp"
 #include "core.hpp"
+#include "ecs.hpp"
 #include "event.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -46,6 +51,7 @@ UUID Scene::createEntity() {
 	const auto entity = registry.create();
 	UUID uuid = UUID();
 	registry.emplace<EntityBaseComponent>(entity, uuid, "Entity");
+	registry.emplace<TransformComponent>(entity);
 	entityMap[uuid] = entity;
 
 	CITRON_CORE_INFO("Successfully created entity: {}", (int)uuid);
@@ -61,9 +67,25 @@ void Scene::addComponent(entt::entity entity, T component) {
 }
 
 void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
+	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
+
+	// reparenting entity to root
+	if (parent == entt::null) {
+		if (base.parentId != UUID::nullID) {
+			EntityBaseComponent &oldParentBase =
+				registry.get<EntityBaseComponent>(entityMap[base.parentId]);
+			oldParentBase.children.erase(std::remove(oldParentBase.children.begin(),
+													 oldParentBase.children.end(),
+													 base.uuid),
+										 oldParentBase.children.end());
+		}
+
+		base.parentId = UUID::nullID;
+		return;
+	}
+
 	EntityBaseComponent &newParentBase =
 		registry.get<EntityBaseComponent>(parent);
-	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 
 	if (base.uuid == newParentBase.uuid || base.parentId == newParentBase.uuid)
 		return;
@@ -106,16 +128,70 @@ void Scene::deleteEntity(entt::entity entity) {
 	entityMap.erase(uuid);
 }
 
+glm::vec3 Scene::getGlobalPosition(entt::entity entity) {
+	if (!registry.any_of<TransformComponent>(entity)) {
+		return glm::vec3(0.0f);
+	}
+
+	TransformComponent &t = registry.get<TransformComponent>(entity);
+	EntityBaseComponent &b = registry.get<EntityBaseComponent>(entity);
+
+	bool hasValidParent = b.parentId != UUID::nullID && entityMap.contains(b.parentId) && registry.any_of<TransformComponent>(entity);
+
+	return hasValidParent ? getGlobalPosition(getEntity(b.parentId)) + t.position : t.position;
+}
+
+glm::quat Scene::getGlobalRotation(entt::entity entity) {
+	if (!registry.any_of<TransformComponent>(entity)) {
+		return glm::identity<glm::quat>();
+	}
+
+	TransformComponent &t = registry.get<TransformComponent>(entity);
+	EntityBaseComponent &b = registry.get<EntityBaseComponent>(entity);
+
+	bool hasValidParent = b.parentId != UUID::nullID && entityMap.contains(b.parentId) && registry.any_of<TransformComponent>(entity);
+
+	return hasValidParent ? getGlobalRotation(getEntity(b.parentId)) * t.rotation : t.rotation;
+}
+
+glm::vec3 Scene::getGlobalScale(entt::entity entity) {
+	if (!registry.any_of<TransformComponent>(entity)) {
+		return glm::vec3(1.0f);
+	}
+
+	TransformComponent &t = registry.get<TransformComponent>(entity);
+	EntityBaseComponent &b = registry.get<EntityBaseComponent>(entity);
+
+	bool hasValidParent = b.parentId != UUID::nullID && entityMap.contains(b.parentId) && registry.any_of<TransformComponent>(entity);
+
+	return hasValidParent ? getGlobalScale(getEntity(b.parentId)) * t.scale : t.scale;
+}
+
+glm::mat4 Scene::getGlobalTransform(entt::entity entity) {
+	if (!registry.any_of<TransformComponent>(entity)) {
+		return glm::identity<glm::mat4>();
+	}
+
+	TransformComponent &t = registry.get<TransformComponent>(entity);
+	EntityBaseComponent &b = registry.get<EntityBaseComponent>(entity);
+
+	t.matrix = glm::identity<glm::mat4>();
+	t.matrix = glm::translate(glm::mat4(1.0f), t.position) *
+			   glm::mat4_cast(glm::normalize(t.rotation)) *
+			   glm::scale(glm::mat4(1.0f), t.scale);
+
+	bool hasValidParent = b.parentId != UUID::nullID && entityMap.contains(b.parentId) && registry.any_of<TransformComponent>(entity);
+
+	return hasValidParent ? getGlobalTransform(getEntity(b.parentId)) * t.matrix : t.matrix;
+}
+
 std::vector<CitronGraphics::RenderableReferenceData> Scene::extractRenderableData(AssetManager &assetManager) {
 	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
 	for (auto &entity : registry.view<MeshComponent, TransformComponent, EntityBaseComponent>()) {
 		CitronGraphics::RenderableReferenceData data;
 		data.entityUUID = registry.get<EntityBaseComponent>(entity).uuid;
 
-		TransformComponent &t = registry.get<TransformComponent>(entity);
-		t.matrix = glm::identity<glm::mat4>();
-		t.matrix = glm::translate(glm::mat4(1.0f), t.position) * glm::mat4_cast(glm::normalize(t.rotation)) * glm::scale(glm::mat4(1.0f), t.scale);
-		data.transform = t.matrix;
+		data.transform = getGlobalTransform(entity);
 
 		MeshComponent &meshComponent = registry.get<MeshComponent>(entity);
 		if (!assetManager.isValidAsset(meshComponent.meshAsset.uuid))

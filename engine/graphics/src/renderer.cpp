@@ -171,7 +171,7 @@ void Renderer::init() {
 
 	rendererResourcesManager.initResources();
 
-	colorTarget = device.createEmptyRenderTargetTexture();
+	colorTarget = device.createEmptyRenderTargetTexture(window.getWidth(), window.getHeight());
 	colorTargetView = device.createTextureView(colorTarget);
 }
 
@@ -222,4 +222,14 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 		return a.material->getUUID() < b.material->getUUID();
 	});
 	return renderables;
+}
+
+wgpu::Texture &Renderer::getColorTarget(glm::vec2 viewportSize) {
+	if (viewportSize.x != colorTarget.getWidth() || viewportSize.y != colorTarget.getHeight()) {
+		colorTarget.release();
+		colorTarget = device.createEmptyRenderTargetTexture(viewportSize.x, viewportSize.y);
+		colorTargetView.release();
+		colorTargetView = colorTarget.createView();
+	}
+	return colorTarget;
 }

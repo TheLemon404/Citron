@@ -54,7 +54,13 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void deleteEntity(UUID uuid);
 	void deleteEntity(entt::entity entity);
 
-	std::vector<CitronGraphics::RenderableReferenceData> extractRenderableData(AssetManager &assetManager);
+	glm::vec3 getGlobalPosition(entt::entity entity);
+	glm::quat getGlobalRotation(entt::entity entity);
+	glm::vec3 getGlobalScale(entt::entity entity);
+	glm::mat4 getGlobalTransform(entt::entity entity);
+
+	std::vector<CitronGraphics::RenderableReferenceData>
+	extractRenderableData(AssetManager &assetManager);
 
 	void rename(const std::string &name) { this->name = name; }
 

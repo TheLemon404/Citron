@@ -1,3 +1,5 @@
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 #include "gui.hpp"
 #include "app.hpp"
 #include "backends/imgui_impl_sdl3.h"
@@ -16,10 +18,6 @@
 #include <io.hpp>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
-
-constexpr ImVec4 xColor = ImVec4(1, 0.373, 0.373, 1.0f);
-constexpr ImVec4 yColor = ImVec4(0.655, 0.949, 0.267, 1.0f);
-constexpr ImVec4 zColor = ImVec4(0.337, 0.596, 0.988, 1.0f);
 
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
 											viewPanel(appContext, Editor::get().getEditorContext().getCurrentSelectedEntity(), Editor::get().editorView),
@@ -296,11 +294,11 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_ScrollbarGrabActive] =
 		ImVec4(0.50980395f, 0.50980395f, 0.50980395f, 1.0f);
 	style.Colors[ImGuiCol_CheckMark] =
-		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+		themeColor;
 	style.Colors[ImGuiCol_SliderGrab] =
-		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+		themeColor;
 	style.Colors[ImGuiCol_SliderGrabActive] =
-		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+		themeColor;
 	style.Colors[ImGuiCol_Button] =
 		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_ButtonHovered] =
@@ -338,9 +336,9 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_PlotLinesHovered] =
 		ImVec4(1.0f, 0.42745098f, 0.34901962f, 1.0f);
 	style.Colors[ImGuiCol_PlotHistogram] =
-		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+		themeColor;
 	style.Colors[ImGuiCol_PlotHistogramHovered] =
-		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+		themeColor;
 	style.Colors[ImGuiCol_TableHeaderBg] =
 		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_TableBorderStrong] =
@@ -365,7 +363,7 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_CheckboxSelectedBg] =
 		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
 	style.Colors[ImGuiCol_DockingPreview] =
-		ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+		themeColor;
 	style.Colors[ImGuiCol_DockingEmptyBg] =
 		ImVec4(0.15686275f, 0.15686275f, 0.15686275f, 1.0f);
 
@@ -379,7 +377,7 @@ void GuiLayer::applyTheme() {
 
 	guizmoStyle.RotationLineThickness = 3.0f;
 	guizmoStyle.RotationOuterLineThickness = 3.0f;
-	guizmoStyle.HatchedAxisLineThickness = 0.0f;
+	guizmoStyle.HatchedAxisLineThickness = 3.0f;
 	guizmoStyle.ScaleLineThickness = 3.0f;
 	guizmoStyle.ScaleLineCircleSize = 6.0f;
 	guizmoStyle.TranslationLineArrowSize = 6.0f;

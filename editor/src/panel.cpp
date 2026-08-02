@@ -577,6 +577,19 @@ void OutlinerPanel::onDraw() {
 		ImGui::TableSetupColumn("Name");
 		ImGui::TableHeadersRow();
 
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload *payload =
+					ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
+				uint64_t *childEntityUUID = (uint64_t *)payload->Data;
+				UUID newChildUUID = *childEntityUUID;
+				std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
+				currentScene->reparentEntity(
+					currentScene->getEntity(newChildUUID),
+					entt::null);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
 		int i = 0;
@@ -610,8 +623,6 @@ void OutlinerPanel::onDraw() {
 				if (ImGui::MenuItem("Create Entity")) {
 					UUID newEntity = currentEditedScene->createEntity();
 					currentEditedScene->getRegistry().emplace<MeshComponent>(
-						currentEditedScene->getEntity(newEntity));
-					currentEditedScene->getRegistry().emplace<TransformComponent>(
 						currentEditedScene->getEntity(newEntity));
 				}
 
@@ -718,12 +729,15 @@ void InspectorPanel::onDraw() {
 		if (registry.all_of<TransformComponent>(selectedEntity)) {
 			TransformComponent &transformComponent =
 				registry.get<TransformComponent>(selectedEntity);
-			ImGui::DragFloat3("Position", &transformComponent.position[0]);
-			glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(transformComponent.rotation));
-			if (ImGui::DragFloat3("Rotation", &eulerRotation[0])) {
-				transformComponent.rotation = glm::quat(glm::radians(eulerRotation));
+			static bool selection = true;
+			if (collapsingHeader("Transform Component", &selection)) {
+				ImGui::DragFloat3("Position", &transformComponent.position[0]);
+				glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(transformComponent.rotation));
+				if (ImGui::DragFloat3("Rotation", &eulerRotation[0])) {
+					transformComponent.rotation = glm::quat(glm::radians(eulerRotation));
+				}
+				ImGui::DragFloat3("Scale", &transformComponent.scale[0]);
 			}
-			ImGui::DragFloat3("Scale", &transformComponent.scale[0]);
 		}
 		if (registry.all_of<MeshComponent>(selectedEntity)) {
 			MeshComponent &meshComponent =

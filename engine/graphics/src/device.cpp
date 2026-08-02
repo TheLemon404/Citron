@@ -226,12 +226,12 @@ void Device::resizeSurface(int width, int height) {
 	m_lastSurfaceHeight = height;
 }
 
-wgpu::Texture Device::createEmptyRenderTargetTexture() {
+wgpu::Texture Device::createEmptyRenderTargetTexture(int width, int height) {
 	wgpu::TextureDescriptor colorTargetDesc = {};
 	colorTargetDesc.label = wgpu::StringView("colorTarget");
 	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;
-	colorTargetDesc.size.width = window.getWidth();
-	colorTargetDesc.size.height = window.getHeight();
+	colorTargetDesc.size.width = width;
+	colorTargetDesc.size.height = height;
 	colorTargetDesc.size.depthOrArrayLayers = 1;
 	colorTargetDesc.mipLevelCount = 1;
 	colorTargetDesc.sampleCount = 1;

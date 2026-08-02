@@ -136,3 +136,7 @@ void Editor::saveCurrentScene() {
 		"Scene: {} saved to {}: ", Editor::get().sceneManager.getActiveScene()->getName(),
 		editorContext.currentlyEditedSceneAssetPath.string());
 }
+
+glm::vec2 Editor::getActiveViewSize() {
+	return getLayer<GuiLayer>()->viewPanel.getViewportSize();
+}

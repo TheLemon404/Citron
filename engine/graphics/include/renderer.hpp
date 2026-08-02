@@ -97,7 +97,7 @@ struct RendererContext {
 
 class CITRON_GRAPHICS_API Renderer {
   public:
-	Renderer(Window &window, AssetManager &assetManager) : device(window), assetManager(assetManager), rendererResourcesManager(device) {}
+	Renderer(Window &window, AssetManager &assetManager) : window(window), device(window), assetManager(assetManager), rendererResourcesManager(device) {}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
 	Frame beginFrame(View &view);
@@ -155,10 +155,11 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
-	wgpu::Texture &getColorTarget() { return colorTarget; }
+	wgpu::Texture &getColorTarget(glm::vec2 viewportSize);
 	wgpu::TextureView &getColorTargetView() { return colorTargetView; }
 
   private:
+	Window &window;
 	RendererResourceManager rendererResourcesManager;
 	AssetManager &assetManager;
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/fwd.hpp"
 #define WEBGPU_BACKEND DAWN
 
 #include "buffer.hpp"
@@ -44,7 +45,7 @@ class CITRON_GRAPHICS_API Device {
 
 	void resizeSurface(int width, int height);
 
-	wgpu::Texture createEmptyRenderTargetTexture();
+	wgpu::Texture createEmptyRenderTargetTexture(int width, int height);
 	wgpu::TextureView createTextureView(wgpu::Texture &texture);
 
   private:

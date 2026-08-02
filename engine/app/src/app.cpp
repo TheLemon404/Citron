@@ -122,14 +122,16 @@ void App::update() {
 			layer->onUpdate();
 		}
 
+		glm::vec2 viewportSize = getActiveViewSize();
 		if (renderer.frameReady()) {
 			Frame frame = renderer.beginFrame(getActiveView());
 			if (sceneManager.getActiveScene()) {
-				RenderPass colorPass = frame.beginRenderPass(renderer.getColorTarget());
+				RenderPass colorPass = frame.beginRenderPass(renderer.getColorTarget(viewportSize));
 				std::vector<CitronGraphics::RenderableReferenceData> renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
 				if (!renderableData.empty()) {
 					colorPass.drawRenderData(renderableData);
 				}
+
 				colorPass.end();
 			}
 
@@ -138,7 +140,6 @@ void App::update() {
 			if (renderer.onGuiDrawCallback)
 				renderer.onGuiDrawCallback(renderer.getColorTargetView(), uiPass);
 			uiPass.end();
-
 			renderer.endFrame(frame);
 		}
 

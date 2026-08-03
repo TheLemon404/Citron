@@ -39,6 +39,7 @@ class CITRON_GRAPHICS_API Renderer;
 struct RenderPassColorAttachment {
 	wgpu::Texture targetTexture;
 	wgpu::TextureView targetTextureView;
+	wgpu::TextureFormat textureFormat = wgpu::TextureFormat::BGRA8UnormSrgb;
 	wgpu::Color clearValue = {0.247, 0.247, 0.247, 1.0};
 };
 
@@ -82,10 +83,12 @@ class CITRON_GRAPHICS_API RenderPass {
 	Frame &getParentFrame() { return parentFrame; }
 
 	const std::vector<RenderPassColorAttachment> &getColorAttachments() const { return params.colorAttachments; }
+	const std::vector<wgpu::TextureFormat> &getColorAttachmentFormats() const { return colorAttachmentFormats; }
 
 	const RenderPassParams &getParams() const { return params; }
 
   private:
+	std::vector<wgpu::TextureFormat> colorAttachmentFormats;
 	std::vector<wgpu::RenderPassColorAttachment> renderPassColorAttachments;
 	Renderer &renderer;
 	Frame &parentFrame;
@@ -143,7 +146,7 @@ class CITRON_GRAPHICS_API Renderer {
 
 	std::shared_ptr<Pipeline> getPipeline(PipelineKey key) {
 		if (!rendererResourcesManager.pipelineCache.contains(key)) {
-			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachments, key.hasDepthStencilAttachment, key.shader, key.textureFormat);
+			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachmentFormats, key.hasDepthStencilAttachment, key.shader);
 			rendererResourcesManager.pipelineCache[key] = pipeline;
 		}
 		return rendererResourcesManager.pipelineCache[key];

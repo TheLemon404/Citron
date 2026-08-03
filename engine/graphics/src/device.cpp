@@ -255,6 +255,21 @@ wgpu::Texture Device::createRenderTargetColorTexture(int width, int height) {
 	return device.createTexture(colorTargetDesc);
 }
 
+wgpu::Texture Device::createRenderTargetColorTexture(int width, int height, wgpu::TextureFormat format) {
+	wgpu::TextureDescriptor colorTargetDesc = {};
+	colorTargetDesc.label = wgpu::StringView("colorTarget");
+	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;
+	colorTargetDesc.size.width = width;
+	colorTargetDesc.size.height = height;
+	colorTargetDesc.size.depthOrArrayLayers = 1;
+	colorTargetDesc.mipLevelCount = 1;
+	colorTargetDesc.sampleCount = 1;
+	colorTargetDesc.format = format;
+	colorTargetDesc.usage = wgpu::TextureUsage::RenderAttachment |
+							wgpu::TextureUsage::TextureBinding;
+	return device.createTexture(colorTargetDesc);
+}
+
 wgpu::TextureView Device::createTextureView(wgpu::Texture &texture) {
 	return texture.createView();
 }

@@ -20,7 +20,6 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 	  params(params), parentFrame(parentFrame) {
 
 	// Render pass encoder setup
-
 	for (RenderPassColorAttachment attachment : params.colorAttachments) {
 		wgpu::RenderPassColorAttachment colorAttachment = {};
 		colorAttachment.nextInChain = nullptr;
@@ -30,6 +29,7 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 		colorAttachment.storeOp = wgpu::StoreOp::Store;
 		colorAttachment.clearValue = attachment.clearValue;
 		renderPassColorAttachments.push_back(colorAttachment);
+		colorAttachmentFormats.push_back(attachment.textureFormat);
 	}
 
 	wgpu::RenderPassDepthStencilAttachment depthStencilAttachment = {};
@@ -53,9 +53,8 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 
 void RenderPass::drawFullscreenQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass) {
 	RendererContext context = renderer.getContext();
-	std::vector<wgpu::RenderPassColorAttachment> colorAttachments = renderPass.renderPassColorAttachments;
 
-	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({fullScreenQuadRenderObject.shader, colorAttachments, renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
+	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({fullScreenQuadRenderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
 	if (!pipeline) {
 		CITRON_CORE_ERROR("Failed to get pipeline for render object");
 		return;
@@ -70,10 +69,9 @@ void RenderPass::drawFullscreenQuad(RenderObject fullScreenQuadRenderObject, Ren
 
 void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderPass &renderPass) {
 	RendererContext context = renderer.getContext();
-	std::vector<wgpu::RenderPassColorAttachment> colorAttachments = renderPass.renderPassColorAttachments;
 
 	// sorting
-	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObjects[0].shader, colorAttachments, renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
+	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObjects[0].shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
 	setPipeline(pipeline);
 
 	// get bind group for frame uniforms
@@ -91,7 +89,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 	for (size_t i = 0; i < renderObjects.size(); i++) {
 		RenderObject &renderObject = renderObjects[i];
 		if (i > 0 && renderObjects[i].shader->getUUID() != renderObjects[i - 1].shader->getUUID()) {
-			pipeline = renderer.getPipeline({renderObject.shader, colorAttachments, renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
+			pipeline = renderer.getPipeline({renderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
 			setPipeline(pipeline);
 		}
 		if (!pipeline) {
@@ -169,10 +167,10 @@ void Renderer::init() {
 
 	rendererResourcesManager.initResources();
 
-	uuidBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	uuidBufferTextureView = device.createTextureView(uuidBufferTexture);
 	depthBufferTexture = device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight());
 	depthBufferTextureView = device.createTextureView(depthBufferTexture);
+	uuidBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
+	uuidBufferTextureView = device.createTextureView(uuidBufferTexture);
 	colorBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 	colorBufferTextureView = device.createTextureView(colorBufferTexture);
 	normalBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
@@ -182,6 +180,7 @@ void Renderer::init() {
 	fullscreenQuadRenderObject.modelUniforms = ModelUniforms();
 	fullscreenQuadRenderObject.mesh = Mesh::createFullscreenQuad(device);
 	fullscreenQuadRenderObject.material = std::make_shared<Material>(UUID(), device);
+
 	std::string fullscreenQuadShader = R"(
 		struct VertexInput {
     @location(0) in_vertex_position: vec3f,
@@ -269,17 +268,6 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 		device.getWGPUDevice().getQueue().writeBuffer(rendererResourcesManager.frameUniformBuffer.buffer, 0, &rendererResourcesManager.frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 	}
 
-	// uuid painting pass
-	RenderPassColorAttachment uuidAttachment = {};
-	uuidAttachment.targetTexture = uuidBufferTexture;
-	uuidAttachment.targetTextureView = uuidBufferTextureView;
-	RenderPassParams uuidPassParams = {};
-	uuidPassParams.containsDepthStencil = false;
-	uuidPassParams.colorAttachments = {uuidAttachment};
-	RenderPass uuidPass = frame.beginRenderPass(uuidPassParams);
-	uuidPass.drawFullscreenQuad(fullscreenQuadRenderObject, uuidPass);
-	uuidPass.end();
-
 	// depth and gbuffer pass
 	RenderPassDepthStencilAttachment depthAttachment = {};
 	depthAttachment.targetTexture = depthBufferTexture;
@@ -336,7 +324,7 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 void Renderer::resizeRenderTargets(glm::vec2 viewportSize) {
 	if (viewportSize.x != uuidBufferTexture.getWidth() || viewportSize.y != uuidBufferTexture.getHeight()) {
 		uuidBufferTexture.release();
-		uuidBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
+		uuidBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 		uuidBufferTextureView.release();
 		uuidBufferTextureView = uuidBufferTexture.createView();
 	}

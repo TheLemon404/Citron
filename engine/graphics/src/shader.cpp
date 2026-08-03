@@ -50,6 +50,8 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 		bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(bindGroupLayoutDesc));
 	}
 
+	miniray_free(reflectionData);
+
 	wgpu::PipelineLayoutDescriptor pipelineLayoutDesc = {};
 	pipelineLayoutDesc.setDefault();
 	pipelineLayoutDesc.nextInChain = nullptr;

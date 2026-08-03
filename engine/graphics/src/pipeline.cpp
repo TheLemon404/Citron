@@ -6,8 +6,8 @@
 
 using namespace CitronGraphics;
 
-Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::RenderPassColorAttachment> colorAttachments, bool hasDepthStencilAttachment,
-				   std::shared_ptr<Shader> shader, wgpu::TextureFormat format)
+Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> colorAttachmentFormats, bool hasDepthStencilAttachment,
+				   std::shared_ptr<Shader> shader)
 	: device(device) {
 
 	// render pipeline
@@ -61,7 +61,7 @@ Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::RenderPassColor
 	blendState.alpha.dstFactor = wgpu::BlendFactor::One;
 	blendState.alpha.operation = wgpu::BlendOperation::Add;
 
-	for (const auto &attachment : colorAttachments) {
+	for (const auto &format : colorAttachmentFormats) {
 		wgpu::ColorTargetState colorTarget;
 		colorTarget.format = format;
 		colorTarget.blend = &blendState;

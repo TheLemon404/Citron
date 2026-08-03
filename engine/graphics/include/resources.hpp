@@ -19,6 +19,7 @@ struct CITRON_GRAPHICS_API RenderableReferenceData {
 
 struct CITRON_GRAPHICS_API ModelUniforms {
 	glm::mat4 transform = glm::identity<glm::mat4>();
+	uint32_t uuid;
 };
 
 struct CITRON_GRAPHICS_API FrameUniforms {

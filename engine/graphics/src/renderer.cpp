@@ -5,6 +5,7 @@
 #include "mesh.hpp"
 #include "resources.hpp"
 #include "view.hpp"
+#include <complex>
 #include <event.hpp>
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
@@ -249,7 +250,7 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 
 		renderObjectCache.renderObjects.push_back({
 			renderableReferenceData[i].entityUUID,
-			{.transform = renderableReferenceData[i].transform},
+			{.transform = renderableReferenceData[i].transform, .uuid = (uint32_t)(uint64_t)renderableReferenceData[i].entityUUID},
 			mesh,
 			material,
 			shader,

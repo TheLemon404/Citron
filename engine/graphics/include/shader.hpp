@@ -24,17 +24,25 @@ class CITRON_GRAPHICS_API Shader : public Asset<Shader, AssetType::SHADER> {
 
 	template <typename T>
 	static size_t dynamicSizeof(size_t alignment) {
-		return round(sizeof(T) / (float)alignment) * alignment;
+		if (alignment == 0)
+			return sizeof(T);
+		return ((sizeof(T) + alignment - 1) / alignment) * alignment;
 	}
 
 	static size_t dynamicSizeof(std::size_t size, size_t alignment) {
-		return round(size / (float)alignment) * alignment;
+		if (alignment == 0)
+			return size;
+		return ((size + alignment - 1) / alignment) * alignment;
 	}
 
 	template <typename T>
-	static size_t paddedSizeof() { return round(sizeof(T) / 16.0f) * 16; }
+	static size_t paddedSizeof() {
+		return ((sizeof(T) + 15) / 16) * 16;
+	}
 
-	static size_t paddedSizeof(std::size_t size) { return round(size / 16.0f) * 16; }
+	static size_t paddedSizeof(std::size_t size) {
+		return ((size + 15) / 16) * 16;
+	}
 
 	wgpu::PipelineLayout &getPipelineLayout() { return pipelineLayout; }
 	wgpu::BindGroupLayout &getBindGroupLayout(const uint16_t index) { return bindGroupLayouts[index]; }

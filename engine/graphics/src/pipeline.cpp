@@ -64,7 +64,7 @@ Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> 
 	for (const auto &format : colorAttachmentFormats) {
 		wgpu::ColorTargetState colorTarget;
 		colorTarget.format = format;
-		colorTarget.blend = &blendState;
+		colorTarget.blend = format == wgpu::TextureFormat::BGRA8Unorm ? &blendState : nullptr;
 		colorTarget.writeMask = wgpu::ColorWriteMask::All;
 		colorTargets.push_back(colorTarget);
 	}

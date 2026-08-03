@@ -226,7 +226,21 @@ void Device::resizeSurface(int width, int height) {
 	m_lastSurfaceHeight = height;
 }
 
-wgpu::Texture Device::createEmptyRenderTargetTexture(int width, int height) {
+wgpu::Texture Device::createRenderTargetDepthTexture(int width, int height) {
+	wgpu::TextureDescriptor depthTargetDesc = {};
+	depthTargetDesc.label = wgpu::StringView("depthTarget");
+	depthTargetDesc.dimension = wgpu::TextureDimension::_2D;
+	depthTargetDesc.size.width = width;
+	depthTargetDesc.size.height = height;
+	depthTargetDesc.size.depthOrArrayLayers = 1;
+	depthTargetDesc.mipLevelCount = 1;
+	depthTargetDesc.sampleCount = 1;
+	depthTargetDesc.format = wgpu::TextureFormat::Depth32Float;
+	depthTargetDesc.usage = wgpu::TextureUsage::RenderAttachment | wgpu::TextureUsage::TextureBinding;
+	return device.createTexture(depthTargetDesc);
+}
+
+wgpu::Texture Device::createRenderTargetColorTexture(int width, int height) {
 	wgpu::TextureDescriptor colorTargetDesc = {};
 	colorTargetDesc.label = wgpu::StringView("colorTarget");
 	colorTargetDesc.dimension = wgpu::TextureDimension::_2D;

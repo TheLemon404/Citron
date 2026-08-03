@@ -1,3 +1,6 @@
+
+#define WEBGPU_CPP_IMPLEMENTATION
+
 #include "app.hpp"
 #include "assets.hpp"
 #include "device.hpp"
@@ -16,6 +19,7 @@
 #include <shader.hpp>
 #include <string>
 #include <string_view>
+
 #include <webgpu/webgpu.hpp>
 #include <x86gprintrin.h>
 
@@ -114,6 +118,8 @@ void App::update() {
 	};
 	std::shared_ptr<Mesh> geometry = std::make_shared<Mesh>(triPositions, triIndices, renderer.getContext().device);
 
+	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
+
 	while (running) {
 		window.pollEvents();
 		sceneManager.onUpdate();
@@ -126,20 +132,24 @@ void App::update() {
 		if (renderer.frameReady()) {
 			Frame frame = renderer.beginFrame(getActiveView());
 			if (sceneManager.getActiveScene()) {
-				RenderPass colorPass = frame.beginRenderPass(renderer.getColorTarget(viewportSize));
-				std::vector<CitronGraphics::RenderableReferenceData> renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
-				if (!renderableData.empty()) {
-					colorPass.drawRenderData(renderableData);
-				}
-
-				colorPass.end();
+				renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
+			}
+			if (!renderableData.empty()) {
+				renderer.render(frame, renderableData, viewportSize);
 			}
 
+			// for editor ui
 			wgpu::Texture surfaceTexture = renderer.getContext().device.getCurrentSurfaceTexture().texture;
-			RenderPass uiPass = frame.beginRenderPass(surfaceTexture);
+			RenderPassColorAttachment colorAttachment = {};
+			colorAttachment.targetTexture = surfaceTexture;
+			colorAttachment.targetTextureView = surfaceTexture.createView();
+			RenderPassParams guiPassParams = {};
+			guiPassParams.colorAttachments.push_back(colorAttachment);
+			RenderPass uiPass = frame.beginRenderPass(guiPassParams);
 			if (renderer.onGuiDrawCallback)
-				renderer.onGuiDrawCallback(renderer.getColorTargetView(), uiPass);
+				renderer.onGuiDrawCallback(renderer.colorBufferTextureView, uiPass);
 			uiPass.end();
+			guiPassParams.colorAttachments[0].targetTextureView.release();
 			renderer.endFrame(frame);
 		}
 

@@ -6,7 +6,7 @@
 
 using namespace CitronGraphics;
 
-Pipeline::Pipeline(wgpu::Device &device,
+Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::RenderPassColorAttachment> colorAttachments, bool hasDepthStencilAttachment,
 				   std::shared_ptr<Shader> shader, wgpu::TextureFormat format)
 	: device(device) {
 
@@ -60,15 +60,27 @@ Pipeline::Pipeline(wgpu::Device &device,
 	blendState.alpha.srcFactor = wgpu::BlendFactor::Zero;
 	blendState.alpha.dstFactor = wgpu::BlendFactor::One;
 	blendState.alpha.operation = wgpu::BlendOperation::Add;
-	wgpu::ColorTargetState colorTarget;
-	colorTarget.format = format;
-	colorTarget.blend = &blendState;
-	colorTarget.writeMask = wgpu::ColorWriteMask::All;
-	fragmentState.targetCount = 1;
-	fragmentState.targets = &colorTarget;
+
+	for (const auto &attachment : colorAttachments) {
+		wgpu::ColorTargetState colorTarget;
+		colorTarget.format = format;
+		colorTarget.blend = &blendState;
+		colorTarget.writeMask = wgpu::ColorWriteMask::All;
+		colorTargets.push_back(colorTarget);
+	}
+
+	fragmentState.targetCount = colorTargets.size();
+	fragmentState.targets = colorTargets.data();
+
+	wgpu::DepthStencilState depthStencilState = {};
+	if (hasDepthStencilAttachment) {
+		depthStencilState.format = wgpu::TextureFormat::Depth32Float;
+		depthStencilState.depthWriteEnabled = wgpu::OptionalBool::True;
+		depthStencilState.depthCompare = wgpu::CompareFunction::Less;
+	}
 
 	pipelineDesc.fragment = &fragmentState;
-	pipelineDesc.depthStencil = nullptr;
+	pipelineDesc.depthStencil = hasDepthStencilAttachment ? &depthStencilState : nullptr;
 	pipelineDesc.multisample.count = 1;
 	pipelineDesc.multisample.mask = ~0u;
 	pipelineDesc.multisample.alphaToCoverageEnabled = false;

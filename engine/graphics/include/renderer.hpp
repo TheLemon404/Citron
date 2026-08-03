@@ -35,17 +35,35 @@ struct CITRON_GRAPHICS_API RenderObject {
 
 class CITRON_GRAPHICS_API Renderer;
 
+struct RenderPassColorAttachment {
+	wgpu::Texture targetTexture;
+	wgpu::TextureView targetTextureView;
+	wgpu::Color clearValue = {0.247, 0.247, 0.247, 1.0};
+};
+
+struct RenderPassDepthStencilAttachment {
+	wgpu::Texture targetTexture;
+	wgpu::TextureView targetTextureView;
+	float depthClearValue = 1.0f;
+	float stencilClearValue = 0.0f;
+};
+
+struct RenderPassParams {
+	std::vector<RenderPassColorAttachment> colorAttachments;
+	bool containsDepthStencil = false;
+	RenderPassDepthStencilAttachment depthStencilAttachment;
+};
+
 class CITRON_GRAPHICS_API RenderPass {
   public:
-	RenderPass(Renderer &renderer, wgpu::Texture &targetTexture,
+	RenderPass(Renderer &renderer, RenderPassParams &params,
 			   wgpu::CommandEncoder &commandEncoder, Frame &parentFrame);
-	~RenderPass();
 	RenderPass(const RenderPass &) = delete;
 	RenderPass &operator=(const RenderPass &) = delete;
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawRenderData(std::vector<RenderableReferenceData> renderableReferenceData);
+	void drawRenderData(std::vector<RenderableReferenceData> renderableReferenceData, RenderPass &renderPass);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);
@@ -57,16 +75,20 @@ class CITRON_GRAPHICS_API RenderPass {
 		return renderPassEncoder;
 	}
 
-	wgpu::TextureView &getTargetView() { return targetView; }
+	wgpu::TextureView &getColorTargetView(int attachmentIndex) { return params.colorAttachments[attachmentIndex].targetTextureView; }
 
 	Frame &getParentFrame() { return parentFrame; }
 
+	const std::vector<RenderPassColorAttachment> &getColorAttachments() const { return params.colorAttachments; }
+
+	const RenderPassParams &getParams() const { return params; }
+
   private:
+	std::vector<wgpu::RenderPassColorAttachment> renderPassColorAttachments;
 	Renderer &renderer;
 	Frame &parentFrame;
-	wgpu::Texture &targetTexture;
+	RenderPassParams &params;
 	wgpu::CommandEncoder &commandEncoder;
-	wgpu::TextureView targetView;
 	wgpu::RenderPassEncoder renderPassEncoder;
 };
 
@@ -75,7 +97,7 @@ class CITRON_GRAPHICS_API Frame {
 	Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
 		  wgpu::SurfaceTexture &surfaceTexture, View &view);
 
-	RenderPass beginRenderPass(wgpu::Texture &tartetTexture);
+	RenderPass beginRenderPass(RenderPassParams &params);
 
 	void drawRenderData(std::vector<RenderObject> &renderObjects);
 
@@ -103,6 +125,8 @@ class CITRON_GRAPHICS_API Renderer {
 	Frame beginFrame(View &view);
 	void endFrame(Frame &frame);
 
+	void render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::vec2 viewportSize);
+
 	void init();
 	void end();
 	void onEvent(Event &e);
@@ -112,7 +136,7 @@ class CITRON_GRAPHICS_API Renderer {
 
 	std::shared_ptr<Pipeline> getPipeline(PipelineKey key) {
 		if (!rendererResourcesManager.pipelineCache.contains(key)) {
-			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.shader, key.textureFormat);
+			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachments, key.hasDepthStencilAttachment, key.shader, key.textureFormat);
 			rendererResourcesManager.pipelineCache[key] = pipeline;
 		}
 		return rendererResourcesManager.pipelineCache[key];
@@ -155,16 +179,20 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
-	wgpu::Texture &getColorTarget(glm::vec2 viewportSize);
-	wgpu::TextureView &getColorTargetView() { return colorTargetView; }
+	void resizeRenderTargets(glm::vec2 viewportSize);
+
+	// render targets
+	wgpu::Texture depthBufferTexture;
+	wgpu::TextureView depthBufferTextureView;
+	wgpu::Texture colorBufferTexture;
+	wgpu::TextureView colorBufferTextureView;
+	wgpu::Texture normalBufferTexture;
+	wgpu::TextureView normalBufferTextureView;
 
   private:
 	Window &window;
 	RendererResourceManager rendererResourcesManager;
 	AssetManager &assetManager;
-
-	wgpu::Texture colorTarget;
-	wgpu::TextureView colorTargetView;
 
 	Device device;
 };

@@ -5,7 +5,6 @@
 #include "mesh.hpp"
 #include "pipeline.hpp"
 #include "shader.hpp"
-#include <map>
 #include <variant>
 #include <webgpu/webgpu.hpp>
 
@@ -32,14 +31,12 @@ struct CITRON_GRAPHICS_API FrameUniforms {
 
 struct CITRON_GRAPHICS_API PipelineKey {
 	std::shared_ptr<Shader> shader;
+	std::vector<wgpu::RenderPassColorAttachment> &colorAttachments;
+	bool hasDepthStencilAttachment = false;
 	wgpu::TextureFormat textureFormat;
 
 	bool operator==(const PipelineKey &other) const {
-		return shader == other.shader && textureFormat == other.textureFormat;
-	}
-
-	bool operator<(const PipelineKey &other) const {
-		return shader < other.shader || (shader == other.shader && textureFormat < other.textureFormat);
+		return shader == other.shader && textureFormat == other.textureFormat && colorAttachments.size() == other.colorAttachments.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment;
 	}
 };
 

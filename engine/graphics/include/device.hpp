@@ -45,7 +45,8 @@ class CITRON_GRAPHICS_API Device {
 
 	void resizeSurface(int width, int height);
 
-	wgpu::Texture createEmptyRenderTargetTexture(int width, int height);
+	wgpu::Texture createRenderTargetDepthTexture(int width, int height);
+	wgpu::Texture createRenderTargetColorTexture(int width, int height);
 	wgpu::TextureView createTextureView(wgpu::Texture &texture);
 
   private:

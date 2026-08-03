@@ -49,6 +49,7 @@ std::shared_ptr<AssetBase> MeshImporter::importAsset(AssetMetadata metadata) {
 
 	for (size_t i = 0; i < mesh->mNumVertices; i++) {
 		CitronGraphics::Vertex v = CitronGraphics::Vertex(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		v.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 		vertices.push_back(v);
 	}
 	for (size_t i = 0; i < mesh->mNumFaces; i++) {

@@ -98,26 +98,6 @@ void App::init() {
 }
 
 void App::update() {
-	std::vector<Vertex> triPositions = {
-		// Define a first triangle:
-		Vertex(-0.5, -0.5, 0.0),
-		Vertex(+0.5, -0.5, 0.0),
-		Vertex(+0.0, +0.5, 0.0),
-
-		// Add a second triangle:
-		Vertex(-0.55f, -0.5, 0.0),
-		Vertex(-0.05f, +0.5, 0.0),
-		Vertex(-0.55f, +0.5, 0.0)};
-	std::vector<uint32_t> triIndices = {
-		0,
-		1,
-		2,
-		3,
-		4,
-		5,
-	};
-	std::shared_ptr<Mesh> geometry = std::make_shared<Mesh>(triPositions, triIndices, renderer.getContext().device);
-
 	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
 
 	while (running) {

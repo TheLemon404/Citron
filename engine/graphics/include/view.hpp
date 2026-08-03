@@ -11,6 +11,8 @@ class CITRON_GRAPHICS_API View {
 
 	glm::vec3 position = glm::vec3(0.0f, 0.0f, -10.0f);
 	glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f);
+
+	virtual bool isInsideBounds(glm::vec3 position) = 0;
 };
 
 class CITRON_GRAPHICS_API PerspectiveView : public View {
@@ -20,6 +22,8 @@ class CITRON_GRAPHICS_API PerspectiveView : public View {
 	float far = 20000.0f;
 	float aspect = 1.2f;
 	glm::mat4 getProjectionMatrix() override;
+
+	virtual bool isInsideBounds(glm::vec3 position) override;
 };
 
 } // namespace CitronGraphics

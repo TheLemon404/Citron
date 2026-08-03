@@ -14,3 +14,9 @@ glm::mat4 View::getViewMatrix() {
 glm::mat4 PerspectiveView::getProjectionMatrix() {
 	return glm::perspective(fov, aspect, near, far);
 }
+
+bool PerspectiveView::isInsideBounds(glm::vec3 position) {
+	glm::vec4 clipCoord = glm::vec4(position, 1.0f) * getProjectionMatrix() * getViewMatrix();
+	clipCoord /= clipCoord.w;
+	return clipCoord.x >= -1.0f && clipCoord.x <= 1.0f && clipCoord.y >= -1.0f && clipCoord.y <= 1.0f && clipCoord.z >= -1.0f && clipCoord.z <= 1.0f;
+}

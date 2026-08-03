@@ -16,6 +16,7 @@
 #include <map>
 #include <material.hpp>
 #include <memory>
+#include <set>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
@@ -63,7 +64,8 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawRenderData(std::vector<RenderableReferenceData> renderableReferenceData, RenderPass &renderPass);
+	void drawFullscreenQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass);
+	void drawRenderData(std::vector<RenderObject> renderableReferenceData, RenderPass &renderPass);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);
@@ -115,6 +117,11 @@ struct RendererContext {
 	Device &device;
 	AssetManager &assetManager;
 	RendererResourceManager &rendererResourcesManager;
+};
+
+struct RenderObjectCache {
+	std::set<uint64_t> entityUUIDs;
+	std::vector<RenderObject> renderObjects;
 };
 
 class CITRON_GRAPHICS_API Renderer {
@@ -182,6 +189,8 @@ class CITRON_GRAPHICS_API Renderer {
 	void resizeRenderTargets(glm::vec2 viewportSize);
 
 	// render targets
+	wgpu::Texture uuidBufferTexture;
+	wgpu::TextureView uuidBufferTextureView;
 	wgpu::Texture depthBufferTexture;
 	wgpu::TextureView depthBufferTextureView;
 	wgpu::Texture colorBufferTexture;
@@ -189,12 +198,18 @@ class CITRON_GRAPHICS_API Renderer {
 	wgpu::Texture normalBufferTexture;
 	wgpu::TextureView normalBufferTextureView;
 
+	const RenderObject &getFullscreenQuad() const { return fullscreenQuadRenderObject; }
+
   private:
+	RenderObjectCache renderObjectCache;
+
 	Window &window;
 	RendererResourceManager rendererResourcesManager;
 	AssetManager &assetManager;
 
 	Device device;
+
+	RenderObject fullscreenQuadRenderObject;
 };
 
 } // namespace CitronGraphics

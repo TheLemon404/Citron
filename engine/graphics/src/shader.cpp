@@ -2,68 +2,53 @@
 #include "assets.hpp"
 #include "logger.hpp"
 #include "material.hpp"
-#include "renderer.hpp"
-#include <array>
+#include "resources.hpp"
+#include <libminiray.h>
 #include <io.hpp>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
+#include <nlohmann/json.hpp>
+
+using namespace nlohmann;
 
 using namespace CitronGraphics;
 
 Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Shader, AssetType::SHADER>(uuid) {
 	// bind group layout & pipeline layout
-	wgpu::BindGroupLayoutEntry frameUniformBindingLayout = {};
-	frameUniformBindingLayout.setDefault();
-	frameUniformBindingLayout.binding = 0;
-	frameUniformBindingLayout.visibility = wgpu::ShaderStage::Vertex;
-	frameUniformBindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-	frameUniformBindingLayout.buffer.minBindingSize = Shader::paddedSizeof<FrameUniforms>();
-	// IMPORTANT: THIS IS A BUG IN WGPU. setDefault() sets types to Undefine, not BindingNotUsed, which causes mysterous runtime errors
-	frameUniformBindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
-	frameUniformBindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
-	frameUniformBindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;
-	frameUniformBindingLayout.storageTexture.access = wgpu::StorageTextureAccess::BindingNotUsed;
+	char *reflectionData;
+	int reflectionDataLength;
+	if (miniray_reflect(source.data(), source.size(), &reflectionData, &reflectionDataLength)) {
+		CITRON_CORE_ERROR("Failed to get miniray reflection data for shader: {}", (uint64_t)uuid);
+		return;
+	}
 
-	wgpu::BindGroupLayoutDescriptor frameBindGroupLayoutDesc = {};
-	frameBindGroupLayoutDesc.nextInChain = nullptr;
-	frameBindGroupLayoutDesc.entryCount = 1;
-	frameBindGroupLayoutDesc.entries = &frameUniformBindingLayout;
-	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(frameBindGroupLayoutDesc));
+	json reflectionJson = json::parse(reflectionData);
+	for (const auto &bindingEntry : reflectionJson["bindings"]) {
+		const size_t group = bindingEntry["group"];
+		const size_t binding = bindingEntry["binding"];
+		const std::string name = bindingEntry["name"];
+		const std::string type = bindingEntry["type"];
+		const size_t layoutSize = bindingEntry["layout"]["size"];
+		const size_t layoutAlignment = bindingEntry["layout"]["alignment"];
 
-	wgpu::BindGroupLayoutEntry modelUniformBindingLayout = {};
-	modelUniformBindingLayout.setDefault();
-	modelUniformBindingLayout.binding = 0;
-	modelUniformBindingLayout.visibility = wgpu::ShaderStage::Vertex;
-	modelUniformBindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-	modelUniformBindingLayout.buffer.minBindingSize = Shader::paddedSizeof<FrameUniforms>();
-	// IMPORTANT: THIS IS A BUG IN WGPU. setDefault() sets types to Undefine, not BindingNotUsed, which causes mysterous runtime errors
-	modelUniformBindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
-	modelUniformBindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
-	modelUniformBindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;
-	modelUniformBindingLayout.storageTexture.access = wgpu::StorageTextureAccess::BindingNotUsed;
+		wgpu::BindGroupLayoutEntry bindingLayout = {};
+		bindingLayout.setDefault();
+		bindingLayout.binding = binding;
+		bindingLayout.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
+		bindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
+		bindingLayout.buffer.minBindingSize = Shader::dynamicSizeof(layoutSize, layoutAlignment);
+		// IMPORTANT: THIS IS A BUG IN WGPU. setDefault() sets types to Undefine, not BindingNotUsed, which causes mysterous runtime errors
+		bindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
+		bindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
+		bindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;
+		bindingLayout.storageTexture.access = wgpu::StorageTextureAccess::BindingNotUsed;
 
-	wgpu::BindGroupLayoutDescriptor modelBindGroupLayoutDesc = {};
-	modelBindGroupLayoutDesc.nextInChain = nullptr;
-	modelBindGroupLayoutDesc.entryCount = 1;
-	modelBindGroupLayoutDesc.entries = &modelUniformBindingLayout;
-	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(modelBindGroupLayoutDesc));
-
-	wgpu::BindGroupLayoutEntry materialUniformBindingLayout = {};
-	materialUniformBindingLayout.setDefault();
-	materialUniformBindingLayout.binding = 0;
-	materialUniformBindingLayout.visibility = wgpu::ShaderStage::Fragment;
-	materialUniformBindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-	materialUniformBindingLayout.buffer.minBindingSize = Shader::paddedSizeof<MaterialUniforms>();
-	materialUniformBindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
-	materialUniformBindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
-	materialUniformBindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;
-	materialUniformBindingLayout.storageTexture.access = wgpu::StorageTextureAccess::BindingNotUsed;
-
-	wgpu::BindGroupLayoutDescriptor materialBindGroupLayoutDesc = {};
-	materialBindGroupLayoutDesc.nextInChain = nullptr;
-	materialBindGroupLayoutDesc.entryCount = 1;
-	materialBindGroupLayoutDesc.entries = &materialUniformBindingLayout;
-	bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(materialBindGroupLayoutDesc));
+		wgpu::BindGroupLayoutDescriptor bindGroupLayoutDesc = {};
+		bindGroupLayoutDesc.nextInChain = nullptr;
+		bindGroupLayoutDesc.entryCount = 1;
+		bindGroupLayoutDesc.entries = &bindingLayout;
+		bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(bindGroupLayoutDesc));
+	}
 
 	wgpu::PipelineLayoutDescriptor pipelineLayoutDesc = {};
 	pipelineLayoutDesc.setDefault();

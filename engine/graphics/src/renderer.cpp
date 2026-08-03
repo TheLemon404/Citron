@@ -51,49 +51,30 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 	renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 }
 
-void RenderPass::drawRenderData(std::vector<RenderableReferenceData> renderableReferenceData, RenderPass &renderPass) {
-	std::vector<RenderObject> renderObjects;
+void RenderPass::drawFullscreenQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass) {
 	RendererContext context = renderer.getContext();
 	std::vector<wgpu::RenderPassColorAttachment> colorAttachments = renderPass.renderPassColorAttachments;
 
-	// need to cache assets already gethered in previous frames
-	for (size_t i = 0; i < renderableReferenceData.size(); i++) {
-		std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(renderableReferenceData[i].meshUUID);
-		std::shared_ptr<Material> material = context.assetManager.getAsset<Material>(renderableReferenceData[i].materialUUID);
-		if (!material) {
-			CITRON_CORE_ERROR("Failed to get material for render object");
-			continue;
-		}
-
-		std::shared_ptr<Shader> shader = context.assetManager.getAsset<Shader>(material->shader.uuid);
-
-		if (!mesh || !shader) {
-			CITRON_CORE_ERROR("Failed to get mesh or shader for render object");
-			continue;
-		}
-
-		renderObjects.push_back({
-			renderableReferenceData[i].entityUUID,
-			{.transform = renderableReferenceData[i].transform},
-			mesh,
-			material,
-			shader,
-		});
-	}
-	if (renderObjects.size() == 0)
+	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({fullScreenQuadRenderObject.shader, colorAttachments, renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
+	if (!pipeline) {
+		CITRON_CORE_ERROR("Failed to get pipeline for render object");
 		return;
-
-	// sorting
-	renderObjects = Renderer::sortByShader(renderObjects);
-	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObjects[0].shader, colorAttachments, renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
+	}
 	setPipeline(pipeline);
 
-	// update frame uniforms if needed
-	FrameUniforms lastFrameUniforms = context.rendererResourcesManager.frameUniforms;
-	context.rendererResourcesManager.frameUniforms.viewProjection = getParentFrame().getView().getProjectionMatrix() * getParentFrame().getView().getViewMatrix();
-	if (lastFrameUniforms != context.rendererResourcesManager.frameUniforms) {
-		context.device.getWGPUDevice().getQueue().writeBuffer(context.rendererResourcesManager.frameUniformBuffer.buffer, 0, &context.rendererResourcesManager.frameUniforms, Shader::paddedSizeof<FrameUniforms>());
+	if (fullScreenQuadRenderObject.mesh && fullScreenQuadRenderObject.shader) {
+		setMesh(fullScreenQuadRenderObject.mesh);
+		draw(fullScreenQuadRenderObject.mesh);
 	}
+}
+
+void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderPass &renderPass) {
+	RendererContext context = renderer.getContext();
+	std::vector<wgpu::RenderPassColorAttachment> colorAttachments = renderPass.renderPassColorAttachments;
+
+	// sorting
+	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObjects[0].shader, colorAttachments, renderPass.getParams().containsDepthStencil, context.device.getWGPUPreferredSurfaceFormat()});
+	setPipeline(pipeline);
 
 	// get bind group for frame uniforms
 	std::vector<BindGroupEntry> bindGroupEntries;
@@ -188,12 +169,41 @@ void Renderer::init() {
 
 	rendererResourcesManager.initResources();
 
+	uuidBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
+	uuidBufferTextureView = device.createTextureView(uuidBufferTexture);
 	depthBufferTexture = device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight());
 	depthBufferTextureView = device.createTextureView(depthBufferTexture);
 	colorBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 	colorBufferTextureView = device.createTextureView(colorBufferTexture);
 	normalBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 	normalBufferTextureView = device.createTextureView(normalBufferTexture);
+
+	fullscreenQuadRenderObject.entityUUID = UUID();
+	fullscreenQuadRenderObject.modelUniforms = ModelUniforms();
+	fullscreenQuadRenderObject.mesh = Mesh::createFullscreenQuad(device);
+	fullscreenQuadRenderObject.material = std::make_shared<Material>(UUID(), device);
+	std::string fullscreenQuadShader = R"(
+		struct VertexInput {
+    @location(0) in_vertex_position: vec3f,
+    @location(1) in_vertex_normal: vec3f,
+    @location(2) in_vertex_color: vec3f,
+    @location(3) in_vertex_uv: vec2f,
+		};
+
+		@vertex
+		fn vs_main(
+    input: VertexInput
+		) -> @builtin(position) vec4f {
+    return vec4f(input.in_vertex_position, 1.0);
+		}
+
+		@fragment
+		fn fs_main() -> @location(0) vec4f {
+    return vec4f(1.0, 1.0, 1.0, 1.0);
+		}
+
+	)";
+	fullscreenQuadRenderObject.shader = std::make_shared<Shader>(UUID(), device, fullscreenQuadShader);
 }
 
 Frame Renderer::beginFrame(View &view) {
@@ -214,6 +224,63 @@ void Renderer::endFrame(Frame &frame) {
 
 void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::vec2 viewportSize) {
 	resizeRenderTargets(viewportSize);
+
+	// need to cache assets already gethered in previous frames
+	renderObjectCache.renderObjects.clear();
+
+	View &currentFrameView = frame.getView();
+
+	for (size_t i = 0; i < renderableReferenceData.size(); i++) {
+		std::shared_ptr<Mesh> mesh = assetManager.getAsset<Mesh>(renderableReferenceData[i].meshUUID);
+		// frustrum culling
+		if (!currentFrameView.isInsideBounds(mesh->getWorldSpaceBoundsMin()) && !currentFrameView.isInsideBounds(mesh->getWorldSpaceBoundsMax()))
+			continue;
+		std::shared_ptr<Material> material = assetManager.getAsset<Material>(renderableReferenceData[i].materialUUID);
+		if (!material) {
+			CITRON_CORE_ERROR("Failed to get material for render object");
+			continue;
+		}
+
+		std::shared_ptr<Shader> shader = assetManager.getAsset<Shader>(material->shader.uuid);
+
+		if (!mesh || !shader) {
+			CITRON_CORE_ERROR("Failed to get mesh or shader for render object");
+			continue;
+		}
+
+		renderObjectCache.renderObjects.push_back({
+			renderableReferenceData[i].entityUUID,
+			{.transform = renderableReferenceData[i].transform},
+			mesh,
+			material,
+			shader,
+		});
+	}
+
+	if (renderObjectCache.renderObjects.size() == 0)
+		return;
+
+	renderObjectCache.renderObjects = Renderer::sortByShader(renderObjectCache.renderObjects);
+
+	// update frame uniforms if needed
+	FrameUniforms lastFrameUniforms = rendererResourcesManager.frameUniforms;
+	rendererResourcesManager.frameUniforms.viewProjection = currentFrameView.getProjectionMatrix() * currentFrameView.getViewMatrix();
+	if (lastFrameUniforms != rendererResourcesManager.frameUniforms) {
+		device.getWGPUDevice().getQueue().writeBuffer(rendererResourcesManager.frameUniformBuffer.buffer, 0, &rendererResourcesManager.frameUniforms, Shader::paddedSizeof<FrameUniforms>());
+	}
+
+	// uuid painting pass
+	RenderPassColorAttachment uuidAttachment = {};
+	uuidAttachment.targetTexture = uuidBufferTexture;
+	uuidAttachment.targetTextureView = uuidBufferTextureView;
+	RenderPassParams uuidPassParams = {};
+	uuidPassParams.containsDepthStencil = false;
+	uuidPassParams.colorAttachments = {uuidAttachment};
+	RenderPass uuidPass = frame.beginRenderPass(uuidPassParams);
+	uuidPass.drawFullscreenQuad(fullscreenQuadRenderObject, uuidPass);
+	uuidPass.end();
+
+	// depth and gbuffer pass
 	RenderPassDepthStencilAttachment depthAttachment = {};
 	depthAttachment.targetTexture = depthBufferTexture;
 	depthAttachment.targetTextureView = depthBufferTextureView;
@@ -229,7 +296,7 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 	gBufferPassParams.colorAttachments.push_back(colorAttachment);
 	gBufferPassParams.colorAttachments.push_back(normalAttachment);
 	RenderPass gBufferPass = frame.beginRenderPass(gBufferPassParams);
-	gBufferPass.drawRenderData(renderableReferenceData, gBufferPass);
+	gBufferPass.drawRenderData(renderObjectCache.renderObjects, gBufferPass);
 	gBufferPass.end();
 }
 
@@ -267,6 +334,13 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 }
 
 void Renderer::resizeRenderTargets(glm::vec2 viewportSize) {
+	if (viewportSize.x != uuidBufferTexture.getWidth() || viewportSize.y != uuidBufferTexture.getHeight()) {
+		uuidBufferTexture.release();
+		uuidBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
+		uuidBufferTextureView.release();
+		uuidBufferTextureView = uuidBufferTexture.createView();
+	}
+
 	if (viewportSize.x != depthBufferTexture.getWidth() || viewportSize.y != depthBufferTexture.getHeight()) {
 		depthBufferTexture.release();
 		depthBufferTexture = device.createRenderTargetDepthTexture(viewportSize.x, viewportSize.y);

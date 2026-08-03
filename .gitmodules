@@ -49,3 +49,9 @@
 [submodule "vendor/imguizmo"]
 	path = vendor/imguizmo
 	url = https://github.com/TheLemon404/ImGuizmo.git
+[submodule "vendor/miniray"]
+	path = vendor/miniray
+	url = https://github.com/TheLemon404/miniray.git
+[submodule "vendor/json"]
+	path = vendor/json
+	url = https://github.com/nlohmann/json.git

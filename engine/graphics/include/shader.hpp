@@ -23,6 +23,15 @@ class CITRON_GRAPHICS_API Shader : public Asset<Shader, AssetType::SHADER> {
 	void setShaderModule(wgpu::ShaderModule &shaderModule) { this->shaderModule = shaderModule; }
 
 	template <typename T>
+	static size_t dynamicSizeof(size_t alignment) {
+		return round(sizeof(T) / (float)alignment) * alignment;
+	}
+
+	static size_t dynamicSizeof(std::size_t size, size_t alignment) {
+		return round(size / (float)alignment) * alignment;
+	}
+
+	template <typename T>
 	static size_t paddedSizeof() { return round(sizeof(T) / 16.0f) * 16; }
 
 	static size_t paddedSizeof(std::size_t size) { return round(size / 16.0f) * 16; }

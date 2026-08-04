@@ -13,6 +13,7 @@
 #include <material.hpp>
 #include <mesh.hpp>
 #include <serialization.hpp>
+#include <component_registry.hpp>
 
 using namespace CitronCore;
 using namespace CitronAssets;

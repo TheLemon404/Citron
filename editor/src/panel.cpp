@@ -4,6 +4,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
+#include "component_registry.hpp"
 #include "editor.hpp"
 #include <cfloat>
 #include <component.hpp>
@@ -18,6 +19,7 @@
 
 #include "entt/entity/fwd.hpp"
 #include "glm/trigonometric.hpp"
+#include "gui_elements.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
@@ -380,9 +382,8 @@ void AssetPropertiesPanel::drawShaderProperties(std::shared_ptr<Shader> shader) 
 void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> material) {
 	if (!material)
 		return;
-	static bool open = true;
-	if (InspectorPanel::collapsingHeader("Material", &open)) {
-		InspectorPanel::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
+	if (InspectorPanel::collapsingHeader("Material")) {
+		GuiElements::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
 	}
 }
 
@@ -395,8 +396,7 @@ void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {
 void AssetPropertiesPanel::drawGenericProperties(AssetMetadata metadata) {
 	if (!appContext.assetManager.isValidAsset(metadata.uuid))
 		return;
-	static bool open = true;
-	if (InspectorPanel::collapsingHeader("Generic", &open)) {
+	if (InspectorPanel::collapsingHeader("Generic")) {
 		ImGui::Text("Asset Type: %s", std::string(to_string(metadata.assetType)).c_str());
 		ImGui::Text("Asset Path: %s", metadata.assetPath.string().c_str());
 		ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
@@ -639,7 +639,7 @@ void OutlinerPanel::onDraw() {
 }
 void OutlinerPanel::onEvent(Event &e) {}
 
-bool InspectorPanel::collapsingHeader(const char *label, bool *p_open,
+bool InspectorPanel::collapsingHeader(const char *label,
 									  const char *icon_open,
 									  const char *icon_closed) {
 	ImGuiWindow *window = ImGui::GetCurrentWindow();
@@ -649,65 +649,32 @@ bool InspectorPanel::collapsingHeader(const char *label, bool *p_open,
 	ImGuiContext &g = *GImGui;
 	const ImGuiStyle &style = g.Style;
 
+	ImGuiID id = ImGui::GetID(label);
+	ImGuiStorage *storage = ImGui::GetStateStorage();
+
+	bool open = storage->GetBool(id, true);
+
 	// Align button text to the left
 	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.5f));
 
 	// Format full-width label with your custom trailing/leading icons
 	char buf[128];
-	snprintf(buf, sizeof(buf), "%s  %s", (*p_open ? icon_open : icon_closed),
+	snprintf(buf, sizeof(buf), "%s  %s", (open ? icon_open : icon_closed),
 			 label);
 
 	// Draw full-width style frame
 	if (ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))) {
-		*p_open = !*p_open;
+		open = !open;
+		storage->SetBool(id, open);
 	}
 
 	ImGui::PopStyleVar();
-	return *p_open;
+	return open;
 }
 
 void InspectorPanel::onAttach() {}
 void InspectorPanel::onDetach() {}
 void InspectorPanel::onUpdate() {}
-
-template <typename T>
-	requires std::derived_from<T, AssetBase>
-void InspectorPanel::drawAssetReferenceComponentGui(
-	const std::string assetName, AssetReference<T> &assetReference, AppContext appContext) {
-
-	if (assetReference.path == "" && assetReference.uuid != UUID::nullID && appContext.assetManager.isValidAsset(assetReference.uuid)) {
-		assetReference.path = appContext.assetManager.getAssetMetadata(assetReference.uuid).assetPath.string();
-	}
-
-	EditorContext &context = Editor::get().getEditorContext();
-	AssetManager &assetManager =
-		appContext.assetManager;
-
-	ImGui::PushID(&assetReference);
-	if (ImGui::Button("Clear")) {
-		assetReference.uuid = UUID::nullID;
-		assetReference.path.clear();
-	}
-	ImGui::SameLine();
-	ImGui::InputText(assetName.c_str(), &assetReference.path,
-					 ImGuiInputTextFlags_ReadOnly);
-	if (ImGui::BeginDragDropTarget()) {
-		if (const ImGuiPayload *payload =
-				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
-			std::string srcPath((const char *)payload->Data, payload->DataSize);
-			AssetMetadata metadata = assetManager.getAssetMetadata(std::filesystem::path(srcPath));
-			if (assetManager.isValidAsset(metadata.uuid)) {
-				if (metadata.assetType == AssetReference<T>::assetType) {
-					assetReference.uuid = metadata.uuid;
-					assetReference.path = metadata.assetPath.string();
-					appContext.assetManager.getAsset<T>(metadata.uuid);
-				}
-			}
-		}
-		ImGui::EndDragDropTarget();
-	}
-	ImGui::PopID();
-}
 
 void InspectorPanel::onDraw() {
 	ImGui::Begin("Inspector");
@@ -715,39 +682,17 @@ void InspectorPanel::onDraw() {
 	auto &registry = appContext.sceneManager.getActiveScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
-		if (registry.all_of<EntityBaseComponent>(selectedEntity)) {
-			EntityBaseComponent &entityBase =
-				registry.get<EntityBaseComponent>(selectedEntity);
-			static bool selection = true;
-			if (collapsingHeader("Entity Base Component", &selection)) {
-				float width = ImGui::GetContentRegionAvail().x;
-
-				ImGui::InputText("Name", &entityBase.name);
-				ImGui::Text("ID: %u", (unsigned int)entityBase.uuid);
-			}
-		}
-		if (registry.all_of<TransformComponent>(selectedEntity)) {
-			TransformComponent &transformComponent =
-				registry.get<TransformComponent>(selectedEntity);
-			static bool selection = true;
-			if (collapsingHeader("Transform Component", &selection)) {
-				ImGui::DragFloat3("Position", &transformComponent.position[0]);
-				glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(transformComponent.rotation));
-				if (ImGui::DragFloat3("Rotation", &eulerRotation[0])) {
-					transformComponent.rotation = glm::quat(glm::radians(eulerRotation));
+		for (const auto &[hash, metadata] : ComponentRegistry::getComponentRegistry()) {
+			if (metadata.has(registry, selectedEntity)) {
+				void *component = metadata.get(registry, selectedEntity);
+				if (collapsingHeader(metadata.componentName.c_str())) {
+					for (const auto &member : metadata.members) {
+						PropertyGuiDrawer drawer = member.drawer;
+						if (drawer)
+							drawer(member, component, appContext.assetManager);
+					}
 				}
-				ImGui::DragFloat3("Scale", &transformComponent.scale[0]);
-			}
-		}
-		if (registry.all_of<MeshComponent>(selectedEntity)) {
-			MeshComponent &meshComponent =
-				registry.get<MeshComponent>(selectedEntity);
-			static bool selection = true;
-			if (collapsingHeader("Mesh Component", &selection)) {
-				drawAssetReferenceComponentGui<Mesh>("Geometry",
-													 meshComponent.meshAsset, appContext);
-				drawAssetReferenceComponentGui<Material>("Material",
-														 meshComponent.materialAsset, appContext);
+				ImGui::Separator();
 			}
 		}
 
@@ -782,6 +727,7 @@ void AssetRegistryPanel::onDraw() {
 			ImGui::Text("Asset Type: %s", std::string(to_string(AssetMetadata.assetType)).c_str());
 			ImGui::Text("Asset Path: %s", AssetMetadata.assetPath.string().c_str());
 			ImGui::Text("Asset UUID: %u", (unsigned int)id);
+			ImGui::Separator();
 		}
 	}
 	ImGui::End();

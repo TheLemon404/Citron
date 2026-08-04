@@ -133,7 +133,7 @@ class InspectorPanel : public Panel {
 											   AssetReference<T> &assetReference,
 											   AppContext appContext);
 
-	static bool collapsingHeader(const char *label, bool *p_open,
+	static bool collapsingHeader(const char *label,
 								 const char *icon_open = ICON_FA_SQUARE_MINUS,
 								 const char *icon_closed = ICON_FA_SQUARE_PLUS);
 };

@@ -1,4 +1,5 @@
 
+#include "component_registry.hpp"
 #define WEBGPU_CPP_IMPLEMENTATION
 
 #include "app.hpp"
@@ -86,6 +87,8 @@ void App::init() {
 
 	CITRON_CORE_INFO("Core logger initialized");
 	CITRON_CLIENT_INFO("Client logger initialized");
+
+	ComponentRegistry::registerDefaultComponents();
 
 	window.init();
 	window.open();

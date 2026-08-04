@@ -5,12 +5,11 @@
 #include "mesh.hpp"
 #include "resources.hpp"
 #include "view.hpp"
-#include <complex>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/vec_swizzle.hpp>
 #include <event.hpp>
 #include <logger.hpp>
 #include <webgpu/webgpu.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace CitronGraphics;
@@ -233,8 +232,12 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 	for (size_t i = 0; i < renderableReferenceData.size(); i++) {
 		std::shared_ptr<Mesh> mesh = assetManager.getAsset<Mesh>(renderableReferenceData[i].meshUUID);
 		// frustrum culling
-		if (!currentFrameView.isInsideBounds(mesh->getWorldSpaceBoundsMin()) && !currentFrameView.isInsideBounds(mesh->getWorldSpaceBoundsMax()))
+		glm::vec4 transformedMin = glm::vec4(mesh->getBoundsMin(), 1.0f) * renderableReferenceData[i].transform;
+		glm::vec4 transformedMax = glm::vec4(mesh->getBoundsMax(), 1.0f) * renderableReferenceData[i].transform;
+		if (!currentFrameView.isInsideBounds(glm::xyz(transformedMin)) && !currentFrameView.isInsideBounds(glm::xyz(transformedMax))) {
+			CITRON_CORE_INFO("CULLED");
 			continue;
+		}
 		std::shared_ptr<Material> material = assetManager.getAsset<Material>(renderableReferenceData[i].materialUUID);
 		if (!material) {
 			CITRON_CORE_ERROR("Failed to get material for render object");

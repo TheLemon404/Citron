@@ -28,14 +28,14 @@ class CITRON_GRAPHICS_API Mesh : public Asset<Mesh, AssetType::MESH> {
 	const GPUBuffer &getVertexBuffer() const { return vertexBuffer; }
 	const GPUBuffer &getIndexBuffer() const { return indexBuffer; }
 
-	const glm::vec3 &getWorldSpaceBoundsMin() const { return worldSpaceBoundsMin; }
-	const glm::vec3 &getWorldSpaceBoundsMax() const { return worldSpaceBoundsMax; }
+	const glm::vec3 &getBoundsMin() const { return boundsMin; }
+	const glm::vec3 &getBoundsMax() const { return boundsMax; }
 
 	static std::shared_ptr<Mesh> createFullscreenQuad(Device &device);
 
   private:
-	glm::vec3 worldSpaceBoundsMin = glm::vec3(0.0f);
-	glm::vec3 worldSpaceBoundsMax = glm::vec3(0.0f);
+	glm::vec3 boundsMin = glm::vec3(0.0f);
+	glm::vec3 boundsMax = glm::vec3(0.0f);
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 

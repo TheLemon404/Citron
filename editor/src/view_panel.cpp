@@ -7,7 +7,6 @@
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
 #include "event.hpp"
-#include "glm/ext/quaternion_common.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "gui.hpp"
 #include "imgui.h"

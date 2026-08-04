@@ -2,6 +2,7 @@
 
 #include "citron_exports.hpp"
 
+#include "component_registry.hpp"
 #include "mesh.hpp"
 #include "spdlog/common.h"
 #include "texture.hpp"

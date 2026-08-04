@@ -1,3 +1,5 @@
+#pragma once
+
 #include "app.hpp"
 #include "entt/entity/entity.hpp"
 #include "view.hpp"

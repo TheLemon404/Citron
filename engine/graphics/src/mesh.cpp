@@ -8,7 +8,7 @@
 
 using namespace CitronGraphics;
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device) : Asset<Mesh, AssetType::MESH>(UUID()), vertices(vertices), indices(indices), worldSpaceBoundsMin(worldSpaceBoundsMin), worldSpaceBoundsMax(worldSpaceBoundsMax), device(device) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device) : Asset<Mesh, AssetType::MESH>(UUID()), vertices(vertices), indices(indices), boundsMin(worldSpaceBoundsMin), boundsMax(worldSpaceBoundsMax), device(device) {
 	wgpu::BufferDescriptor vertexBufferDesc = {};
 	vertexBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Vertex;
 	vertexBufferDesc.size = vertices.size() * sizeof(Vertex);

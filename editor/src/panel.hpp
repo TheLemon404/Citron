@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IconsFontAwesome5.h"
 #include "IconsFontAwesome6.h"
 #include "entt/entity/entity.hpp"
 #include "shader.hpp"
@@ -134,8 +135,8 @@ class InspectorPanel : public Panel {
 											   AppContext appContext);
 
 	static bool collapsingHeader(const char *label,
-								 const char *icon_open = ICON_FA_SQUARE_MINUS,
-								 const char *icon_closed = ICON_FA_SQUARE_PLUS);
+								 const char *icon_open = "+",
+								 const char *icon_closed = "-");
 };
 
 class AssetRegistryPanel : public Panel {

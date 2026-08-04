@@ -68,6 +68,9 @@ void RenderPass::drawFullscreenQuad(RenderObject fullScreenQuadRenderObject, Ren
 }
 
 void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderPass &renderPass) {
+	if (renderObjects.size() == 0)
+		return;
+
 	RendererContext context = renderer.getContext();
 
 	// sorting
@@ -235,7 +238,6 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 		glm::vec4 transformedMin = glm::vec4(mesh->getBoundsMin(), 1.0f) * renderableReferenceData[i].transform;
 		glm::vec4 transformedMax = glm::vec4(mesh->getBoundsMax(), 1.0f) * renderableReferenceData[i].transform;
 		if (!currentFrameView.isInsideBounds(glm::xyz(transformedMin)) && !currentFrameView.isInsideBounds(glm::xyz(transformedMax))) {
-			CITRON_CORE_INFO("CULLED");
 			continue;
 		}
 		std::shared_ptr<Material> material = assetManager.getAsset<Material>(renderableReferenceData[i].materialUUID);
@@ -259,9 +261,6 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 			shader,
 		});
 	}
-
-	if (renderObjectCache.renderObjects.size() == 0)
-		return;
 
 	renderObjectCache.renderObjects = Renderer::sortByShader(renderObjectCache.renderObjects);
 

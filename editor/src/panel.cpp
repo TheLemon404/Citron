@@ -659,8 +659,10 @@ bool InspectorPanel::collapsingHeader(const char *label,
 
 	// Format full-width label with your custom trailing/leading icons
 	char buf[128];
+	ImGui::SetWindowFontScale(4.0f);
 	snprintf(buf, sizeof(buf), "%s  %s", (open ? icon_open : icon_closed),
 			 label);
+	ImGui::SetWindowFontScale(1.0f);
 
 	// Draw full-width style frame
 	if (ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))) {
@@ -686,10 +688,22 @@ void InspectorPanel::onDraw() {
 			if (metadata.has(registry, selectedEntity)) {
 				void *component = metadata.get(registry, selectedEntity);
 				if (collapsingHeader(metadata.componentName.c_str())) {
-					for (const auto &member : metadata.members) {
-						PropertyGuiDrawer drawer = member.drawer;
-						if (drawer)
-							drawer(member, component, appContext.assetManager);
+					if (ImGui::BeginTable("##ComponentMemberTable", 2,
+										  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+						// First column gets a fixed width of 150 units
+						ImGui::TableSetupColumn("##Fixed Col", ImGuiTableColumnFlags_WidthFixed, 115.0f);
+						// Second column stretches to consume all remaining space in the row
+						ImGui::TableSetupColumn("##Stretch Col", ImGuiTableColumnFlags_WidthStretch);
+
+						for (const auto &member : metadata.members) {
+							ImGui::TableNextColumn();
+							ImGui::Text("%s", member.fieldName.c_str());
+							ImGui::TableNextColumn();
+							PropertyGuiDrawer drawer = member.drawer;
+							if (drawer)
+								drawer(member, component, appContext.assetManager);
+						}
+						ImGui::EndTable();
 					}
 				}
 				ImGui::Separator();
@@ -703,7 +717,19 @@ void InspectorPanel::onDraw() {
 			std::string componentSearchResult;
 			ImGui::InputTextWithHint("##ComponentSearch",
 									 "Enter Component Class Name",
-									 &componentSearchResult);
+									 &componentSearchResult, ImGuiInputTextFlags_EnterReturnsTrue);
+			for (const auto &[id, component] : ComponentRegistry::getComponentRegistry()) {
+				std::string searchLower = componentSearchResult;
+				std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(), ::tolower);
+
+				if (component.componentName.starts_with(componentSearchResult)) {
+					if (ImGui::Selectable(component.componentName.c_str())) {
+						componentSearchResult = component.componentName;
+						component.add(registry, selectedEntity);
+						ImGui::CloseCurrentPopup();
+					}
+				}
+			}
 			ImGui::EndPopup();
 		}
 	}

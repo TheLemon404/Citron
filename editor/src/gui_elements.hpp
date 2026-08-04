@@ -19,11 +19,7 @@ class GuiElements {
 			appContext.assetManager;
 
 		ImGui::PushID(&assetReference);
-		if (ImGui::Button("Clear")) {
-			assetReference.uuid = UUID::nullID;
-			assetReference.path.clear();
-		}
-		ImGui::SameLine();
+
 		ImGui::InputText(assetName.c_str(), &assetReference.path,
 						 ImGuiInputTextFlags_ReadOnly);
 		if (ImGui::BeginDragDropTarget()) {
@@ -40,6 +36,11 @@ class GuiElements {
 				}
 			}
 			ImGui::EndDragDropTarget();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			assetReference.uuid = UUID::nullID;
+			assetReference.path.clear();
 		}
 		ImGui::PopID();
 	}

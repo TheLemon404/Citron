@@ -130,7 +130,7 @@ void App::update() {
 			guiPassParams.colorAttachments.push_back(colorAttachment);
 			RenderPass uiPass = frame.beginRenderPass(guiPassParams);
 			if (renderer.onGuiDrawCallback)
-				renderer.onGuiDrawCallback(renderer.colorBufferTextureView, uiPass);
+				renderer.onGuiDrawCallback(renderer.lightingBufferTextureView, uiPass);
 			uiPass.end();
 			guiPassParams.colorAttachments[0].targetTextureView.release();
 			renderer.endFrame(frame);

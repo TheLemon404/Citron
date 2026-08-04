@@ -20,7 +20,8 @@ class GuiElements {
 
 		ImGui::PushID(&assetReference);
 
-		ImGui::InputText(assetName.c_str(), &assetReference.path,
+		std::string assetNameStr = std::filesystem::path(assetReference.path).filename().string();
+		ImGui::InputText(assetName.c_str(), &assetNameStr,
 						 ImGuiInputTextFlags_ReadOnly);
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload *payload =

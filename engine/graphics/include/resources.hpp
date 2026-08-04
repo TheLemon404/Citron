@@ -34,10 +34,9 @@ struct CITRON_GRAPHICS_API PipelineKey {
 	std::shared_ptr<Shader> shader;
 	const std::vector<wgpu::TextureFormat> &colorAttachmentFormats;
 	bool hasDepthStencilAttachment = false;
-	wgpu::TextureFormat textureFormat;
 
 	bool operator==(const PipelineKey &other) const {
-		return shader == other.shader && textureFormat == other.textureFormat && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment;
+		return shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment;
 	}
 };
 
@@ -45,7 +44,7 @@ struct CITRON_GRAPHICS_API BindGroupEntry {
 	uint32_t binding;
 
 	// IN THE FUTURE: std::variant<wgpu::Buffer, wgpu::TextureView, wgpu::Sampler> resource;
-	std::variant<wgpu::Buffer> resource;
+	std::variant<wgpu::Buffer, wgpu::TextureView> resource;
 	uint64_t offset;
 	size_t size = WGPU_WHOLE_SIZE;
 
@@ -80,7 +79,7 @@ template <>
 struct hash<CitronGraphics::PipelineKey> {
 	std::size_t operator()(const CitronGraphics::PipelineKey &key) const {
 		size_t vertexShaderHash = hash<std::shared_ptr<CitronGraphics::Shader>>()(key.shader);
-		size_t fragmentShaderHash = hash<wgpu::TextureFormat::W>()(key.textureFormat.m_raw);
+		size_t fragmentShaderHash = hash<wgpu::TextureFormat::W>()(key.colorAttachmentFormats[0].m_raw);
 		return vertexShaderHash ^ (fragmentShaderHash << 1);
 	}
 };

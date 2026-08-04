@@ -65,7 +65,7 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawFullscreenQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass);
+	void drawLightingPassQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass);
 	void drawRenderData(std::vector<RenderObject> renderableReferenceData, RenderPass &renderPass);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
@@ -156,13 +156,30 @@ class CITRON_GRAPHICS_API Renderer {
 		if (!rendererResourcesManager.bindGroupCache.contains(key)) {
 			std::vector<wgpu::BindGroupEntry> entries;
 			for (const auto &e : key.entries) {
-				wgpu::BindGroupEntry entry = {};
-				entry.setDefault();
-				entry.binding = e.binding;
-				entry.buffer = std::get<wgpu::Buffer>(e.resource);
-				entry.offset = e.offset;
-				entry.size = e.size;
-				entries.push_back(entry);
+				switch (e.resource.index()) {
+				case 0: {
+					wgpu::BindGroupEntry entry = {};
+					entry.setDefault();
+					entry.binding = e.binding;
+					entry.buffer = std::get<wgpu::Buffer>(e.resource);
+					entry.offset = e.offset;
+					entry.size = e.size;
+					entries.push_back(entry);
+					break;
+				}
+				case 1: {
+					wgpu::BindGroupEntry entry = {};
+					entry.setDefault();
+					entry.binding = e.binding;
+					entry.textureView = std::get<wgpu::TextureView>(e.resource);
+					entry.offset = e.offset;
+					entry.size = e.size;
+					entries.push_back(entry);
+					break;
+				}
+				default:
+					break;
+				}
 			}
 			wgpu::BindGroupDescriptor bindGroupDesc = {};
 			bindGroupDesc.setDefault();

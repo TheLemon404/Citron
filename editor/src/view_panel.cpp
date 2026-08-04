@@ -177,7 +177,9 @@ void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, 
 	if (ImGuizmo::Manipulate(cameraView, cameraProjection, manipulationSettings.currentGizmoOperation, manipulationSettings.relativeSpaceMode, &matrix[0][0], &deltaMatrix[0][0], manipulationSettings.snap ? &snap.x : nullptr)) {
 		if (manipulationSettings.currentGizmoOperation == ImGuizmo::ROTATE) {
 			glm::quat deltaRotation = glm::quat_cast(glm::mat3(deltaMatrix));
-			transform.rotation = glm::normalize(deltaRotation * transform.rotation);
+			glm::quat parentRotation = glm::quat_cast(glm::mat3(globalParentMatrix));
+			glm::quat localDeltaRotation = glm::inverse(parentRotation) * deltaRotation * parentRotation;
+			transform.rotation = glm::normalize(localDeltaRotation * transform.rotation);
 		} else {
 			glm::vec3 skew;
 			glm::vec4 perspective;

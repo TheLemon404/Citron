@@ -345,22 +345,29 @@ void AssetPropertiesPanel::onDraw() {
 	if (currentlySelectedAsset != UUID::nullID && currentlySelectedAssetType != CitronAssets::AssetType::UNKNOWN) {
 		AssetMetadata metadata = appContext.assetManager.getAssetMetadata(currentlySelectedAssetPath);
 		std::shared_ptr<CitronAssets::AssetBase> asset = appContext.assetManager.getAsset<CitronAssets::AssetBase>(currentlySelectedAsset);
-		drawGenericProperties(metadata);
-		switch (currentlySelectedAssetType) {
-		case CitronAssets::AssetType::SHADER:
-			drawShaderProperties(std::static_pointer_cast<Shader>(asset));
-			break;
-		case CitronAssets::AssetType::MATERIAL:
-			drawMaterialProperties(std::static_pointer_cast<Material>(asset));
-			break;
-		case CitronAssets::AssetType::TEXTURE:
-			drawTextureProperties(std::static_pointer_cast<Texture>(asset));
-			break;
-		case CitronAssets::AssetType::MESH:
-			drawMeshProperties(std::static_pointer_cast<Mesh>(asset));
-			break;
-		default:
-			break;
+		if (ImGui::BeginTable("##ComponentMemberTable", 1,
+							  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+			// First column gets a fixed width of 150 units
+			ImGui::TableNextColumn();
+			drawGenericProperties(metadata);
+			ImGui::TableNextColumn();
+			switch (currentlySelectedAssetType) {
+			case CitronAssets::AssetType::SHADER:
+				drawShaderProperties(std::static_pointer_cast<Shader>(asset));
+				break;
+			case CitronAssets::AssetType::MATERIAL:
+				drawMaterialProperties(std::static_pointer_cast<Material>(asset));
+				break;
+			case CitronAssets::AssetType::TEXTURE:
+				drawTextureProperties(std::static_pointer_cast<Texture>(asset));
+				break;
+			case CitronAssets::AssetType::MESH:
+				drawMeshProperties(std::static_pointer_cast<Mesh>(asset));
+				break;
+			default:
+				break;
+			}
+			ImGui::EndTable();
 		}
 	}
 	ImGui::End();

@@ -49,6 +49,7 @@ class CITRON_GRAPHICS_API Shader : public Asset<Shader, AssetType::SHADER> {
 
   private:
 	wgpu::PipelineLayout pipelineLayout;
+	std::map<uint32_t, std::vector<wgpu::BindGroupLayoutEntry>> groupEntries;
 	std::vector<wgpu::BindGroupLayout> bindGroupLayouts;
 	wgpu::ShaderModule shaderModule;
 };

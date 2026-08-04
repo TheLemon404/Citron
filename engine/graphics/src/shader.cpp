@@ -28,25 +28,35 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 		const size_t binding = bindingEntry["binding"];
 		const std::string name = bindingEntry["name"];
 		const std::string type = bindingEntry["type"];
-		const size_t layoutSize = bindingEntry["layout"]["size"];
-		const size_t layoutAlignment = bindingEntry["layout"]["alignment"];
 
 		wgpu::BindGroupLayoutEntry bindingLayout = {};
 		bindingLayout.setDefault();
 		bindingLayout.binding = binding;
 		bindingLayout.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
-		bindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-		bindingLayout.buffer.minBindingSize = Shader::dynamicSizeof(layoutSize, layoutAlignment);
-		// IMPORTANT: THIS IS A BUG IN WGPU. setDefault() sets types to Undefine, not BindingNotUsed, which causes mysterous runtime errors
+		bindingLayout.buffer.type = wgpu::BufferBindingType::BindingNotUsed;
 		bindingLayout.texture.sampleType = wgpu::TextureSampleType::BindingNotUsed;
 		bindingLayout.texture.viewDimension = wgpu::TextureViewDimension::Undefined;
 		bindingLayout.sampler.type = wgpu::SamplerBindingType::BindingNotUsed;
 		bindingLayout.storageTexture.access = wgpu::StorageTextureAccess::BindingNotUsed;
 
+		if (type == "texture_2d<f32>") {
+			bindingLayout.texture.sampleType = wgpu::TextureSampleType::Float;
+			bindingLayout.texture.viewDimension = wgpu::TextureViewDimension::_2D;
+		} else if (bindingEntry.contains("layout")) {
+			const size_t layoutSize = bindingEntry["layout"]["size"];
+			const size_t layoutAlignment = bindingEntry["layout"]["alignment"];
+			bindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
+			bindingLayout.buffer.minBindingSize = Shader::dynamicSizeof(layoutSize, layoutAlignment);
+		}
+
+		groupEntries[group].push_back(bindingLayout);
+	}
+
+	for (auto &[group, entries] : groupEntries) {
 		wgpu::BindGroupLayoutDescriptor bindGroupLayoutDesc = {};
 		bindGroupLayoutDesc.nextInChain = nullptr;
-		bindGroupLayoutDesc.entryCount = 1;
-		bindGroupLayoutDesc.entries = &bindingLayout;
+		bindGroupLayoutDesc.entryCount = entries.size();
+		bindGroupLayoutDesc.entries = entries.data();
 		bindGroupLayouts.push_back(device.getWGPUDevice().createBindGroupLayout(bindGroupLayoutDesc));
 	}
 

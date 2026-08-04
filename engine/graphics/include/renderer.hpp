@@ -192,14 +192,16 @@ class CITRON_GRAPHICS_API Renderer {
 	void resizeRenderTargets(glm::vec2 viewportSize);
 
 	// render targets
-	wgpu::Texture uuidBufferTexture;
-	wgpu::TextureView uuidBufferTextureView;
+	wgpu::Texture idBufferTexture;
+	wgpu::TextureView idBufferTextureView;
 	wgpu::Texture depthBufferTexture;
 	wgpu::TextureView depthBufferTextureView;
 	wgpu::Texture colorBufferTexture;
 	wgpu::TextureView colorBufferTextureView;
 	wgpu::Texture normalBufferTexture;
 	wgpu::TextureView normalBufferTextureView;
+	wgpu::Texture lightingBufferTexture;
+	wgpu::TextureView lightingBufferTextureView;
 
 	const RenderObject &getFullscreenQuad() const { return fullscreenQuadRenderObject; }
 

@@ -172,12 +172,14 @@ void Renderer::init() {
 
 	depthBufferTexture = device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight());
 	depthBufferTextureView = device.createTextureView(depthBufferTexture);
-	uuidBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	uuidBufferTextureView = device.createTextureView(uuidBufferTexture);
+	idBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
+	idBufferTextureView = device.createTextureView(idBufferTexture);
 	colorBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 	colorBufferTextureView = device.createTextureView(colorBufferTexture);
 	normalBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 	normalBufferTextureView = device.createTextureView(normalBufferTexture);
+	lightingBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
+	lightingBufferTextureView = device.createTextureView(lightingBufferTexture);
 
 	fullscreenQuadRenderObject.entityUUID = UUID();
 	fullscreenQuadRenderObject.modelUniforms = ModelUniforms();
@@ -281,14 +283,27 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 	RenderPassColorAttachment normalAttachment = {};
 	normalAttachment.targetTexture = normalBufferTexture;
 	normalAttachment.targetTextureView = normalBufferTextureView;
+	RenderPassColorAttachment idAttachment = {};
+	idAttachment.targetTexture = idBufferTexture;
+	idAttachment.targetTextureView = idBufferTextureView;
 	RenderPassParams gBufferPassParams = {};
 	gBufferPassParams.containsDepthStencil = true;
 	gBufferPassParams.depthStencilAttachment = depthAttachment;
 	gBufferPassParams.colorAttachments.push_back(colorAttachment);
 	gBufferPassParams.colorAttachments.push_back(normalAttachment);
+	gBufferPassParams.colorAttachments.push_back(idAttachment);
 	RenderPass gBufferPass = frame.beginRenderPass(gBufferPassParams);
 	gBufferPass.drawRenderData(renderObjectCache.renderObjects, gBufferPass);
 	gBufferPass.end();
+
+	RenderPassColorAttachment lightingAttachment = {};
+	lightingAttachment.targetTexture = lightingBufferTexture;
+	lightingAttachment.targetTextureView = lightingBufferTextureView;
+	RenderPassParams lightingPassParams = {};
+	lightingPassParams.colorAttachments.push_back(lightingAttachment);
+	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);
+	lightingPass.drawFullscreenQuad(fullscreenQuadRenderObject, lightingPass);
+	lightingPass.end();
 }
 
 void Renderer::end() {
@@ -325,11 +340,11 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 }
 
 void Renderer::resizeRenderTargets(glm::vec2 viewportSize) {
-	if (viewportSize.x != uuidBufferTexture.getWidth() || viewportSize.y != uuidBufferTexture.getHeight()) {
-		uuidBufferTexture.release();
-		uuidBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-		uuidBufferTextureView.release();
-		uuidBufferTextureView = uuidBufferTexture.createView();
+	if (viewportSize.x != idBufferTexture.getWidth() || viewportSize.y != idBufferTexture.getHeight()) {
+		idBufferTexture.release();
+		idBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
+		idBufferTextureView.release();
+		idBufferTextureView = idBufferTexture.createView();
 	}
 
 	if (viewportSize.x != depthBufferTexture.getWidth() || viewportSize.y != depthBufferTexture.getHeight()) {
@@ -351,5 +366,12 @@ void Renderer::resizeRenderTargets(glm::vec2 viewportSize) {
 		normalBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
 		normalBufferTextureView.release();
 		normalBufferTextureView = normalBufferTexture.createView();
+	}
+
+	if (viewportSize.x != lightingBufferTexture.getWidth() || viewportSize.y != lightingBufferTexture.getHeight()) {
+		lightingBufferTexture.release();
+		lightingBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
+		lightingBufferTextureView.release();
+		lightingBufferTextureView = lightingBufferTexture.createView();
 	}
 }

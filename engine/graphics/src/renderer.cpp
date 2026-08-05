@@ -52,17 +52,16 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 	renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 }
 
-void RenderPass::drawLightingPassQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass) {
+void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass) {
 	RendererContext context = renderer.getContext();
 
-	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({fullScreenQuadRenderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
+	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
 	if (!pipeline) {
 		CITRON_CORE_ERROR("Failed to get pipeline for render object");
 		return;
 	}
 	setPipeline(pipeline);
 
-	std::vector<BindGroupEntry> bindGroupEntries;
 	bindGroupEntries.push_back({
 		.binding = 0,
 		.resource = renderer.colorBufferTextureView,
@@ -75,16 +74,22 @@ void RenderPass::drawLightingPassQuad(RenderObject fullScreenQuadRenderObject, R
 		.offset = 0,
 		.size = WGPU_WHOLE_SIZE,
 	});
+	bindGroupEntries.push_back({
+		.binding = 2,
+		.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
+		.offset = 0,
+		.size = WGPU_WHOLE_SIZE,
+	});
 
 	wgpu::BindGroup bindGroup = renderer.getBindGroup({
-		.layout = fullScreenQuadRenderObject.shader->getBindGroupLayout(0),
+		.layout = shader->getBindGroupLayout(0),
 		.entries = bindGroupEntries,
 	});
 	setBindGroup(0, bindGroup);
 
-	if (fullScreenQuadRenderObject.mesh && fullScreenQuadRenderObject.shader) {
-		setMesh(fullScreenQuadRenderObject.mesh);
-		draw(fullScreenQuadRenderObject.mesh);
+	if (fullscreenQuad && shader) {
+		setMesh(fullscreenQuad);
+		draw(fullscreenQuad);
 	}
 }
 
@@ -99,7 +104,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 	setPipeline(pipeline);
 
 	// get bind group for frame uniforms
-	std::vector<BindGroupEntry> bindGroupEntries;
+	bindGroupEntries.clear();
 	bindGroupEntries.push_back({.binding = 0,
 								.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
 								.offset = 0,
@@ -202,12 +207,8 @@ void Renderer::init() {
 	lightingBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
 	lightingBufferTextureView = device.createTextureView(lightingBufferTexture);
 
-	fullscreenQuadRenderObject.entityUUID = UUID();
-	fullscreenQuadRenderObject.modelUniforms = ModelUniforms();
-	fullscreenQuadRenderObject.mesh = Mesh::createFullscreenQuad(device);
-	fullscreenQuadRenderObject.material = std::make_shared<Material>(UUID(), device);
-
-	fullscreenQuadRenderObject.shader = std::make_shared<Shader>(UUID(), device, lighting_pass);
+	fullscreenQuad = Mesh::createFullscreenQuad(device);
+	lightingPassShader = std::make_shared<Shader>(UUID(), device, lighting_pass);
 }
 
 Frame Renderer::beginFrame(View &view) {
@@ -302,7 +303,7 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 	RenderPassParams lightingPassParams = {};
 	lightingPassParams.colorAttachments.push_back(lightingAttachment);
 	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);
-	lightingPass.drawLightingPassQuad(fullscreenQuadRenderObject, lightingPass);
+	lightingPass.drawFullscreenQuadPass(fullscreenQuad, lightingPassShader, lightingPass);
 	lightingPass.end();
 }
 

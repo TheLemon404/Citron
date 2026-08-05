@@ -2,6 +2,7 @@
 
 #include "buffer.hpp"
 #include "citron_exports.hpp"
+#include "glm/fwd.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
 #include "shader.hpp"
@@ -24,9 +25,12 @@ struct CITRON_GRAPHICS_API ModelUniforms {
 
 struct CITRON_GRAPHICS_API FrameUniforms {
 	glm::mat4 viewProjection = glm::identity<glm::mat4>();
+	glm::vec4 sunLight = glm::vec4(1.0f);
+	glm::vec4 sunLightColor = glm::vec4(1.0f);
+	glm::vec4 ambientLight = glm::vec4(0.2f, 0.2f, 0.25f, 0.0f);
 
 	bool operator==(const FrameUniforms &other) const {
-		return viewProjection == other.viewProjection;
+		return viewProjection == other.viewProjection && sunLight == other.sunLight && sunLightColor == other.sunLightColor && ambientLight == other.ambientLight;
 	}
 };
 

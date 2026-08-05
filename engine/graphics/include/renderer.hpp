@@ -65,7 +65,7 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawLightingPassQuad(RenderObject fullScreenQuadRenderObject, RenderPass &renderPass);
+	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass);
 	void drawRenderData(std::vector<RenderObject> renderableReferenceData, RenderPass &renderPass);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
@@ -88,6 +88,7 @@ class CITRON_GRAPHICS_API RenderPass {
 	const RenderPassParams &getParams() const { return params; }
 
   private:
+	std::vector<BindGroupEntry> bindGroupEntries;
 	std::vector<wgpu::TextureFormat> colorAttachmentFormats;
 	std::vector<wgpu::RenderPassColorAttachment> renderPassColorAttachments;
 	Renderer &renderer;
@@ -220,7 +221,8 @@ class CITRON_GRAPHICS_API Renderer {
 	wgpu::Texture lightingBufferTexture;
 	wgpu::TextureView lightingBufferTextureView;
 
-	const RenderObject &getFullscreenQuad() const { return fullscreenQuadRenderObject; }
+	const std::shared_ptr<Mesh> &getFullscreenQuad() const { return fullscreenQuad; }
+	const std::shared_ptr<Shader> &getLightingPassShader() const { return lightingPassShader; }
 
   private:
 	RenderObjectCache renderObjectCache;
@@ -231,7 +233,8 @@ class CITRON_GRAPHICS_API Renderer {
 
 	Device device;
 
-	RenderObject fullscreenQuadRenderObject;
+	std::shared_ptr<Mesh> fullscreenQuad = nullptr;
+	std::shared_ptr<Shader> lightingPassShader = nullptr;
 };
 
 } // namespace CitronGraphics

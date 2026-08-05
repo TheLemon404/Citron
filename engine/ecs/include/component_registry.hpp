@@ -52,11 +52,15 @@ class CITRON_ECS_API ComponentRegistry {
 		metadata.has = [](entt::registry &registry, entt::entity entity) {
 			return registry.any_of<T>(entity);
 		};
-		metadata.add = [](entt::registry &registry, entt::entity entity) {
-			registry.emplace<T>(entity);
+		metadata.add = [metadata](entt::registry &registry, entt::entity entity) {
+			if (!metadata.has(registry, entity)) {
+				registry.emplace<T>(entity);
+			}
 		};
-		metadata.remove = [](entt::registry &registry, entt::entity entity) {
-			registry.remove<T>(entity);
+		metadata.remove = [metadata](entt::registry &registry, entt::entity entity) {
+			if (metadata.has(registry, entity)) {
+				registry.remove<T>(entity);
+			}
 		};
 		metadata.get = [](entt::registry &registry, entt::entity entity) {
 			return &registry.get<T>(entity);

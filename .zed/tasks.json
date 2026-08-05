@@ -1,15 +1,7 @@
 [
 	{
 		"label": "CMake Configure Desktop",
-		"command": "cmake",
-		"args": [
-			"-D",
-			"CMAKE_POLICY_VERSION_MINIMUM=3.5",
-			"-G",
-			"Ninja",
-			"-B",
-			"cmake-build-citron",
-		],
+		"command": "cmake -D CMAKE_POLICY_VERSION_MINIMUM=3.5 -G Ninja -B cmake-build-citron ; python build_engine_resources.py",
 		"use_new_terminal": false,
 	},
 	{

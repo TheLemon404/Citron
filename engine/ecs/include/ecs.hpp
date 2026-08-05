@@ -3,6 +3,7 @@
 #include "citron_exports.hpp"
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
+#include "logger.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
 #include "view.hpp"
@@ -24,12 +25,13 @@ class CITRON_ECS_API Scene;
 class CITRON_ECS_API System {
   public:
 	System(const std::string name) : name(name) {}
+
 	virtual void init(Scene &activeScene) {};
 	virtual void start(Scene &activeScene) {};
 	virtual void update(Scene &activeScene) {};
 	virtual void onEvent(Scene &activeScene, Event &e) {};
 	virtual void end(Scene &registry) {};
-	virtual const std::string getName() { return name; }
+	const std::string getName() { return name; }
 
   private:
 	const std::string name;
@@ -42,8 +44,35 @@ class CITRON_ECS_API Scene : public ISerializable {
 	virtual void serialize(StreamWriter &writer) override;
 	virtual void deserialize(StreamReader &reader) override;
 
+	template <typename T>
+	void addSystem() {
+		if (!hasSystem<T>()) {
+			m_systemRegistry[typeid(T).hash_code()] = std::make_shared<T>();
+		}
+	}
+
+	template <typename T>
+	void removeSystem() {
+		if (hasSystem<T>()) {
+			m_systemRegistry.erase(typeid(T).hash_code());
+		}
+	}
+
+	template <typename T>
+	bool hasSystem() {
+		return m_systemRegistry.contains(typeid(T).hash_code());
+	}
+
+	template <typename T>
+	std::shared_ptr<T> getSystem() {
+		if (hasSystem<T>()) {
+			return std::static_pointer_cast<T>(m_systemRegistry[typeid(T).hash_code()]);
+		}
+		return nullptr;
+	}
+
 	const std::string &getName() { return name; }
-	std::vector<std::shared_ptr<System>> &getSystems() { return systems; }
+	std::map<uint32_t, std::shared_ptr<System>> &getSystems() { return m_systemRegistry; }
 	entt::registry &getRegistry() { return registry; }
 
 	UUID createEntity();
@@ -70,7 +99,6 @@ class CITRON_ECS_API Scene : public ISerializable {
 	void editorUpdate();
 	void onEvent(Event &e);
 	void end();
-	std::vector<std::shared_ptr<System>> systems;
 
 	CitronGraphics::View &getActiveView() { return tempPerspectiveView; }
 
@@ -82,6 +110,7 @@ class CITRON_ECS_API Scene : public ISerializable {
 
 	std::string name;
 	entt::registry registry;
+	std::map<uint32_t, std::shared_ptr<System>> m_systemRegistry;
 };
 
 enum class SceneMode {

@@ -4,7 +4,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
-#include "component_registry.hpp"
+#include "registry.hpp"
 #include "editor.hpp"
 #include <cfloat>
 #include <component.hpp>
@@ -27,6 +27,7 @@
 #include "mesh.hpp"
 #include "shader.hpp"
 #include "spdlog/common.h"
+#include "test_system.hpp"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
 #include <imgui_stdlib.h>
@@ -579,9 +580,36 @@ void OutlinerPanel::onDraw() {
 	ImGui::InputTextWithHint("##EntitySearch", "Search by entity name",
 							 &entitySearchResult);
 
-	if (ImGui::BeginTable("LogTable", 1,
+	bool pendingAddSystem = false;
+
+	if (ImGui::BeginTable("##SystemsTable", 1)) {
+		ImGui::TableSetupColumn("Systems");
+		ImGui::TableHeadersRow();
+		for (auto &[id, system] : currentEditedScene->getSystems()) {
+			ImGui::PushID(id);
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			if (ImGui::Selectable(system->getName().c_str())) {
+			}
+			ImGui::PopID();
+		}
+		ImGui::EndTable();
+
+		if (currentEditedScene) {
+			if (ImGui::BeginPopupContextWindow(
+					"SceneContextPopup",
+					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
+				if (ImGui::MenuItem("Add System")) {
+					pendingAddSystem = true;
+				}
+				ImGui::EndPopup();
+			}
+		}
+	}
+
+	if (ImGui::BeginTable("##EntityTable", 1,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
-		ImGui::TableSetupColumn("Name");
+		ImGui::TableSetupColumn("Entities");
 		ImGui::TableHeadersRow();
 
 		if (ImGui::BeginDragDropTarget()) {
@@ -599,19 +627,6 @@ void OutlinerPanel::onDraw() {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
-		int i = 0;
-		if (currentEditedScene) {
-			for (std::shared_ptr<System> &system :
-				 currentEditedScene->getSystems()) {
-				ImGui::PushID(i++);
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				ImGui::Selectable(system->getName().c_str(), false,
-								  ImGuiSelectableFlags_SpanAllColumns);
-				ImGui::PopID();
-			}
-		}
-
 		if (currentEditedScene) {
 			const auto &view =
 				currentEditedScene->getRegistry().view<EntityBaseComponent>();
@@ -625,8 +640,6 @@ void OutlinerPanel::onDraw() {
 			if (ImGui::BeginPopupContextWindow(
 					"SceneContextPopup",
 					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
-				if (ImGui::MenuItem("Add System")) {
-				}
 				if (ImGui::MenuItem("Create Entity")) {
 					UUID newEntity = currentEditedScene->createEntity();
 					currentEditedScene->getRegistry().emplace<MeshComponent>(
@@ -642,8 +655,34 @@ void OutlinerPanel::onDraw() {
 		ImGui::EndTable();
 	}
 
+	if (pendingAddSystem) {
+		ImGui::OpenPopup("SystemsPopup");
+		pendingAddSystem = false;
+	}
+
+	if (currentEditedScene && ImGui::BeginPopup("SystemsPopup")) {
+		std::string systemSearchResult;
+		ImGui::InputTextWithHint("##SystemSearch",
+								 "Enter System Class Name",
+								 &systemSearchResult, ImGuiInputTextFlags_EnterReturnsTrue);
+		for (const auto &[id, system] : ECSRegistry::getSystemRegistry()) {
+			std::string searchLower = systemSearchResult;
+			std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(), ::tolower);
+
+			if (system.name.starts_with(systemSearchResult)) {
+				if (ImGui::Selectable(system.name.c_str())) {
+					systemSearchResult = system.name;
+					system.add(currentEditedScene);
+					ImGui::CloseCurrentPopup();
+				}
+			}
+		}
+		ImGui::EndPopup();
+	}
+
 	ImGui::End();
 }
+
 void OutlinerPanel::onEvent(Event &e) {}
 
 bool InspectorPanel::collapsingHeader(const char *label,
@@ -691,10 +730,10 @@ void InspectorPanel::onDraw() {
 	auto &registry = appContext.sceneManager.getActiveScene()->getRegistry();
 	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
 	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
-		for (const auto &[hash, metadata] : ComponentRegistry::getComponentRegistry()) {
+		for (const auto &[hash, metadata] : ECSRegistry::getComponentRegistry()) {
 			if (metadata.has(registry, selectedEntity)) {
 				void *component = metadata.get(registry, selectedEntity);
-				if (collapsingHeader(metadata.componentName.c_str())) {
+				if (collapsingHeader(metadata.name.c_str())) {
 					if (ImGui::BeginTable("##ComponentMemberTable", 2,
 										  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
 						// First column gets a fixed width of 150 units
@@ -725,13 +764,13 @@ void InspectorPanel::onDraw() {
 			ImGui::InputTextWithHint("##ComponentSearch",
 									 "Enter Component Class Name",
 									 &componentSearchResult, ImGuiInputTextFlags_EnterReturnsTrue);
-			for (const auto &[id, component] : ComponentRegistry::getComponentRegistry()) {
+			for (const auto &[id, component] : ECSRegistry::getComponentRegistry()) {
 				std::string searchLower = componentSearchResult;
 				std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(), ::tolower);
 
-				if (component.componentName.starts_with(componentSearchResult)) {
-					if (ImGui::Selectable(component.componentName.c_str())) {
-						componentSearchResult = component.componentName;
+				if (component.name.starts_with(componentSearchResult)) {
+					if (ImGui::Selectable(component.name.c_str())) {
+						componentSearchResult = component.name;
 						component.add(registry, selectedEntity);
 						ImGui::CloseCurrentPopup();
 					}

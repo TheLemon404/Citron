@@ -15,7 +15,7 @@
 #include <memory>
 #include <serialization.hpp>
 #include <yaml-cpp/yaml.h>
-#include <component_registry.hpp>
+#include <registry.hpp>
 #include <imgui_stdlib.h>
 #include "gui_elements.hpp"
 
@@ -26,57 +26,57 @@ Editor::Editor(const std::string &projectFilePath)
 
 	AppContext context = App::getContext();
 
-	ComponentRegistry::registerPropertyGuiDrawer<int>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<int>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::InputInt(fieldNameId.c_str(), (int *)field);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<UUID>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<UUID>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
 		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<float>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<float>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::InputFloat(fieldNameId.c_str(), (float *)field);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<std::string>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<std::string>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string *str = (std::string *)field;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::InputText(fieldNameId.c_str(), str);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<glm::vec2>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<glm::vec2>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::DragFloat2(fieldNameId.c_str(), (float *)field);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<glm::vec3>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<glm::vec3>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::DragFloat3(fieldNameId.c_str(), (float *)field);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<glm::quat>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<glm::quat>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(*(glm::quat *)field));
 		ImGui::DragFloat3(fieldNameId.c_str(), &eulerRotation[0]);
 		*(glm::quat *)field = glm::quat(glm::radians(eulerRotation));
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<glm::vec4>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<glm::vec4>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::DragFloat4(fieldNameId.c_str(), (float *)field);
 	});
-	ComponentRegistry::registerPropertyGuiDrawer<AssetReference<Mesh>>(
+	ECSRegistry::registerPropertyGuiDrawer<AssetReference<Mesh>>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;
 			GuiElements::drawAssetReferenceComponentGui<Mesh>(fieldNameId, *(AssetReference<Mesh> *)field, context);
 		});
-	ComponentRegistry::registerPropertyGuiDrawer<AssetReference<Material>>(
+	ECSRegistry::registerPropertyGuiDrawer<AssetReference<Material>>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;

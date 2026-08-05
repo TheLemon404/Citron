@@ -2,6 +2,7 @@
 
 #include "assets.hpp"
 #include "citron_exports.hpp"
+#include "ecs.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -24,9 +25,9 @@ struct CITRON_ECS_API Member {
 };
 
 struct CITRON_ECS_API ComponentMetadata {
-	uint32_t componentHash;
+	uint32_t hash;
 	std::vector<Member> members;
-	std::string componentName;
+	std::string name;
 
 	std::function<bool(entt::registry &, entt::entity)> has;
 	std::function<void(entt::registry &, entt::entity)> add;
@@ -34,21 +35,60 @@ struct CITRON_ECS_API ComponentMetadata {
 	std::function<void *(entt::registry &, entt::entity)> get;
 };
 
-class CITRON_ECS_API ComponentRegistry {
+struct CITRON_ECS_API SystemMetadata {
+	uint32_t hash;
+	std::vector<Member> members;
+	std::string name;
+
+	std::function<bool(std::shared_ptr<Scene> scene)> has;
+	std::function<void(std::shared_ptr<Scene> scene)> add;
+	std::function<void(std::shared_ptr<Scene> scene)> remove;
+	std::function<std::shared_ptr<System>(std::shared_ptr<Scene> scene)> get;
+};
+
+class CITRON_ECS_API ECSRegistry {
 	static std::unordered_map<uint32_t, ComponentMetadata> m_componentRegistry;
 	static std::unordered_map<uint32_t, PropertyGuiDrawer> m_propertyGuiDrawers;
+	static std::unordered_map<uint32_t, SystemMetadata> m_systemRegistry;
 
   public:
 	static std::unordered_map<uint32_t, ComponentMetadata> &getComponentRegistry() {
 		return m_componentRegistry;
 	}
 
+	static std::unordered_map<uint32_t, SystemMetadata> &getSystemRegistry() {
+		return m_systemRegistry;
+	}
+
+	template <typename T>
+	static void registerSystem(std::string name) {
+		const uint32_t systemHash = typeid(T).hash_code();
+		SystemMetadata metadata;
+		metadata.hash = systemHash;
+		metadata.name = name;
+
+		metadata.add = [metadata](std::shared_ptr<Scene> scene) {
+			scene->addSystem<T>();
+		};
+		metadata.remove = [metadata](std::shared_ptr<Scene> scene) {
+			scene->removeSystem<T>();
+		};
+		metadata.get = [metadata](std::shared_ptr<Scene> scene) {
+			return scene->getSystem<T>();
+		};
+		metadata.has = [metadata](std::shared_ptr<Scene> scene) {
+			return scene->hasSystem<T>();
+		};
+
+		m_systemRegistry[systemHash] = metadata;
+	}
+
 	template <typename T>
 	static void registerComponent(std::string name) {
 		const uint32_t componentHash = typeid(T).hash_code();
 		ComponentMetadata metadata;
-		metadata.componentHash = componentHash;
-		metadata.componentName = name;
+		metadata.hash = componentHash;
+		metadata.name = name;
 		metadata.has = [](entt::registry &registry, entt::entity entity) {
 			return registry.any_of<T>(entity);
 		};
@@ -92,5 +132,7 @@ class CITRON_ECS_API ComponentRegistry {
 	}
 
 	static void registerDefaultComponents();
+	static void registerDefaultSystems();
 };
+
 } // namespace CitronECS

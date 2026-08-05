@@ -212,19 +212,19 @@ void Scene::deleteEntity(UUID uuid) {
 }
 
 void Scene::init() {
-	for (auto &system : systems) {
+	for (auto &[id, system] : m_systemRegistry) {
 		system->init(*this);
 	}
 }
 
 void Scene::start() {
-	for (auto &system : systems) {
+	for (auto &[id, system] : m_systemRegistry) {
 		system->start(*this);
 	}
 }
 
 void Scene::update() {
-	for (auto &system : systems) {
+	for (auto &[id, system] : m_systemRegistry) {
 		system->update(*this);
 	}
 }
@@ -232,13 +232,13 @@ void Scene::update() {
 void Scene::editorUpdate() {}
 
 void Scene::onEvent(Event &e) {
-	for (auto &system : systems) {
+	for (auto &[id, system] : m_systemRegistry) {
 		system->onEvent(*this, e);
 	}
 }
 
 void Scene::end() {
-	for (auto &system : systems) {
+	for (auto &[id, system] : m_systemRegistry) {
 		system->end(*this);
 	}
 }

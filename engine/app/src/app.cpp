@@ -1,8 +1,8 @@
 
 #include "SDL3/SDL_timer.h"
 #include "clock.hpp"
-#include "component_registry.hpp"
 #define WEBGPU_CPP_IMPLEMENTATION
+#include "registry.hpp"
 
 #include "app.hpp"
 #include "assets.hpp"
@@ -93,7 +93,8 @@ void App::init() {
 	CITRON_CORE_INFO("Core logger initialized");
 	CITRON_CLIENT_INFO("Client logger initialized");
 
-	ComponentRegistry::registerDefaultComponents();
+	ECSRegistry::registerDefaultComponents();
+	ECSRegistry::registerDefaultSystems();
 
 	window.init();
 	window.open();
@@ -110,9 +111,15 @@ void App::update() {
 	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
 
 	while (running) {
-		CITRON_PROFILE_SCOPE("App Running Loop")
-		window.pollEvents();
-		sceneManager.onUpdate();
+		CITRON_PROFILE_SCOPE("App Running Loop");
+		{
+			CITRON_PROFILE_SCOPE("Window Poll Events");
+			window.pollEvents();
+		}
+		{
+			CITRON_PROFILE_SCOPE("Scene Update");
+			sceneManager.onUpdate();
+		}
 
 		{
 			CITRON_PROFILE_SCOPE("Layer Update")

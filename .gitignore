@@ -1,3 +1,4 @@
 cmake-build-citron
 .fetchcontent-cache
 .cache
+citron_profile.json

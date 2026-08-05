@@ -136,7 +136,7 @@ class CITRON_GRAPHICS_API Renderer {
 	Frame beginFrame(View &view);
 	void endFrame(Frame &frame);
 
-	void render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::vec2 viewportSize);
+	void render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize);
 
 	void init();
 	void end();
@@ -207,7 +207,7 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
-	void resizeRenderTargets(glm::vec2 viewportSize);
+	void resizeRenderTargets(glm::ivec2 viewportSize);
 
 	// render targets
 	wgpu::Texture idBufferTexture;

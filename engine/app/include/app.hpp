@@ -117,7 +117,7 @@ class CITRON_APP_API App {
 	const bool isRuntime() { return isRuntimeMode; }
 
 	virtual View &getActiveView() { return sceneManager.getActiveScene()->getActiveView(); }
-	virtual glm::vec2 getActiveViewSize() { return glm::vec2(window.getWidth(), window.getHeight()); }
+	virtual glm::ivec2 getActiveViewSize() { return glm::ivec2(window.getWidth(), window.getHeight()); }
 
   protected:
 	const bool isRuntimeMode = false;

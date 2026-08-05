@@ -7,9 +7,9 @@
 #include <ImGuizmo.h>
 
 struct ViewportMotionSettings {
-	float moveSpeed = 0.5f;
-	float fastMoveSpeed = 1.0f;
-	float lookSpeed = 0.005f;
+	float moveSpeed = 0.05f;
+	float fastMoveSpeed = 0.1f;
+	float lookSpeed = 0.007f;
 	float snapTranslation = 1.0f;
 	float snapRotation = 15.0f;
 	float snapScale = 0.25f;
@@ -38,7 +38,7 @@ class ViewPanel : public Panel {
 		this->sceneView = sceneView;
 	}
 
-	glm::vec2 getViewportSize() {
+	glm::ivec2 getViewportSize() {
 		return {viewportSize.x, viewportSize.y};
 	}
 

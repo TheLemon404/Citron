@@ -218,7 +218,7 @@ void Device::resizeSurface(int width, int height) {
 	surfaceConfiguration.viewFormats = nullptr;
 	surfaceConfiguration.usage = wgpu::TextureUsage::RenderAttachment;
 	surfaceConfiguration.device = device;
-	surfaceConfiguration.presentMode = wgpu::PresentMode::Fifo;
+	surfaceConfiguration.presentMode = wgpu::PresentMode::Mailbox;
 	surfaceConfiguration.alphaMode = wgpu::CompositeAlphaMode::Auto;
 	surface.configure(surfaceConfiguration);
 

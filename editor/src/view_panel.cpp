@@ -1,3 +1,4 @@
+#include "clock.hpp"
 #include "uuid.hpp"
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -37,24 +38,26 @@ void ViewPanel::onUpdate() {
 	if (!focused || !viewportMovementActive)
 		return;
 
+	float deltaTime = CitronCore::Clock::getDeltaTime();
+
 	CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
 	if (inputLayer->isPressed(SDLK_W)) {
-		editorView.position += editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+		editorView.position += editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
 	if (inputLayer->isPressed(SDLK_S)) {
-		editorView.position -= editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+		editorView.position -= editorView.forward * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
 	if (inputLayer->isPressed(SDLK_D)) {
-		editorView.position += glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+		editorView.position += glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
 	if (inputLayer->isPressed(SDLK_A)) {
-		editorView.position -= glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+		editorView.position -= glm::normalize(glm::cross(editorView.forward, glm::vec3(0.0f, 1.0f, 0.0f))) * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
 	if (inputLayer->isPressed(SDLK_E)) {
-		editorView.position += globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+		editorView.position += globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
 	if (inputLayer->isPressed(SDLK_Q)) {
-		editorView.position -= globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed);
+		editorView.position -= globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
 }
 
@@ -113,14 +116,16 @@ void ViewPanel::onEvent(Event &e) {
 	if (!focused)
 		return;
 
+	float deltaTime = CitronCore::Clock::getDeltaTime();
+
 	EventDispatcher dispatcher(e);
 	dispatcher.dispatch<MouseButtonPressedEvent>(CITRON_BIND_EVENT_FN(ViewPanel::mouseSelectEvent));
 
 	if (e.isInCategory(EventCategoryMouse)) {
 		if (e.getEventType() == EventType::MouseMoved && viewportMovementActive) {
 			MouseMovedEvent &mouseEvent = static_cast<MouseMovedEvent &>(e);
-			float dx = mouseEvent.getDx() * motionSettings.lookSpeed;
-			float dy = mouseEvent.getDy() * motionSettings.lookSpeed;
+			float dx = mouseEvent.getDx() * motionSettings.lookSpeed * deltaTime;
+			float dy = mouseEvent.getDy() * motionSettings.lookSpeed * deltaTime;
 			editorView.forward = glm::rotate(editorView.forward, -dx, globalUp);
 			glm::vec3 localRightVector = glm::normalize(glm::cross(editorView.forward, globalUp));
 			editorView.forward = glm::rotate(editorView.forward, -dy, localRightVector);

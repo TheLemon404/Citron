@@ -227,7 +227,7 @@ void Renderer::endFrame(Frame &frame) {
 	device.presentCurrentSurfaceTexture();
 }
 
-void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::vec2 viewportSize) {
+void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize) {
 	resizeRenderTargets(viewportSize);
 
 	// need to cache assets already gethered in previous frames
@@ -340,7 +340,7 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 	return renderables;
 }
 
-void Renderer::resizeRenderTargets(glm::vec2 viewportSize) {
+void Renderer::resizeRenderTargets(glm::ivec2 viewportSize) {
 	if (viewportSize.x != idBufferTexture.getWidth() || viewportSize.y != idBufferTexture.getHeight()) {
 		idBufferTexture.release();
 		idBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);

@@ -1,4 +1,6 @@
 
+#include "SDL3/SDL_timer.h"
+#include "clock.hpp"
 #include "component_registry.hpp"
 #define WEBGPU_CPP_IMPLEMENTATION
 
@@ -20,6 +22,7 @@
 #include <shader.hpp>
 #include <string>
 #include <string_view>
+#include <instrumentor.hpp>
 
 #include <webgpu/webgpu.hpp>
 #include <x86gprintrin.h>
@@ -81,6 +84,8 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 App::~App() {}
 
 void App::init() {
+	CITRON_PROFILE_FUNCTION();
+
 	Logger::init();
 
 	initLogSink();
@@ -101,40 +106,63 @@ void App::init() {
 }
 
 void App::update() {
+	CITRON_PROFILE_FUNCTION();
 	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
 
 	while (running) {
+		CITRON_PROFILE_SCOPE("App Running Loop")
 		window.pollEvents();
 		sceneManager.onUpdate();
 
-		for (auto &layer : layerStack) {
-			layer->onUpdate();
+		{
+			CITRON_PROFILE_SCOPE("Layer Update")
+			for (auto &layer : layerStack) {
+				layer->onUpdate();
+			}
 		}
 
-		glm::vec2 viewportSize = getActiveViewSize();
-		if (renderer.frameReady()) {
-			Frame frame = renderer.beginFrame(getActiveView());
-			if (sceneManager.getActiveScene()) {
-				renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
-			}
-			if (!renderableData.empty()) {
-				renderer.render(frame, renderableData, viewportSize);
-			}
+		{
+			CITRON_PROFILE_SCOPE("Render")
+			glm::ivec2 viewportSize = getActiveViewSize();
+			if (renderer.frameReady()) {
+				Frame frame = renderer.beginFrame(getActiveView());
+				{
+					CITRON_PROFILE_SCOPE("Renderable Data Extraction")
+					if (sceneManager.getActiveScene()) {
+						renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
+					}
+				}
+				{
+					CITRON_PROFILE_SCOPE("Render Scene")
+					if (!renderableData.empty()) {
+						renderer.render(frame, renderableData, viewportSize);
+					}
+				}
 
-			// for editor ui
-			wgpu::Texture surfaceTexture = renderer.getContext().device.getCurrentSurfaceTexture().texture;
-			RenderPassColorAttachment colorAttachment = {};
-			colorAttachment.targetTexture = surfaceTexture;
-			colorAttachment.targetTextureView = surfaceTexture.createView();
-			RenderPassParams guiPassParams = {};
-			guiPassParams.colorAttachments.push_back(colorAttachment);
-			RenderPass uiPass = frame.beginRenderPass(guiPassParams);
-			if (renderer.onGuiDrawCallback)
-				renderer.onGuiDrawCallback(renderer.lightingBufferTextureView, uiPass);
-			uiPass.end();
-			guiPassParams.colorAttachments[0].targetTextureView.release();
-			renderer.endFrame(frame);
+				// for editor ui
+				{
+					CITRON_PROFILE_SCOPE("Render GUI")
+					wgpu::Texture surfaceTexture = renderer.getContext().device.getCurrentSurfaceTexture().texture;
+					RenderPassColorAttachment colorAttachment = {};
+					colorAttachment.targetTexture = surfaceTexture;
+					colorAttachment.targetTextureView = surfaceTexture.createView();
+					RenderPassParams guiPassParams = {};
+					guiPassParams.colorAttachments.push_back(colorAttachment);
+					RenderPass uiPass = frame.beginRenderPass(guiPassParams);
+					if (renderer.onGuiDrawCallback)
+						renderer.onGuiDrawCallback(renderer.lightingBufferTextureView, uiPass);
+					uiPass.end();
+					guiPassParams.colorAttachments[0].targetTextureView.release();
+				}
+
+				{
+					CITRON_PROFILE_SCOPE("End Render Frame");
+					renderer.endFrame(frame);
+				}
+			}
 		}
+
+		Clock::tick(SDL_GetTicks());
 
 		window.swapBuffers();
 	}
@@ -145,12 +173,15 @@ void App::update() {
 }
 
 void App::close() {
+	CITRON_PROFILE_FUNCTION();
 	renderer.end();
 	running = false;
 	window.close();
 }
 
 void App::onEvent(Event &e) {
+	CITRON_PROFILE_FUNCTION();
+
 	EventDispatcher dispatcher(e);
 	dispatcher.dispatch<WindowCloseEvent>(
 		CITRON_BIND_EVENT_FN(App::onWindowClose));

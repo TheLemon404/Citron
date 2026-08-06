@@ -23,6 +23,20 @@
 
 using namespace CitronECS;
 
+std::vector<Entity> Entity::getChildren() {
+	EntityBaseComponent &base = getComponent<EntityBaseComponent>();
+	std::vector<Entity> result = {};
+	for (UUID childID : base.children) {
+		result.push_back({scene->getEntity(childID), scene});
+	}
+	return result;
+}
+
+Entity Entity::getParent() {
+	EntityBaseComponent &base = getComponent<EntityBaseComponent>();
+	return {scene->getEntity(base.parentId), scene};
+}
+
 void Scene::serialize(StreamWriter &writer) {
 	writer.writeString(name);
 	entt::snapshot{registry}
@@ -47,7 +61,7 @@ void Scene::deserialize(StreamReader &reader) {
 	}
 }
 
-UUID Scene::createEntity() {
+Entity Scene::createEntity() {
 	const auto entity = registry.create();
 	UUID uuid = UUID();
 	registry.emplace<EntityBaseComponent>(entity, uuid, "Entity");
@@ -56,33 +70,28 @@ UUID Scene::createEntity() {
 
 	CITRON_CORE_INFO("Successfully created entity: {}", (int)uuid);
 
-	return uuid;
+	return {entity, this};
 }
 
-entt::entity Scene::getEntity(UUID uuid) { return entityMap[uuid]; }
+Entity Scene::getEntity(UUID uuid) { return {entityMap[uuid], this}; }
 
-template <typename T>
-void Scene::addComponent(entt::entity entity, T component) {
-	registry.emplace<T>(entity, component);
-}
-
-void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
+void Scene::reparentEntityToRoot(Entity entity) {
 	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 
-	// reparenting entity to root
-	if (parent == entt::null) {
-		if (base.parentId != UUID::nullID) {
-			EntityBaseComponent &oldParentBase =
-				registry.get<EntityBaseComponent>(entityMap[base.parentId]);
-			oldParentBase.children.erase(std::remove(oldParentBase.children.begin(),
-													 oldParentBase.children.end(),
-													 base.uuid),
-										 oldParentBase.children.end());
-		}
-
-		base.parentId = UUID::nullID;
-		return;
+	if (base.parentId != UUID::nullID) {
+		EntityBaseComponent &oldParentBase =
+			registry.get<EntityBaseComponent>(entityMap[base.parentId]);
+		oldParentBase.children.erase(std::remove(oldParentBase.children.begin(),
+												 oldParentBase.children.end(),
+												 base.uuid),
+									 oldParentBase.children.end());
 	}
+
+	base.parentId = UUID::nullID;
+}
+
+void Scene::reparentEntity(Entity entity, Entity parent) {
+	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 
 	EntityBaseComponent &newParentBase =
 		registry.get<EntityBaseComponent>(parent);
@@ -106,12 +115,12 @@ void Scene::reparentEntity(entt::entity entity, entt::entity parent) {
 					 (unsigned int)base.uuid, (unsigned int)newParentBase.uuid);
 }
 
-void Scene::deleteEntity(entt::entity entity) {
+void Scene::deleteEntity(Entity entity) {
 	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 
 	UUID uuid = base.uuid;
-	for (UUID childID : base.children) {
-		deleteEntity(childID);
+	for (Entity child : entity.getChildren()) {
+		deleteEntity(child);
 	}
 
 	if (base.parentId != UUID::nullID) {
@@ -204,11 +213,6 @@ std::vector<CitronGraphics::RenderableReferenceData> Scene::extractRenderableDat
 		renderableData.push_back(data);
 	}
 	return renderableData;
-}
-
-void Scene::deleteEntity(UUID uuid) {
-	entt::entity e = entityMap[uuid];
-	deleteEntity(e);
 }
 
 void Scene::init() {

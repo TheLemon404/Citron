@@ -37,6 +37,8 @@ class CITRON_ECS_API System {
 	const std::string name;
 };
 
+class CITRON_ECS_API Entity;
+
 class CITRON_ECS_API Scene : public ISerializable {
   public:
 	Scene(std::string name) : name(name) {}
@@ -75,13 +77,11 @@ class CITRON_ECS_API Scene : public ISerializable {
 	std::map<uint32_t, std::shared_ptr<System>> &getSystems() { return m_systemRegistry; }
 	entt::registry &getRegistry() { return registry; }
 
-	UUID createEntity();
-	entt::entity getEntity(UUID uuid);
-	template <typename T>
-	void addComponent(entt::entity entity, T component);
-	void reparentEntity(entt::entity entity, entt::entity parent);
-	void deleteEntity(UUID uuid);
-	void deleteEntity(entt::entity entity);
+	Entity createEntity();
+	Entity getEntity(UUID entity);
+	void reparentEntityToRoot(Entity entity);
+	void reparentEntity(Entity entity, Entity parent);
+	void deleteEntity(Entity entity);
 
 	glm::vec3 getGlobalPosition(entt::entity entity);
 	glm::quat getGlobalRotation(entt::entity entity);
@@ -111,6 +111,42 @@ class CITRON_ECS_API Scene : public ISerializable {
 	std::string name;
 	entt::registry registry;
 	std::map<uint32_t, std::shared_ptr<System>> m_systemRegistry;
+};
+
+class CITRON_ECS_API Entity {
+  public:
+	Entity(const entt::entity handle, Scene *scene) : handle(handle), scene(scene) {};
+
+	template <typename T>
+	bool hasComponent() {
+		return scene->getRegistry().any_of<T>(handle);
+	}
+
+	template <typename T>
+	T &getComponent() {
+		return scene->getRegistry().get<T>(handle);
+	}
+
+	template <typename T>
+	void removeComponent() {
+		if (hasComponent<T>())
+			scene->getRegistry().remove<T>(handle);
+	}
+
+	template <typename T, typename... Args>
+	void addComponent(Args... args) {
+		if (!hasComponent<T>())
+			scene->getRegistry().emplace<T>(handle, args...);
+	}
+
+	Entity getParent();
+	std::vector<Entity> getChildren();
+
+	operator entt::entity() { return handle; }
+
+  private:
+	const entt::entity handle;
+	Scene *scene;
 };
 
 enum class SceneMode {

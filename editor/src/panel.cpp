@@ -478,16 +478,15 @@ void OutlinerPanel::onUpdate() {
 		appContext.sceneManager.getActiveScene();
 	if (pendingCreateEntity) {
 		pendingCreateEntity = false;
-		UUID newEntity = currentEditedScene->createEntity();
+		Entity newEntity = currentEditedScene->createEntity();
 		if (pendingCreateEntityParent != UUID::nullID) {
-			currentEditedScene->reparentEntity(
-				currentEditedScene->getEntity(newEntity),
-				currentEditedScene->getEntity(pendingCreateEntityParent));
+			currentEditedScene->reparentEntity(newEntity,
+											   currentEditedScene->getEntity(pendingCreateEntityParent));
 			pendingCreateEntityParent = UUID::nullID;
 		}
 	}
 	if (pendingDeleteEntity != UUID::nullID) {
-		currentEditedScene->deleteEntity(pendingDeleteEntity);
+		currentEditedScene->deleteEntity(currentEditedScene->getEntity(pendingDeleteEntity));
 		pendingDeleteEntity = UUID::nullID;
 	}
 }
@@ -618,9 +617,8 @@ void OutlinerPanel::onDraw() {
 				uint64_t *childEntityUUID = (uint64_t *)payload->Data;
 				UUID newChildUUID = *childEntityUUID;
 				std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
-				currentScene->reparentEntity(
-					currentScene->getEntity(newChildUUID),
-					entt::null);
+				currentScene->reparentEntityToRoot(
+					currentScene->getEntity(newChildUUID));
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -641,9 +639,8 @@ void OutlinerPanel::onDraw() {
 					"SceneContextPopup",
 					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
 				if (ImGui::MenuItem("Create Entity")) {
-					UUID newEntity = currentEditedScene->createEntity();
-					currentEditedScene->getRegistry().emplace<MeshComponent>(
-						currentEditedScene->getEntity(newEntity));
+					Entity newEntity = currentEditedScene->createEntity();
+					newEntity.addComponent<MeshComponent>();
 				}
 
 				ImGui::EndPopup();

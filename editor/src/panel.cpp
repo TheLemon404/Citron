@@ -582,17 +582,20 @@ void OutlinerPanel::onDraw() {
 	bool pendingAddSystem = false;
 
 	if (ImGui::BeginTable("##SystemsTable", 1)) {
+		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
+
 		ImGui::TableSetupColumn("Systems");
 		ImGui::TableHeadersRow();
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
 			ImGui::PushID(id);
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0, 4.0));
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
-			if (ImGui::Selectable(system->getName().c_str())) {
+			if (ImGui::TreeNodeEx(system->getName().c_str(), ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen)) {
 			}
+			ImGui::PopStyleVar();
 			ImGui::PopID();
 		}
-		ImGui::EndTable();
 
 		if (currentEditedScene) {
 			if (ImGui::BeginPopupContextWindow(
@@ -604,6 +607,9 @@ void OutlinerPanel::onDraw() {
 				ImGui::EndPopup();
 			}
 		}
+		ImGui::EndTable();
+
+		ImGui::PopStyleVar();
 	}
 
 	if (ImGui::BeginTable("##EntityTable", 1,

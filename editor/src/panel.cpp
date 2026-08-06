@@ -582,10 +582,10 @@ void OutlinerPanel::onDraw() {
 	bool pendingAddSystem = false;
 
 	if (ImGui::BeginTable("##SystemsTable", 1)) {
-		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
-
 		ImGui::TableSetupColumn("Systems");
 		ImGui::TableHeadersRow();
+		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
+
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
 			ImGui::PushID(id);
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0, 4.0));
@@ -607,9 +607,9 @@ void OutlinerPanel::onDraw() {
 				ImGui::EndPopup();
 			}
 		}
-		ImGui::EndTable();
-
 		ImGui::PopStyleVar();
+
+		ImGui::EndTable();
 	}
 
 	if (ImGui::BeginTable("##EntityTable", 1,

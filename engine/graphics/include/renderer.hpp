@@ -27,7 +27,7 @@ namespace CitronGraphics {
 class CITRON_GRAPHICS_API Frame;
 
 struct CITRON_GRAPHICS_API RenderObject {
-	uint64_t entityUUID;
+	uint32_t entityUUID;
 	ModelUniforms modelUniforms;
 	std::shared_ptr<Mesh> mesh;
 	std::shared_ptr<Material> material;
@@ -124,7 +124,7 @@ struct RendererContext {
 };
 
 struct RenderObjectCache {
-	std::set<uint64_t> entityUUIDs;
+	std::set<uint32_t> entityUUIDs;
 	std::vector<RenderObject> renderObjects;
 };
 

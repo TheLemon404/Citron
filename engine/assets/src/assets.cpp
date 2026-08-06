@@ -18,7 +18,7 @@ void EditorAssetManager::serialize(StreamWriter &writer) {
 	int count = assetMetadataRegistry.size();
 	writer.writeData(&count, sizeof(int));
 	for (const auto &pair : assetMetadataRegistry) {
-		writer.writeData(&pair.first, sizeof(uint64_t));
+		writer.writeData(&pair.first, sizeof(uint32_t));
 		writer.writeString(pair.second.assetPath.string());
 		writer.writeData(&pair.second.assetType, sizeof(AssetType));
 	}
@@ -30,8 +30,8 @@ void EditorAssetManager::deserialize(StreamReader &reader) {
 		reader.readData(&count, sizeof(int));
 		assetMetadataRegistry.clear();
 		for (int i = 0; i < count; i++) {
-			uint64_t uuid;
-			reader.readData(&uuid, sizeof(uint64_t));
+			uint32_t uuid;
+			reader.readData(&uuid, sizeof(uint32_t));
 			std::string path;
 			reader.readString(path);
 			AssetType assetType = AssetType::UNKNOWN;
@@ -84,7 +84,7 @@ std::shared_ptr<AssetBase> EditorAssetManager::getAsset(const UUID uuid) {
 	}
 
 	if (!assetMetadataRegistry.contains(uuid)) {
-		CITRON_CORE_ERROR("Asset registry does not contain metadata for uuid: {}", (uint64_t)uuid);
+		CITRON_CORE_ERROR("Asset registry does not contain metadata for uuid: {}", (uint32_t)uuid);
 		return nullptr;
 	}
 	AssetMetadata metadata = assetMetadataRegistry[uuid];
@@ -115,7 +115,7 @@ void EditorAssetManager::refreshAssetRegistry() {
 		if (isKnownAssetFileExtension(file.extension().string())) {
 			if (!filepathToUUID.contains(file) || !assetMetadataRegistry.contains(filepathToUUID[file])) {
 				AssetMetadata metadata = {};
-				metadata.uuid = (uint64_t)UUID();
+				metadata.uuid = (uint32_t)UUID();
 				metadata.assetPath = file;
 				metadata.assetType = getAssetTypeFromExtension(file.extension().string());
 				assetMetadataRegistry[metadata.uuid] = metadata;
@@ -123,7 +123,7 @@ void EditorAssetManager::refreshAssetRegistry() {
 			}
 		}
 	}
-	for (const std::pair<uint64_t, AssetMetadata> &metadata : assetMetadataRegistry) {
+	for (const std::pair<uint32_t, AssetMetadata> &metadata : assetMetadataRegistry) {
 		if (!std::filesystem::exists(metadata.second.assetPath)) {
 			assetMetadataRegistry.erase(metadata.first);
 			filepathToUUID.erase(metadata.second.assetPath);
@@ -180,6 +180,7 @@ AssetManager::AssetManager(const bool isRuntime, std::filesystem::path projectRo
 
 void AssetManager::initializeAssetRegistry() {
 	m_assetManager->initializeAssetRegistry();
+	CITRON_CORE_INFO("Initialized Asset Registry");
 }
 
 AssetManager::~AssetManager() {

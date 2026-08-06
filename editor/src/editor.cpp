@@ -2,6 +2,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "app.hpp"
 #include "assets.hpp"
+#include "entt/entity/entity.hpp"
 #include "event.hpp"
 #include "gui.hpp"
 #include "keyboard.hpp"
@@ -141,7 +142,7 @@ bool Editor::openScene(std::string sceneAssetPath) {
 	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
 	Editor::get().sceneManager.getActiveScene()->deserialize(reader);
 	editorContext.currentlyEditedSceneAssetPath = sceneAssetPath;
-
+	editorContext.setCurrentSelectedEntity(entt::null);
 	return true;
 }
 
@@ -153,8 +154,14 @@ bool Editor::createScene() {
 						   Editor::get().sceneManager.getActiveScene()->getName());
 		return false;
 	}
+	saveCurrentScene();
 	CitronIO::IO::createFile(newSceneFile);
-	return openScene(newSceneFile);
+	FileStreamWriter writer = FileStreamWriter(newSceneFile);
+	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
+	Editor::get().sceneManager.getActiveScene()->serialize(writer);
+	editorContext.currentlyEditedSceneAssetPath = newSceneFile;
+	editorContext.setCurrentSelectedEntity(entt::null);
+	return true;
 }
 
 bool Editor::openProject(std::string projectFilePath) {
@@ -200,9 +207,7 @@ void Editor::saveCurrentScene() {
 		FileStreamWriter(editorContext.currentlyEditedSceneAssetPath);
 	Editor::get().sceneManager.getActiveScene()->serialize(fwriter);
 
-	CITRON_CLIENT_INFO(
-		"Scene: {} saved to {}: ", Editor::get().sceneManager.getActiveScene()->getName(),
-		editorContext.currentlyEditedSceneAssetPath.string());
+	CITRON_CLIENT_INFO("Scene saved");
 }
 
 glm::ivec2 Editor::getActiveViewSize() {

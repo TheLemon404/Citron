@@ -1,6 +1,9 @@
 
+#include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/vector_float3.hpp"
+#include "registry.hpp"
+#include <stdexcept>
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 #include "assets.hpp"
@@ -39,25 +42,79 @@ Entity Entity::getParent() {
 
 void Scene::serialize(StreamWriter &writer) {
 	writer.writeString(name);
-	entt::snapshot{registry}
-		.get<entt::entity>(writer)
-		.get<EntityBaseComponent>(writer)
-		.get<MeshComponent>(writer)
-		.get<TransformComponent>(writer);
+	size_t numSystems = m_systemRegistry.size();
+	writer.writeData(&numSystems, sizeof(numSystems));
+	for (const auto &[typeHash, metadata] : ECSRegistry::getSystemRegistry()) {
+		if (metadata.has(shared_from_this())) {
+			writer.writeData(&metadata.hash, sizeof(metadata.hash));
+			for (const Member &member : metadata.members) {
+				void *memberBytes = (char *)m_systemRegistry[typeHash].get() + member.offset;
+				member.serialize(writer, memberBytes);
+			}
+		}
+	}
+
+	auto view = registry.view<EntityBaseComponent>();
+	size_t numEntities = view.size();
+	writer.writeData(&numEntities, sizeof(numEntities));
+	for (auto entity : view) {
+		std::map<uint32_t, ComponentMetadata> componentsOnEntity;
+		for (const auto &[typeHash, metadata] : ECSRegistry::getComponentRegistry()) {
+			if (metadata.has(registry, entity)) {
+				componentsOnEntity[typeHash] = metadata;
+			}
+		}
+		size_t numComponents = componentsOnEntity.size();
+		writer.writeData(&numComponents, sizeof(numComponents));
+		for (const auto &[typeHash, metadata] : componentsOnEntity) {
+			writer.writeData(&typeHash, sizeof(typeHash));
+			for (const Member &member : metadata.members) {
+				CITRON_CORE_INFO("Serializing member: {}", member.fieldName);
+				void *component = metadata.get(registry, entity);
+				void *memberBytes = (char *)component + member.offset;
+				member.serialize(writer, memberBytes);
+			}
+		}
+	}
 }
 
 void Scene::deserialize(StreamReader &reader) {
-	reader.readString(name);
 	registry.clear();
-	entt::snapshot_loader{registry}
-		.get<entt::entity>(reader)
-		.get<EntityBaseComponent>(reader)
-		.get<MeshComponent>(reader)
-		.get<TransformComponent>(reader)
-		.orphans();
-	for (auto [entity, baseComponent] :
-		 registry.view<EntityBaseComponent>().each()) {
-		entityMap[baseComponent.uuid] = entity;
+	entityMap.clear();
+
+	reader.readString(name);
+	size_t numSystems;
+	reader.readData(&numSystems, sizeof(numSystems));
+	for (size_t i = 0; i < numSystems; i++) {
+		uint32_t typeHash;
+		reader.readData(&typeHash, sizeof(typeHash));
+		SystemMetadata metadata = ECSRegistry::getSystemRegistry()[typeHash];
+		metadata.add(shared_from_this());
+		for (Member &member : metadata.members) {
+			void *memberBytes = (char *)m_systemRegistry[typeHash].get() + member.offset;
+			member.deserialize(reader, memberBytes);
+		}
+	}
+
+	size_t numEntities;
+	reader.readData(&numEntities, sizeof(numEntities));
+	for (size_t i = 0; i < numEntities; i++) {
+		size_t numComponents;
+		entt::entity entity = registry.create();
+		reader.readData(&numComponents, sizeof(numComponents));
+		for (size_t j = 0; j < numComponents; j++) {
+			uint32_t typeHash;
+			reader.readData(&typeHash, sizeof(typeHash));
+			ComponentMetadata metadata = ECSRegistry::getComponentRegistry()[typeHash];
+			metadata.add(registry, entity);
+			for (Member &member : metadata.members) {
+				void *component = metadata.get(registry, entity);
+				void *memberBytes = (char *)component + member.offset;
+				member.deserialize(reader, memberBytes);
+			}
+		}
+		uint32_t uuid = registry.get<EntityBaseComponent>(entity).uuid;
+		entityMap[uuid] = entity;
 	}
 }
 
@@ -73,7 +130,13 @@ Entity Scene::createEntity() {
 	return {entity, this};
 }
 
-Entity Scene::getEntity(UUID uuid) { return {entityMap[uuid], this}; }
+Entity Scene::getEntity(UUID uuid) {
+	if (entityMap.contains(uuid)) {
+		return {entityMap[uuid], this};
+	}
+	CITRON_CORE_ERROR("Entity not found: {}", (unsigned int)uuid);
+	throw std::runtime_error("Entity not found: " + std::to_string(uuid));
+}
 
 void Scene::reparentEntityToRoot(Entity entity) {
 	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);

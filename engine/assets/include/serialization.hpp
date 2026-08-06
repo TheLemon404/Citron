@@ -24,24 +24,6 @@ class CITRON_ASSETS_API StreamWriter {
   public:
 	virtual void writeData(const void *data, size_t size) = 0;
 	virtual void writeString(const std::string &str) = 0;
-
-	// Need to impliment these methods for EnTT's snapshot integration
-	void operator()(entt::entity entity) {
-		writeData(reinterpret_cast<const char *>(&entity),
-				  sizeof(entt::entity));
-	}
-	void operator()(std::underlying_type_t<entt::entity> size) {
-		writeData(reinterpret_cast<const char *>(&size), sizeof(size));
-	}
-	template <typename T>
-	void operator()(const T &data) {
-		std::stringstream os;
-		{
-			cereal::YAMLOutputArchive archive(os);
-			archive(data);
-		}
-		writeString(os.str());
-	}
 };
 
 class CITRON_ASSETS_API FileStreamWriter : public StreamWriter {
@@ -76,24 +58,6 @@ class CITRON_ASSETS_API StreamReader {
   public:
 	virtual void readData(void *data, size_t size) = 0;
 	virtual void readString(std::string &str) = 0;
-
-	// Need to impliment these methods for EnTT's snapshot integration
-	void operator()(entt::entity &entity) {
-		readData(&entity, sizeof(entt::entity));
-	}
-	void operator()(std::underlying_type_t<entt::entity> &size) {
-		readData(&size, sizeof(size));
-	}
-	template <typename T>
-	void operator()(T &data) {
-		std::string str;
-		readString(str);
-		std::stringstream ss(str);
-		{
-			cereal::YAMLInputArchive archive(ss);
-			archive(data);
-		}
-	}
 };
 
 class CITRON_ASSETS_API FileStreamReader : public StreamReader {

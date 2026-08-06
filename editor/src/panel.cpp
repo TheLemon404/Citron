@@ -507,14 +507,14 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 	if (ImGui::BeginDragDropSource()) {
 		ImGui::SetDragDropPayload("ENTITY_TREE_REORDER",
-								  (uint64_t *)&entityBase.uuid,
-								  sizeof(uint64_t));
+								  (uint32_t *)&entityBase.uuid,
+								  sizeof(uint32_t));
 		ImGui::Text("Reparenting Entity: %s", entityBase.name.c_str());
 		ImGui::EndDragDropSource();
 	} else if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload *payload =
 				ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
-			uint64_t *childEntityUUID = (uint64_t *)payload->Data;
+			uint32_t *childEntityUUID = (uint32_t *)payload->Data;
 			UUID newChildUUID = *childEntityUUID;
 			std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
 			currentScene->reparentEntity(
@@ -614,7 +614,7 @@ void OutlinerPanel::onDraw() {
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload *payload =
 					ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
-				uint64_t *childEntityUUID = (uint64_t *)payload->Data;
+				uint32_t *childEntityUUID = (uint32_t *)payload->Data;
 				UUID newChildUUID = *childEntityUUID;
 				std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
 				currentScene->reparentEntityToRoot(
@@ -639,8 +639,7 @@ void OutlinerPanel::onDraw() {
 					"SceneContextPopup",
 					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
 				if (ImGui::MenuItem("Create Entity")) {
-					Entity newEntity = currentEditedScene->createEntity();
-					newEntity.addComponent<MeshComponent>();
+					currentEditedScene->createEntity();
 				}
 
 				ImGui::EndPopup();
@@ -699,6 +698,7 @@ bool InspectorPanel::collapsingHeader(const char *label,
 
 	// Align button text to the left
 	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.5f));
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
 
 	// Format full-width label with your custom trailing/leading icons
 	char buf[128];
@@ -713,6 +713,7 @@ bool InspectorPanel::collapsingHeader(const char *label,
 		storage->SetBool(id, open);
 	}
 
+	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 	return open;
 }
@@ -743,7 +744,7 @@ void InspectorPanel::onDraw() {
 							ImGui::Text("%s", member.fieldName.c_str());
 							ImGui::TableNextColumn();
 							PropertyGuiDrawer drawer = member.drawer;
-							if (drawer)
+							if (!member.hideInEditor && drawer)
 								drawer(member, component, appContext.assetManager);
 						}
 						ImGui::EndTable();

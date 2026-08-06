@@ -13,7 +13,7 @@ void RendererResourceManager::initResources() {
 	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 }
 
-GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
+GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
 	wgpu::Device &wgpuDevice = device.getWGPUDevice();
 	if (!entityModelUniformBufferCache.contains(entityUUID)) {
 		wgpu::BufferDescriptor modelUniformBufferDesc = {};

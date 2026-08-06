@@ -18,7 +18,7 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	char *reflectionData;
 	int reflectionDataLength;
 	if (miniray_reflect(source.data(), source.size(), &reflectionData, &reflectionDataLength)) {
-		CITRON_CORE_ERROR("Failed to get miniray reflection data for shader: {}", (uint64_t)uuid);
+		CITRON_CORE_ERROR("Failed to get miniray reflection data for shader: {}", (uint32_t)uuid);
 		return;
 	}
 

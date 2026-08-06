@@ -40,7 +40,7 @@ constexpr std::string_view to_string(AssetType t) {
 }
 
 struct CITRON_ASSETS_API AssetMetadata {
-	uint64_t uuid;
+	uint32_t uuid;
 	std::filesystem::path assetPath;
 	AssetType assetType;
 };
@@ -67,7 +67,7 @@ template <typename T>
 	requires std::derived_from<T, AssetBase>
 struct AssetReference {
 	std::string path;
-	uint64_t uuid = UUID::nullID;
+	uint32_t uuid = UUID::nullID;
 	static constexpr AssetType assetType = T::GetType();
 
 	template <class Archive>
@@ -110,12 +110,12 @@ class CITRON_ASSETS_API AssetManagerBase {
 
 	virtual void serializeAssets() = 0;
 
-	std::map<uint64_t, AssetMetadata> &getAssetMetadataRegistry() {
+	std::map<uint32_t, AssetMetadata> &getAssetMetadataRegistry() {
 		return assetMetadataRegistry;
 	}
 
   protected:
-	std::map<uint64_t, AssetMetadata> assetMetadataRegistry;
+	std::map<uint32_t, AssetMetadata> assetMetadataRegistry;
 
 	std::unordered_map<std::string, AssetType> fileExtensionToAssetType;
 	std::unordered_map<AssetType, std::shared_ptr<AssetImporter>> assetImporters;
@@ -159,7 +159,7 @@ class CITRON_ASSETS_API EditorAssetManager : public AssetManagerBase, public ISe
 
 	AssetType getAssetTypeFromExtension(std::string extension);
 
-	std::unordered_map<std::filesystem::path, uint64_t> filepathToUUID;
+	std::unordered_map<std::filesystem::path, uint32_t> filepathToUUID;
 	const std::filesystem::path projectRootPath;
 };
 
@@ -247,7 +247,7 @@ class CITRON_ASSETS_API AssetManager {
 		return std::dynamic_pointer_cast<T>(m_assetManager->getAsset(uuid));
 	}
 
-	std::map<uint64_t, AssetMetadata> &getAssetMetadataRegistry() {
+	std::map<uint32_t, AssetMetadata> &getAssetMetadataRegistry() {
 		return m_assetManager->getAssetMetadataRegistry();
 	}
 

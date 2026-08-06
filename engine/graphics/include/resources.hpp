@@ -12,10 +12,10 @@
 namespace CitronGraphics {
 
 struct CITRON_GRAPHICS_API RenderableReferenceData {
-	uint64_t entityUUID;
+	uint32_t entityUUID;
 	glm::mat4 transform;
-	uint64_t meshUUID;
-	uint64_t materialUUID;
+	uint32_t meshUUID;
+	uint32_t materialUUID;
 };
 
 struct CITRON_GRAPHICS_API ModelUniforms {
@@ -95,11 +95,11 @@ class CITRON_GRAPHICS_API RendererResourceManager {
   public:
 	RendererResourceManager(Device &device) : device(device) {}
 	void initResources();
-	GPUBuffer &getEntityModelUniformBuffer(uint64_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
+	GPUBuffer &getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
 
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
-	std::unordered_map<uint64_t, GPUBuffer> entityModelUniformBufferCache;
+	std::unordered_map<uint32_t, GPUBuffer> entityModelUniformBufferCache;
 
 	FrameUniforms frameUniforms;
 	GPUBuffer frameUniformBuffer;

@@ -4,13 +4,13 @@
 
 using namespace CitronCore;
 
-uint64_t UUID::nullID = 0;
+uint32_t UUID::nullID = 0;
 
 static std::random_device randomDevice;
 static std::mt19937 randomEngine(randomDevice());
-static std::uniform_int_distribution<uint64_t>
-	uniformDistribution(0, std::numeric_limits<uint64_t>::max());
+static std::uniform_int_distribution<uint32_t>
+	uniformDistribution(0, std::numeric_limits<uint32_t>::max());
 
 UUID::UUID() : m_uuid(uniformDistribution(randomEngine)) {}
 
-UUID::UUID(uint64_t uuid) : m_uuid(uuid) {}
+UUID::UUID(uint32_t uuid) : m_uuid(uuid) {}

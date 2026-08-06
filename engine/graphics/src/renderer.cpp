@@ -258,7 +258,7 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 
 		renderObjectCache.renderObjects.push_back({
 			renderableReferenceData[i].entityUUID,
-			{.transform = renderableReferenceData[i].transform, .uuid = (uint32_t)(uint64_t)renderableReferenceData[i].entityUUID},
+			{.transform = renderableReferenceData[i].transform, .uuid = (uint32_t)renderableReferenceData[i].entityUUID},
 			mesh,
 			material,
 			shader,

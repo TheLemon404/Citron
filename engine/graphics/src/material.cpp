@@ -8,12 +8,12 @@
 using namespace CitronGraphics;
 
 void Material::serialize(StreamWriter &writer) {
-	CITRON_CORE_INFO("Serializing material asset: {}", (uint64_t)uuid);
+	CITRON_CORE_INFO("Serializing material asset: {}", (uint32_t)uuid);
 	writer.writeData(&shader.uuid, sizeof(shader.uuid));
 }
 
 void Material::deserialize(StreamReader &reader) {
-	CITRON_CORE_INFO("Deserializing material asset: {}", (uint64_t)uuid);
+	CITRON_CORE_INFO("Deserializing material asset: {}", (uint32_t)uuid);
 	try {
 		reader.readData(&shader.uuid, sizeof(shader.uuid));
 	} catch (const std::exception &e) {

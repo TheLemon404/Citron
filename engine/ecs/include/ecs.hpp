@@ -39,7 +39,7 @@ class CITRON_ECS_API System {
 
 class CITRON_ECS_API Entity;
 
-class CITRON_ECS_API Scene : public ISerializable {
+class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_from_this<Scene> {
   public:
 	Scene(std::string name) : name(name) {}
 

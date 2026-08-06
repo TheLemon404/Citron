@@ -3,6 +3,7 @@
 #include "assets.hpp"
 #include "citron_exports.hpp"
 #include "ecs.hpp"
+#include "serialization.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -21,7 +22,13 @@ struct CITRON_ECS_API Member {
 	std::string fieldName;
 	const std::type_info *typeInfo;
 	size_t offset;
+	std::function<void(StreamWriter &, void *)> serialize;
+	std::function<void(StreamReader &, void *)> deserialize;
+	bool hideInEditor = false;
 	PropertyGuiDrawer drawer;
+
+	static std::unordered_map<uint32_t, std::function<void(StreamWriter &, void *)>> serializationMethods;
+	static std::unordered_map<uint32_t, std::function<void(StreamReader &, void *)>> deserializationMethods;
 };
 
 struct CITRON_ECS_API ComponentMetadata {
@@ -115,11 +122,19 @@ class CITRON_ECS_API ECSRegistry {
 	}
 
 	template <typename T, typename U>
-	static void registerComponentMember(std::string memberName, size_t offset) {
+	static void registerComponentMember(std::string memberName, size_t offset, bool hideInEditor = false) {
 		uint32_t componentTypeHashCode = typeid(T).hash_code();
 		uint32_t memberTypeHashCode = typeid(U).hash_code();
-		if (m_propertyGuiDrawers.contains(memberTypeHashCode)) {
-			m_componentRegistry[componentTypeHashCode].members.emplace_back(Member{memberName, &typeid(U), offset, m_propertyGuiDrawers[memberTypeHashCode]});
+		if (hideInEditor || m_propertyGuiDrawers.contains(memberTypeHashCode)) {
+			Member member = {};
+			member.fieldName = memberName;
+			member.typeInfo = &typeid(U);
+			member.offset = offset;
+			member.drawer = m_propertyGuiDrawers[memberTypeHashCode];
+			member.serialize = Member::serializationMethods[memberTypeHashCode];
+			member.deserialize = Member::deserializationMethods[memberTypeHashCode];
+			member.hideInEditor = hideInEditor;
+			m_componentRegistry[componentTypeHashCode].members.emplace_back(member);
 		} else {
 			CITRON_CORE_CRITICAL("no property gui drawer registered for component {} {}", memberName, typeid(T).name());
 			throw std::runtime_error("no property gui drawer registered for component " + std::string(typeid(T).name()));
@@ -129,6 +144,47 @@ class CITRON_ECS_API ECSRegistry {
 	template <typename T>
 	static void registerPropertyGuiDrawer(PropertyGuiDrawer drawer) {
 		m_propertyGuiDrawers[typeid(T).hash_code()] = drawer;
+	}
+
+	template <typename T>
+	static void registerCollectionSerialization() {
+		Member::serializationMethods[typeid(std::vector<T>).hash_code()] = [](StreamWriter &writer, void *data) {
+			std::vector<T> *vec = static_cast<std::vector<T> *>(data);
+			size_t vectorSize = vec->size();
+			writer.writeData(&vectorSize, sizeof(size_t));
+			for (T &item : *vec) {
+				Member::serializationMethods[typeid(T).hash_code()](writer, (void *)&item);
+			}
+		};
+	}
+	template <typename T>
+	static void registerCollectionDeserialization() {
+		Member::deserializationMethods[typeid(std::vector<T>).hash_code()] = [](StreamReader &reader, void *data) {
+			std::vector<T> *vec = static_cast<std::vector<T> *>(data);
+			size_t size;
+			reader.readData(&size, sizeof(size_t));
+			vec->resize(size);
+			for (T &item : *vec) {
+				Member::deserializationMethods[typeid(T).hash_code()](reader, (void *)&item);
+			}
+		};
+	}
+
+	template <typename T>
+	static void registerAssetReferenceSerialization() {
+		Member::serializationMethods[typeid(AssetReference<T>).hash_code()] = [](StreamWriter &writer, void *data) {
+			AssetReference<T> *ref = static_cast<AssetReference<T> *>(data);
+			writer.writeData(&ref->uuid, sizeof(uint32_t));
+			writer.writeString(ref->path);
+		};
+	};
+	template <typename T>
+	static void registerAssetReferenceDeserialization() {
+		Member::deserializationMethods[typeid(AssetReference<T>).hash_code()] = [](StreamReader &reader, void *data) {
+			AssetReference<T> *ref = static_cast<AssetReference<T> *>(data);
+			reader.readData(&ref->uuid, sizeof(uint32_t));
+			reader.readString(ref->path);
+		};
 	}
 
 	static void registerDefaultComponents();

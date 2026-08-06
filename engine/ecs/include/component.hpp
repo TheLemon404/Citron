@@ -13,7 +13,6 @@
 #include <material.hpp>
 #include <mesh.hpp>
 #include <serialization.hpp>
-#include <registry.hpp>
 
 using namespace CitronCore;
 using namespace CitronAssets;
@@ -50,16 +49,11 @@ void serialize(Archive &archive, glm::mat4 &mat) {
 namespace CitronECS {
 
 struct CITRON_ECS_API EntityBaseComponent {
-	uint64_t uuid;
+	uint32_t uuid;
 	std::string name;
 
-	uint64_t parentId = UUID(0);
-	std::vector<uint64_t> children;
-
-	template <class Archive>
-	void serialize(Archive &archive) {
-		archive(uuid, name, parentId, children);
-	}
+	uint32_t parentId = UUID(0);
+	std::vector<uint32_t> children;
 };
 
 struct CITRON_ECS_API TransformComponent {
@@ -69,21 +63,11 @@ struct CITRON_ECS_API TransformComponent {
 
 	// DO NOT DISPLAY THIS MEMBER IN EDITOR
 	glm::mat4 matrix = glm::identity<glm::mat4>();
-
-	template <class Archive>
-	void serialize(Archive &archive) {
-		archive(position, rotation, scale, matrix);
-	}
 };
 
 struct CITRON_ECS_API MeshComponent {
 	AssetReference<Mesh> meshAsset;
 	AssetReference<Material> materialAsset;
-
-	template <class Archive>
-	void serialize(Archive &archive) {
-		archive(meshAsset, materialAsset);
-	}
 };
 
 } // namespace CitronECS

@@ -142,8 +142,8 @@ void ViewPanel::onEvent(Event &e) {
 	if (e.isInCategory(EventCategoryMouse)) {
 		if (e.getEventType() == EventType::MouseMoved && viewportMovementActive) {
 			MouseMovedEvent &mouseEvent = static_cast<MouseMovedEvent &>(e);
-			float dx = mouseEvent.getDx() * motionSettings.lookSpeed * deltaTime;
-			float dy = mouseEvent.getDy() * motionSettings.lookSpeed * deltaTime;
+			float dx = mouseEvent.getDx() * motionSettings.lookSpeed;
+			float dy = mouseEvent.getDy() * motionSettings.lookSpeed;
 			editorView.forward = glm::rotate(editorView.forward, -dx, globalUp);
 			glm::vec3 localRightVector = glm::normalize(glm::cross(editorView.forward, globalUp));
 			editorView.forward = glm::rotate(editorView.forward, -dy, localRightVector);

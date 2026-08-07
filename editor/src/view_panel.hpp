@@ -9,7 +9,7 @@
 struct ViewportMotionSettings {
 	float moveSpeed = 0.05f;
 	float fastMoveSpeed = 0.1f;
-	float lookSpeed = 0.007f;
+	float lookSpeed = 0.004f;
 	float snapTranslation = 1.0f;
 	float snapRotation = 15.0f;
 	float snapScale = 0.25f;

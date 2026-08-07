@@ -808,11 +808,14 @@ void InspectorPanel::onDraw() {
 						ImGui::TableSetupColumn("##Stretch Col", ImGuiTableColumnFlags_WidthStretch);
 
 						for (const auto &member : metadata.members) {
+							if (member.hideInEditor)
+								continue;
+
 							ImGui::TableNextColumn();
 							ImGui::Text("%s", member.fieldName.c_str());
 							ImGui::TableNextColumn();
 							PropertyGuiDrawer drawer = member.drawer;
-							if (!member.hideInEditor && drawer)
+							if (drawer)
 								drawer(member, system.get(), appContext.assetManager);
 						}
 						ImGui::EndTable();

@@ -125,7 +125,7 @@ class CITRON_ECS_API ECSRegistry {
 	static void registerComponentMember(std::string memberName, size_t offset, bool hideInEditor = false) {
 		uint32_t parentClassTypeHash = typeid(T).hash_code();
 		uint32_t memberTypeHashCode = typeid(U).hash_code();
-		if (hideInEditor || m_propertyGuiDrawers.contains(memberTypeHashCode)) {
+		if (m_propertyGuiDrawers.contains(memberTypeHashCode)) {
 			Member member = {};
 			member.fieldName = memberName;
 			member.typeInfo = &typeid(U);
@@ -135,7 +135,7 @@ class CITRON_ECS_API ECSRegistry {
 			member.deserialize = Member::deserializationMethods[memberTypeHashCode];
 			member.hideInEditor = hideInEditor;
 			m_componentRegistry[parentClassTypeHash].members.emplace_back(member);
-		} else {
+		} else if (!hideInEditor) {
 			CITRON_CORE_CRITICAL("no property gui drawer registered for component {} {}", memberName, typeid(T).name());
 			throw std::runtime_error("no property gui drawer registered for component " + std::string(typeid(T).name()));
 		}
@@ -145,7 +145,7 @@ class CITRON_ECS_API ECSRegistry {
 	static void registerSystemMember(std::string memberName, size_t offset, bool hideInEditor = false) {
 		uint32_t parentClassTypeHash = typeid(T).hash_code();
 		uint32_t memberTypeHashCode = typeid(U).hash_code();
-		if (hideInEditor || m_propertyGuiDrawers.contains(memberTypeHashCode)) {
+		if (m_propertyGuiDrawers.contains(memberTypeHashCode)) {
 			Member member = {};
 			member.fieldName = memberName;
 			member.typeInfo = &typeid(U);
@@ -155,7 +155,7 @@ class CITRON_ECS_API ECSRegistry {
 			member.deserialize = Member::deserializationMethods[memberTypeHashCode];
 			member.hideInEditor = hideInEditor;
 			m_systemRegistry[parentClassTypeHash].members.emplace_back(member);
-		} else {
+		} else if (!hideInEditor) {
 			CITRON_CORE_CRITICAL("no property gui drawer registered for component {} {}", memberName, typeid(T).name());
 			throw std::runtime_error("no property gui drawer registered for component " + std::string(typeid(T).name()));
 		}

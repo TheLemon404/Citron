@@ -23,11 +23,13 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 	}
 
 	json reflectionJson = json::parse(reflectionData);
+
 	for (const auto &bindingEntry : reflectionJson["bindings"]) {
 		const size_t group = bindingEntry["group"];
 		const size_t binding = bindingEntry["binding"];
 		const std::string name = bindingEntry["name"];
 		const std::string type = bindingEntry["type"];
+		std::string addressSpace = bindingEntry["addressSpace"];
 
 		wgpu::BindGroupLayoutEntry bindingLayout = {};
 		bindingLayout.setDefault();
@@ -45,8 +47,18 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 		} else if (bindingEntry.contains("layout")) {
 			const size_t layoutSize = bindingEntry["layout"]["size"];
 			const size_t layoutAlignment = bindingEntry["layout"]["alignment"];
-			bindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-			bindingLayout.buffer.minBindingSize = Shader::dynamicSizeof(layoutSize, layoutAlignment);
+			if (addressSpace == "uniform") {
+				bindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
+				bindingLayout.buffer.minBindingSize = Shader::dynamicSizeof(layoutSize, layoutAlignment);
+			} else if (addressSpace == "storage") {
+				std::string layoutAccessMode = bindingEntry["accessMode"];
+				if (layoutAccessMode == "read") {
+					bindingLayout.buffer.type = wgpu::BufferBindingType::ReadOnlyStorage;
+				} else if (layoutAccessMode == "write") {
+					bindingLayout.buffer.type = wgpu::BufferBindingType::Storage;
+				}
+				bindingLayout.buffer.minBindingSize = Shader::dynamicSizeof(layoutSize, layoutAlignment);
+			}
 		}
 
 		groupEntries[group].push_back(bindingLayout);

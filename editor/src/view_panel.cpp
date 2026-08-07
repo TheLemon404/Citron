@@ -96,6 +96,24 @@ void ViewPanel::onDraw() {
 	if (ImGui::Selectable("Snap", manipulationSettings.snap, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
 		manipulationSettings.snap = !manipulationSettings.snap;
 	}
+	ImGui::SameLine();
+	ImGui::Dummy(ImVec2(50, 0));
+	ImGui::SameLine();
+	if (ImGui::Selectable("Translate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::TRANSLATE, ImGuiSelectableFlags_None, ImVec2(80.0f, 18.0f))) {
+		manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	ImGui::SameLine();
+	ImGui::Dummy(ImVec2(5, 0));
+	ImGui::SameLine();
+	if (ImGui::Selectable("Rotate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::ROTATE, ImGuiSelectableFlags_None, ImVec2(50.0f, 18.0f))) {
+		manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+	}
+	ImGui::SameLine();
+	ImGui::Dummy(ImVec2(5, 0));
+	ImGui::SameLine();
+	if (ImGui::Selectable("Scale", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::SCALE, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
+		manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+	}
 
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();

@@ -5,6 +5,7 @@
 #include "material.hpp"
 #include "mesh.hpp"
 #include "resources.hpp"
+#include "shader.hpp"
 #include "view.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vec_swizzle.hpp>
@@ -62,28 +63,27 @@ void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, st
 	}
 	setPipeline(pipeline);
 
-	bindGroupEntries.push_back({
-		.binding = 0,
-		.resource = renderer.colorBufferTextureView,
-		.offset = 0,
-		.size = WGPU_WHOLE_SIZE,
-	});
-	bindGroupEntries.push_back({
-		.binding = 1,
-		.resource = renderer.normalBufferTextureView,
-		.offset = 0,
-		.size = WGPU_WHOLE_SIZE,
-	});
-	bindGroupEntries.push_back({
-		.binding = 2,
-		.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
-		.offset = 0,
-		.size = WGPU_WHOLE_SIZE,
-	});
-
 	wgpu::BindGroup bindGroup = renderer.getBindGroup({
 		.layout = shader->getBindGroupLayout(0),
-		.entries = bindGroupEntries,
+		.entries = {
+			{
+				.binding = 0,
+				.resource = renderer.colorBufferTextureView,
+				.offset = 0,
+				.size = WGPU_WHOLE_SIZE,
+			},
+			{
+				.binding = 1,
+				.resource = renderer.normalBufferTextureView,
+				.offset = 0,
+				.size = WGPU_WHOLE_SIZE,
+			},
+			{
+				.binding = 2,
+				.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
+				.offset = 0,
+				.size = WGPU_WHOLE_SIZE,
+			}},
 	});
 	setBindGroup(0, bindGroup);
 
@@ -100,60 +100,53 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 	RendererContext context = renderer.getContext();
 
 	// sorting
-	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({renderObjects[0].shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
-	setPipeline(pipeline);
+	std::shared_ptr<Pipeline> pipeline = nullptr;
 
 	// get bind group for frame uniforms
-	bindGroupEntries.clear();
-	bindGroupEntries.push_back({.binding = 0,
-								.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
-								.offset = 0,
-								.size = Shader::paddedSizeof<FrameUniforms>()});
-	wgpu::BindGroup frameBindGroup = renderer.getBindGroup({
-		.layout = renderObjects[0].shader->getBindGroupLayout(0),
-		.entries = bindGroupEntries,
-	});
-	setBindGroup(0, frameBindGroup);
 
 	for (size_t i = 0; i < renderObjects.size(); i++) {
 		RenderObject &renderObject = renderObjects[i];
-		if (i > 0 && renderObjects[i].shader->getUUID() != renderObjects[i - 1].shader->getUUID()) {
+		if (pipeline == nullptr || i > 0 && renderObjects[i].shader->getUUID() != renderObjects[i - 1].shader->getUUID()) {
 			pipeline = renderer.getPipeline({renderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
 			setPipeline(pipeline);
-		}
-		if (!pipeline) {
-			CITRON_CORE_ERROR("Failed to get pipeline for render object");
-			return;
+
+			// for now, we just reset the frame bind groups each time we change the pipeline. This needs to be optimized in the future.
+			wgpu::BindGroup frameBindGroup = renderer.getBindGroup(
+				{.layout = renderObject.shader->getBindGroupLayout(0),
+				 .entries = {
+					 {.binding = 0,
+					  .resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
+					  .offset = 0,
+					  .size = Shader::paddedSizeof<FrameUniforms>()}}});
+			setBindGroup(0, frameBindGroup);
+
+			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
+				.layout = renderObject.shader->getBindGroupLayout(1),
+				.entries = {
+					{.binding = 0,
+					 .resource = context.rendererResourcesManager.modelUniformsBuffer.buffer,
+					 .offset = 0,
+					 .size = Shader::paddedSizeof<ModelUniforms>()}},
+			});
+			setBindGroup(1, modelBindGroup);
 		}
 
 		if (renderObject.mesh && renderObject.shader) {
-			bindGroupEntries.clear();
-			bindGroupEntries.push_back({.binding = 0,
-										.resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms, true).buffer,
-										.offset = 0,
-										.size = Shader::paddedSizeof<ModelUniforms>()});
-			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
-				.layout = renderObject.shader->getBindGroupLayout(1),
-				.entries = bindGroupEntries,
-			});
-
-			bindGroupEntries.clear();
-			bindGroupEntries.push_back({.binding = 0,
-										.resource = renderObject.material->getMaterialUniformBuffer().buffer,
-										.offset = 0,
-										.size = Shader::paddedSizeof<MaterialUniforms>()});
 			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
 				.layout = renderObject.shader->getBindGroupLayout(2),
-				.entries = bindGroupEntries,
+				.entries = {
+					{.binding = 0,
+					 .resource = renderObject.material->getMaterialUniformBuffer().buffer,
+					 .offset = 0,
+					 .size = Shader::paddedSizeof<MaterialUniforms>()}},
 			});
 
-			if (!frameBindGroup || !materialBindGroup) {
+			if (!materialBindGroup) {
 				CITRON_CORE_ERROR("Failed to get bind groups from cache for render object");
 				continue;
 			}
 
 			setMesh(renderObject.mesh);
-			setBindGroup(1, modelBindGroup);
 			setBindGroup(2, materialBindGroup);
 			draw(renderObject.mesh);
 		}
@@ -256,9 +249,13 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 			continue;
 		}
 
+		ModelUniforms modelUniforms = {};
+		modelUniforms.transform = renderableReferenceData[i].transform;
+		device.getQueue().writeBuffer(rendererResourcesManager.modelUniformsBuffer.buffer, Shader::paddedSizeof<ModelUniforms>() * i, &modelUniforms, Shader::paddedSizeof<ModelUniforms>());
+
 		renderObjectCache.renderObjects.push_back({
 			renderableReferenceData[i].entityUUID,
-			{.transform = renderableReferenceData[i].transform, .uuid = (uint32_t)renderableReferenceData[i].entityUUID},
+			{.transform = renderableReferenceData[i].transform},
 			mesh,
 			material,
 			shader,

@@ -88,7 +88,6 @@ class CITRON_GRAPHICS_API RenderPass {
 	const RenderPassParams &getParams() const { return params; }
 
   private:
-	std::vector<BindGroupEntry> bindGroupEntries;
 	std::vector<wgpu::TextureFormat> colorAttachmentFormats;
 	std::vector<wgpu::RenderPassColorAttachment> renderPassColorAttachments;
 	Renderer &renderer;

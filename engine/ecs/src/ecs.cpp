@@ -69,7 +69,6 @@ void Scene::serialize(StreamWriter &writer) {
 		for (const auto &[typeHash, metadata] : componentsOnEntity) {
 			writer.writeData(&typeHash, sizeof(typeHash));
 			for (const Member &member : metadata.members) {
-				CITRON_CORE_INFO("Serializing member: {}", member.fieldName);
 				void *component = metadata.get(registry, entity);
 				void *memberBytes = (char *)component + member.offset;
 				member.serialize(writer, memberBytes);

@@ -175,11 +175,6 @@ void RenderPass::end() {
 	renderPassEncoder.release();
 }
 
-Frame::Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
-			 wgpu::SurfaceTexture &surfaceTexture, View &view)
-	: renderer(renderer), encoder(encoder), view(view) {
-}
-
 RenderPass Frame::beginRenderPass(RenderPassParams &params) {
 	return RenderPass(renderer, params, encoder, *this);
 }
@@ -190,24 +185,24 @@ void Renderer::init() {
 	rendererResourcesManager.initResources();
 
 	depthBufferTexture = device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight());
-	depthBufferTextureView = device.createTextureView(depthBufferTexture);
+	depthBufferTextureView = depthBufferTexture.createView();
 	idBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	idBufferTextureView = device.createTextureView(idBufferTexture);
+	idBufferTextureView = idBufferTexture.createView();
 	colorBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	colorBufferTextureView = device.createTextureView(colorBufferTexture);
+	colorBufferTextureView = colorBufferTexture.createView();
 	normalBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	normalBufferTextureView = device.createTextureView(normalBufferTexture);
+	normalBufferTextureView = normalBufferTexture.createView();
 	lightingBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	lightingBufferTextureView = device.createTextureView(lightingBufferTexture);
+	lightingBufferTextureView = lightingBufferTexture.createView();
 
 	fullscreenQuad = Mesh::createFullscreenQuad(device);
 	lightingPassShader = std::make_shared<Shader>(UUID(), device, lighting_pass);
 }
 
-Frame Renderer::beginFrame(View &view) {
+Frame Renderer::beginFrame() {
 	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
-				 device.getCurrentSurfaceTexture(), view);
+				 device.getCurrentSurfaceTexture());
 }
 
 void Renderer::endFrame(Frame &frame) {
@@ -220,20 +215,18 @@ void Renderer::endFrame(Frame &frame) {
 	device.presentCurrentSurfaceTexture();
 }
 
-void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize) {
+void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, wgpu::Texture &outputTexture, wgpu::TextureView &outputTextureView) {
 	resizeRenderTargets(viewportSize);
 
 	// need to cache assets already gethered in previous frames
 	renderObjectCache.renderObjects.clear();
-
-	View &currentFrameView = frame.getView();
 
 	for (size_t i = 0; i < renderableReferenceData.size(); i++) {
 		std::shared_ptr<Mesh> mesh = assetManager.getAsset<Mesh>(renderableReferenceData[i].meshUUID);
 		// frustrum culling
 		glm::vec4 transformedMin = glm::vec4(mesh->getBoundsMin(), 1.0f) * renderableReferenceData[i].transform;
 		glm::vec4 transformedMax = glm::vec4(mesh->getBoundsMax(), 1.0f) * renderableReferenceData[i].transform;
-		if (!currentFrameView.isInsideBounds(glm::xyz(transformedMin)) && !currentFrameView.isInsideBounds(glm::xyz(transformedMax))) {
+		if (!view.isInsideBounds(glm::xyz(transformedMin)) && !view.isInsideBounds(glm::xyz(transformedMax))) {
 			continue;
 		}
 		std::shared_ptr<Material> material = assetManager.getAsset<Material>(renderableReferenceData[i].materialUUID);
@@ -262,7 +255,7 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 
 	// update frame uniforms if needed
 	FrameUniforms lastFrameUniforms = rendererResourcesManager.frameUniforms;
-	rendererResourcesManager.frameUniforms.viewProjection = currentFrameView.getProjectionMatrix() * currentFrameView.getViewMatrix();
+	rendererResourcesManager.frameUniforms.viewProjection = view.getProjectionMatrix() * view.getViewMatrix();
 	if (lastFrameUniforms != rendererResourcesManager.frameUniforms) {
 		device.getWGPUDevice().getQueue().writeBuffer(rendererResourcesManager.frameUniformBuffer.buffer, 0, &rendererResourcesManager.frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 	}
@@ -291,8 +284,8 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 	gBufferPass.end();
 
 	RenderPassColorAttachment lightingAttachment = {};
-	lightingAttachment.targetTexture = lightingBufferTexture;
-	lightingAttachment.targetTextureView = lightingBufferTextureView;
+	lightingAttachment.targetTexture = outputTexture;
+	lightingAttachment.targetTextureView = outputTextureView;
 	RenderPassParams lightingPassParams = {};
 	lightingPassParams.colorAttachments.push_back(lightingAttachment);
 	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);

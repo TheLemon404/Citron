@@ -100,7 +100,7 @@ class CITRON_GRAPHICS_API RenderPass {
 class CITRON_GRAPHICS_API Frame {
   public:
 	Frame(Renderer &renderer, wgpu::CommandEncoder encoder,
-		  wgpu::SurfaceTexture &surfaceTexture, View &view);
+		  wgpu::SurfaceTexture &surfaceTexture) : renderer(renderer), encoder(encoder) {}
 
 	RenderPass beginRenderPass(RenderPassParams &params);
 
@@ -108,10 +108,7 @@ class CITRON_GRAPHICS_API Frame {
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 
-	View &getView() { return view; }
-
   private:
-	View &view;
 	Renderer &renderer;
 	wgpu::CommandEncoder encoder;
 };
@@ -132,10 +129,10 @@ class CITRON_GRAPHICS_API Renderer {
 	Renderer(Window &window, AssetManager &assetManager) : window(window), device(window), assetManager(assetManager), rendererResourcesManager(device) {}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
-	Frame beginFrame(View &view);
+	Frame beginFrame();
 	void endFrame(Frame &frame);
 
-	void render(Frame &frame, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize);
+	void render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize, wgpu::Texture &outputTexture, wgpu::TextureView &outputTextureView);
 
 	void init();
 	void end();

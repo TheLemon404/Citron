@@ -269,7 +269,3 @@ wgpu::Texture Device::createRenderTargetColorTexture(int width, int height, wgpu
 							wgpu::TextureUsage::TextureBinding;
 	return device.createTexture(colorTargetDesc);
 }
-
-wgpu::TextureView Device::createTextureView(wgpu::Texture &texture) {
-	return texture.createView();
-}

@@ -48,7 +48,6 @@ class CITRON_GRAPHICS_API Device {
 	wgpu::Texture createRenderTargetDepthTexture(int width, int height);
 	wgpu::Texture createRenderTargetColorTexture(int width, int height);
 	wgpu::Texture createRenderTargetColorTexture(int width, int height, wgpu::TextureFormat format);
-	wgpu::TextureView createTextureView(wgpu::Texture &texture);
 
   private:
 	int m_lastSurfaceWidth = 0;

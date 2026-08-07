@@ -20,6 +20,18 @@ void RendererResourceManager::initResources() {
 	modelUniformsBuffer.buffer = device.getWGPUDevice().createBuffer(modelUniformBufferDesc);
 }
 
+void RendererResourceManager::releaseResources() {
+	for (auto &[entityUUID, buffer] : entityModelUniformBufferCache) {
+		buffer.buffer.release();
+	}
+	for (auto &[key, bindGroup] : bindGroupCache) {
+		bindGroup.release();
+	}
+	entityModelUniformBufferCache.clear();
+	modelUniformsBuffer.buffer.release();
+	frameUniformBuffer.buffer.release();
+}
+
 GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
 	wgpu::Device &wgpuDevice = device.getWGPUDevice();
 	if (!entityModelUniformBufferCache.contains(entityUUID)) {

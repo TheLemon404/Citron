@@ -97,6 +97,7 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 	RendererResourceManager(Device &device) : device(device) {}
 	void initResources();
 	GPUBuffer &getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
+	void releaseResources();
 
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;

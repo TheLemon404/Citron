@@ -305,6 +305,7 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 }
 
 void Renderer::end() {
+	rendererResourcesManager.releaseResources();
 	device.releasePlatformResources();
 }
 

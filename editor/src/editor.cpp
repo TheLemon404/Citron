@@ -5,6 +5,7 @@
 #include "entt/entity/entity.hpp"
 #include "event.hpp"
 #include "gui.hpp"
+#include "imgui.h"
 #include "keyboard.hpp"
 #include "logger.hpp"
 #include "material.hpp"
@@ -53,11 +54,30 @@ Editor::Editor(const std::string &projectFilePath)
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::DragFloat2(fieldNameId.c_str(), (float *)field);
+
+		// colors
+		ImVec2 inputRectMin = ImGui::GetItemRectMin();
+		ImVec2 inputRectMax = ImGui::GetItemRectMax();
+		ImVec2 inputRectBottomMin = ImVec2(inputRectMin.x, inputRectMax.y);
+		float perEntryOffset = (inputRectMax.x - inputRectMin.x) / 2.0f;
+		ImDrawList *drawList = ImGui::GetWindowDrawList();
+		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec3>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::DragFloat3(fieldNameId.c_str(), (float *)field);
+
+		// colors
+		ImVec2 inputRectMin = ImGui::GetItemRectMin();
+		ImVec2 inputRectMax = ImGui::GetItemRectMax();
+		ImVec2 inputRectBottomMin = ImVec2(inputRectMin.x, inputRectMax.y);
+		float perEntryOffset = (inputRectMax.x - inputRectMin.x) / 3.0f;
+		ImDrawList *drawList = ImGui::GetWindowDrawList();
+		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 2.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 2.0f, inputRectBottomMin.y), ImGui::GetColorU32(zColor), 1.5f);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::quat>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
@@ -65,11 +85,32 @@ Editor::Editor(const std::string &projectFilePath)
 		glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(*(glm::quat *)field));
 		ImGui::DragFloat3(fieldNameId.c_str(), &eulerRotation[0]);
 		*(glm::quat *)field = glm::quat(glm::radians(eulerRotation));
+
+		// colors
+		ImVec2 inputRectMin = ImGui::GetItemRectMin();
+		ImVec2 inputRectMax = ImGui::GetItemRectMax();
+		ImVec2 inputRectBottomMin = ImVec2(inputRectMin.x, inputRectMax.y);
+		float perEntryOffset = (inputRectMax.x - inputRectMin.x) / 3.0f;
+		ImDrawList *drawList = ImGui::GetWindowDrawList();
+		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 2.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 2.0f, inputRectBottomMin.y), ImGui::GetColorU32(zColor), 1.5f);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec4>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		ImGui::DragFloat4(fieldNameId.c_str(), (float *)field);
+
+		// colors
+		ImVec2 inputRectMin = ImGui::GetItemRectMin();
+		ImVec2 inputRectMax = ImGui::GetItemRectMax();
+		ImVec2 inputRectBottomMin = ImVec2(inputRectMin.x, inputRectMax.y);
+		float perEntryOffset = (inputRectMax.x - inputRectMin.x) / 4.0f;
+		ImDrawList *drawList = ImGui::GetWindowDrawList();
+		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 2.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 2.0f, inputRectBottomMin.y), ImGui::GetColorU32(zColor), 1.5f);
+		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 3.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 3.0f, inputRectBottomMin.y), ImGui::GetColorU32(wColor), 1.5f);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<AssetReference<Mesh>>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {

@@ -620,6 +620,7 @@ void OutlinerPanel::onDraw() {
 			if (selected) {
 				ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
 				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondaryColor);
+
 				flags |= ImGuiTreeNodeFlags_Selected;
 			}
 			ImGui::PushID(id);

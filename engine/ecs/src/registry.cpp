@@ -119,9 +119,9 @@ void ECSRegistry::registerDefaultComponents() {
 	registerAssetReferenceDeserialization<Shader>();
 
 	registerComponent<EntityBaseComponent>("Entity Base Component");
-	registerComponentMember<EntityBaseComponent, UUID>("uuid", offsetof(EntityBaseComponent, uuid));
+	registerComponentMember<EntityBaseComponent, uint32_t>("uuid", offsetof(EntityBaseComponent, uuid));
 	registerComponentMember<EntityBaseComponent, std::string>("name", offsetof(EntityBaseComponent, name));
-	registerComponentMember<EntityBaseComponent, UUID>("parentId", offsetof(EntityBaseComponent, parentId), true);
+	registerComponentMember<EntityBaseComponent, uint32_t>("parentId", offsetof(EntityBaseComponent, parentId), true);
 	registerComponentMember<EntityBaseComponent, std::vector<uint32_t>>("children", offsetof(EntityBaseComponent, children), true);
 	registerComponent<TransformComponent>("Transform Component");
 	registerComponentMember<TransformComponent, glm::vec3>("position", offsetof(TransformComponent, position));

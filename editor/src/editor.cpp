@@ -39,6 +39,18 @@ Editor::Editor(const std::string &projectFilePath)
 		std::string uuidString = std::to_string(*(unsigned int *)field);
 		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
 	});
+	ECSRegistry::registerPropertyGuiDrawer<uint32_t>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+		void *field = (char *)object + member.offset;
+		std::string fieldNameId = "##" + member.fieldName;
+		std::string uuidString = std::to_string(*(unsigned int *)field);
+		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+	});
+	ECSRegistry::registerPropertyGuiDrawer<uint64_t>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+		void *field = (char *)object + member.offset;
+		std::string fieldNameId = "##" + member.fieldName;
+		std::string uuidString = std::to_string(*(unsigned int *)field);
+		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+	});
 	ECSRegistry::registerPropertyGuiDrawer<float>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;

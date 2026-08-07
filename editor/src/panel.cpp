@@ -388,7 +388,7 @@ void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> mate
 	if (InspectorPanel::collapsingHeader("Material")) {
 		if (ImGui::BeginTable("##ComponentMemberTable", 1,
 							  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
-			ImGui::NextColumn();
+			ImGui::TableNextColumn();
 			GuiElements::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
 			ImGui::EndTable();
 		}

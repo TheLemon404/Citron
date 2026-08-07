@@ -480,6 +480,21 @@ void ConsolePanel::onDraw() {
 }
 void ConsolePanel::onEvent(Event &e) {}
 
+void GamePanel::onAttach() {}
+void GamePanel::onDetach() {}
+void GamePanel::onUpdate() {}
+void GamePanel::onDraw() {
+	ImGui::Begin("Game", nullptr);
+	viewportSize = ImGui::GetContentRegionAvail();
+	ImVec2 viewportPos = ImGui::GetCursorScreenPos();
+	WGPUTextureView view = sceneView;
+	ImDrawList *drawList = ImGui::GetWindowDrawList();
+	drawList->AddImage((ImTextureID)(uintptr_t)view, viewportPos, ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y));
+	((PerspectiveView &)gameView).aspect = viewportSize.x / viewportSize.y;
+	ImGui::End();
+}
+void GamePanel::onEvent(Event &e) {}
+
 void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
 void OutlinerPanel::onUpdate() {

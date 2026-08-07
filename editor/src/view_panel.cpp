@@ -126,7 +126,7 @@ void ViewPanel::onDraw() {
 		TransformComponent &transform = appContext.sceneManager.getActiveScene()->getRegistry().get<TransformComponent>(std::get<entt::entity>(currentlySelectedItem));
 		editTransformComponent(viewportPos, viewportSize, &editorView.getViewMatrix()[0][0], &editorView.getProjectionMatrix()[0][0], std::get<entt::entity>(currentlySelectedItem));
 	}
-	editorView.aspect = viewportSize.x / viewportSize.y;
+	((PerspectiveView &)editorView).aspect = viewportSize.x / viewportSize.y;
 	ImGui::End();
 }
 

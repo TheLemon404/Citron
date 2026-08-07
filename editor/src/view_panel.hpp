@@ -4,6 +4,7 @@
 #include "entt/entity/fwd.hpp"
 #include "imgui.h"
 #include "panel.hpp"
+#include "view.hpp"
 #include <ImGuizmo.h>
 
 struct ViewportMotionSettings {
@@ -23,7 +24,7 @@ struct ViewportManipulationSettings {
 
 class ViewPanel : public Panel {
   public:
-	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, PerspectiveView &editorView) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), editorView(editorView) {
+	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, View &editorView) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), editorView(editorView) {
 		viewportSize.x = appContext.window.getWidth();
 		viewportSize.y = appContext.window.getHeight();
 	};
@@ -52,7 +53,7 @@ class ViewPanel : public Panel {
 	bool focused = false;
 	ViewportMotionSettings motionSettings;
 	ViewportManipulationSettings manipulationSettings;
-	PerspectiveView &editorView;
+	View &editorView;
 	bool viewportMovementActive = false;
 	wgpu::TextureView sceneView;
 };

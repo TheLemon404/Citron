@@ -3,6 +3,7 @@
 #include "IconsFontAwesome5.h"
 #include "IconsFontAwesome6.h"
 #include "entt/entity/entity.hpp"
+#include "imgui.h"
 #include "shader.hpp"
 #include "view.hpp"
 #include <app.hpp>
@@ -98,6 +99,30 @@ class ConsolePanel : public Panel {
 	virtual void onUpdate() override;
 	virtual void onDraw() override;
 	virtual void onEvent(Event &e) override;
+};
+
+class GamePanel : public Panel {
+  public:
+	GamePanel(AppContext appContext, View &gameView) : Panel("Game", appContext), gameView(gameView) {}
+
+	void setView(wgpu::TextureView sceneView) {
+		this->sceneView = sceneView;
+	}
+
+	glm::ivec2 getViewportSize() {
+		return {viewportSize.x, viewportSize.y};
+	}
+
+	virtual void onAttach() override;
+	virtual void onDetach() override;
+	virtual void onUpdate() override;
+	virtual void onDraw() override;
+	virtual void onEvent(Event &e) override;
+
+  private:
+	ImVec2 viewportSize;
+	View &gameView;
+	wgpu::TextureView sceneView;
 };
 
 class OutlinerPanel : public Panel {

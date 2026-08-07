@@ -22,7 +22,7 @@ class GuiLayer : public Layer {
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
-	void drawGui(wgpu::TextureView &sceneView,
+	void drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView,
 				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;
 
@@ -33,6 +33,7 @@ class GuiLayer : public Layer {
 	OutlinerPanel outlinerPanel;
 	ConsolePanel consolePanel;
 	InspectorPanel inspectorPanel;
+	GamePanel gamePanel;
 	void applyTheme();
 
   private:

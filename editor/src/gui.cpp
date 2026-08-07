@@ -27,7 +27,8 @@ GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
 											assetRegistryPanel(appContext),
 											outlinerPanel(appContext),
 											consolePanel(appContext),
-											inspectorPanel(appContext) {}
+											inspectorPanel(appContext),
+											gamePanel(appContext, App::get().getActiveView()) {}
 
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
@@ -67,7 +68,7 @@ void GuiLayer::onAttach() {
 	ImGui_ImplWGPU_Init(&initInfo);
 
 	appContext.renderer.onGuiDrawCallback = CITRON_BIND_FN(
-		GuiLayer::drawGui, std::placeholders::_1, std::placeholders::_2);
+		GuiLayer::drawGui, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
 	applyTheme();
 
@@ -78,6 +79,7 @@ void GuiLayer::onAttach() {
 	consolePanel.onAttach();
 	inspectorPanel.onAttach();
 	assetRegistryPanel.onAttach();
+	gamePanel.onAttach();
 }
 
 void GuiLayer::onDetach() {
@@ -92,6 +94,7 @@ void GuiLayer::onDetach() {
 	consolePanel.onDetach();
 	inspectorPanel.onDetach();
 	assetRegistryPanel.onDetach();
+	gamePanel.onDetach();
 }
 
 void GuiLayer::onUpdate() {
@@ -102,9 +105,10 @@ void GuiLayer::onUpdate() {
 	consolePanel.onUpdate();
 	inspectorPanel.onUpdate();
 	assetRegistryPanel.onUpdate();
+	gamePanel.onUpdate();
 }
 
-void GuiLayer::drawGui(wgpu::TextureView &sceneView,
+void GuiLayer::drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView,
 					   CitronGraphics::RenderPass &currentRenderPass) {
 	EditorContext &context = Editor::get().getEditorContext();
 
@@ -187,6 +191,8 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView,
 	consolePanel.onDraw();
 	inspectorPanel.onDraw();
 	assetRegistryPanel.onDraw();
+	gamePanel.setView(gameView);
+	gamePanel.onDraw();
 
 	ImGui::EndFrame();
 	ImGui::Render();
@@ -214,6 +220,7 @@ void GuiLayer::onEvent(Event &e) {
 	consolePanel.onEvent(e);
 	inspectorPanel.onEvent(e);
 	assetRegistryPanel.onEvent(e);
+	gamePanel.onEvent(e);
 	if (SDL_Event *sdlEvent = (SDL_Event *)e.getInternalEvent())
 		ImGui_ImplSDL3_ProcessEvent(sdlEvent);
 }

@@ -141,7 +141,7 @@ class CITRON_GRAPHICS_API Renderer {
 	void end();
 	void onEvent(Event &e);
 
-	std::function<void(wgpu::TextureView &, RenderPass &)> onGuiDrawCallback =
+	std::function<void(wgpu::TextureView &, wgpu::TextureView &, RenderPass &)> onGuiDrawCallback =
 		nullptr;
 
 	std::shared_ptr<Pipeline> getPipeline(PipelineKey key) {

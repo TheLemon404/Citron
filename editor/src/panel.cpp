@@ -347,29 +347,23 @@ void AssetPropertiesPanel::onDraw() {
 	if (currentlySelectedAsset != UUID::nullID && currentlySelectedAssetType != CitronAssets::AssetType::UNKNOWN) {
 		AssetMetadata metadata = appContext.assetManager.getAssetMetadata(currentlySelectedAssetPath);
 		std::shared_ptr<CitronAssets::AssetBase> asset = appContext.assetManager.getAsset<CitronAssets::AssetBase>(currentlySelectedAsset);
-		if (ImGui::BeginTable("##ComponentMemberTable", 1,
-							  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
-			// First column gets a fixed width of 150 units
-			ImGui::TableNextColumn();
-			drawGenericProperties(metadata);
-			ImGui::TableNextColumn();
-			switch (currentlySelectedAssetType) {
-			case CitronAssets::AssetType::SHADER:
-				drawShaderProperties(std::static_pointer_cast<Shader>(asset));
-				break;
-			case CitronAssets::AssetType::MATERIAL:
-				drawMaterialProperties(std::static_pointer_cast<Material>(asset));
-				break;
-			case CitronAssets::AssetType::TEXTURE:
-				drawTextureProperties(std::static_pointer_cast<Texture>(asset));
-				break;
-			case CitronAssets::AssetType::MESH:
-				drawMeshProperties(std::static_pointer_cast<Mesh>(asset));
-				break;
-			default:
-				break;
-			}
-			ImGui::EndTable();
+
+		drawGenericProperties(metadata);
+		switch (currentlySelectedAssetType) {
+		case CitronAssets::AssetType::SHADER:
+			drawShaderProperties(std::static_pointer_cast<Shader>(asset));
+			break;
+		case CitronAssets::AssetType::MATERIAL:
+			drawMaterialProperties(std::static_pointer_cast<Material>(asset));
+			break;
+		case CitronAssets::AssetType::TEXTURE:
+			drawTextureProperties(std::static_pointer_cast<Texture>(asset));
+			break;
+		case CitronAssets::AssetType::MESH:
+			drawMeshProperties(std::static_pointer_cast<Mesh>(asset));
+			break;
+		default:
+			break;
 		}
 	}
 	ImGui::End();
@@ -392,7 +386,12 @@ void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> mate
 	if (!material)
 		return;
 	if (InspectorPanel::collapsingHeader("Material")) {
-		GuiElements::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
+		if (ImGui::BeginTable("##ComponentMemberTable", 1,
+							  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
+			ImGui::NextColumn();
+			GuiElements::drawAssetReferenceComponentGui<Shader>("Shader", material->shader, appContext);
+			ImGui::EndTable();
+		}
 	}
 }
 
@@ -405,10 +404,19 @@ void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {
 void AssetPropertiesPanel::drawGenericProperties(AssetMetadata metadata) {
 	if (!appContext.assetManager.isValidAsset(metadata.uuid))
 		return;
+
 	if (InspectorPanel::collapsingHeader("Generic")) {
-		ImGui::Text("Asset Type: %s", std::string(to_string(metadata.assetType)).c_str());
-		ImGui::Text("Asset Path: %s", metadata.assetPath.string().c_str());
-		ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
+		if (ImGui::BeginTable("##ComponentMemberTable", 1,
+							  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
+			// First column gets a fixed width of 150 units
+			ImGui::TableNextColumn();
+			ImGui::Text("Asset Type: %s", std::string(to_string(metadata.assetType)).c_str());
+			ImGui::TableNextColumn();
+			ImGui::Text("Asset Path: %s", metadata.assetPath.string().c_str());
+			ImGui::TableNextColumn();
+			ImGui::Text("Asset UUID: %u", (unsigned int)metadata.uuid);
+			ImGui::EndTable();
+		}
 	}
 }
 
@@ -489,6 +497,10 @@ void OutlinerPanel::onUpdate() {
 	if (pendingDeleteEntity != UUID::nullID) {
 		currentEditedScene->deleteEntity(currentEditedScene->getEntity(pendingDeleteEntity));
 		pendingDeleteEntity = UUID::nullID;
+	}
+	if (pendingDeleteSystem != nullptr) {
+		currentEditedScene->removeSystem(pendingDeleteSystem);
+		pendingDeleteSystem = nullptr;
 	}
 }
 
@@ -631,6 +643,9 @@ void OutlinerPanel::onDraw() {
 			if (ImGui::BeginPopupContextWindow(
 					"SceneContextPopup",
 					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
+				if (ImGui::MenuItem("Delete System") && context.getCurrentlySelectedItem().index() == 1) {
+					pendingDeleteSystem = std::get<std::shared_ptr<System>>(context.getCurrentlySelectedItem());
+				}
 				if (ImGui::MenuItem("Add System")) {
 					pendingAddSystem = true;
 				}
@@ -734,7 +749,6 @@ bool InspectorPanel::collapsingHeader(const char *label,
 
 	// Align button text to the left
 	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.5f));
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
 
 	// Format full-width label with your custom trailing/leading icons
 	char buf[128];
@@ -749,7 +763,6 @@ bool InspectorPanel::collapsingHeader(const char *label,
 		storage->SetBool(id, open);
 	}
 
-	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 	return open;
 }
@@ -772,7 +785,7 @@ void InspectorPanel::onDraw() {
 				std::shared_ptr<System> system = metadata.get(currentScene);
 				if (collapsingHeader(metadata.name.c_str())) {
 					if (ImGui::BeginTable("##ComponentMemberTable", 2,
-										  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+										  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
 						// First column gets a fixed width of 150 units
 						ImGui::TableSetupColumn("##Fixed Col", ImGuiTableColumnFlags_WidthFixed, 115.0f);
 						// Second column stretches to consume all remaining space in the row
@@ -789,7 +802,6 @@ void InspectorPanel::onDraw() {
 						ImGui::EndTable();
 					}
 				}
-				ImGui::Separator();
 			}
 		}
 	}
@@ -800,7 +812,7 @@ void InspectorPanel::onDraw() {
 				void *component = metadata.get(registry, selectedEntity);
 				if (collapsingHeader(metadata.name.c_str())) {
 					if (ImGui::BeginTable("##ComponentMemberTable", 2,
-										  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+										  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
 						// First column gets a fixed width of 150 units
 						ImGui::TableSetupColumn("##Fixed Col", ImGuiTableColumnFlags_WidthFixed, 115.0f);
 						// Second column stretches to consume all remaining space in the row
@@ -817,7 +829,6 @@ void InspectorPanel::onDraw() {
 						ImGui::EndTable();
 					}
 				}
-				ImGui::Separator();
 			}
 		}
 

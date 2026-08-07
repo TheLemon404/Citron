@@ -342,9 +342,9 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_TableHeaderBg] =
 		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
 	style.Colors[ImGuiCol_TableBorderStrong] =
-		ImVec4(0.30980393f, 0.30980393f, 0.34901962f, 1.0f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_TableBorderLight] =
-		ImVec4(0.22745098f, 0.22745098f, 0.24705882f, 1.0f);
+		ImVec4(0.09411765f, 0.09411765f, 0.09411765f, 1.0f);
 	style.Colors[ImGuiCol_TableRowBg] =
 		ImVec4(0.16862746f, 0.16862746f, 0.16862746f, 1.0f);
 	style.Colors[ImGuiCol_TableRowBgAlt] =
@@ -361,11 +361,12 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.8f, 0.8f, 0.8f, 0.35f);
 
 	style.Colors[ImGuiCol_CheckboxSelectedBg] =
-		ImVec4(0.33333334f, 0.33333334f, 0.33333334f, 1.0f);
+		themeSecondaryColor;
 	style.Colors[ImGuiCol_DockingPreview] =
 		themeColor;
 	style.Colors[ImGuiCol_DockingEmptyBg] =
 		ImVec4(0.15686275f, 0.15686275f, 0.15686275f, 1.0f);
+	style.Colors[ImGuiCol_TabSelectedOverline] = themeColor;
 
 	ImGuizmo::Style &guizmoStyle = ImGuizmo::GetStyle();
 	guizmoStyle.Colors[ImGuizmo::COLOR::DIRECTION_X] = xColor;

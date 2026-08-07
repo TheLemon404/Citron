@@ -60,6 +60,17 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 		}
 	}
 
+	void removeSystem(std::shared_ptr<System> system) {
+		if (system != nullptr) {
+			for (const auto &[hash, registeredSystem] : m_systemRegistry) {
+				if (system == registeredSystem) {
+					m_systemRegistry.erase(hash);
+					return;
+				}
+			}
+		}
+	}
+
 	template <typename T>
 	bool hasSystem() {
 		return m_systemRegistry.contains(typeid(T).hash_code());

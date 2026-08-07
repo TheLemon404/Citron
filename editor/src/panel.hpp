@@ -116,6 +116,7 @@ class OutlinerPanel : public Panel {
 	bool pendingCreateEntity = false;
 	UUID pendingCreateEntityParent = UUID::nullID;
 	UUID pendingDeleteEntity = UUID::nullID;
+	std::shared_ptr<System> pendingDeleteSystem = nullptr;
 };
 
 class InspectorPanel : public Panel {

@@ -120,11 +120,11 @@ void ViewPanel::onDraw() {
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 
-	if (currentlySelectedEntity != entt::null && appContext.sceneManager.getActiveScene()->getRegistry().any_of<TransformComponent>(currentlySelectedEntity)) {
+	if (currentlySelectedItem.index() == 0 && appContext.sceneManager.getActiveScene()->getRegistry().any_of<TransformComponent>(std::get<entt::entity>(currentlySelectedItem))) {
 		ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 		ImGuizmo::Enable(true);
-		TransformComponent &transform = appContext.sceneManager.getActiveScene()->getRegistry().get<TransformComponent>(currentlySelectedEntity);
-		editTransformComponent(viewportPos, viewportSize, &editorView.getViewMatrix()[0][0], &editorView.getProjectionMatrix()[0][0], currentlySelectedEntity);
+		TransformComponent &transform = appContext.sceneManager.getActiveScene()->getRegistry().get<TransformComponent>(std::get<entt::entity>(currentlySelectedItem));
+		editTransformComponent(viewportPos, viewportSize, &editorView.getViewMatrix()[0][0], &editorView.getProjectionMatrix()[0][0], std::get<entt::entity>(currentlySelectedItem));
 	}
 	editorView.aspect = viewportSize.x / viewportSize.y;
 	ImGui::End();

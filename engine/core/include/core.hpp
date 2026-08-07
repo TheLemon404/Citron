@@ -24,4 +24,4 @@ namespace CitronCore {} // namespace CitronCore
 #define CITRON_BIND_FN(fn, ...) std::bind(&fn, this, __VA_ARGS__)
 
 #define CITRON_PROJECT_FILE_ENDING "project.yaml"
-#define CITRON_SCENE_FILE_ENDING "scene.yaml"
+#define CITRON_SCENE_FILE_ENDING "scene"

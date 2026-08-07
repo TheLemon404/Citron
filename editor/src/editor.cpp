@@ -142,7 +142,7 @@ bool Editor::openScene(std::string sceneAssetPath) {
 	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
 	Editor::get().sceneManager.getActiveScene()->deserialize(reader);
 	editorContext.currentlyEditedSceneAssetPath = sceneAssetPath;
-	editorContext.setCurrentSelectedEntity(entt::null);
+	editorContext.setCurrentlySelectedItem(entt::null);
 	return true;
 }
 
@@ -160,7 +160,7 @@ bool Editor::createScene() {
 	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
 	Editor::get().sceneManager.getActiveScene()->serialize(writer);
 	editorContext.currentlyEditedSceneAssetPath = newSceneFile;
-	editorContext.setCurrentSelectedEntity(entt::null);
+	editorContext.setCurrentlySelectedItem(entt::null);
 	return true;
 }
 

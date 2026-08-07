@@ -4,6 +4,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
+#include "gui.hpp"
 #include "registry.hpp"
 #include "editor.hpp"
 #include <cfloat>
@@ -501,9 +502,24 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	ImGui::TableNextRow();
 	ImGui::TableNextColumn();
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding;
+	bool selected = context.getCurrentlySelectedItem().index() == 0 && std::get<entt::entity>(context.getCurrentlySelectedItem()) == entity;
+	bool isLeaf = scene->getRegistry().get<CitronECS::EntityBaseComponent>(entity).children.empty();
+	if (isLeaf) {
+		flags |= ImGuiTreeNodeFlags_Leaf;
+	}
+	if (selected) {
+		ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
+		ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondaryColor);
+		flags |= ImGuiTreeNodeFlags_Selected;
+	}
 	bool node1_open = ImGui::TreeNodeEx(entityBase.name.c_str(),
-										ImGuiTreeNodeFlags_FramePadding);
+										flags);
 	ImGui::PopStyleVar();
+	if (selected) {
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+	}
 
 	if (ImGui::BeginDragDropSource()) {
 		ImGui::SetDragDropPayload("ENTITY_TREE_REORDER",
@@ -525,7 +541,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	}
 
 	if (ImGui::IsItemClicked()) {
-		context.setCurrentSelectedEntity(entity);
+		context.setCurrentlySelectedItem(entity);
 	}
 
 	if (ImGui::BeginPopupContextItem("EntityContextPopup")) {
@@ -533,7 +549,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 			pendingDeleteEntity = entityBase.uuid;
 		}
 		if (ImGui::MenuItem("Create Entity")) {
-			context.setCurrentSelectedEntity(entt::null);
+			context.setCurrentlySelectedItem(entt::null);
 			pendingCreateEntity = true;
 			pendingCreateEntityParent = entityBase.uuid;
 			ImGui::CloseCurrentPopup();
@@ -566,7 +582,7 @@ void OutlinerPanel::onDraw() {
 		}
 		if (ImGui::MenuItem("Create Entity")) {
 			if (currentEditedScene) {
-				context.setCurrentSelectedEntity(entt::null);
+				context.setCurrentlySelectedItem(entt::null);
 				pendingCreateEntity = true;
 				ImGui::CloseCurrentPopup();
 			}
@@ -587,14 +603,28 @@ void OutlinerPanel::onDraw() {
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			bool selected = context.getCurrentlySelectedItem().index() == 1 && std::get<std::shared_ptr<System>>(context.getCurrentlySelectedItem()) == system;
+			if (selected) {
+				ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
+				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondaryColor);
+				flags |= ImGuiTreeNodeFlags_Selected;
+			}
 			ImGui::PushID(id);
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0, 4.0));
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
-			if (ImGui::TreeNodeEx(system->getName().c_str(), ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen)) {
+			ImGui::TreeNodeEx(system->getName().c_str(), flags);
+
+			if (ImGui::IsItemClicked()) {
+				context.setCurrentlySelectedItem(system);
 			}
 			ImGui::PopStyleVar();
 			ImGui::PopID();
+			if (selected) {
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+			}
 		}
 
 		if (currentEditedScene) {
@@ -729,11 +759,42 @@ void InspectorPanel::onDetach() {}
 void InspectorPanel::onUpdate() {}
 
 void InspectorPanel::onDraw() {
-	ImGui::Begin("Inspector");
 	EditorContext &context = Editor::get().getEditorContext();
+	std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
+
+	ImGui::Begin("Inspector");
 	auto &registry = appContext.sceneManager.getActiveScene()->getRegistry();
-	const entt::entity selectedEntity = context.getCurrentSelectedEntity();
-	if (selectedEntity != entt::null && registry.valid(selectedEntity)) {
+	const std::variant<entt::entity, std::shared_ptr<System>> &selectedItem = context.getCurrentlySelectedItem();
+	if (selectedItem.index() == 1) {
+		std::shared_ptr<System> selectedSystem = std::get<std::shared_ptr<System>>(selectedItem);
+		for (const auto &[hash, metadata] : ECSRegistry::getSystemRegistry()) {
+			if (metadata.has(currentScene)) {
+				std::shared_ptr<System> system = metadata.get(currentScene);
+				if (collapsingHeader(metadata.name.c_str())) {
+					if (ImGui::BeginTable("##ComponentMemberTable", 2,
+										  ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+						// First column gets a fixed width of 150 units
+						ImGui::TableSetupColumn("##Fixed Col", ImGuiTableColumnFlags_WidthFixed, 115.0f);
+						// Second column stretches to consume all remaining space in the row
+						ImGui::TableSetupColumn("##Stretch Col", ImGuiTableColumnFlags_WidthStretch);
+
+						for (const auto &member : metadata.members) {
+							ImGui::TableNextColumn();
+							ImGui::Text("%s", member.fieldName.c_str());
+							ImGui::TableNextColumn();
+							PropertyGuiDrawer drawer = member.drawer;
+							if (!member.hideInEditor && drawer)
+								drawer(member, system.get(), appContext.assetManager);
+						}
+						ImGui::EndTable();
+					}
+				}
+				ImGui::Separator();
+			}
+		}
+	}
+	if (selectedItem.index() == 0 && registry.valid(std::get<entt::entity>(selectedItem))) {
+		entt::entity selectedEntity = std::get<entt::entity>(selectedItem);
 		for (const auto &[hash, metadata] : ECSRegistry::getComponentRegistry()) {
 			if (metadata.has(registry, selectedEntity)) {
 				void *component = metadata.get(registry, selectedEntity);

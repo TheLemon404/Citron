@@ -1,5 +1,7 @@
 add_library(citron_util SHARED)
 
+target_compile_definitions(citron_util PRIVATE CITRON_UTIL_BUILD_DLL)
+
 file(GLOB_RECURSE src CONFIGURE_DEPENDS  src/*.cpp)
 
 target_sources(citron_util PRIVATE ${src})

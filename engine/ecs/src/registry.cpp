@@ -8,6 +8,7 @@
 #include "shader.hpp"
 #include "test_system.hpp"
 #include "uuid.hpp"
+#include <macros.hpp>
 #include <unordered_map>
 
 using namespace CitronECS;
@@ -133,4 +134,5 @@ void ECSRegistry::registerDefaultComponents() {
 
 void ECSRegistry::registerDefaultSystems() {
 	registerSystem<TestSystem>("Test System");
+	registerSystemMember<TestSystem, float>("test Member", offset_of<&TestSystem::testMember, TestSystem>());
 }

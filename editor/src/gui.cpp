@@ -20,7 +20,7 @@
 #include <webgpu/webgpu.hpp>
 
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
-											viewPanel(appContext, Editor::get().getEditorContext().getCurrentSelectedEntity(), Editor::get().editorView),
+											viewPanel(appContext, Editor::get().getEditorContext().getCurrentlySelectedItem(), Editor::get().editorView),
 											appContext(appContext),
 											assetPropertiesPanel(appContext),
 											assetPanel(appContext, assetPropertiesPanel),

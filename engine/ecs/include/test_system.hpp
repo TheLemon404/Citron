@@ -9,6 +9,8 @@ namespace CitronECS {
 
 class TestSystem : public System {
   public:
+	float testMember = 0;
+
 	TestSystem() : System("TestSystem") {
 	}
 	virtual void init(Scene &activeScene) override {};

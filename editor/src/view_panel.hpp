@@ -23,7 +23,7 @@ struct ViewportManipulationSettings {
 
 class ViewPanel : public Panel {
   public:
-	ViewPanel(AppContext appContext, entt::entity &currentlySelectedEntity, PerspectiveView &editorView) : Panel("Viewport", appContext), currentlySelectedEntity(currentlySelectedEntity), editorView(editorView) {
+	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, PerspectiveView &editorView) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), editorView(editorView) {
 		viewportSize.x = appContext.window.getWidth();
 		viewportSize.y = appContext.window.getHeight();
 	};
@@ -47,7 +47,7 @@ class ViewPanel : public Panel {
 	void editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity);
 	bool mouseSelectEvent(Event &e);
 
-	entt::entity &currentlySelectedEntity;
+	std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem;
 
 	bool focused = false;
 	ViewportMotionSettings motionSettings;

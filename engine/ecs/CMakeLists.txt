@@ -9,4 +9,4 @@ target_include_directories(citron_ecs PUBLIC include)
 
 target_compile_features(citron_ecs PUBLIC cxx_std_26)
 target_link_libraries(citron_ecs PUBLIC yaml-cpp::yaml-cpp)
-target_link_libraries(citron_ecs PRIVATE citron_core citron_assets EnTT citron_io citron_graphics)
+target_link_libraries(citron_ecs PRIVATE citron_core citron_assets EnTT citron_io citron_graphics citron_util)

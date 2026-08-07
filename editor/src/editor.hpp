@@ -2,10 +2,12 @@
 
 #include "app.hpp"
 #include "entt/entity/entity.hpp"
+#include "entt/entity/fwd.hpp"
 #include "view.hpp"
 #include <ecs.hpp>
 #include <layer.hpp>
 #include <logger.hpp>
+#include <variant>
 #include <window.hpp>
 
 using namespace CitronECS;
@@ -17,17 +19,21 @@ class EditorContext {
   public:
 	std::filesystem::path currentlyEditedSceneAssetPath = "";
 
-	entt::entity &getCurrentSelectedEntity() {
-		return currentSelectedEntity;
+	std::variant<entt::entity, std::shared_ptr<System>> &getCurrentlySelectedItem() {
+		return currentlySelectedItem;
 	}
-	void setCurrentSelectedEntity(const entt::entity entity) {
-		currentSelectedEntity = entity;
+
+	void setCurrentlySelectedItem(const entt::entity entity) {
+		currentlySelectedItem = entity;
+	}
+	void setCurrentlySelectedItem(const std::shared_ptr<System> &system) {
+		currentlySelectedItem = system;
 	}
 
 	std::filesystem::path projectFilePath = "";
 
   private:
-	entt::entity currentSelectedEntity = entt::null;
+	std::variant<entt::entity, std::shared_ptr<System>> currentlySelectedItem;
 };
 
 class Editor : public CitronCore::App {

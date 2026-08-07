@@ -9,8 +9,6 @@
 #include <variant>
 #include <webgpu/webgpu.hpp>
 
-constexpr uint32_t MAX_MODEL_UNIFORMS = 1000;
-
 namespace CitronGraphics {
 
 struct CITRON_GRAPHICS_API RenderableReferenceData {
@@ -105,8 +103,6 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 
 	FrameUniforms frameUniforms;
 	GPUBuffer frameUniformBuffer;
-
-	GPUBuffer modelUniformsBuffer;
 
   private:
 	Device &device;

@@ -12,12 +12,6 @@ void RendererResourceManager::initResources() {
 	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
 	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
 	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
-
-	wgpu::BufferDescriptor modelUniformBufferDesc = {};
-	modelUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Storage;
-	modelUniformBufferDesc.mappedAtCreation = false;
-	modelUniformBufferDesc.size = Shader::paddedSizeof<ModelUniforms>() * MAX_MODEL_UNIFORMS;
-	modelUniformsBuffer.buffer = device.getWGPUDevice().createBuffer(modelUniformBufferDesc);
 }
 
 void RendererResourceManager::releaseResources() {
@@ -28,7 +22,6 @@ void RendererResourceManager::releaseResources() {
 		bindGroup.release();
 	}
 	entityModelUniformBufferCache.clear();
-	modelUniformsBuffer.buffer.release();
 	frameUniformBuffer.buffer.release();
 }
 

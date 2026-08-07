@@ -119,16 +119,6 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 					  .offset = 0,
 					  .size = Shader::paddedSizeof<FrameUniforms>()}}});
 			setBindGroup(0, frameBindGroup);
-
-			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
-				.layout = renderObject.shader->getBindGroupLayout(1),
-				.entries = {
-					{.binding = 0,
-					 .resource = context.rendererResourcesManager.modelUniformsBuffer.buffer,
-					 .offset = 0,
-					 .size = Shader::paddedSizeof<ModelUniforms>()}},
-			});
-			setBindGroup(1, modelBindGroup);
 		}
 
 		if (renderObject.mesh && renderObject.shader) {
@@ -141,12 +131,22 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 					 .size = Shader::paddedSizeof<MaterialUniforms>()}},
 			});
 
-			if (!materialBindGroup) {
+			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
+				.layout = renderObject.shader->getBindGroupLayout(1),
+				.entries = {
+					{.binding = 0,
+					 .resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms).buffer,
+					 .offset = 0,
+					 .size = Shader::paddedSizeof<ModelUniforms>()}},
+			});
+
+			if (!materialBindGroup || !modelBindGroup) {
 				CITRON_CORE_ERROR("Failed to get bind groups from cache for render object");
 				continue;
 			}
 
 			setMesh(renderObject.mesh);
+			setBindGroup(1, modelBindGroup);
 			setBindGroup(2, materialBindGroup);
 			draw(renderObject.mesh);
 		}
@@ -248,10 +248,6 @@ void Renderer::render(Frame &frame, std::vector<RenderableReferenceData> rendera
 			CITRON_CORE_ERROR("Failed to get mesh or shader for render object");
 			continue;
 		}
-
-		ModelUniforms modelUniforms = {};
-		modelUniforms.transform = renderableReferenceData[i].transform;
-		device.getQueue().writeBuffer(rendererResourcesManager.modelUniformsBuffer.buffer, Shader::paddedSizeof<ModelUniforms>() * i, &modelUniforms, Shader::paddedSizeof<ModelUniforms>());
 
 		renderObjectCache.renderObjects.push_back({
 			renderableReferenceData[i].entityUUID,

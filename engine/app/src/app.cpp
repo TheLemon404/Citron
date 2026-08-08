@@ -1,6 +1,7 @@
 
 #include "SDL3/SDL_timer.h"
 #include "clock.hpp"
+#include "texture.hpp"
 #define WEBGPU_CPP_IMPLEMENTATION
 #include "registry.hpp"
 
@@ -142,24 +143,24 @@ void App::update() {
 				{
 					CITRON_PROFILE_SCOPE("Render Scene")
 					if (!renderableData.empty()) {
-						renderer.render(frame, getActiveView(), renderableData, viewportSize, renderer.lightingBufferTexture, renderer.lightingBufferTextureView);
+						renderer.render(frame, getActiveView(), renderableData, viewportSize, renderer.lightingBufferTexture);
 					}
 				}
 
 				// for editor ui
 				{
 					CITRON_PROFILE_SCOPE("Render GUI")
-					wgpu::Texture surfaceTexture = renderer.getContext().device.getCurrentSurfaceTexture().texture;
+					Texture surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
+					surfaceTexture.regenerateTextureView();
 					RenderPassColorAttachment colorAttachment = {};
 					colorAttachment.targetTexture = surfaceTexture;
-					colorAttachment.targetTextureView = surfaceTexture.createView();
 					RenderPassParams guiPassParams = {};
 					guiPassParams.colorAttachments.push_back(colorAttachment);
 					RenderPass uiPass = frame.beginRenderPass(guiPassParams);
 					if (renderer.onGuiDrawCallback)
-						renderer.onGuiDrawCallback(renderer.lightingBufferTextureView, renderer.lightingBufferTextureView, uiPass);
+						renderer.onGuiDrawCallback(renderer.lightingBufferTexture.getTextureView(), renderer.lightingBufferTexture.getTextureView(), uiPass);
 					uiPass.end();
-					guiPassParams.colorAttachments[0].targetTextureView.release();
+					guiPassParams.colorAttachments[0].targetTexture.releaseView();
 				}
 
 				{

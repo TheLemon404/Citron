@@ -7,6 +7,7 @@
 #include "resources.hpp"
 #include "shader.hpp"
 #include "view.hpp"
+#include <cstdint>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vec_swizzle.hpp>
 #include <event.hpp>
@@ -25,7 +26,7 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 	for (RenderPassColorAttachment attachment : params.colorAttachments) {
 		wgpu::RenderPassColorAttachment colorAttachment = {};
 		colorAttachment.nextInChain = nullptr;
-		colorAttachment.view = attachment.targetTextureView;
+		colorAttachment.view = attachment.targetTexture.getTextureView();
 		colorAttachment.resolveTarget = nullptr;
 		colorAttachment.loadOp = wgpu::LoadOp::Clear;
 		colorAttachment.storeOp = wgpu::StoreOp::Store;
@@ -36,7 +37,7 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 
 	wgpu::RenderPassDepthStencilAttachment depthStencilAttachment = {};
 	if (params.containsDepthStencil) {
-		depthStencilAttachment.view = params.depthStencilAttachment.targetTextureView;
+		depthStencilAttachment.view = params.depthStencilAttachment.targetTexture.getTextureView();
 		depthStencilAttachment.depthLoadOp = wgpu::LoadOp::Clear;
 		depthStencilAttachment.depthStoreOp = wgpu::StoreOp::Store;
 		depthStencilAttachment.stencilLoadOp = wgpu::LoadOp::Clear;
@@ -68,13 +69,13 @@ void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, st
 		.entries = {
 			{
 				.binding = 0,
-				.resource = renderer.colorBufferTextureView,
+				.resource = renderer.colorBufferTexture.getTextureView(),
 				.offset = 0,
 				.size = WGPU_WHOLE_SIZE,
 			},
 			{
 				.binding = 1,
-				.resource = renderer.normalBufferTextureView,
+				.resource = renderer.normalBufferTexture.getTextureView(),
 				.offset = 0,
 				.size = WGPU_WHOLE_SIZE,
 			},
@@ -82,7 +83,7 @@ void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, st
 				.binding = 2,
 				.resource = context.rendererResourcesManager.frameUniformBuffer.buffer,
 				.offset = 0,
-				.size = WGPU_WHOLE_SIZE,
+				.size = Shader::paddedSizeof<FrameUniforms>(),
 			}},
 	});
 	setBindGroup(0, bindGroup);
@@ -122,15 +123,6 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 		}
 
 		if (renderObject.mesh && renderObject.shader) {
-			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
-				.layout = renderObject.shader->getBindGroupLayout(2),
-				.entries = {
-					{.binding = 0,
-					 .resource = renderObject.material->getMaterialUniformBuffer().buffer,
-					 .offset = 0,
-					 .size = Shader::paddedSizeof<MaterialUniforms>()}},
-			});
-
 			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
 				.layout = renderObject.shader->getBindGroupLayout(1),
 				.entries = {
@@ -138,6 +130,15 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 					 .resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms).buffer,
 					 .offset = 0,
 					 .size = Shader::paddedSizeof<ModelUniforms>()}},
+			});
+
+			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
+				.layout = renderObject.shader->getBindGroupLayout(2),
+				.entries = {
+					{.binding = 0,
+					 .resource = renderObject.material->getMaterialUniformBuffer().buffer,
+					 .offset = 0,
+					 .size = Shader::paddedSizeof<MaterialUniforms>()}},
 			});
 
 			if (!materialBindGroup || !modelBindGroup) {
@@ -184,16 +185,16 @@ void Renderer::init() {
 
 	rendererResourcesManager.initResources();
 
-	depthBufferTexture = device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight());
-	depthBufferTextureView = depthBufferTexture.createView();
-	idBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	idBufferTextureView = idBufferTexture.createView();
-	colorBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	colorBufferTextureView = colorBufferTexture.createView();
-	normalBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	normalBufferTextureView = normalBufferTexture.createView();
-	lightingBufferTexture = device.createRenderTargetColorTexture(window.getWidth(), window.getHeight());
-	lightingBufferTextureView = lightingBufferTexture.createView();
+	depthBufferTexture = {device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
+	depthBufferTexture.regenerateTextureView();
+	idBufferTexture = {device.createRenderTargetColorTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
+	idBufferTexture.regenerateTextureView();
+	colorBufferTexture = {device.createRenderTargetColorTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
+	colorBufferTexture.regenerateTextureView();
+	normalBufferTexture = {device.createRenderTargetColorTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
+	normalBufferTexture.regenerateTextureView();
+	lightingBufferTexture = {device.createRenderTargetColorTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
+	lightingBufferTexture.regenerateTextureView();
 
 	fullscreenQuad = Mesh::createFullscreenQuad(device);
 	lightingPassShader = std::make_shared<Shader>(UUID(), device, lighting_pass);
@@ -215,7 +216,7 @@ void Renderer::endFrame(Frame &frame) {
 	device.presentCurrentSurfaceTexture();
 }
 
-void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, wgpu::Texture &outputTexture, wgpu::TextureView &outputTextureView) {
+void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, Texture &outputTexture) {
 	resizeRenderTargets(viewportSize);
 
 	// need to cache assets already gethered in previous frames
@@ -263,16 +264,12 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	// depth and gbuffer pass
 	RenderPassDepthStencilAttachment depthAttachment = {};
 	depthAttachment.targetTexture = depthBufferTexture;
-	depthAttachment.targetTextureView = depthBufferTextureView;
 	RenderPassColorAttachment colorAttachment = {};
 	colorAttachment.targetTexture = colorBufferTexture;
-	colorAttachment.targetTextureView = colorBufferTextureView;
 	RenderPassColorAttachment normalAttachment = {};
 	normalAttachment.targetTexture = normalBufferTexture;
-	normalAttachment.targetTextureView = normalBufferTextureView;
 	RenderPassColorAttachment idAttachment = {};
 	idAttachment.targetTexture = idBufferTexture;
-	idAttachment.targetTextureView = idBufferTextureView;
 	RenderPassParams gBufferPassParams = {};
 	gBufferPassParams.containsDepthStencil = true;
 	gBufferPassParams.depthStencilAttachment = depthAttachment;
@@ -285,7 +282,6 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 
 	RenderPassColorAttachment lightingAttachment = {};
 	lightingAttachment.targetTexture = outputTexture;
-	lightingAttachment.targetTextureView = outputTextureView;
 	RenderPassParams lightingPassParams = {};
 	lightingPassParams.colorAttachments.push_back(lightingAttachment);
 	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);
@@ -330,36 +326,31 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 void Renderer::resizeRenderTargets(glm::ivec2 viewportSize) {
 	if (viewportSize.x != idBufferTexture.getWidth() || viewportSize.y != idBufferTexture.getHeight()) {
 		idBufferTexture.release();
-		idBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
-		idBufferTextureView.release();
-		idBufferTextureView = idBufferTexture.createView();
+		idBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
+		idBufferTexture.regenerateTextureView();
 	}
 
 	if (viewportSize.x != depthBufferTexture.getWidth() || viewportSize.y != depthBufferTexture.getHeight()) {
 		depthBufferTexture.release();
-		depthBufferTexture = device.createRenderTargetDepthTexture(viewportSize.x, viewportSize.y);
-		depthBufferTextureView.release();
-		depthBufferTextureView = depthBufferTexture.createView();
+		depthBufferTexture = {device.createRenderTargetDepthTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
+		depthBufferTexture.regenerateTextureView();
 	}
 
 	if (viewportSize.x != colorBufferTexture.getWidth() || viewportSize.y != colorBufferTexture.getHeight()) {
 		colorBufferTexture.release();
-		colorBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
-		colorBufferTextureView.release();
-		colorBufferTextureView = colorBufferTexture.createView();
+		colorBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
+		colorBufferTexture.regenerateTextureView();
 	}
 
 	if (viewportSize.x != normalBufferTexture.getWidth() || viewportSize.y != normalBufferTexture.getHeight()) {
 		normalBufferTexture.release();
-		normalBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
-		normalBufferTextureView.release();
-		normalBufferTextureView = normalBufferTexture.createView();
+		normalBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
+		normalBufferTexture.regenerateTextureView();
 	}
 
 	if (viewportSize.x != lightingBufferTexture.getWidth() || viewportSize.y != lightingBufferTexture.getHeight()) {
 		lightingBufferTexture.release();
-		lightingBufferTexture = device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y);
-		lightingBufferTextureView.release();
-		lightingBufferTextureView = lightingBufferTexture.createView();
+		lightingBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
+		lightingBufferTexture.regenerateTextureView();
 	}
 }

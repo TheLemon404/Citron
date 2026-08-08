@@ -35,7 +35,7 @@ struct CITRON_GRAPHICS_API FrameUniforms {
 
 struct CITRON_GRAPHICS_API PipelineKey {
 	std::shared_ptr<Shader> shader;
-	const std::vector<wgpu::TextureFormat> &colorAttachmentFormats;
+	const std::vector<wgpu::TextureFormat> colorAttachmentFormats;
 	bool hasDepthStencilAttachment = false;
 
 	bool operator==(const PipelineKey &other) const {

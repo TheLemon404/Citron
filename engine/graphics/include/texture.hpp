@@ -7,22 +7,40 @@
 using namespace CitronAssets;
 
 namespace CitronGraphics {
-class CITRON_GRAPHICS_API Texture : public Asset<Texture, AssetType::TEXTURE> {
+class CITRON_GRAPHICS_API Texture {
   public:
-	Texture(const UUID uuid, uint32_t width, uint32_t height);
-	~Texture();
+	Texture() : width(0), height(0) {}
+	Texture(uint32_t width, uint32_t height) : width(width), height(height) {}
+	Texture(wgpu::Texture texture, uint32_t width, uint32_t height) : texture(texture), width(width), height(height) {}
 
-	static std::shared_ptr<Texture> loadFromFile(const std::filesystem::path &path, Device &device);
+	wgpu::TextureView &getTextureView();
+	wgpu::Texture &getTexture() { return texture; }
 
-	static void writeMipMaps(Device &device, std::shared_ptr<Texture> texture, wgpu::Extent3D textureSize, uint32_t mipLevelCount, const unsigned char *data);
+	void release();
+	void releaseView();
+	void regenerateTextureView();
 
+	const uint32_t getWidth() const { return width; }
+	const uint32_t getHeight() const { return height; }
+
+  protected:
 	uint32_t width;
 	uint32_t height;
 	wgpu::Texture texture;
 
-	wgpu::TextureView &getTextureView() { return textureView; }
 	wgpu::TextureView textureView;
 	wgpu::Sampler sampler;
+};
+
+class CITRON_GRAPHICS_API ImageTexture : public Asset<ImageTexture, AssetType::TEXTURE>,
+										 public Texture {
+  public:
+	ImageTexture(const UUID uuid, uint32_t width, uint32_t height);
+	~ImageTexture();
+
+	static std::shared_ptr<ImageTexture> loadFromFile(const std::filesystem::path &path, Device &device);
+
+	static void writeMipMaps(Device &device, std::shared_ptr<ImageTexture> texture, wgpu::Extent3D textureSize, uint32_t mipLevelCount, const unsigned char *data);
 };
 
 class CITRON_GRAPHICS_API TextureImporter : public AssetImporter {

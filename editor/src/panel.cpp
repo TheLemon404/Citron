@@ -39,7 +39,7 @@ void AssetPanel::onAttach() {
 	currentDirectory = context.projectFilePath.parent_path();
 	refreshDirectoryListings();
 
-	folderIconTexture = Texture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getContext().device);
+	folderIconTexture = ImageTexture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getContext().device);
 }
 
 void AssetPanel::onDetach() {}
@@ -357,7 +357,7 @@ void AssetPropertiesPanel::onDraw() {
 			drawMaterialProperties(std::static_pointer_cast<Material>(asset));
 			break;
 		case CitronAssets::AssetType::TEXTURE:
-			drawTextureProperties(std::static_pointer_cast<Texture>(asset));
+			drawTextureProperties(std::static_pointer_cast<ImageTexture>(asset));
 			break;
 		case CitronAssets::AssetType::MESH:
 			drawMeshProperties(std::static_pointer_cast<Mesh>(asset));
@@ -395,7 +395,7 @@ void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> mate
 	}
 }
 
-void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<Texture> texture) {
+void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<ImageTexture> texture) {
 }
 
 void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {

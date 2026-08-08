@@ -9,6 +9,7 @@
 #include "pipeline.hpp"
 #include "resources.hpp"
 #include "shader.hpp"
+#include "texture.hpp"
 #include "view.hpp"
 #include <cstddef>
 #include <functional>
@@ -37,15 +38,13 @@ struct CITRON_GRAPHICS_API RenderObject {
 class CITRON_GRAPHICS_API Renderer;
 
 struct RenderPassColorAttachment {
-	wgpu::Texture targetTexture;
-	wgpu::TextureView targetTextureView;
+	Texture targetTexture;
 	wgpu::TextureFormat textureFormat = wgpu::TextureFormat::BGRA8UnormSrgb;
 	wgpu::Color clearValue = {0.247, 0.247, 0.247, 1.0};
 };
 
 struct RenderPassDepthStencilAttachment {
-	wgpu::Texture targetTexture;
-	wgpu::TextureView targetTextureView;
+	Texture targetTexture;
 	float depthClearValue = 1.0f;
 	float stencilClearValue = 0.0f;
 };
@@ -78,7 +77,7 @@ class CITRON_GRAPHICS_API RenderPass {
 		return renderPassEncoder;
 	}
 
-	wgpu::TextureView &getColorTargetView(int attachmentIndex) { return params.colorAttachments[attachmentIndex].targetTextureView; }
+	wgpu::TextureView &getColorTargetView(int attachmentIndex) { return params.colorAttachments[attachmentIndex].targetTexture.getTextureView(); }
 
 	Frame &getParentFrame() { return parentFrame; }
 
@@ -132,7 +131,7 @@ class CITRON_GRAPHICS_API Renderer {
 	Frame beginFrame();
 	void endFrame(Frame &frame);
 
-	void render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize, wgpu::Texture &outputTexture, wgpu::TextureView &outputTextureView);
+	void render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize, Texture &outputTexture);
 
 	void init();
 	void end();
@@ -180,7 +179,6 @@ class CITRON_GRAPHICS_API Renderer {
 			}
 			wgpu::BindGroupDescriptor bindGroupDesc = {};
 			bindGroupDesc.setDefault();
-			bindGroupDesc.label = wgpu::StringView("test");
 			bindGroupDesc.nextInChain = nullptr;
 			bindGroupDesc.entryCount = entries.size();
 			bindGroupDesc.entries = entries.data();
@@ -205,17 +203,17 @@ class CITRON_GRAPHICS_API Renderer {
 
 	void resizeRenderTargets(glm::ivec2 viewportSize);
 
+	Texture getCurrentDeviceSurfaceTexture() {
+		return Texture{
+			device.getCurrentSurfaceTexture().texture, (uint32_t)device.getLastSurfaceWidth(), (uint32_t)device.getLastSurfaceHeight()};
+	}
+
 	// render targets
-	wgpu::Texture idBufferTexture;
-	wgpu::TextureView idBufferTextureView;
-	wgpu::Texture depthBufferTexture;
-	wgpu::TextureView depthBufferTextureView;
-	wgpu::Texture colorBufferTexture;
-	wgpu::TextureView colorBufferTextureView;
-	wgpu::Texture normalBufferTexture;
-	wgpu::TextureView normalBufferTextureView;
-	wgpu::Texture lightingBufferTexture;
-	wgpu::TextureView lightingBufferTextureView;
+	Texture idBufferTexture;
+	Texture depthBufferTexture;
+	Texture colorBufferTexture;
+	Texture normalBufferTexture;
+	Texture lightingBufferTexture;
 
 	const std::shared_ptr<Mesh> &getFullscreenQuad() const { return fullscreenQuad; }
 	const std::shared_ptr<Shader> &getLightingPassShader() const { return lightingPassShader; }

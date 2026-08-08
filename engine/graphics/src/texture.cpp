@@ -6,9 +6,9 @@
 
 using namespace CitronGraphics;
 
-Texture::Texture(const UUID uuid, uint32_t width, uint32_t height) : Asset(uuid), width(width), height(height), texture(nullptr) {}
+ImageTexture::ImageTexture(const UUID uuid, uint32_t width, uint32_t height) : Asset(uuid), Texture(width, height) {}
 
-Texture::~Texture() {
+ImageTexture::~ImageTexture() {
 	if (textureView) {
 		textureView.release();
 	}
@@ -18,7 +18,7 @@ Texture::~Texture() {
 	}
 }
 
-std::shared_ptr<Texture> Texture::loadFromFile(const std::filesystem::path &path, Device &device) {
+std::shared_ptr<ImageTexture> ImageTexture::loadFromFile(const std::filesystem::path &path, Device &device) {
 	int width, height, channels;
 	unsigned char *data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
 	if (!data) {
@@ -36,7 +36,7 @@ std::shared_ptr<Texture> Texture::loadFromFile(const std::filesystem::path &path
 	descriptor.viewFormatCount = 0;
 	descriptor.viewFormats = nullptr;
 
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>(UUID(), static_cast<uint32_t>(width), static_cast<uint32_t>(height));
+	std::shared_ptr<ImageTexture> texture = std::make_shared<ImageTexture>(UUID(), static_cast<uint32_t>(width), static_cast<uint32_t>(height));
 	texture->texture = device.getWGPUDevice().createTexture(descriptor);
 
 	writeMipMaps(device, texture, descriptor.size, descriptor.mipLevelCount, data);
@@ -46,7 +46,7 @@ std::shared_ptr<Texture> Texture::loadFromFile(const std::filesystem::path &path
 	return texture;
 }
 
-void Texture::writeMipMaps(Device &device, std::shared_ptr<Texture> texture, wgpu::Extent3D textureSize, uint32_t mipLevelCount, const unsigned char *data) {
+void ImageTexture::writeMipMaps(Device &device, std::shared_ptr<ImageTexture> texture, wgpu::Extent3D textureSize, uint32_t mipLevelCount, const unsigned char *data) {
 	wgpu::TexelCopyTextureInfo destination;
 	destination.texture = texture->texture;
 	destination.mipLevel = 0;
@@ -61,6 +61,30 @@ void Texture::writeMipMaps(Device &device, std::shared_ptr<Texture> texture, wgp
 	wgpu::Queue queue = device.getWGPUDevice().getQueue();
 	queue.writeTexture(destination, data, 4 * textureSize.width * textureSize.height, source, textureSize);
 	queue.release();
+}
+
+wgpu::TextureView &Texture::getTextureView() {
+	if (!textureView)
+		regenerateTextureView();
+	return textureView;
+}
+
+void Texture::release() {
+	if (texture)
+		texture.release();
+	if (textureView)
+		textureView.release();
+}
+
+void Texture::releaseView() {
+	if (textureView)
+		textureView.release();
+}
+
+void Texture::regenerateTextureView() {
+	if (textureView)
+		textureView.release();
+	textureView = texture.createView();
 }
 
 std::shared_ptr<AssetBase> TextureImporter::importAsset(AssetMetadata metadata) {

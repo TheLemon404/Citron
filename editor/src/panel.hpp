@@ -57,7 +57,7 @@ class AssetPropertiesPanel : public Panel {
   private:
 	void drawShaderProperties(std::shared_ptr<Shader> shader);
 	void drawMaterialProperties(std::shared_ptr<Material> material);
-	void drawTextureProperties(std::shared_ptr<Texture> texture);
+	void drawTextureProperties(std::shared_ptr<ImageTexture> texture);
 	void drawMeshProperties(std::shared_ptr<Mesh> mesh);
 	void drawGenericProperties(AssetMetadata metadata);
 
@@ -81,7 +81,7 @@ class AssetPanel : public Panel {
 
   private:
 	AssetPropertiesPanel &assetPropertiesPanel;
-	std::shared_ptr<Texture> folderIconTexture = nullptr;
+	std::shared_ptr<ImageTexture> folderIconTexture = nullptr;
 	wgpu::TextureView folderIconTextureView = nullptr;
 
 	void refreshDirectoryListings();

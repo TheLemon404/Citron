@@ -1,3 +1,4 @@
+#include "texture.hpp"
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 #include "gui.hpp"
@@ -21,7 +22,7 @@
 #include <instrumentor.hpp>
 
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
-											viewPanel(appContext, Editor::get().getEditorContext().getCurrentlySelectedItem(), Editor::get().editorView),
+											viewPanel(appContext, Editor::get().getEditorContext().getCurrentlySelectedItem()),
 											appContext(appContext),
 											assetPropertiesPanel(appContext),
 											assetPanel(appContext, assetPropertiesPanel),
@@ -29,7 +30,7 @@ GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
 											outlinerPanel(appContext),
 											consolePanel(appContext),
 											inspectorPanel(appContext),
-											gamePanel(appContext, App::get().getActiveView()) {}
+											gamePanel(appContext) {}
 
 void GuiLayer::onAttach() {
 	IMGUI_CHECKVERSION();
@@ -70,6 +71,11 @@ void GuiLayer::onAttach() {
 
 	applyTheme();
 
+	AppContext context = Editor::get().getContext();
+	Renderer &renderer = context.renderer;
+
+	renderer.createRenderTargetColorTexture(editorViewTextureRenderTarget, context.window.getWidth(), context.window.getHeight());
+
 	viewPanel.onAttach();
 	assetPanel.onAttach();
 	assetPropertiesPanel.onAttach();
@@ -106,11 +112,14 @@ void GuiLayer::onUpdate() {
 	gamePanel.onUpdate();
 }
 
-void GuiLayer::onRender(void *frame) {
-	Frame *currentFrame = (Frame *)frame;
-
+void GuiLayer::onRender(void *frame, void *renderableData) {
 	CITRON_PROFILE_FUNCTION();
+	Frame *currentFrame = (Frame *)frame;
 	Renderer &renderer = Editor::get().getContext().renderer;
+	std::vector<CitronGraphics::RenderableReferenceData> *renderableReferenceData = (std::vector<CitronGraphics::RenderableReferenceData> *)renderableData;
+
+	renderer.render(*currentFrame, Editor::get().editorView, *renderableReferenceData, viewPanel.getViewportSize(), editorViewTextureRenderTarget);
+
 	Texture surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
 	surfaceTexture.regenerateTextureView();
 	RenderPassColorAttachment colorAttachment = {};
@@ -118,12 +127,12 @@ void GuiLayer::onRender(void *frame) {
 	RenderPassParams guiPassParams = {};
 	guiPassParams.colorAttachments.push_back(colorAttachment);
 	RenderPass uiPass = currentFrame->beginRenderPass(guiPassParams);
-	drawGui(renderer.lightingBufferTexture.getTextureView(), renderer.lightingBufferTexture.getTextureView(), uiPass);
+	drawGui(editorViewTextureRenderTarget, renderer.lightingBufferTexture, uiPass);
 	uiPass.end();
 	guiPassParams.colorAttachments[0].targetTexture.releaseView();
 }
 
-void GuiLayer::drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView,
+void GuiLayer::drawGui(Texture &editorView, Texture &gameView,
 					   CitronGraphics::RenderPass &currentRenderPass) {
 	EditorContext &context = Editor::get().getEditorContext();
 
@@ -198,7 +207,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView
 		ImGui::EndPopup();
 	}
 
-	viewPanel.setView(sceneView);
+	viewPanel.setView(editorView.getTextureView());
 	viewPanel.onDraw();
 	assetPanel.onDraw();
 	assetPropertiesPanel.onDraw();
@@ -206,7 +215,7 @@ void GuiLayer::drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView
 	consolePanel.onDraw();
 	inspectorPanel.onDraw();
 	assetRegistryPanel.onDraw();
-	gamePanel.setView(gameView);
+	gamePanel.setView(gameView.getTextureView());
 	gamePanel.onDraw();
 
 	ImGui::EndFrame();
@@ -269,7 +278,7 @@ void GuiLayer::applyTheme() {
 	style.ScrollbarRounding = 9.0f;
 	style.GrabMinSize = 10.0f;
 	style.GrabRounding = 2.5f;
-	style.TabRounding = 3.0f;
+	style.TabRounding = 0.0f;
 	style.TabBorderSize = 0.0f;
 	style.TabCloseButtonMinWidthSelected = 0.0f;
 	style.ColorButtonPosition = ImGuiDir_Right;

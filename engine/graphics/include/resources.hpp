@@ -2,12 +2,16 @@
 
 #include "buffer.hpp"
 #include "citron_exports.hpp"
-#include "glm/fwd.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
 #include "shader.hpp"
 #include <variant>
 #include <webgpu/webgpu.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include "glm/fwd.hpp"
+#include <glm/gtx/hash.hpp>
 
 namespace CitronGraphics {
 
@@ -22,13 +26,13 @@ struct CITRON_GRAPHICS_API ModelUniforms {
 	glm::mat4 transform = glm::identity<glm::mat4>();
 };
 
-struct CITRON_GRAPHICS_API FrameUniforms {
+struct CITRON_GRAPHICS_API DrawUniforms {
 	glm::mat4 viewProjection = glm::identity<glm::mat4>();
 	glm::vec4 sunLight = glm::vec4(1.0f);
 	glm::vec4 sunLightColor = glm::vec4(1.0f);
 	glm::vec4 ambientLight = glm::vec4(0.2f, 0.2f, 0.25f, 0.0f);
 
-	bool operator==(const FrameUniforms &other) const {
+	bool operator==(const DrawUniforms &other) const {
 		return viewProjection == other.viewProjection && sunLight == other.sunLight && sunLightColor == other.sunLightColor && ambientLight == other.ambientLight;
 	}
 };
@@ -86,6 +90,14 @@ struct hash<CitronGraphics::PipelineKey> {
 		return vertexShaderHash ^ (fragmentShaderHash << 1);
 	}
 };
+
+template <>
+struct hash<CitronGraphics::DrawUniforms> {
+	std::size_t operator()(const CitronGraphics::DrawUniforms &drawUniforms) const {
+		return hash<glm::mat4>()(drawUniforms.viewProjection);
+	}
+};
+
 } // namespace std
 
 namespace CitronGraphics {
@@ -95,16 +107,16 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 	RendererResourceManager(Device &device) : device(device) {}
 	void initResources();
 	GPUBuffer &getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
+	GPUBuffer &getDrawUniformBuffer(DrawUniforms drawUniforms, bool isDirty = false);
 	void releaseResources();
 
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
-	std::unordered_map<uint32_t, GPUBuffer> entityModelUniformBufferCache;
-
-	FrameUniforms frameUniforms;
-	GPUBuffer frameUniformBuffer;
 
   private:
+	std::unordered_map<DrawUniforms, GPUBuffer> drawUniformBufferCache;
+	std::unordered_map<uint32_t, GPUBuffer> entityModelUniformBufferCache;
+
 	Device &device;
 };
 

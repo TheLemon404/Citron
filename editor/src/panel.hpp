@@ -57,7 +57,7 @@ class AssetPropertiesPanel : public Panel {
   private:
 	void drawShaderProperties(std::shared_ptr<Shader> shader);
 	void drawMaterialProperties(std::shared_ptr<Material> material);
-	void drawTextureProperties(std::shared_ptr<ImageTexture> texture);
+	void drawTextureProperties(std::shared_ptr<Texture> texture);
 	void drawMeshProperties(std::shared_ptr<Mesh> mesh);
 	void drawGenericProperties(AssetMetadata metadata);
 
@@ -81,7 +81,7 @@ class AssetPanel : public Panel {
 
   private:
 	AssetPropertiesPanel &assetPropertiesPanel;
-	std::shared_ptr<ImageTexture> folderIconTexture = nullptr;
+	std::shared_ptr<Texture> folderIconTexture = nullptr;
 	wgpu::TextureView folderIconTextureView = nullptr;
 
 	void refreshDirectoryListings();
@@ -103,7 +103,10 @@ class ConsolePanel : public Panel {
 
 class GamePanel : public Panel {
   public:
-	GamePanel(AppContext appContext, View &gameView) : Panel("Game", appContext), gameView(gameView) {}
+	GamePanel(AppContext appContext) : Panel("Game", appContext) {
+		viewportSize.x = appContext.window.getWidth();
+		viewportSize.y = appContext.window.getHeight();
+	}
 
 	void setView(wgpu::TextureView sceneView) {
 		this->sceneView = sceneView;
@@ -121,7 +124,6 @@ class GamePanel : public Panel {
 
   private:
 	ImVec2 viewportSize;
-	View &gameView;
 	wgpu::TextureView sceneView;
 };
 

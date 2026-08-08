@@ -6,12 +6,6 @@
 using namespace CitronGraphics;
 
 void RendererResourceManager::initResources() {
-	wgpu::BufferDescriptor frameUniformBufferDesc = {};
-	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
-	frameUniformBufferDesc.mappedAtCreation = false;
-	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
-	frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
-	device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 }
 
 void RendererResourceManager::releaseResources() {
@@ -21,8 +15,12 @@ void RendererResourceManager::releaseResources() {
 	for (auto &[key, bindGroup] : bindGroupCache) {
 		bindGroup.release();
 	}
+	for (auto &[key, buffer] : drawUniformBufferCache) {
+		buffer.buffer.release();
+	}
 	entityModelUniformBufferCache.clear();
-	frameUniformBuffer.buffer.release();
+	bindGroupCache.clear();
+	drawUniformBufferCache.clear();
 }
 
 GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
@@ -46,4 +44,22 @@ GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityU
 	}
 
 	return entityModelUniformBufferCache[entityUUID];
+}
+
+GPUBuffer &RendererResourceManager::getDrawUniformBuffer(DrawUniforms drawUniforms, bool isDirty) {
+	wgpu::Device &wgpuDevice = device.getWGPUDevice();
+	if (!drawUniformBufferCache.contains(drawUniforms)) {
+		wgpu::BufferDescriptor frameUniformBufferDesc = {};
+		frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
+		frameUniformBufferDesc.mappedAtCreation = false;
+		frameUniformBufferDesc.size = Shader::paddedSizeof<DrawUniforms>();
+		GPUBuffer frameUniformBuffer = {};
+		frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
+		device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &drawUniforms, Shader::paddedSizeof<DrawUniforms>());
+		drawUniformBufferCache[drawUniforms] = frameUniformBuffer;
+	}
+	if (isDirty) {
+		device.getQueue().writeBuffer(drawUniformBufferCache[drawUniforms].buffer, 0, &drawUniforms, Shader::paddedSizeof<DrawUniforms>());
+	}
+	return drawUniformBufferCache[drawUniforms];
 }

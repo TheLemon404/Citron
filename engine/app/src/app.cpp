@@ -131,7 +131,6 @@ void App::update() {
 
 		{
 			CITRON_PROFILE_SCOPE("Render")
-			glm::ivec2 viewportSize = getActiveViewSize();
 			if (renderer.frameReady()) {
 				Frame frame = renderer.beginFrame();
 				{
@@ -143,11 +142,11 @@ void App::update() {
 				{
 					CITRON_PROFILE_SCOPE("Render Scene")
 					if (!renderableData.empty()) {
-						renderer.render(frame, getActiveView(), renderableData, viewportSize, renderer.lightingBufferTexture);
+						renderer.render(frame, getActiveView(), renderableData, getActiveViewSize(), renderer.lightingBufferTexture);
 					}
 
 					for (auto &layer : layerStack) {
-						layer->onRender(&frame);
+						layer->onRender(&frame, &renderableData);
 					}
 				}
 

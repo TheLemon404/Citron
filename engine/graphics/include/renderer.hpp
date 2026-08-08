@@ -64,8 +64,8 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass);
-	void drawRenderData(std::vector<RenderObject> renderableReferenceData, RenderPass &renderPass);
+	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass, DrawUniforms frameUniforms);
+	void drawRenderData(std::vector<RenderObject> renderableReferenceData, RenderPass &renderPass, DrawUniforms frameUniforms);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);
@@ -198,7 +198,8 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
-	void resizeRenderTargets(glm::ivec2 viewportSize);
+	void resizeRenderTargets(glm::ivec2 viewportSize, Texture &tempOutputTexture);
+	void createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height);
 
 	Texture getCurrentDeviceSurfaceTexture() {
 		return Texture{

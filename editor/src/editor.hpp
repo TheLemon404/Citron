@@ -56,7 +56,6 @@ class Editor : public CitronCore::App {
 
 	PerspectiveView editorView;
 
-	View &getActiveView() override { return editorView; }
 	glm::ivec2 getActiveViewSize() override;
 
   private:

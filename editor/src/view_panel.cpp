@@ -1,4 +1,5 @@
 #include "clock.hpp"
+#include "panel.hpp"
 #include "uuid.hpp"
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -38,6 +39,7 @@ void ViewPanel::onUpdate() {
 	if (!focused || !viewportMovementActive)
 		return;
 
+	PerspectiveView &editorView = Editor::get().editorView;
 	float deltaTime = CitronCore::Clock::getDeltaTime();
 
 	CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
@@ -62,6 +64,8 @@ void ViewPanel::onUpdate() {
 }
 
 void ViewPanel::onDraw() {
+	PerspectiveView &editorView = Editor::get().editorView;
+
 	ImGui::Begin("Viewport", nullptr);
 	viewportSize = ImGui::GetContentRegionAvail();
 	ImVec2 viewportPos = ImGui::GetCursorScreenPos();
@@ -126,13 +130,15 @@ void ViewPanel::onDraw() {
 		TransformComponent &transform = appContext.sceneManager.getActiveScene()->getRegistry().get<TransformComponent>(std::get<entt::entity>(currentlySelectedItem));
 		editTransformComponent(viewportPos, viewportSize, &editorView.getViewMatrix()[0][0], &editorView.getProjectionMatrix()[0][0], std::get<entt::entity>(currentlySelectedItem));
 	}
-	((PerspectiveView &)editorView).aspect = viewportSize.x / viewportSize.y;
+	editorView.aspect = viewportSize.x / viewportSize.y;
 	ImGui::End();
 }
 
 void ViewPanel::onEvent(Event &e) {
 	if (!focused)
 		return;
+
+	PerspectiveView &editorView = Editor::get().editorView;
 
 	float deltaTime = CitronCore::Clock::getDeltaTime();
 

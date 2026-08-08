@@ -116,8 +116,13 @@ class CITRON_APP_API App {
 
 	const bool isRuntime() { return isRuntimeMode; }
 
-	virtual View &getActiveView() { return sceneManager.getActiveScene()->getActiveView(); }
 	virtual glm::ivec2 getActiveViewSize() { return glm::ivec2(window.getWidth(), window.getHeight()); }
+	View &getActiveView() {
+		PerspectiveView &view = static_cast<PerspectiveView &>(sceneManager.getActiveScene()->getActiveView());
+		glm::ivec2 viewSize = getActiveViewSize();
+		view.aspect = (float)viewSize.x / (float)viewSize.y;
+		return view;
+	}
 
   protected:
 	const bool isRuntimeMode = false;

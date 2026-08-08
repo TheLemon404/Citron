@@ -24,7 +24,7 @@ struct ViewportManipulationSettings {
 
 class ViewPanel : public Panel {
   public:
-	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, View &editorView) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), editorView(editorView) {
+	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem) {
 		viewportSize.x = appContext.window.getWidth();
 		viewportSize.y = appContext.window.getHeight();
 	};
@@ -53,7 +53,6 @@ class ViewPanel : public Panel {
 	bool focused = false;
 	ViewportMotionSettings motionSettings;
 	ViewportManipulationSettings manipulationSettings;
-	View &editorView;
 	bool viewportMovementActive = false;
 	wgpu::TextureView sceneView;
 };

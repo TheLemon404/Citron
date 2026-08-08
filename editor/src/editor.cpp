@@ -257,5 +257,5 @@ void Editor::saveCurrentScene() {
 }
 
 glm::ivec2 Editor::getActiveViewSize() {
-	return getLayer<GuiLayer>()->viewPanel.getViewportSize();
+	return getLayer<GuiLayer>()->gamePanel.getViewportSize();
 }

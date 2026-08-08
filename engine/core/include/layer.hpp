@@ -11,7 +11,7 @@ class CITRON_CORE_API Layer {
 
 	virtual void onAttach() = 0;
 	virtual void onDetach() = 0;
-	virtual void onRender(void *frame) = 0;
+	virtual void onRender(void *frame, void *renderableData) = 0;
 	virtual void onUpdate() = 0;
 	virtual void onEvent(Event &e) = 0;
 

@@ -2,6 +2,7 @@
 
 #include "app.hpp"
 #include "panel.hpp"
+#include "texture.hpp"
 #include "view_panel.hpp"
 #include <layer.hpp>
 #include <renderer.hpp>
@@ -22,10 +23,12 @@ class GuiLayer : public Layer {
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
-	void onRender(void *frame) override;
-	void drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView,
+	void onRender(void *frame, void *renderableData) override;
+	void drawGui(Texture &editorView, Texture &gameView,
 				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;
+
+	Texture editorViewTextureRenderTarget;
 
 	ViewPanel viewPanel;
 	AssetPanel assetPanel;

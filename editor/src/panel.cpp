@@ -29,6 +29,7 @@
 #include "shader.hpp"
 #include "spdlog/common.h"
 #include "test_system.hpp"
+#include "texture.hpp"
 #include <IconsFontAwesome5.h>
 #include <IconsFontAwesome6.h>
 #include <imgui_stdlib.h>
@@ -395,7 +396,7 @@ void AssetPropertiesPanel::drawMaterialProperties(std::shared_ptr<Material> mate
 	}
 }
 
-void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<ImageTexture> texture) {
+void AssetPropertiesPanel::drawTextureProperties(std::shared_ptr<Texture> texture) {
 }
 
 void AssetPropertiesPanel::drawMeshProperties(std::shared_ptr<Mesh> mesh) {
@@ -490,7 +491,6 @@ void GamePanel::onDraw() {
 	WGPUTextureView view = sceneView;
 	ImDrawList *drawList = ImGui::GetWindowDrawList();
 	drawList->AddImage((ImTextureID)(uintptr_t)view, viewportPos, ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y));
-	((PerspectiveView &)gameView).aspect = viewportSize.x / viewportSize.y;
 	ImGui::End();
 }
 void GamePanel::onEvent(Event &e) {}

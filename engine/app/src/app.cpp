@@ -145,22 +145,14 @@ void App::update() {
 					if (!renderableData.empty()) {
 						renderer.render(frame, getActiveView(), renderableData, viewportSize, renderer.lightingBufferTexture);
 					}
+
+					for (auto &layer : layerStack) {
+						layer->onRender(&frame);
+					}
 				}
 
 				// for editor ui
 				{
-					CITRON_PROFILE_SCOPE("Render GUI")
-					Texture surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
-					surfaceTexture.regenerateTextureView();
-					RenderPassColorAttachment colorAttachment = {};
-					colorAttachment.targetTexture = surfaceTexture;
-					RenderPassParams guiPassParams = {};
-					guiPassParams.colorAttachments.push_back(colorAttachment);
-					RenderPass uiPass = frame.beginRenderPass(guiPassParams);
-					if (renderer.onGuiDrawCallback)
-						renderer.onGuiDrawCallback(renderer.lightingBufferTexture.getTextureView(), renderer.lightingBufferTexture.getTextureView(), uiPass);
-					uiPass.end();
-					guiPassParams.colorAttachments[0].targetTexture.releaseView();
 				}
 
 				{

@@ -18,6 +18,7 @@
 #include <io.hpp>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
+#include <instrumentor.hpp>
 
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
 											viewPanel(appContext, Editor::get().getEditorContext().getCurrentlySelectedItem(), Editor::get().editorView),
@@ -67,9 +68,6 @@ void GuiLayer::onAttach() {
 	initInfo.DepthStencilFormat = WGPUTextureFormat_Undefined;
 	ImGui_ImplWGPU_Init(&initInfo);
 
-	appContext.renderer.onGuiDrawCallback = CITRON_BIND_FN(
-		GuiLayer::drawGui, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-
 	applyTheme();
 
 	viewPanel.onAttach();
@@ -106,6 +104,23 @@ void GuiLayer::onUpdate() {
 	inspectorPanel.onUpdate();
 	assetRegistryPanel.onUpdate();
 	gamePanel.onUpdate();
+}
+
+void GuiLayer::onRender(void *frame) {
+	Frame *currentFrame = (Frame *)frame;
+
+	CITRON_PROFILE_FUNCTION();
+	Renderer &renderer = Editor::get().getContext().renderer;
+	Texture surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
+	surfaceTexture.regenerateTextureView();
+	RenderPassColorAttachment colorAttachment = {};
+	colorAttachment.targetTexture = surfaceTexture;
+	RenderPassParams guiPassParams = {};
+	guiPassParams.colorAttachments.push_back(colorAttachment);
+	RenderPass uiPass = currentFrame->beginRenderPass(guiPassParams);
+	drawGui(renderer.lightingBufferTexture.getTextureView(), renderer.lightingBufferTexture.getTextureView(), uiPass);
+	uiPass.end();
+	guiPassParams.colorAttachments[0].targetTexture.releaseView();
 }
 
 void GuiLayer::drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView,

@@ -22,6 +22,7 @@ class GuiLayer : public Layer {
 	void onAttach() override;
 	void onDetach() override;
 	void onUpdate() override;
+	void onRender(void *frame) override;
 	void drawGui(wgpu::TextureView &sceneView, wgpu::TextureView &gameView,
 				 CitronGraphics::RenderPass &currentRenderPass);
 	void onEvent(Event &e) override;

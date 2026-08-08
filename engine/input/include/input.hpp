@@ -25,6 +25,7 @@ class CITRON_INPUT_API InputLayer : public Layer {
 
 	void onAttach() override;
 	void onDetach() override;
+	void onRender(void *frame) override {};
 	void onUpdate() override;
 	void onEvent(Event &e) override;
 

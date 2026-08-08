@@ -137,9 +137,6 @@ class CITRON_GRAPHICS_API Renderer {
 	void end();
 	void onEvent(Event &e);
 
-	std::function<void(wgpu::TextureView &, wgpu::TextureView &, RenderPass &)> onGuiDrawCallback =
-		nullptr;
-
 	std::shared_ptr<Pipeline> getPipeline(PipelineKey key) {
 		if (!rendererResourcesManager.pipelineCache.contains(key)) {
 			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachmentFormats, key.hasDepthStencilAttachment, key.shader);

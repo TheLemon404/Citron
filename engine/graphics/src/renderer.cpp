@@ -238,8 +238,13 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 
 		std::shared_ptr<Shader> shader = assetManager.getAsset<Shader>(material->shader.uuid);
 
-		if (!mesh || !shader) {
-			CITRON_CORE_ERROR("Failed to get mesh or shader for render object");
+		if (!mesh) {
+			CITRON_CORE_ERROR("Failed to get mesh for render object");
+			continue;
+		}
+
+		if (!shader) {
+			CITRON_CORE_ERROR("Failed to get shader for render object");
 			continue;
 		}
 

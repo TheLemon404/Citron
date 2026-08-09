@@ -49,14 +49,14 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	template <typename T>
 	void addSystem() {
 		if (!hasSystem<T>()) {
-			m_systemRegistry[typeid(T).hash_code()] = std::make_shared<T>();
+			m_systemRegistry[Hashing::typeHash<T>()] = std::make_shared<T>();
 		}
 	}
 
 	template <typename T>
 	void removeSystem() {
 		if (hasSystem<T>()) {
-			m_systemRegistry.erase(typeid(T).hash_code());
+			m_systemRegistry.erase(Hashing::typeHash<T>());
 		}
 	}
 
@@ -73,13 +73,13 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 
 	template <typename T>
 	bool hasSystem() {
-		return m_systemRegistry.contains(typeid(T).hash_code());
+		return m_systemRegistry.contains(Hashing::typeHash<T>());
 	}
 
 	template <typename T>
 	std::shared_ptr<T> getSystem() {
 		if (hasSystem<T>()) {
-			return std::static_pointer_cast<T>(m_systemRegistry[typeid(T).hash_code()]);
+			return std::static_pointer_cast<T>(m_systemRegistry[Hashing::typeHash<T>()]);
 		}
 		return nullptr;
 	}

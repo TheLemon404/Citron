@@ -12,16 +12,12 @@ using namespace CitronInput;
 
 int main(int argc, char *argv[]) {
 	// CITRON_PROFILE_BEGIN_SESSION("Citron", "citron_profile.json");
-	try {
-		std::string projectFilePath = argv[1];
-		Editor editor = Editor(projectFilePath);
-		editor.init();
-		while (editor.isRunning()) {
-			editor.update();
-			editor.close();
-		}
-	} catch (std::exception e) {
-		std::cerr << e.what() << std::endl;
+	std::string projectFilePath = argv[1];
+	Editor editor = Editor(projectFilePath);
+	editor.init();
+	while (editor.isRunning()) {
+		editor.update();
+		editor.close();
 	}
 	// CITRON_PROFILE_END_SESSION();
 	return 0;

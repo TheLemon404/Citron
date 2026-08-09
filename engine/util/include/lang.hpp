@@ -45,7 +45,7 @@ class CITRON_UTIL_API Hashing {
 
 	// Helper to safely get a unique 32-bit hash for any type
 	template <typename T>
-	static uint32_t get_type_hash() {
+	static uint32_t typeHash() {
 		return hash_32_fnv1a(typeid(T).name());
 	}
 };

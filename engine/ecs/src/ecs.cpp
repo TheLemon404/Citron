@@ -88,6 +88,10 @@ void Scene::deserialize(StreamReader &reader) {
 	for (size_t i = 0; i < numSystems; i++) {
 		uint32_t typeHash;
 		reader.readData(&typeHash, sizeof(typeHash));
+		if (!ECSRegistry::getSystemRegistry().contains(typeHash)) {
+			CITRON_CORE_ERROR("System of type hash {} not found", typeHash);
+			throw std::runtime_error("Component of type hash " + std::to_string(typeHash) + " not found");
+		}
 		SystemMetadata metadata = ECSRegistry::getSystemRegistry()[typeHash];
 		metadata.add(shared_from_this());
 		for (Member &member : metadata.members) {
@@ -105,6 +109,11 @@ void Scene::deserialize(StreamReader &reader) {
 		for (size_t j = 0; j < numComponents; j++) {
 			uint32_t typeHash;
 			reader.readData(&typeHash, sizeof(typeHash));
+			if (!ECSRegistry::getComponentRegistry().contains(typeHash)) {
+				CITRON_CORE_ERROR("Component of type hash {} not found", typeHash);
+				throw std::runtime_error("Component of type hash " + std::to_string(typeHash) + " not found");
+			}
+
 			ComponentMetadata metadata = ECSRegistry::getComponentRegistry()[typeHash];
 			metadata.add(registry, entity);
 			for (Member &member : metadata.members) {

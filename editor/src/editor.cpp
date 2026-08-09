@@ -11,6 +11,7 @@
 #include "material.hpp"
 #include "mesh.hpp"
 #include "panel.hpp"
+#include "view.hpp"
 #include "yaml-cpp/node/emit.h"
 #include <input.hpp>
 #include <io.hpp>
@@ -135,6 +136,15 @@ Editor::Editor(const std::string &projectFilePath)
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;
 			GuiElements::drawAssetReferenceComponentGui<Material>(fieldNameId, *(AssetReference<Material> *)field, context);
+		});
+	ECSRegistry::registerPropertyGuiDrawer<PerspectiveView>(
+		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+			PerspectiveView *field = (PerspectiveView *)((char *)object + member.offset);
+			std::string fieldNameId = "##" + member.fieldName;
+			ImGui::DragFloat("near", &field->near);
+			ImGui::DragFloat("far", &field->far);
+			ImGui::DragFloat("fov", &field->fov);
+			ImGui::DragFloat("aspect", &field->aspect);
 		});
 }
 

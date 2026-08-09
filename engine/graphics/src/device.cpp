@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <webgpu.h>
 
 #define WEBGPU_CPP_IMPLEMENTATION
 
@@ -157,52 +158,34 @@ void Device::releasePlatformResources() {
 }
 
 bool Device::prepareCurrentSurfaceTexture() {
-	if (currentSurfaceTexture.texture)
-		((wgpu::Texture)currentSurfaceTexture.texture).release();
+	surface.getCurrentTexture(&currentSurfaceTexture);
+
+	if (currentSurfaceTexture.status !=
+			wgpu::SurfaceGetCurrentTextureStatus::SuccessOptimal &&
+		currentSurfaceTexture.status !=
+			wgpu::SurfaceGetCurrentTextureStatus::SuccessSuboptimal) {
+		CITRON_CORE_ERROR(
+			"Current WGPU surface failed in pre-render with status Error");
+		currentSurfaceTexture.texture = nullptr;
+		return false;
+	}
 
 	if (getLastSurfaceWidth() != window.getWidth() ||
 		getLastSurfaceHeight() != window.getHeight()) {
 		CITRON_CORE_WARN("Current WGPU surface size is different from window "
 						 "size, attempting to resize...");
+		wgpuTextureRelease(currentSurfaceTexture.texture);
+		currentSurfaceTexture.texture = nullptr;
 		resizeSurface(window.getWidth(), window.getHeight());
 		return false;
 	}
 
-	surface.getCurrentTexture(&currentSurfaceTexture);
-	if (currentSurfaceTexture.status ==
-		wgpu::SurfaceGetCurrentTextureStatus::Error) {
-		CITRON_CORE_ERROR(
-			"Current WGPU surface failed in pre-render with status Error");
-		return false;
-	}
-	if (currentSurfaceTexture.status ==
-		wgpu::SurfaceGetCurrentTextureStatus::SuccessSuboptimal) {
-		if (currentSurfaceTexture.texture)
-			((wgpu::Texture)currentSurfaceTexture.texture).release();
-
-		resizeSurface(window.getWidth(), window.getHeight());
-		CITRON_CORE_ERROR("Current WGPU surface completed in pre-render with "
-						  "status SuccessSuboptimal, attempting to resize...");
-		return false;
-	}
-	if (((wgpu::Texture)currentSurfaceTexture.texture).getWidth() !=
-			getLastSurfaceWidth() ||
-		((wgpu::Texture)currentSurfaceTexture.texture).getHeight() !=
-			getLastSurfaceHeight()) {
-		((wgpu::Texture)currentSurfaceTexture.texture).release();
-
-		resizeSurface(window.getWidth(), window.getHeight());
-		CITRON_CORE_ERROR("Current surface and surface texture size mismatch, "
-						  "attempting to resize...");
-
-		return false;
-	}
-
-	return currentSurfaceTexture.status ==
-		   wgpu::SurfaceGetCurrentTextureStatus::SuccessOptimal;
+	return true;
 }
 
-void Device::presentCurrentSurfaceTexture() { surface.present(); }
+void Device::presentCurrentSurfaceTexture() {
+	surface.present();
+}
 
 const int Device::getLastSurfaceWidth() { return m_lastSurfaceWidth; }
 

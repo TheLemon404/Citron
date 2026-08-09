@@ -124,7 +124,8 @@ void ViewPanel::onDraw() {
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 
-	if (currentlySelectedItem.index() == 0 && appContext.sceneManager.getActiveScene()->getRegistry().any_of<TransformComponent>(std::get<entt::entity>(currentlySelectedItem))) {
+	entt::registry &registry = appContext.sceneManager.getActiveScene()->getRegistry();
+	if (currentlySelectedItem.index() == 0 && registry.valid(std::get<entt::entity>(currentlySelectedItem)) && registry.any_of<TransformComponent, EntityBaseComponent>(std::get<entt::entity>(currentlySelectedItem))) {
 		ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 		ImGuizmo::Enable(true);
 		TransformComponent &transform = appContext.sceneManager.getActiveScene()->getRegistry().get<TransformComponent>(std::get<entt::entity>(currentlySelectedItem));

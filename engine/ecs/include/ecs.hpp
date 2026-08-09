@@ -111,11 +111,11 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	void onEvent(Event &e);
 	void end();
 
-	CitronGraphics::View &getActiveView() { return tempPerspectiveView; }
+	CitronGraphics::View &getActiveView();
 
   private:
 	// needs to be swapped out later with current scene camera
-	CitronGraphics::PerspectiveView tempPerspectiveView;
+	CitronGraphics::PerspectiveView tempSceneView;
 
 	std::map<UUID, entt::entity> entityMap;
 

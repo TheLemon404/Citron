@@ -74,16 +74,16 @@ class CITRON_ECS_API ECSRegistry {
 		metadata.hash = systemHash;
 		metadata.name = name;
 
-		metadata.add = [metadata](std::shared_ptr<Scene> scene) {
+		metadata.add = [](std::shared_ptr<Scene> scene) {
 			scene->addSystem<T>();
 		};
-		metadata.remove = [metadata](std::shared_ptr<Scene> scene) {
+		metadata.remove = [](std::shared_ptr<Scene> scene) {
 			scene->removeSystem<T>();
 		};
-		metadata.get = [metadata](std::shared_ptr<Scene> scene) {
+		metadata.get = [](std::shared_ptr<Scene> scene) {
 			return scene->getSystem<T>();
 		};
-		metadata.has = [metadata](std::shared_ptr<Scene> scene) {
+		metadata.has = [](std::shared_ptr<Scene> scene) {
 			return scene->hasSystem<T>();
 		};
 
@@ -99,15 +99,11 @@ class CITRON_ECS_API ECSRegistry {
 		metadata.has = [](entt::registry &registry, entt::entity entity) {
 			return registry.any_of<T>(entity);
 		};
-		metadata.add = [metadata](entt::registry &registry, entt::entity entity) {
-			if (!metadata.has(registry, entity)) {
-				registry.emplace<T>(entity);
-			}
+		metadata.add = [](entt::registry &registry, entt::entity entity) {
+			registry.emplace<T>(entity);
 		};
-		metadata.remove = [metadata](entt::registry &registry, entt::entity entity) {
-			if (metadata.has(registry, entity)) {
-				registry.remove<T>(entity);
-			}
+		metadata.remove = [](entt::registry &registry, entt::entity entity) {
+			registry.remove<T>(entity);
 		};
 		metadata.get = [](entt::registry &registry, entt::entity entity) {
 			return &registry.get<T>(entity);
@@ -125,6 +121,7 @@ class CITRON_ECS_API ECSRegistry {
 	static void registerComponentMember(std::string memberName, size_t offset, bool hideInEditor = false) {
 		uint32_t parentClassTypeHash = typeid(T).hash_code();
 		uint32_t memberTypeHashCode = typeid(U).hash_code();
+		CITRON_CORE_INFO("REGISTERING MEMBER HASHCODE", memberName, typeid(U).name());
 		if (m_propertyGuiDrawers.contains(memberTypeHashCode)) {
 			Member member = {};
 			member.fieldName = memberName;
@@ -172,19 +169,23 @@ class CITRON_ECS_API ECSRegistry {
 			std::vector<T> *vec = static_cast<std::vector<T> *>(data);
 			size_t vectorSize = vec->size();
 			writer.writeData(&vectorSize, sizeof(size_t));
+			CITRON_CORE_INFO("WRITING COLLECTION SIZE {}", vectorSize);
 			for (T &item : *vec) {
+				CITRON_CORE_INFO("WRITING CHILD");
 				Member::serializationMethods[typeid(T).hash_code()](writer, (void *)&item);
 			}
 		};
 	}
 	template <typename T>
 	static void registerCollectionDeserialization() {
+		CITRON_CORE_INFO("VECTOR TYPE ID {}", typeid(std::vector<T>).hash_code());
 		Member::deserializationMethods[typeid(std::vector<T>).hash_code()] = [](StreamReader &reader, void *data) {
 			std::vector<T> *vec = static_cast<std::vector<T> *>(data);
 			size_t size;
 			reader.readData(&size, sizeof(size_t));
 			vec->resize(size);
 			for (T &item : *vec) {
+				CITRON_CORE_INFO("READING CHILD");
 				Member::deserializationMethods[typeid(T).hash_code()](reader, (void *)&item);
 			}
 		};

@@ -820,20 +820,37 @@ void InspectorPanel::onDraw() {
 							else
 								ImGui::Text("Drawing method undefined");
 						}
+
+						if (ImGui::BeginPopupContextWindow()) {
+							if (ImGui::MenuItem("Remove System")) {
+								metadata.remove(currentScene);
+							}
+							ImGui::EndPopup();
+						}
+
 						ImGui::EndTable();
 					}
 				}
 			}
 		}
 	}
+
 	if (selectedItem.index() == 0 && registry.valid(std::get<entt::entity>(selectedItem))) {
 		entt::entity selectedEntity = std::get<entt::entity>(selectedItem);
 		for (const auto &[hash, metadata] : ECSRegistry::getComponentRegistry()) {
 			if (metadata.has(registry, selectedEntity)) {
 				void *component = metadata.get(registry, selectedEntity);
 				if (collapsingHeader(metadata.name.c_str())) {
+					if (ImGui::BeginPopupContextItem()) {
+						if (ImGui::MenuItem("Remove Component")) {
+							metadata.remove(registry, selectedEntity);
+						}
+						ImGui::EndPopup();
+					}
+
 					if (ImGui::BeginTable("##ComponentMemberTable", 2,
 										  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
+
 						// First column gets a fixed width of 150 units
 						ImGui::TableSetupColumn("##Fixed Col", ImGuiTableColumnFlags_WidthFixed, 115.0f);
 						// Second column stretches to consume all remaining space in the row
@@ -852,6 +869,7 @@ void InspectorPanel::onDraw() {
 							else
 								ImGui::Text("Drawing method undefined");
 						}
+
 						ImGui::EndTable();
 					}
 				}

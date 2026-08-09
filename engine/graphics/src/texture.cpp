@@ -64,7 +64,12 @@ void ImageTexture::writeMipMaps(Device &device, std::shared_ptr<ImageTexture> te
 }
 
 Texture::Texture(wgpu::Texture texture, uint32_t width, uint32_t height) : texture(texture), width(width), height(height) {
-	textureView = texture.createView();
+	if (texture) {
+		textureView = texture.createView();
+	} else {
+		textureView = nullptr;
+		CITRON_CORE_ERROR("Failed to create texture view since texture is null");
+	}
 }
 
 wgpu::TextureView &Texture::getTextureView() {

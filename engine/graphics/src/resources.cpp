@@ -13,7 +13,6 @@ void RendererResourceManager::initResources() {
 void RendererResourceManager::releaseUnusedBindGroups() {
 	for (auto it = bindGroupCache.begin(); it != bindGroupCache.end();) {
 		if (!usedBindGroupKeysThisFrame.contains(it->first)) {
-			CITRON_CORE_INFO("RELEASE");
 			it->second.release();
 			it = bindGroupCache.erase(it);
 		} else {
@@ -44,7 +43,6 @@ wgpu::BindGroup RendererResourceManager::getBindGroup(BindGroupKey key) {
 	});
 
 	if (!bindGroupCache.contains(key)) {
-		CITRON_CORE_INFO("Creating new bind group");
 		std::vector<wgpu::BindGroupEntry> entries;
 		for (const auto &e : key.entries) {
 			switch (e.resource.index()) {

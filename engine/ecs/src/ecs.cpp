@@ -3,6 +3,7 @@
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "registry.hpp"
+#include "view.hpp"
 #include <stdexcept>
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -307,6 +308,16 @@ void Scene::end() {
 	for (auto &[id, system] : m_systemRegistry) {
 		system->end(*this);
 	}
+}
+
+View &Scene::getActiveView() {
+	const auto &cameraComponentView = registry.view<PerspectiveCameraComponent, TransformComponent>();
+	for (auto [entity, cameraComponent, transformComponent] : cameraComponentView.each()) {
+		cameraComponent.view.position = transformComponent.position;
+		cameraComponent.view.forward = transformComponent.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
+		return cameraComponent.view;
+	}
+	return tempSceneView;
 }
 
 void SceneManager::switchScene(std::shared_ptr<Scene> newScene) {

@@ -3,6 +3,7 @@
 #include "citron_exports.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "uuid.hpp"
+#include "view.hpp"
 #include <assets.hpp>
 #include <cereal/types/vector.hpp>
 #include <cstdint>
@@ -68,6 +69,10 @@ struct CITRON_ECS_API TransformComponent {
 struct CITRON_ECS_API MeshComponent {
 	AssetReference<Mesh> meshAsset;
 	AssetReference<Material> materialAsset;
+};
+
+struct CITRON_ECS_API PerspectiveCameraComponent {
+	PerspectiveView view;
 };
 
 } // namespace CitronECS

@@ -8,6 +8,7 @@
 #include "shader.hpp"
 #include "test_system.hpp"
 #include "uuid.hpp"
+#include "view.hpp"
 #include <lang.hpp>
 #include <unordered_map>
 
@@ -59,6 +60,13 @@ void ECSRegistry::registerDefaultComponents() {
 	Member::serializationMethods[typeid(glm::quat).hash_code()] = [](StreamWriter &writer, void *data) {
 		writer.writeData(data, sizeof(glm::quat));
 	};
+	Member::serializationMethods[typeid(PerspectiveView).hash_code()] = [](StreamWriter &writer, void *data) {
+		PerspectiveView *perspectiveView = (PerspectiveView *)data;
+		writer.writeData(&perspectiveView->aspect, sizeof(perspectiveView->aspect));
+		writer.writeData(&perspectiveView->fov, sizeof(perspectiveView->fov));
+		writer.writeData(&perspectiveView->near, sizeof(perspectiveView->near));
+		writer.writeData(&perspectiveView->far, sizeof(perspectiveView->far));
+	};
 	registerCollectionSerialization<int>();
 	registerCollectionSerialization<uint32_t>();
 	registerCollectionSerialization<float>();
@@ -108,6 +116,13 @@ void ECSRegistry::registerDefaultComponents() {
 	Member::deserializationMethods[typeid(glm::quat).hash_code()] = [](StreamReader &reader, void *data) {
 		reader.readData(data, sizeof(glm::quat));
 	};
+	Member::deserializationMethods[typeid(PerspectiveView).hash_code()] = [](StreamReader &reader, void *data) {
+		PerspectiveView *perspectiveView = (PerspectiveView *)data;
+		reader.readData(&perspectiveView->aspect, sizeof(perspectiveView->aspect));
+		reader.readData(&perspectiveView->fov, sizeof(perspectiveView->fov));
+		reader.readData(&perspectiveView->near, sizeof(perspectiveView->near));
+		reader.readData(&perspectiveView->far, sizeof(perspectiveView->far));
+	};
 	registerCollectionDeserialization<int>();
 	registerCollectionDeserialization<uint32_t>();
 	registerCollectionDeserialization<float>();
@@ -130,6 +145,8 @@ void ECSRegistry::registerDefaultComponents() {
 	registerComponent<MeshComponent>("Mesh Component");
 	registerComponentMember<MeshComponent, AssetReference<Mesh>>("mesh", offsetof(MeshComponent, meshAsset));
 	registerComponentMember<MeshComponent, AssetReference<Material>>("material", offsetof(MeshComponent, materialAsset));
+	registerComponent<PerspectiveCameraComponent>("Perspective Camera Component");
+	registerComponentMember<PerspectiveCameraComponent, PerspectiveView>("view", offsetof(PerspectiveCameraComponent, view));
 }
 
 void ECSRegistry::registerDefaultSystems() {

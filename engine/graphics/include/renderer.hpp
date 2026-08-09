@@ -107,7 +107,11 @@ class CITRON_GRAPHICS_API Frame {
 
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 
+	void incrementRenderCount() { renderCount++; }
+	const uint16_t getRenderCount() const { return renderCount; }
+
   private:
+	uint16_t renderCount = 0;
 	Renderer &renderer;
 	wgpu::CommandEncoder encoder;
 };
@@ -137,55 +141,6 @@ class CITRON_GRAPHICS_API Renderer {
 	void end();
 	void onEvent(Event &e);
 
-	std::shared_ptr<Pipeline> getPipeline(PipelineKey key) {
-		if (!rendererResourcesManager.pipelineCache.contains(key)) {
-			auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachmentFormats, key.hasDepthStencilAttachment, key.shader);
-			rendererResourcesManager.pipelineCache[key] = pipeline;
-		}
-		return rendererResourcesManager.pipelineCache[key];
-	}
-
-	wgpu::BindGroup getBindGroup(BindGroupKey key) {
-		if (!rendererResourcesManager.bindGroupCache.contains(key)) {
-			std::vector<wgpu::BindGroupEntry> entries;
-			for (const auto &e : key.entries) {
-				switch (e.resource.index()) {
-				case 0: {
-					wgpu::BindGroupEntry entry = {};
-					entry.setDefault();
-					entry.binding = e.binding;
-					entry.buffer = std::get<wgpu::Buffer>(e.resource);
-					entry.offset = e.offset;
-					entry.size = e.size;
-					entries.push_back(entry);
-					break;
-				}
-				case 1: {
-					wgpu::BindGroupEntry entry = {};
-					entry.setDefault();
-					entry.binding = e.binding;
-					entry.textureView = std::get<wgpu::TextureView>(e.resource);
-					entry.offset = e.offset;
-					entry.size = e.size;
-					entries.push_back(entry);
-					break;
-				}
-				default:
-					break;
-				}
-			}
-			wgpu::BindGroupDescriptor bindGroupDesc = {};
-			bindGroupDesc.setDefault();
-			bindGroupDesc.nextInChain = nullptr;
-			bindGroupDesc.entryCount = entries.size();
-			bindGroupDesc.entries = entries.data();
-			bindGroupDesc.layout = key.layout;
-			wgpu::BindGroup bindGroup = device.getWGPUDevice().createBindGroup(bindGroupDesc);
-			rendererResourcesManager.bindGroupCache[key] = bindGroup;
-		}
-		return rendererResourcesManager.bindGroupCache[key];
-	}
-
 	static std::vector<RenderObject> sortByShader(std::vector<RenderObject> &renderables, int start = 0, int end = -1);
 	static std::vector<RenderObject> sortByMesh(std::vector<RenderObject> &renderables, int start = 0, int end = -1);
 	static std::vector<RenderObject> sortByMaterial(std::vector<RenderObject> &renderables, int start = 0, int end = -1);
@@ -198,12 +153,10 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
-	void resizeRenderTargets(glm::ivec2 viewportSize, Texture &tempOutputTexture);
 	void createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height);
 
-	Texture getCurrentDeviceSurfaceTexture() {
-		return Texture{
-			device.getCurrentSurfaceTexture().texture, (uint32_t)device.getLastSurfaceWidth(), (uint32_t)device.getLastSurfaceHeight()};
+	Texture &getCurrentDeviceSurfaceTexture() {
+		return deviceSurfaceTexture;
 	}
 
 	// render targets
@@ -217,6 +170,8 @@ class CITRON_GRAPHICS_API Renderer {
 	const std::shared_ptr<Shader> &getLightingPassShader() const { return lightingPassShader; }
 
   private:
+	Texture deviceSurfaceTexture;
+
 	RenderObjectCache renderObjectCache;
 
 	Window &window;

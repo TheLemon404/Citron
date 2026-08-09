@@ -1,11 +1,26 @@
 #include "resources.hpp"
 #include "buffer.hpp"
+#include "logger.hpp"
 #include "mesh.hpp"
+#include "pipeline.hpp"
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronGraphics;
 
 void RendererResourceManager::initResources() {
+}
+
+void RendererResourceManager::releaseUnusedBindGroups() {
+	for (auto it = bindGroupCache.begin(); it != bindGroupCache.end();) {
+		if (!usedBindGroupKeysThisFrame.contains(it->first)) {
+			CITRON_CORE_INFO("RELEASE");
+			it->second.release();
+			it = bindGroupCache.erase(it);
+		} else {
+			++it;
+		}
+	}
+	usedBindGroupKeysThisFrame.clear();
 }
 
 void RendererResourceManager::releaseResources() {
@@ -23,7 +38,62 @@ void RendererResourceManager::releaseResources() {
 	drawUniformBufferCache.clear();
 }
 
-GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty) {
+wgpu::BindGroup RendererResourceManager::getBindGroup(BindGroupKey key) {
+	std::sort(key.entries.begin(), key.entries.end(), [](const BindGroupEntry &a, const BindGroupEntry &b) {
+		return a.binding < b.binding;
+	});
+
+	if (!bindGroupCache.contains(key)) {
+		CITRON_CORE_INFO("Creating new bind group");
+		std::vector<wgpu::BindGroupEntry> entries;
+		for (const auto &e : key.entries) {
+			switch (e.resource.index()) {
+			case 0: {
+				wgpu::BindGroupEntry entry = {};
+				entry.setDefault();
+				entry.binding = e.binding;
+				entry.buffer = std::get<wgpu::Buffer>(e.resource);
+				entry.offset = e.offset;
+				entry.size = e.size;
+				entries.push_back(entry);
+				break;
+			}
+			case 1: {
+				wgpu::BindGroupEntry entry = {};
+				entry.setDefault();
+				entry.binding = e.binding;
+				entry.textureView = std::get<wgpu::TextureView>(e.resource);
+				entry.offset = e.offset;
+				entry.size = e.size;
+				entries.push_back(entry);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+		wgpu::BindGroupDescriptor bindGroupDesc = {};
+		bindGroupDesc.setDefault();
+		bindGroupDesc.nextInChain = nullptr;
+		bindGroupDesc.entryCount = entries.size();
+		bindGroupDesc.entries = entries.data();
+		bindGroupDesc.layout = key.layout;
+		wgpu::BindGroup bindGroup = device.getWGPUDevice().createBindGroup(bindGroupDesc);
+		bindGroupCache[key] = bindGroup;
+	}
+	usedBindGroupKeysThisFrame.insert(key);
+	return bindGroupCache[key];
+}
+
+std::shared_ptr<Pipeline> RendererResourceManager::getPipeline(PipelineKey key) {
+	if (!pipelineCache.contains(key)) {
+		auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachmentFormats, key.hasDepthStencilAttachment, key.shader);
+		pipelineCache[key] = pipeline;
+	}
+	return pipelineCache[key];
+}
+
+GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms) {
 	wgpu::Device &wgpuDevice = device.getWGPUDevice();
 	if (!entityModelUniformBufferCache.contains(entityUUID)) {
 		wgpu::BufferDescriptor modelUniformBufferDesc = {};
@@ -35,31 +105,21 @@ GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityU
 		entityModelUniformBufferCache[entityUUID].buffer = wgpuDevice.createBuffer(modelUniformBufferDesc);
 		entityModelUniformBufferCache[entityUUID].size = modelUniformBufferDesc.size;
 		entityModelUniformBufferCache[entityUUID].entryCount = 1;
-
-		device.getQueue().writeBuffer(entityModelUniformBufferCache[entityUUID].buffer, 0, &modelUniforms, Shader::paddedSizeof<ModelUniforms>());
-	}
-
-	if (isDirty) {
-		device.getQueue().writeBuffer(entityModelUniformBufferCache[entityUUID].buffer, 0, &modelUniforms, Shader::paddedSizeof<ModelUniforms>());
 	}
 
 	return entityModelUniformBufferCache[entityUUID];
 }
 
-GPUBuffer &RendererResourceManager::getDrawUniformBuffer(DrawUniforms drawUniforms, bool isDirty) {
+GPUBuffer &RendererResourceManager::getDrawUniformBuffer(uint16_t renderCount) {
 	wgpu::Device &wgpuDevice = device.getWGPUDevice();
-	if (!drawUniformBufferCache.contains(drawUniforms)) {
+	if (!drawUniformBufferCache.contains(renderCount)) {
 		wgpu::BufferDescriptor frameUniformBufferDesc = {};
 		frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
 		frameUniformBufferDesc.mappedAtCreation = false;
 		frameUniformBufferDesc.size = Shader::paddedSizeof<DrawUniforms>();
-		GPUBuffer frameUniformBuffer = {};
-		frameUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
-		device.getQueue().writeBuffer(frameUniformBuffer.buffer, 0, &drawUniforms, Shader::paddedSizeof<DrawUniforms>());
-		drawUniformBufferCache[drawUniforms] = frameUniformBuffer;
+		GPUBuffer drawUniformBuffer = {};
+		drawUniformBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
+		drawUniformBufferCache[renderCount] = drawUniformBuffer;
 	}
-	if (isDirty) {
-		device.getQueue().writeBuffer(drawUniformBufferCache[drawUniforms].buffer, 0, &drawUniforms, Shader::paddedSizeof<DrawUniforms>());
-	}
-	return drawUniformBufferCache[drawUniforms];
+	return drawUniformBufferCache[renderCount];
 }

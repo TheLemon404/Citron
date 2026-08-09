@@ -63,9 +63,11 @@ void ImageTexture::writeMipMaps(Device &device, std::shared_ptr<ImageTexture> te
 	queue.release();
 }
 
+Texture::Texture(wgpu::Texture texture, uint32_t width, uint32_t height) : texture(texture), width(width), height(height) {
+	textureView = texture.createView();
+}
+
 wgpu::TextureView &Texture::getTextureView() {
-	if (!textureView)
-		regenerateTextureView();
 	return textureView;
 }
 
@@ -74,17 +76,6 @@ void Texture::release() {
 		texture.release();
 	if (textureView)
 		textureView.release();
-}
-
-void Texture::releaseView() {
-	if (textureView)
-		textureView.release();
-}
-
-void Texture::regenerateTextureView() {
-	if (textureView)
-		textureView.release();
-	textureView = texture.createView();
 }
 
 std::shared_ptr<AssetBase> TextureImporter::importAsset(AssetMetadata metadata) {

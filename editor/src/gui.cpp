@@ -120,8 +120,7 @@ void GuiLayer::onRender(void *frame, void *renderableData) {
 
 	renderer.render(*currentFrame, Editor::get().editorView, *renderableReferenceData, viewPanel.getViewportSize(), editorViewTextureRenderTarget);
 
-	Texture surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
-	surfaceTexture.regenerateTextureView();
+	Texture &surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
 	RenderPassColorAttachment colorAttachment = {};
 	colorAttachment.targetTexture = surfaceTexture;
 	RenderPassParams guiPassParams = {};
@@ -129,7 +128,6 @@ void GuiLayer::onRender(void *frame, void *renderableData) {
 	RenderPass uiPass = currentFrame->beginRenderPass(guiPassParams);
 	drawGui(editorViewTextureRenderTarget, renderer.lightingBufferTexture, uiPass);
 	uiPass.end();
-	guiPassParams.colorAttachments[0].targetTexture.releaseView();
 }
 
 void GuiLayer::drawGui(Texture &editorView, Texture &gameView,

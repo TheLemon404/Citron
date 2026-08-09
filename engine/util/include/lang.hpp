@@ -25,3 +25,11 @@ template <auto member, class TheBase = void>
 inline constexpr std::ptrdiff_t offset_of() {
 	return offset_of<TheBase>(member);
 }
+
+class CITRON_UTIL_API Hashing {
+  public:
+	static size_t hash_combine(size_t seed, size_t value) {
+		seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+		return seed;
+	}
+};

@@ -57,14 +57,14 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass, DrawUniforms drawUniforms) {
 	RendererContext context = renderer.getContext();
 
-	std::shared_ptr<Pipeline> pipeline = renderer.getPipeline({shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
+	std::shared_ptr<Pipeline> pipeline = context.rendererResourcesManager.getPipeline({shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
 	if (!pipeline) {
 		CITRON_CORE_ERROR("Failed to get pipeline for render object");
 		return;
 	}
 	setPipeline(pipeline);
 
-	wgpu::BindGroup bindGroup = renderer.getBindGroup({
+	wgpu::BindGroup bindGroup = context.rendererResourcesManager.getBindGroup({
 		.layout = shader->getBindGroupLayout(0),
 		.entries = {
 			{
@@ -81,7 +81,7 @@ void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, st
 			},
 			{
 				.binding = 2,
-				.resource = context.rendererResourcesManager.getDrawUniformBuffer(drawUniforms).buffer,
+				.resource = context.rendererResourcesManager.getDrawUniformBuffer(parentFrame.getRenderCount()).buffer,
 				.offset = 0,
 				.size = Shader::paddedSizeof<DrawUniforms>(),
 			}},
@@ -107,31 +107,34 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 	for (size_t i = 0; i < renderObjects.size(); i++) {
 		RenderObject &renderObject = renderObjects[i];
 		if (pipeline == nullptr || i > 0 && renderObjects[i].shader->getUUID() != renderObjects[i - 1].shader->getUUID()) {
-			pipeline = renderer.getPipeline({renderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
+			pipeline = context.rendererResourcesManager.getPipeline({renderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
 			setPipeline(pipeline);
 
 			// for now, we just reset the draw bind groups each time we change the pipeline. This needs to be optimized in the future.
-			wgpu::BindGroup frameBindGroup = renderer.getBindGroup(
+			wgpu::BindGroup frameBindGroup = context.rendererResourcesManager.getBindGroup(
 				{.layout = renderObject.shader->getBindGroupLayout(0),
 				 .entries = {
 					 {.binding = 0,
-					  .resource = context.rendererResourcesManager.getDrawUniformBuffer(drawUniforms).buffer,
+					  .resource = context.rendererResourcesManager.getDrawUniformBuffer(parentFrame.getRenderCount()).buffer,
 					  .offset = 0,
 					  .size = Shader::paddedSizeof<DrawUniforms>()}}});
 			setBindGroup(0, frameBindGroup);
 		}
 
+		GPUBuffer modelUniformsBuffer = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms);
+		context.device.getQueue().writeBuffer(modelUniformsBuffer.buffer, 0, &renderObject.modelUniforms, Shader::paddedSizeof<ModelUniforms>());
+
 		if (renderObject.mesh && renderObject.shader) {
-			wgpu::BindGroup modelBindGroup = renderer.getBindGroup({
+			wgpu::BindGroup modelBindGroup = context.rendererResourcesManager.getBindGroup({
 				.layout = renderObject.shader->getBindGroupLayout(1),
 				.entries = {
 					{.binding = 0,
-					 .resource = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms).buffer,
+					 .resource = modelUniformsBuffer.buffer,
 					 .offset = 0,
 					 .size = Shader::paddedSizeof<ModelUniforms>()}},
 			});
 
-			wgpu::BindGroup materialBindGroup = renderer.getBindGroup({
+			wgpu::BindGroup materialBindGroup = context.rendererResourcesManager.getBindGroup({
 				.layout = renderObject.shader->getBindGroupLayout(2),
 				.entries = {
 					{.binding = 0,
@@ -185,7 +188,6 @@ void Renderer::init() {
 	rendererResourcesManager.initResources();
 
 	depthBufferTexture = {device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
-	depthBufferTexture.regenerateTextureView();
 	createRenderTargetColorTexture(idBufferTexture, window.getWidth(), window.getHeight());
 	createRenderTargetColorTexture(colorBufferTexture, window.getWidth(), window.getHeight());
 	createRenderTargetColorTexture(normalBufferTexture, window.getWidth(), window.getHeight());
@@ -196,6 +198,8 @@ void Renderer::init() {
 }
 
 Frame Renderer::beginFrame() {
+	deviceSurfaceTexture = Texture{
+		device.getCurrentSurfaceTexture().texture, (uint32_t)device.getLastSurfaceWidth(), (uint32_t)device.getLastSurfaceHeight()};
 	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());
@@ -209,11 +213,12 @@ void Renderer::endFrame(Frame &frame) {
 	commandBuffer.release();
 
 	device.presentCurrentSurfaceTexture();
+
+	deviceSurfaceTexture.release();
+	rendererResourcesManager.releaseUnusedBindGroups();
 }
 
 void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, Texture &outputTexture) {
-	resizeRenderTargets(viewportSize, outputTexture);
-
 	// need to cache assets already gethered in previous frames
 	renderObjectCache.renderObjects.clear();
 
@@ -251,7 +256,8 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 
 	DrawUniforms drawUniforms = {};
 	drawUniforms.viewProjection = view.getProjectionMatrix() * view.getViewMatrix();
-	GPUBuffer frameUniformBuffer = rendererResourcesManager.getDrawUniformBuffer(drawUniforms);
+	GPUBuffer drawUniformsBuffer = rendererResourcesManager.getDrawUniformBuffer(frame.getRenderCount());
+	device.getQueue().writeBuffer(drawUniformsBuffer.buffer, 0, &drawUniforms, Shader::paddedSizeof<DrawUniforms>());
 
 	// depth and gbuffer pass
 	RenderPassDepthStencilAttachment depthAttachment = {};
@@ -279,6 +285,8 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);
 	lightingPass.drawFullscreenQuadPass(fullscreenQuad, lightingPassShader, lightingPass, drawUniforms);
 	lightingPass.end();
+
+	frame.incrementRenderCount();
 }
 
 void Renderer::end() {
@@ -315,39 +323,6 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 	return renderables;
 }
 
-void Renderer::resizeRenderTargets(glm::ivec2 viewportSize, Texture &tempOutputTexture) {
-	if (viewportSize.x != idBufferTexture.getWidth() || viewportSize.y != idBufferTexture.getHeight()) {
-		idBufferTexture.release();
-		idBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
-		idBufferTexture.regenerateTextureView();
-	}
-
-	if (viewportSize.x != depthBufferTexture.getWidth() || viewportSize.y != depthBufferTexture.getHeight()) {
-		depthBufferTexture.release();
-		depthBufferTexture = {device.createRenderTargetDepthTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
-		depthBufferTexture.regenerateTextureView();
-	}
-
-	if (viewportSize.x != colorBufferTexture.getWidth() || viewportSize.y != colorBufferTexture.getHeight()) {
-		colorBufferTexture.release();
-		colorBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
-		colorBufferTexture.regenerateTextureView();
-	}
-
-	if (viewportSize.x != normalBufferTexture.getWidth() || viewportSize.y != normalBufferTexture.getHeight()) {
-		normalBufferTexture.release();
-		normalBufferTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
-		normalBufferTexture.regenerateTextureView();
-	}
-
-	if (viewportSize.x != tempOutputTexture.getWidth() || viewportSize.y != tempOutputTexture.getHeight()) {
-		tempOutputTexture.release();
-		tempOutputTexture = {device.createRenderTargetColorTexture(viewportSize.x, viewportSize.y), (uint32_t)viewportSize.x, (uint32_t)viewportSize.y};
-		tempOutputTexture.regenerateTextureView();
-	}
-}
-
 void Renderer::createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height) {
 	texture = {device.createRenderTargetColorTexture(width, height), width, height};
-	texture.regenerateTextureView();
 }

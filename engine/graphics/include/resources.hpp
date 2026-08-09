@@ -2,10 +2,13 @@
 
 #include "buffer.hpp"
 #include "citron_exports.hpp"
+#include <lang.hpp>
+#include "logger.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
 #include "shader.hpp"
 #include <variant>
+#include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -43,7 +46,15 @@ struct CITRON_GRAPHICS_API PipelineKey {
 	bool hasDepthStencilAttachment = false;
 
 	bool operator==(const PipelineKey &other) const {
-		return shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment;
+		if (shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment) {
+			for (size_t i = 0; i < colorAttachmentFormats.size(); i++) {
+				if (colorAttachmentFormats[i] != other.colorAttachmentFormats[i]) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -56,7 +67,20 @@ struct CITRON_GRAPHICS_API BindGroupEntry {
 	size_t size = WGPU_WHOLE_SIZE;
 
 	bool operator==(const BindGroupEntry &other) const {
-		return binding == other.binding && resource == other.resource && offset == other.offset && size == other.size;
+		if (binding == other.binding && resource.index() == other.resource.index() && offset == other.offset && size == other.size) {
+			switch (resource.index()) {
+			case 0: {
+				return static_cast<WGPUBuffer>(std::get<0>(resource)) == static_cast<WGPUBuffer>(std::get<0>(other.resource));
+			}
+			case 1: {
+				return static_cast<WGPUTextureView>(std::get<1>(resource)) == static_cast<WGPUTextureView>(std::get<1>(other.resource));
+			}
+
+			default:
+				return false;
+			}
+		}
+		return false;
 	}
 };
 
@@ -65,7 +89,18 @@ struct CITRON_GRAPHICS_API BindGroupKey {
 	std::vector<BindGroupEntry> entries = {};
 
 	bool operator==(const BindGroupKey &other) const {
-		return layout == other.layout && entries == other.entries;
+		if (layout == other.layout) {
+			if (entries.size() != other.entries.size()) {
+				return false;
+			}
+			for (size_t i = 0; i < entries.size(); i++) {
+				if (entries[i] != other.entries[i]) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -76,25 +111,27 @@ namespace std {
 template <>
 struct hash<CitronGraphics::BindGroupKey> {
 	std::size_t operator()(const CitronGraphics::BindGroupKey &key) const {
-		size_t resourceHash = hash<size_t>()(key.entries[0].resource.index());
-		size_t resourceNumHash = hash<size_t>()(key.entries.size());
-		return resourceHash ^ (resourceNumHash << 1);
+		size_t seed = 0;
+		seed = Hashing::hash_combine(seed, key.layout);
+		for (const auto &entry : key.entries) {
+			seed = Hashing::hash_combine(seed, entry.binding);
+			seed = Hashing::hash_combine(seed, entry.offset);
+			seed = Hashing::hash_combine(seed, entry.resource.index());
+			seed = Hashing::hash_combine(seed, entry.size);
+		}
+		return seed;
 	}
 };
 
 template <>
 struct hash<CitronGraphics::PipelineKey> {
 	std::size_t operator()(const CitronGraphics::PipelineKey &key) const {
-		size_t vertexShaderHash = hash<std::shared_ptr<CitronGraphics::Shader>>()(key.shader);
-		size_t fragmentShaderHash = hash<wgpu::TextureFormat::W>()(key.colorAttachmentFormats[0].m_raw);
-		return vertexShaderHash ^ (fragmentShaderHash << 1);
-	}
-};
-
-template <>
-struct hash<CitronGraphics::DrawUniforms> {
-	std::size_t operator()(const CitronGraphics::DrawUniforms &drawUniforms) const {
-		return hash<glm::mat4>()(drawUniforms.viewProjection);
+		size_t seed = 0;
+		seed = Hashing::hash_combine(seed, hash<std::shared_ptr<CitronGraphics::Shader>>()(key.shader));
+		for (const auto &format : key.colorAttachmentFormats) {
+			seed = Hashing::hash_combine(seed, format.m_raw);
+		}
+		return seed;
 	}
 };
 
@@ -106,15 +143,19 @@ class CITRON_GRAPHICS_API RendererResourceManager {
   public:
 	RendererResourceManager(Device &device) : device(device) {}
 	void initResources();
-	GPUBuffer &getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms, bool isDirty = false);
-	GPUBuffer &getDrawUniformBuffer(DrawUniforms drawUniforms, bool isDirty = false);
+	void releaseUnusedBindGroups();
+	GPUBuffer &getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms);
+	GPUBuffer &getDrawUniformBuffer(uint16_t renderCount);
 	void releaseResources();
+	wgpu::BindGroup getBindGroup(BindGroupKey key);
+	std::shared_ptr<Pipeline> getPipeline(PipelineKey key);
 
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
-	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
 
   private:
-	std::unordered_map<DrawUniforms, GPUBuffer> drawUniformBufferCache;
+	std::unordered_set<BindGroupKey> usedBindGroupKeysThisFrame;
+	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
+	std::unordered_map<uint16_t, GPUBuffer> drawUniformBufferCache;
 	std::unordered_map<uint32_t, GPUBuffer> entityModelUniformBufferCache;
 
 	Device &device;

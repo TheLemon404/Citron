@@ -50,8 +50,7 @@ void EditorAssetManager::deserialize(StreamReader &reader) {
 	}
 }
 
-const std::unordered_map<UUID, std::shared_ptr<AssetBase>> &
-AssetManagerBase::getLoadedAssets() {
+std::unordered_map<UUID, std::shared_ptr<AssetBase>> &AssetManagerBase::getLoadedAssets() {
 	return loadedAssets;
 }
 

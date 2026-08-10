@@ -8,7 +8,7 @@
 
 using namespace CitronGraphics;
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device) : Asset<Mesh, AssetType::MESH>(UUID()), vertices(vertices), indices(indices), boundsMin(worldSpaceBoundsMin), boundsMax(worldSpaceBoundsMax), device(device) {
+Mesh::Mesh(const UUID uuid, std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device) : Asset<Mesh, AssetType::MESH>(uuid), vertices(vertices), indices(indices), boundsMin(worldSpaceBoundsMin), boundsMax(worldSpaceBoundsMax), device(device) {
 	wgpu::BufferDescriptor vertexBufferDesc = {};
 	vertexBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Vertex;
 	vertexBufferDesc.size = vertices.size() * sizeof(Vertex);
@@ -71,10 +71,10 @@ std::shared_ptr<AssetBase> MeshImporter::importAsset(AssetMetadata metadata) {
 
 	CITRON_CORE_INFO("Mesh {} loaded: {} vertices, {} indices", metadata.assetPath.string(), vertices.size(), indices.size());
 
-	return std::make_shared<Mesh>(vertices, indices, worldSpaceBoundsMin, worldSpaceBoundsMax, device);
+	return std::make_shared<Mesh>(metadata.uuid, vertices, indices, worldSpaceBoundsMin, worldSpaceBoundsMax, device);
 }
 
-std::shared_ptr<Mesh> Mesh::createFullscreenQuad(Device &device) {
+std::shared_ptr<Mesh> Mesh::createFullscreenQuad(Device &device, AssetManager &assetManager) {
 	std::vector<CitronGraphics::Vertex> vertices = {
 		CitronGraphics::Vertex(-1.0f, -1.0f, 0.0f),
 		CitronGraphics::Vertex(1.0f, -1.0f, 0.0f),
@@ -89,5 +89,35 @@ std::shared_ptr<Mesh> Mesh::createFullscreenQuad(Device &device) {
 		3,
 		0,
 	};
-	return std::make_shared<Mesh>(vertices, indices, glm::vec3(0.0), glm::vec3(1.0f, 1.0f, 0.0f), device);
+	return assetManager.createAsset<Mesh>(vertices, indices, glm::vec3(0.0), glm::vec3(1.0f, 1.0f, 0.0f), device);
+}
+
+std::shared_ptr<Mesh> Mesh::createPlane(Device &device, AssetManager &assetManager) {
+	CitronGraphics::Vertex v1 = CitronGraphics::Vertex(-1.0f, 0.0f, -1.0f);
+	v1.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+	v1.uv = glm::vec2(0.0f, 0.0f);
+	CitronGraphics::Vertex v2 = CitronGraphics::Vertex(1.0f, 0.0f, -1.0f);
+	v2.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+	v2.uv = glm::vec2(1.0f, 0.0f);
+	CitronGraphics::Vertex v3 = CitronGraphics::Vertex(1.0f, 0.0f, 1.0f);
+	v3.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+	v3.uv = glm::vec2(1.0f, 1.0f);
+	CitronGraphics::Vertex v4 = CitronGraphics::Vertex(-1.0f, 0.0f, 1.0f);
+	v4.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+	v4.uv = glm::vec2(0.0f, 1.0f);
+	std::vector<CitronGraphics::Vertex> vertices = {
+		v1,
+		v2,
+		v3,
+		v4,
+	};
+	std::vector<uint32_t> indices = {
+		0,
+		1,
+		2,
+		2,
+		3,
+		0,
+	};
+	return assetManager.createAsset<Mesh>(vertices, indices, glm::vec3(0.0), glm::vec3(1.0f, 1.0f, 0.0f), device);
 }

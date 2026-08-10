@@ -100,8 +100,7 @@ class CITRON_ASSETS_API AssetManagerBase {
 	virtual bool isValidAsset(const UUID uuid) = 0;
 	virtual AssetType getAssetType(const UUID uuid) = 0;
 
-	const std::unordered_map<UUID, std::shared_ptr<AssetBase>> &
-	getLoadedAssets();
+	std::unordered_map<UUID, std::shared_ptr<AssetBase>> &getLoadedAssets();
 
 	void registerAssetImporter(AssetType type, std::shared_ptr<AssetImporter> importer);
 
@@ -239,6 +238,15 @@ class CITRON_ASSETS_API AssetManager {
 			throw std::runtime_error("moveAsset is not supported in runtime mode");
 		}
 		((EditorAssetManager *)m_assetManager.get())->moveAsset(srcPath, dstPath / srcPath.filename());
+	}
+
+	template <typename T, typename... Args>
+		requires std::derived_from<T, AssetBase>
+	std::shared_ptr<T> createAsset(Args &&...args) {
+		std::shared_ptr<T> asset = std::make_shared<T>(UUID(), std::forward<Args>(args)...);
+		std::unordered_map<UUID, std::shared_ptr<AssetBase>> &loadedAssets = m_assetManager->getLoadedAssets();
+		loadedAssets[asset->getUUID()] = asset;
+		return asset;
 	}
 
 	template <typename T>

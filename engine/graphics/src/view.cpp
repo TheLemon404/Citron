@@ -3,12 +3,10 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 
-constexpr glm::vec3 invertedViewportUp = glm::vec3(0.0f, -1.0f, 0.0f);
-
 using namespace CitronGraphics;
 
 glm::mat4 View::getViewMatrix() {
-	return glm::lookAt(position, position + forward, invertedViewportUp);
+	return glm::lookAt(position, position + forward, -up);
 }
 
 glm::mat4 PerspectiveView::getProjectionMatrix() {

@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include "assets.hpp"
 #include "buffer.hpp"
 #include "compiled_shaders.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -8,6 +9,7 @@
 #include "shader.hpp"
 #include "view.hpp"
 #include <cstdint>
+#include <webgpu.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vec_swizzle.hpp>
 #include <event.hpp>
@@ -28,7 +30,7 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 		colorAttachment.nextInChain = nullptr;
 		colorAttachment.view = attachment.targetTexture.getTextureView();
 		colorAttachment.resolveTarget = nullptr;
-		colorAttachment.loadOp = wgpu::LoadOp::Clear;
+		colorAttachment.loadOp = attachment.loadOp;
 		colorAttachment.storeOp = wgpu::StoreOp::Store;
 		colorAttachment.clearValue = attachment.clearValue;
 		renderPassColorAttachments.push_back(colorAttachment);
@@ -38,9 +40,9 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 	wgpu::RenderPassDepthStencilAttachment depthStencilAttachment = {};
 	if (params.containsDepthStencil) {
 		depthStencilAttachment.view = params.depthStencilAttachment.targetTexture.getTextureView();
-		depthStencilAttachment.depthLoadOp = wgpu::LoadOp::Clear;
+		depthStencilAttachment.depthLoadOp = params.depthLoadOp;
 		depthStencilAttachment.depthStoreOp = wgpu::StoreOp::Store;
-		depthStencilAttachment.stencilLoadOp = wgpu::LoadOp::Clear;
+		depthStencilAttachment.stencilLoadOp = params.stencilLoadOp;
 		depthStencilAttachment.stencilStoreOp = wgpu::StoreOp::Store;
 		depthStencilAttachment.depthClearValue = params.depthStencilAttachment.depthClearValue;
 		depthStencilAttachment.stencilClearValue = params.depthStencilAttachment.stencilClearValue;
@@ -54,10 +56,10 @@ RenderPass::RenderPass(Renderer &renderer, RenderPassParams &params,
 	renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 }
 
-void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass, DrawUniforms drawUniforms) {
+void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader) {
 	RendererContext context = renderer.getContext();
 
-	std::shared_ptr<Pipeline> pipeline = context.rendererResourcesManager.getPipeline({shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
+	std::shared_ptr<Pipeline> pipeline = context.rendererResourcesManager.getPipeline({shader, getColorAttachmentFormats(), params.containsDepthStencil});
 	if (!pipeline) {
 		CITRON_CORE_ERROR("Failed to get pipeline for render object");
 		return;
@@ -81,9 +83,9 @@ void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, st
 			},
 			{
 				.binding = 2,
-				.resource = context.rendererResourcesManager.getDrawUniformBuffer(parentFrame.getRenderCount()).buffer,
+				.resource = context.rendererResourcesManager.getFrameUniformsBuffer().buffer,
 				.offset = 0,
-				.size = Shader::paddedSizeof<DrawUniforms>(),
+				.size = Shader::paddedSizeof<FrameUniforms>(),
 			}},
 	});
 	setBindGroup(0, bindGroup);
@@ -94,7 +96,45 @@ void RenderPass::drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, st
 	}
 }
 
-void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderPass &renderPass, DrawUniforms drawUniforms) {
+void RenderPass::drawDebugGrid() {
+	RendererContext context = renderer.getContext();
+
+	std::shared_ptr<Pipeline> debugPipeline = context.rendererResourcesManager.getPipeline(PipelineKey{
+		.shader = context.rendererResourcesManager.getDebugGridShader(),
+		.colorAttachmentFormats = getColorAttachmentFormats(),
+		.hasDepthStencilAttachment = false,
+		.cullMode = PipelineCullMode::None,
+	});
+
+	wgpu::BindGroup frameBindGroup = context.rendererResourcesManager.getBindGroup(
+		{.layout = context.rendererResourcesManager.getDebugGridShader()->getBindGroupLayout(0),
+		 .entries = {
+			 {.binding = 0,
+			  .resource = context.rendererResourcesManager.getFrameUniformsBuffer().buffer,
+			  .offset = 0,
+			  .size = Shader::paddedSizeof<FrameUniforms>()}}});
+
+	wgpu::BindGroup drawBindGroup = context.rendererResourcesManager.getBindGroup(
+		{.layout = context.rendererResourcesManager.getDebugGridShader()->getBindGroupLayout(1),
+		 .entries = {
+			 {.binding = 0,
+			  .resource = context.rendererResourcesManager.getDrawUniformBuffer(parentFrame.getRenderCount()).buffer,
+			  .offset = 0,
+			  .size = Shader::paddedSizeof<DrawUniforms>()},
+			 {
+				 .binding = 1,
+				 .resource = renderer.depthBufferTexture.getTextureView(),
+				 .offset = 0,
+				 .size = WGPU_WHOLE_SIZE,
+			 }}});
+	setPipeline(debugPipeline);
+	setBindGroup(0, frameBindGroup);
+	setBindGroup(1, drawBindGroup);
+	setMesh(context.rendererResourcesManager.getDebugGridMesh());
+	draw(context.rendererResourcesManager.getDebugGridMesh());
+}
+
+void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects) {
 	if (renderObjects.size() == 0)
 		return;
 
@@ -103,22 +143,37 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 	// sorting
 	std::shared_ptr<Pipeline> pipeline = nullptr;
 
+	// risky to assume all shaders use the same frame uniforms, but this should be the case.
+	wgpu::BindGroup frameBindGroup = context.rendererResourcesManager.getBindGroup(
+		{.layout = renderObjects[0].shader->getBindGroupLayout(0),
+		 .entries = {
+			 {.binding = 0,
+			  .resource = context.rendererResourcesManager.getFrameUniformsBuffer().buffer,
+			  .offset = 0,
+			  .size = Shader::paddedSizeof<FrameUniforms>()}}});
+
+	setBindGroup(0, frameBindGroup);
+
 	// get bind group for frame uniforms
 	for (size_t i = 0; i < renderObjects.size(); i++) {
 		RenderObject &renderObject = renderObjects[i];
 		if (pipeline == nullptr || i > 0 && renderObjects[i].shader->getUUID() != renderObjects[i - 1].shader->getUUID()) {
-			pipeline = context.rendererResourcesManager.getPipeline({renderObject.shader, renderPass.getColorAttachmentFormats(), renderPass.getParams().containsDepthStencil});
+			pipeline = context.rendererResourcesManager.getPipeline({
+				.shader = renderObject.shader,
+				.colorAttachmentFormats = getColorAttachmentFormats(),
+				.hasDepthStencilAttachment = params.containsDepthStencil,
+			});
 			setPipeline(pipeline);
 
 			// for now, we just reset the draw bind groups each time we change the pipeline. This needs to be optimized in the future.
-			wgpu::BindGroup frameBindGroup = context.rendererResourcesManager.getBindGroup(
-				{.layout = renderObject.shader->getBindGroupLayout(0),
+			wgpu::BindGroup drawBindGroup = context.rendererResourcesManager.getBindGroup(
+				{.layout = renderObject.shader->getBindGroupLayout(1),
 				 .entries = {
 					 {.binding = 0,
 					  .resource = context.rendererResourcesManager.getDrawUniformBuffer(parentFrame.getRenderCount()).buffer,
 					  .offset = 0,
 					  .size = Shader::paddedSizeof<DrawUniforms>()}}});
-			setBindGroup(0, frameBindGroup);
+			setBindGroup(1, drawBindGroup);
 		}
 
 		GPUBuffer modelUniformsBuffer = context.rendererResourcesManager.getEntityModelUniformBuffer(renderObject.entityUUID, renderObject.modelUniforms);
@@ -126,7 +181,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 
 		if (renderObject.mesh && renderObject.shader) {
 			wgpu::BindGroup modelBindGroup = context.rendererResourcesManager.getBindGroup({
-				.layout = renderObject.shader->getBindGroupLayout(1),
+				.layout = renderObject.shader->getBindGroupLayout(2),
 				.entries = {
 					{.binding = 0,
 					 .resource = modelUniformsBuffer.buffer,
@@ -135,7 +190,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 			});
 
 			wgpu::BindGroup materialBindGroup = context.rendererResourcesManager.getBindGroup({
-				.layout = renderObject.shader->getBindGroupLayout(2),
+				.layout = renderObject.shader->getBindGroupLayout(3),
 				.entries = {
 					{.binding = 0,
 					 .resource = renderObject.material->getMaterialUniformBuffer().buffer,
@@ -149,8 +204,8 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects, RenderP
 			}
 
 			setMesh(renderObject.mesh);
-			setBindGroup(1, modelBindGroup);
-			setBindGroup(2, materialBindGroup);
+			setBindGroup(2, modelBindGroup);
+			setBindGroup(3, materialBindGroup);
 			draw(renderObject.mesh);
 		}
 	}
@@ -193,8 +248,8 @@ void Renderer::init() {
 	createRenderTargetColorTexture(normalBufferTexture, window.getWidth(), window.getHeight());
 	createRenderTargetColorTexture(lightingBufferTexture, window.getWidth(), window.getHeight());
 
-	fullscreenQuad = Mesh::createFullscreenQuad(device);
-	lightingPassShader = std::make_shared<Shader>(UUID(), device, lighting_pass);
+	fullscreenQuad = Mesh::createFullscreenQuad(device, assetManager);
+	lightingPassShader = assetManager.createAsset<Shader>(device, CompiledShaders::lighting_pass);
 }
 
 Frame Renderer::beginFrame() {
@@ -218,7 +273,7 @@ void Renderer::endFrame(Frame &frame) {
 	rendererResourcesManager.releaseUnusedBindGroups();
 }
 
-void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, Texture &outputTexture) {
+void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, Texture &outputTexture, bool drawDebug) {
 	// need to cache assets already gethered in previous frames
 	renderObjectCache.renderObjects.clear();
 
@@ -260,7 +315,8 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	renderObjectCache.renderObjects = Renderer::sortByShader(renderObjectCache.renderObjects);
 
 	DrawUniforms drawUniforms = {};
-	drawUniforms.viewProjection = view.getProjectionMatrix() * view.getViewMatrix();
+	drawUniforms.view = view.getViewMatrix();
+	drawUniforms.projection = view.getProjectionMatrix();
 	GPUBuffer drawUniformsBuffer = rendererResourcesManager.getDrawUniformBuffer(frame.getRenderCount());
 	device.getQueue().writeBuffer(drawUniformsBuffer.buffer, 0, &drawUniforms, Shader::paddedSizeof<DrawUniforms>());
 
@@ -280,7 +336,7 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	gBufferPassParams.colorAttachments.push_back(normalAttachment);
 	gBufferPassParams.colorAttachments.push_back(idAttachment);
 	RenderPass gBufferPass = frame.beginRenderPass(gBufferPassParams);
-	gBufferPass.drawRenderData(renderObjectCache.renderObjects, gBufferPass, drawUniforms);
+	gBufferPass.drawRenderData(renderObjectCache.renderObjects);
 	gBufferPass.end();
 
 	RenderPassColorAttachment lightingAttachment = {};
@@ -288,8 +344,23 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	RenderPassParams lightingPassParams = {};
 	lightingPassParams.colorAttachments.push_back(lightingAttachment);
 	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);
-	lightingPass.drawFullscreenQuadPass(fullscreenQuad, lightingPassShader, lightingPass, drawUniforms);
+	lightingPass.drawFullscreenQuadPass(fullscreenQuad, lightingPassShader);
 	lightingPass.end();
+	// debug grid
+	if (drawDebug) {
+		RenderPassColorAttachment debugAttachment = {
+			.loadOp = wgpu::LoadOp::Load,
+		};
+		debugAttachment.targetTexture = outputTexture;
+		RenderPassParams debugPassParams = {};
+		debugPassParams.colorAttachments.push_back(debugAttachment);
+		debugPassParams.depthStencilAttachment = depthAttachment;
+		debugPassParams.depthLoadOp = wgpu::LoadOp::Load;
+		debugPassParams.stencilLoadOp = wgpu::LoadOp::Load;
+		RenderPass debugPass = frame.beginRenderPass(debugPassParams);
+		debugPass.drawDebugGrid();
+		debugPass.end();
+	}
 
 	frame.incrementRenderCount();
 }

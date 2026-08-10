@@ -7,7 +7,7 @@
 using namespace CitronGraphics;
 
 Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> colorAttachmentFormats, bool hasDepthStencilAttachment,
-				   std::shared_ptr<Shader> shader)
+				   std::shared_ptr<Shader> shader, PipelineCullMode cullMode)
 	: device(device) {
 
 	// render pipeline
@@ -49,7 +49,17 @@ Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> 
 	pipelineDesc.primitive.topology = wgpu::PrimitiveTopology::TriangleList;
 	pipelineDesc.primitive.stripIndexFormat = wgpu::IndexFormat::Undefined;
 	pipelineDesc.primitive.frontFace = wgpu::FrontFace::CCW;
-	pipelineDesc.primitive.cullMode = wgpu::CullMode::Back;
+	switch (cullMode) {
+	case PipelineCullMode::Back:
+		pipelineDesc.primitive.cullMode = wgpu::CullMode::Back;
+		break;
+	case PipelineCullMode::Front:
+		pipelineDesc.primitive.cullMode = wgpu::CullMode::Front;
+		break;
+	case PipelineCullMode::None:
+		pipelineDesc.primitive.cullMode = wgpu::CullMode::None;
+		break;
+	}
 
 	wgpu::FragmentState fragmentState = {};
 	fragmentState.module = shader->getShaderModule();
@@ -57,14 +67,19 @@ Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> 
 	fragmentState.constantCount = 0;
 	fragmentState.constants = nullptr;
 	wgpu::BlendState blendState;
-	blendState.alpha.srcFactor = wgpu::BlendFactor::Zero;
-	blendState.alpha.dstFactor = wgpu::BlendFactor::One;
+	blendState.color.srcFactor = wgpu::BlendFactor::SrcAlpha;
+	blendState.color.dstFactor = wgpu::BlendFactor::OneMinusSrcAlpha;
+	blendState.color.operation = wgpu::BlendOperation::Add;
+	blendState.alpha.srcFactor = wgpu::BlendFactor::SrcAlpha;
+	blendState.alpha.dstFactor = wgpu::BlendFactor::OneMinusSrcAlpha;
 	blendState.alpha.operation = wgpu::BlendOperation::Add;
 
-	for (const auto &format : colorAttachmentFormats) {
+	std::vector<wgpu::BlendState> targetBlends(colorAttachmentFormats.size(), blendState);
+
+	for (size_t i = 0; i < colorAttachmentFormats.size(); i++) {
 		wgpu::ColorTargetState colorTarget;
-		colorTarget.format = format;
-		colorTarget.blend = format == wgpu::TextureFormat::BGRA8Unorm ? &blendState : nullptr;
+		colorTarget.format = colorAttachmentFormats[i];
+		colorTarget.blend = &targetBlends[i];
 		colorTarget.writeMask = wgpu::ColorWriteMask::All;
 		colorTargets.push_back(colorTarget);
 	}

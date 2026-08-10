@@ -118,7 +118,7 @@ void GuiLayer::onRender(void *frame, void *renderableData) {
 	Renderer &renderer = Editor::get().getContext().renderer;
 	std::vector<CitronGraphics::RenderableReferenceData> *renderableReferenceData = (std::vector<CitronGraphics::RenderableReferenceData> *)renderableData;
 
-	renderer.render(*currentFrame, Editor::get().editorView, *renderableReferenceData, viewPanel.getViewportSize(), editorViewTextureRenderTarget);
+	renderer.render(*currentFrame, Editor::get().editorView, *renderableReferenceData, viewPanel.getViewportSize(), editorViewTextureRenderTarget, true);
 
 	Texture &surfaceTexture = renderer.getCurrentDeviceSurfaceTexture();
 	RenderPassColorAttachment colorAttachment = {};
@@ -276,7 +276,7 @@ void GuiLayer::applyTheme() {
 	style.ScrollbarRounding = 9.0f;
 	style.GrabMinSize = 10.0f;
 	style.GrabRounding = 2.5f;
-	style.TabRounding = 0.0f;
+	style.TabRounding = 4.0f;
 	style.TabBorderSize = 0.0f;
 	style.TabCloseButtonMinWidthSelected = 0.0f;
 	style.ColorButtonPosition = ImGuiDir_Right;

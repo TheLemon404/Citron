@@ -22,8 +22,7 @@ fn vs_main(input: VertexInput) -> VertexOutput {
     );
 }
 
-struct DrawUniforms {
-    viewProjection: mat4x4f,
+struct FrameUniforms {
     sunLight: vec4f,
     sunLightColor: vec4f,
     ambientLight: vec4f,
@@ -31,15 +30,16 @@ struct DrawUniforms {
 
 @group(0) @binding(0) var colorTexture: texture_2d<f32>;
 @group(0) @binding(1) var normalTexture: texture_2d<f32>;
-@group(0) @binding(2) var<uniform> drawUniforms: DrawUniforms;
+@group(0) @binding(2) var<uniform> frameUniforms: FrameUniforms;
 
 @fragment
 fn fs_main(input: VertexOutput) -> @location(0) vec4f {
-    let color = textureLoad(colorTexture, vec2i(input.position.xy), 0).rgb * input.color.rgb * drawUniforms.sunLightColor.rgb;
+    let colorTextureValue = textureLoad(colorTexture, vec2i(input.position.xy), 0);
+    let color = colorTextureValue.rgb * input.color.rgb * frameUniforms.sunLightColor.rgb;
 
     let normal = textureLoad(normalTexture, vec2i(input.position.xy), 0).rgb;
 
-    let lit = dot(normal, normalize(drawUniforms.sunLight.xyz));
+    let lit = dot(normal, normalize(frameUniforms.sunLight.xyz));
 
-    return vec4f((color * lit) + drawUniforms.ambientLight.rgb, 1.0);
+    return vec4f((color * lit) + frameUniforms.ambientLight.rgb, colorTextureValue.a);
 }

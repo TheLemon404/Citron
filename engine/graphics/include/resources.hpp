@@ -25,28 +25,37 @@ struct CITRON_GRAPHICS_API RenderableReferenceData {
 	uint32_t materialUUID;
 };
 
-struct CITRON_GRAPHICS_API ModelUniforms {
-	glm::mat4 transform = glm::identity<glm::mat4>();
-};
-
-struct CITRON_GRAPHICS_API DrawUniforms {
-	glm::mat4 viewProjection = glm::identity<glm::mat4>();
+struct CITRON_GRAPHICS_API FrameUniforms {
 	glm::vec4 sunLight = glm::vec4(1.0f);
 	glm::vec4 sunLightColor = glm::vec4(1.0f);
 	glm::vec4 ambientLight = glm::vec4(0.2f, 0.2f, 0.25f, 0.0f);
 
-	bool operator==(const DrawUniforms &other) const {
-		return viewProjection == other.viewProjection && sunLight == other.sunLight && sunLightColor == other.sunLightColor && ambientLight == other.ambientLight;
+	bool operator==(const FrameUniforms &other) const {
+		return sunLight == other.sunLight && sunLightColor == other.sunLightColor && ambientLight == other.ambientLight;
 	}
+};
+
+struct CITRON_GRAPHICS_API DrawUniforms {
+	glm::mat4 view = glm::identity<glm::mat4>();
+	glm::mat4 projection = glm::identity<glm::mat4>();
+
+	bool operator==(const DrawUniforms &other) const {
+		return view == other.view && projection == other.projection;
+	}
+};
+
+struct CITRON_GRAPHICS_API ModelUniforms {
+	glm::mat4 transform = glm::identity<glm::mat4>();
 };
 
 struct CITRON_GRAPHICS_API PipelineKey {
 	std::shared_ptr<Shader> shader;
 	const std::vector<wgpu::TextureFormat> colorAttachmentFormats;
 	bool hasDepthStencilAttachment = false;
+	PipelineCullMode cullMode = PipelineCullMode::Back;
 
 	bool operator==(const PipelineKey &other) const {
-		if (shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment) {
+		if (shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment && cullMode == other.cullMode) {
 			for (size_t i = 0; i < colorAttachmentFormats.size(); i++) {
 				if (colorAttachmentFormats[i] != other.colorAttachmentFormats[i]) {
 					return false;
@@ -141,7 +150,7 @@ namespace CitronGraphics {
 
 class CITRON_GRAPHICS_API RendererResourceManager {
   public:
-	RendererResourceManager(Device &device) : device(device) {}
+	RendererResourceManager(Device &device, AssetManager &assetManager) : device(device), assetManager(assetManager) {}
 	void initResources();
 	void releaseUnusedBindGroups();
 	GPUBuffer &getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms);
@@ -152,11 +161,23 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 
+	GPUBuffer &getFrameUniformsBuffer() { return frameUniformsBuffer; }
+
+	const std::shared_ptr<Shader> getDebugGridShader() { return debugGridShader; }
+	const std::shared_ptr<Mesh> getDebugGridMesh() { return debugGridMesh; }
+
   private:
+	AssetManager &assetManager;
+
+	std::shared_ptr<Shader> debugGridShader = nullptr;
+
 	std::unordered_set<BindGroupKey> usedBindGroupKeysThisFrame;
 	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;
 	std::unordered_map<uint16_t, GPUBuffer> drawUniformBufferCache;
 	std::unordered_map<uint32_t, GPUBuffer> entityModelUniformBufferCache;
+	GPUBuffer frameUniformsBuffer;
+	FrameUniforms frameUniforms;
+	std::shared_ptr<Mesh> debugGridMesh;
 
 	Device &device;
 };

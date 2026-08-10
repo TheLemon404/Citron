@@ -4,6 +4,7 @@
 #include "buffer.hpp"
 #include "citron_exports.hpp"
 
+#include "debug.hpp"
 #include "device.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
@@ -40,7 +41,8 @@ class CITRON_GRAPHICS_API Renderer;
 struct RenderPassColorAttachment {
 	Texture targetTexture;
 	wgpu::TextureFormat textureFormat = wgpu::TextureFormat::BGRA8UnormSrgb;
-	wgpu::Color clearValue = {0.247, 0.247, 0.247, 1.0};
+	wgpu::Color clearValue = {0.247, 0.247, 0.247, 0.0f};
+	wgpu::LoadOp loadOp = wgpu::LoadOp::Clear;
 };
 
 struct RenderPassDepthStencilAttachment {
@@ -53,6 +55,8 @@ struct RenderPassParams {
 	std::vector<RenderPassColorAttachment> colorAttachments;
 	bool containsDepthStencil = false;
 	RenderPassDepthStencilAttachment depthStencilAttachment;
+	wgpu::LoadOp depthLoadOp = wgpu::LoadOp::Clear;
+	wgpu::LoadOp stencilLoadOp = wgpu::LoadOp::Clear;
 };
 
 class CITRON_GRAPHICS_API RenderPass {
@@ -64,8 +68,10 @@ class CITRON_GRAPHICS_API RenderPass {
 
 	RenderPass(RenderPass &&) = default;
 
-	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader, RenderPass &renderPass, DrawUniforms frameUniforms);
-	void drawRenderData(std::vector<RenderObject> renderableReferenceData, RenderPass &renderPass, DrawUniforms frameUniforms);
+	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader);
+	void drawRenderData(std::vector<RenderObject> renderableReferenceData);
+	void drawDebugGrid();
+	void drawRebugRenderData(std::vector<RenderObject> renderableReferenceData, DrawUniforms frameUniforms);
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);
@@ -129,13 +135,13 @@ struct RenderObjectCache {
 
 class CITRON_GRAPHICS_API Renderer {
   public:
-	Renderer(Window &window, AssetManager &assetManager) : window(window), device(window), assetManager(assetManager), rendererResourcesManager(device) {}
+	Renderer(Window &window, AssetManager &assetManager) : window(window), device(window), assetManager(assetManager), rendererResourcesManager(device, assetManager) {}
 
 	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
 	Frame beginFrame();
 	void endFrame(Frame &frame);
 
-	void render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize, Texture &outputTexture);
+	void render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize, Texture &outputTexture, bool drawDebug = false);
 
 	void init();
 	void end();
@@ -170,6 +176,8 @@ class CITRON_GRAPHICS_API Renderer {
 	const std::shared_ptr<Shader> &getLightingPassShader() const { return lightingPassShader; }
 
   private:
+	std::stack<DebugShape> debugShapes;
+
 	Texture deviceSurfaceTexture;
 
 	RenderObjectCache renderObjectCache;

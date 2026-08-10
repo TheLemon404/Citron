@@ -23,7 +23,7 @@ struct CITRON_GRAPHICS_API Vertex {
 class CITRON_GRAPHICS_API Mesh : public Asset<Mesh, AssetType::MESH> {
   public:
 	Mesh(const UUID uuid, Device &device) : Asset<Mesh, AssetType::MESH>(uuid), device(device) {}
-	Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device);
+	Mesh(const UUID uuid, std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device);
 
 	const GPUBuffer &getVertexBuffer() const { return vertexBuffer; }
 	const GPUBuffer &getIndexBuffer() const { return indexBuffer; }
@@ -31,7 +31,8 @@ class CITRON_GRAPHICS_API Mesh : public Asset<Mesh, AssetType::MESH> {
 	const glm::vec3 &getBoundsMin() const { return boundsMin; }
 	const glm::vec3 &getBoundsMax() const { return boundsMax; }
 
-	static std::shared_ptr<Mesh> createFullscreenQuad(Device &device);
+	static std::shared_ptr<Mesh> createFullscreenQuad(Device &device, AssetManager &assetManager);
+	static std::shared_ptr<Mesh> createPlane(Device &device, AssetManager &assetManager);
 
   private:
 	glm::vec3 boundsMin = glm::vec3(0.0f);

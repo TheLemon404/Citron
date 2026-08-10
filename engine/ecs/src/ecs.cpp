@@ -324,6 +324,7 @@ View &Scene::getActiveView() {
 	for (auto [entity, cameraComponent, transformComponent] : cameraComponentView.each()) {
 		cameraComponent.view.position = transformComponent.position;
 		cameraComponent.view.forward = transformComponent.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
+		cameraComponent.view.up = transformComponent.rotation * glm::vec3(0.0f, 1.0f, 0.0f);
 		return cameraComponent.view;
 	}
 	return tempSceneView;

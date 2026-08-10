@@ -44,6 +44,9 @@ Shader::Shader(const UUID uuid, Device &device, std::string &source) : Asset<Sha
 		if (type == "texture_2d<f32>") {
 			bindingLayout.texture.sampleType = wgpu::TextureSampleType::Float;
 			bindingLayout.texture.viewDimension = wgpu::TextureViewDimension::_2D;
+		} else if (type == "texture_depth_2d") {
+			bindingLayout.texture.sampleType = wgpu::TextureSampleType::Depth;
+			bindingLayout.texture.viewDimension = wgpu::TextureViewDimension::_2D;
 		} else if (bindingEntry.contains("layout")) {
 			const size_t layoutSize = bindingEntry["layout"]["size"];
 			const size_t layoutAlignment = bindingEntry["layout"]["alignment"];

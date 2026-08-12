@@ -1,3 +1,4 @@
+#include "ImOGuizmo.hpp"
 #include "texture.hpp"
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -102,6 +103,12 @@ void GuiLayer::onDetach() {
 }
 
 void GuiLayer::onUpdate() {
+	if (editorViewTextureRenderTarget.getWidth() != appContext.window.getWidth() || editorViewTextureRenderTarget.getHeight() != appContext.window.getHeight()) {
+		editorViewTextureRenderTarget.release();
+		Window &window = appContext.window;
+		editorViewTextureRenderTarget = {appContext.renderer.getContext().device.createRenderTargetColorTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
+	}
+
 	viewPanel.onUpdate();
 	assetPanel.onUpdate();
 	assetPropertiesPanel.onUpdate();
@@ -136,7 +143,10 @@ void GuiLayer::drawGui(Texture &editorView, Texture &gameView,
 
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
+	ImOGuizmo::SetRect(200.0f, 200.0f, 120.0f /* square size */);
+
 	ImGui::NewFrame();
+
 	ImGuizmo::BeginFrame();
 
 	ImGui::DockSpaceOverViewport();
@@ -227,7 +237,7 @@ void GuiLayer::onEvent(Event &e) {
 	if (e.isInCategory(CitronCore::EventCategoryInput)) {
 		if (e.getEventType() == EventType::KeyJustPressed) {
 			KeyJustPressedEvent &event = static_cast<KeyJustPressedEvent &>(e);
-			if (event.getKeycode() == SDLK_S && event.getMods() & SDLK_LCTRL) {
+			if (event.getKeycode() == SDLK_S && event.getMods() & SDLK_LCTRL && Editor::get().getEditorContext().getPlaymodeState() == EditorPlaymodeState::Stopped) {
 				CITRON_CORE_INFO("Serializing assets...");
 
 				appContext.assetManager.serializeAssets();
@@ -329,17 +339,17 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_SliderGrabActive] =
 		themeColor;
 	style.Colors[ImGuiCol_Button] =
-		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
+		ImVec4(0.24f, 0.24f, 0.24f, 1.0f);
 	style.Colors[ImGuiCol_ButtonHovered] =
 		ImVec4(0.35193133f, 0.35192782f, 0.35192782f, 1.0f);
 	style.Colors[ImGuiCol_ButtonActive] =
 		ImVec4(0.20171672f, 0.2017147f, 0.2017147f, 1.0f);
 	style.Colors[ImGuiCol_Header] =
-		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
+		ImVec4(0.32941177f, 0.24f, 0.24f, 1.0f);
 	style.Colors[ImGuiCol_HeaderHovered] =
-		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
+		ImVec4(0.24f, 0.24f, 0.24f, 1.0f);
 	style.Colors[ImGuiCol_HeaderActive] =
-		ImVec4(0.32941177f, 0.32941177f, 0.32941177f, 1.0f);
+		ImVec4(0.24f, 0.24f, 0.24f, 1.0f);
 	style.Colors[ImGuiCol_Separator] =
 		ImVec4(0.42745098f, 0.42745098f, 0.49803922f, 0.5f);
 	style.Colors[ImGuiCol_SeparatorHovered] =

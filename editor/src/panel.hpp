@@ -123,6 +123,9 @@ class GamePanel : public Panel {
 	virtual void onEvent(Event &e) override;
 
   private:
+	bool shouldBeFocused = false;
+	bool onPlaymodeEvent(Event &e);
+
 	ImVec2 viewportSize;
 	wgpu::TextureView sceneView;
 };

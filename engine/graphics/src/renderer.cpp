@@ -252,6 +252,11 @@ void Renderer::init() {
 	lightingPassShader = assetManager.createAsset<Shader>(device, CompiledShaders::lighting_pass);
 }
 
+bool Renderer::frameReady() {
+	prepareRenderTargetTextures(window.getWidth(), window.getHeight());
+	return device.prepareCurrentSurfaceTexture();
+}
+
 Frame Renderer::beginFrame() {
 	deviceSurfaceTexture = Texture{
 		device.getCurrentSurfaceTexture().texture, (uint32_t)device.getLastSurfaceWidth(), (uint32_t)device.getLastSurfaceHeight()};
@@ -401,4 +406,31 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 
 void Renderer::createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height) {
 	texture = {device.createRenderTargetColorTexture(width, height), width, height};
+}
+
+void Renderer::prepareRenderTargetTextures(uint32_t width, uint32_t height) {
+	if (idBufferTexture.getWidth() != width || idBufferTexture.getHeight() != height) {
+		idBufferTexture.release();
+		idBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+	}
+
+	if (depthBufferTexture.getWidth() != width || depthBufferTexture.getHeight() != height) {
+		depthBufferTexture.release();
+		depthBufferTexture = {device.createRenderTargetDepthTexture(width, height), width, height};
+	}
+
+	if (colorBufferTexture.getWidth() != width || colorBufferTexture.getHeight() != height) {
+		colorBufferTexture.release();
+		colorBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+	}
+
+	if (normalBufferTexture.getWidth() != width || normalBufferTexture.getHeight() != height) {
+		normalBufferTexture.release();
+		normalBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+	}
+
+	if (lightingBufferTexture.getWidth() != width || lightingBufferTexture.getHeight() != height) {
+		lightingBufferTexture.release();
+		lightingBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+	}
 }

@@ -37,6 +37,7 @@ struct CITRON_ECS_API ComponentMetadata {
 
 	std::function<bool(entt::registry &, entt::entity)> has;
 	std::function<void(entt::registry &, entt::entity)> add;
+	std::function<void(entt::registry &, entt::entity, void *)> clone;
 	std::function<void(entt::registry &, entt::entity)> remove;
 	std::function<void *(entt::registry &, entt::entity)> get;
 };
@@ -99,9 +100,21 @@ class CITRON_ECS_API ECSRegistry {
 			return registry.any_of<T>(entity);
 		};
 		metadata.add = [](entt::registry &registry, entt::entity entity) {
+			if (registry.any_of<T>(entity))
+				return;
+
 			registry.emplace<T>(entity);
 		};
+		metadata.clone = [](entt::registry &registry, entt::entity entity, void *data) {
+			if (registry.any_of<T>(entity))
+				return;
+
+			registry.emplace<T>(entity, *static_cast<T *>(data));
+		};
 		metadata.remove = [](entt::registry &registry, entt::entity entity) {
+			if (!registry.any_of<T>(entity))
+				return;
+
 			registry.remove<T>(entity);
 		};
 		metadata.get = [](entt::registry &registry, entt::entity entity) {
@@ -121,7 +134,7 @@ class CITRON_ECS_API ECSRegistry {
 		uint32_t parentClassTypeHash = Hashing::typeHash<T>();
 		uint32_t memberTypeHashCode = Hashing::typeHash<U>();
 
-		if(!Member::serializationMethods.contains(memberTypeHashCode) || !Member::deserializationMethods.contains(memberTypeHashCode)) {
+		if (!Member::serializationMethods.contains(memberTypeHashCode) || !Member::deserializationMethods.contains(memberTypeHashCode)) {
 			CITRON_CORE_CRITICAL("no property serialization or deserialization registered for component {} {}", memberName, typeid(T).name());
 			throw std::runtime_error("no property serialization or deserialization registered for component " + std::string(typeid(T).name()));
 		}
@@ -149,7 +162,7 @@ class CITRON_ECS_API ECSRegistry {
 		uint32_t parentClassTypeHash = Hashing::typeHash<T>();
 		uint32_t memberTypeHashCode = Hashing::typeHash<U>();
 
-		if(!Member::serializationMethods.contains(memberTypeHashCode) || !Member::deserializationMethods.contains(memberTypeHashCode)) {
+		if (!Member::serializationMethods.contains(memberTypeHashCode) || !Member::deserializationMethods.contains(memberTypeHashCode)) {
 			CITRON_CORE_CRITICAL("no property serialization or deserialization registered for component {} {}", memberName, typeid(T).name());
 			throw std::runtime_error("no property serialization or deserialization registered for component " + std::string(typeid(T).name()));
 		}
@@ -200,7 +213,6 @@ class CITRON_ECS_API ECSRegistry {
 			}
 		};
 	}
-
 
 	template <typename T>
 	static void registerSerializationMethod(std::function<void(StreamWriter &, void *)> serialize) {

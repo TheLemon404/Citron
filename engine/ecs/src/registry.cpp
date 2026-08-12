@@ -140,5 +140,5 @@ void ECSRegistry::registerDefaultComponents() {
 
 void ECSRegistry::registerDefaultSystems() {
 	registerSystem<TestSystem>("Test System");
-	registerSystemMember<TestSystem, float>("test Member", offset_of<&TestSystem::testMember, TestSystem>());
+	registerSystemMember<TestSystem, float>("speed Scaler", offset_of<&TestSystem::speedScaler, TestSystem>());
 }

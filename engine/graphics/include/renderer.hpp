@@ -137,7 +137,7 @@ class CITRON_GRAPHICS_API Renderer {
   public:
 	Renderer(Window &window, AssetManager &assetManager) : window(window), device(window), assetManager(assetManager), rendererResourcesManager(device, assetManager) {}
 
-	bool frameReady() { return device.prepareCurrentSurfaceTexture(); }
+	bool frameReady();
 	Frame beginFrame();
 	void endFrame(Frame &frame);
 
@@ -164,6 +164,8 @@ class CITRON_GRAPHICS_API Renderer {
 	Texture &getCurrentDeviceSurfaceTexture() {
 		return deviceSurfaceTexture;
 	}
+
+	void prepareRenderTargetTextures(uint32_t width, uint32_t height);
 
 	// render targets
 	Texture idBufferTexture;

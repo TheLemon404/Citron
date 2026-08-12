@@ -2,6 +2,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "app.hpp"
 #include "assets.hpp"
+#include "ecs.hpp"
 #include "entt/entity/entity.hpp"
 #include "event.hpp"
 #include "gui.hpp"
@@ -146,6 +147,43 @@ Editor::Editor(const std::string &projectFilePath)
 			ImGui::DragFloat("fov", &field->fov);
 			ImGui::DragFloat("aspect", &field->aspect);
 		});
+
+	sceneManager.setSceneMode(SceneMode::STOP);
+}
+
+void Editor::startPlaying() {
+	temporaryPlaymodeSceneHolder = sceneManager.getActiveScene();
+	std::shared_ptr<Scene> playmodeScene = sceneManager.getActiveScene()->clone();
+	sceneManager.setActiveScene(playmodeScene);
+	sceneManager.setSceneMode(SceneMode::PLAY);
+
+	editorContext.setPlaymodeState(EditorPlaymodeState::Playing);
+	EditorPlaymodeEvent event = EditorPlaymodeEvent(editorContext.getPlaymodeState());
+	onEvent(event);
+}
+
+void Editor::stopPlaying() {
+	if (temporaryPlaymodeSceneHolder) {
+		sceneManager.setActiveScene(temporaryPlaymodeSceneHolder);
+		temporaryPlaymodeSceneHolder = nullptr;
+	}
+	sceneManager.setSceneMode(SceneMode::STOP);
+
+	editorContext.setPlaymodeState(EditorPlaymodeState::Stopped);
+	EditorPlaymodeEvent event = EditorPlaymodeEvent(editorContext.getPlaymodeState());
+	onEvent(event);
+}
+
+void Editor::pausePlaying() {
+	editorContext.setPlaymodeState(EditorPlaymodeState::Paused);
+	EditorPlaymodeEvent event = EditorPlaymodeEvent(editorContext.getPlaymodeState());
+	onEvent(event);
+}
+
+void Editor::resumePlaying() {
+	editorContext.setPlaymodeState(EditorPlaymodeState::Playing);
+	EditorPlaymodeEvent event = EditorPlaymodeEvent(editorContext.getPlaymodeState());
+	onEvent(event);
 }
 
 void Editor::init() {

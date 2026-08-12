@@ -26,6 +26,8 @@ class CITRON_ECS_API System {
   public:
 	System(const std::string name) : name(name) {}
 
+	virtual std::shared_ptr<System> clone() = 0;
+
 	virtual void init(Scene &activeScene) {};
 	virtual void start(Scene &activeScene) {};
 	virtual void update(Scene &activeScene) {};
@@ -87,6 +89,8 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	const std::string &getName() { return name; }
 	std::map<uint32_t, std::shared_ptr<System>> &getSystems() { return m_systemRegistry; }
 	entt::registry &getRegistry() { return registry; }
+
+	std::shared_ptr<Scene> clone();
 
 	Entity createEntity();
 	Entity getEntity(UUID entity);
@@ -161,7 +165,7 @@ class CITRON_ECS_API Entity {
 };
 
 enum class SceneMode {
-	EDIT = 0,
+	STOP = 0,
 	PLAY = 1,
 	PAUSE = 2,
 };
@@ -179,11 +183,13 @@ class CITRON_ECS_API SceneManager {
 	std::shared_ptr<Scene> getActiveScene() { return activeScene; }
 	void setActiveScene(std::shared_ptr<Scene> newScene);
 
+	void setSceneMode(SceneMode mode);
+
   private:
 	bool checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e);
 
 	AssetManager &assetManager;
-	SceneMode mode = SceneMode::EDIT;
+	SceneMode mode = SceneMode::PLAY;
 	std::shared_ptr<Scene> activeScene;
 };
 } // namespace CitronECS

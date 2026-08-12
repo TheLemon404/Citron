@@ -167,6 +167,7 @@ bool Device::prepareCurrentSurfaceTexture() {
 		CITRON_CORE_ERROR(
 			"Current WGPU surface failed in pre-render with status Error");
 		currentSurfaceTexture.texture = nullptr;
+		resizeSurface(window.getWidth(), window.getHeight());
 		return false;
 	}
 

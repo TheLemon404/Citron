@@ -127,6 +127,26 @@ void Scene::deserialize(StreamReader &reader) {
 	}
 }
 
+std::shared_ptr<Scene> Scene::clone() {
+	std::shared_ptr<Scene> clonedScene = std::make_shared<Scene>("Runtime Scene");
+
+	for (auto &[uuid, entity] : entityMap) {
+		entt::entity newEntity = clonedScene->registry.create();
+
+		for (auto &[hash, metadata] : ECSRegistry::getComponentRegistry()) {
+			if (metadata.has(registry, entity)) {
+				metadata.clone(clonedScene->registry, newEntity, metadata.get(registry, entity));
+				clonedScene->entityMap[uuid] = newEntity;
+			}
+		}
+	}
+
+	for (auto &[uuid, system] : m_systemRegistry) {
+		clonedScene->getSystems()[uuid] = system->clone();
+	}
+	return clonedScene;
+}
+
 Entity Scene::createEntity() {
 	const auto entity = registry.create();
 	UUID uuid = UUID();
@@ -349,7 +369,7 @@ void SceneManager::onDetach() {}
 void SceneManager::onUpdate() {
 	if (activeScene) {
 		switch (mode) {
-		case SceneMode::EDIT:
+		case SceneMode::STOP:
 			activeScene->editorUpdate();
 			break;
 		case SceneMode::PLAY:
@@ -370,6 +390,10 @@ void SceneManager::onEvent(Event &e) {
 
 void SceneManager::setActiveScene(std::shared_ptr<Scene> newScene) {
 	activeScene = newScene;
+}
+
+void SceneManager::setSceneMode(SceneMode mode) {
+	this->mode = mode;
 }
 
 bool SceneManager::checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e) {

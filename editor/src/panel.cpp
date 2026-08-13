@@ -34,6 +34,7 @@
 #include <IconsFontAwesome6.h>
 #include <imgui_stdlib.h>
 #include <memory>
+#include <webgpu.h>
 
 void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get().getEditorContext();
@@ -41,6 +42,7 @@ void AssetPanel::onAttach() {
 	refreshDirectoryListings();
 
 	folderIconTexture = ImageTexture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getContext().device);
+	fileIconTexture = ImageTexture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_file.png", appContext.renderer.getContext().device);
 }
 
 void AssetPanel::onDetach() {}
@@ -96,7 +98,8 @@ void AssetPanel::onDraw() {
 	ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(20.0f, 20.0f));
 	ImGui::BeginChild("AssetList");
 
-	WGPUTextureView view = folderIconTexture->getTextureView();
+	WGPUTextureView folderIconView = folderIconTexture->getTextureView();
+	WGPUTextureView fileIconView = fileIconTexture->getTextureView();
 	if (ImGui::BeginTable("##AssetBrowserTable", std::max((int)(ImGui::GetCurrentWindow()->Size.x / zoomLevel), 1), ImGuiTableFlags_ScrollY)) {
 
 		bool createFolder = false;
@@ -151,9 +154,9 @@ void AssetPanel::onDraw() {
 						entry.selected = !entry.selected;
 					}
 				}
-				ImVec2 rect_min = ImGui::GetItemRectMin();
-				ImVec2 rect_max = ImGui::GetItemRectMax();
-				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)view, rect_min, rect_max);
+				ImVec2 rectMin = ImGui::GetItemRectMin();
+				ImVec2 rectMax = ImGui::GetItemRectMax();
+				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)folderIconView, rectMin, rectMax);
 
 				if (ImGui::BeginDragDropTarget()) {
 					if (const ImGuiPayload *payload =
@@ -218,7 +221,7 @@ void AssetPanel::onDraw() {
 				ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
 				ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
 									ImVec2(0.5f, 0.5f));
-				if (ImGui::Selectable(ICON_FA_FILE, &entry.selected,
+				if (ImGui::Selectable("##File", &entry.selected,
 									  ImGuiSelectableFlags_AllowDoubleClick,
 									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
 					if (appContext.assetManager.isKnownAssetFileExtension(entry.path.extension().string()))
@@ -231,6 +234,10 @@ void AssetPanel::onDraw() {
 						entry.selected = !entry.selected;
 					}
 				}
+				ImVec2 rect_min = ImGui::GetItemRectMin();
+				ImVec2 rect_max = ImGui::GetItemRectMax();
+				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)fileIconView, rect_min, rect_max);
+
 				ImGui::PopStyleVar();
 				ImGui::SetWindowFontScale(1.0f);
 
@@ -625,7 +632,7 @@ void OutlinerPanel::onDraw() {
 	bool pendingAddSystem = false;
 
 	if (ImGui::BeginTable("##SystemsTable", 1)) {
-		ImGui::TableSetupColumn("Systems");
+		ImGui::TableSetupColumn("  Systems");
 		ImGui::TableHeadersRow();
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
@@ -675,7 +682,7 @@ void OutlinerPanel::onDraw() {
 
 	if (ImGui::BeginTable("##EntityTable", 1,
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
-		ImGui::TableSetupColumn("Entities");
+		ImGui::TableSetupColumn("  Entities");
 		ImGui::TableHeadersRow();
 
 		if (ImGui::BeginDragDropTarget()) {

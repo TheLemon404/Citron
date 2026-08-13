@@ -1,12 +1,410 @@
 {
-  "date": "2026-08-10T15:41:18.987445300-05:00",
+  "date": "2026-08-12T13:58:32.673295600-05:00",
   "data": {
-    "C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake": [
       {
-        "label": "target_copy_graphics_shared_dependencies",
+        "label": "CMAKE_CXX_COMPILER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_ARG1",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_ID",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_VERSION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_VERSION_INTERNAL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_WRAPPER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_COMPUTED_DEFAULT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_LATEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX98_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX11_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX14_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX17_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX20_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX23_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX26_COMPILE_FEATURES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_PLATFORM_ID",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_SIMULATE_ID",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_FRONTEND_VARIANT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_APPLE_SYSROOT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_SIMULATE_VERSION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_ARCHITECTURE_ID",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "MSVC_CXX_ARCHITECTURE_ID",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_AR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_AR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_RANLIB",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_RANLIB",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_LINKER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_LINKER_LINK",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_LINKER_LLD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_LINKER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_LINKER_ID",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_LINKER_VERSION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_MT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_TAPI",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_COMPILER_IS_GNUCXX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_LOADED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_WORKS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_ABI_COMPILED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_ENV_VAR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_ID_RUN",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_SOURCE_FILE_EXTENSIONS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_IGNORE_EXTENSIONS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_LINKER_PREFERENCE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_LINKER_DEPFILE_SUPPORTED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_SIZEOF_DATA_PTR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\nSave compiler ABI information."
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_ABI",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_BYTE_ORDER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_LIBRARY_ARCHITECTURE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_SIZEOF_VOID_P",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_INTERNAL_PLATFORM_ABI",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_LIBRARY_ARCHITECTURE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_CL_SHOWINCLUDES_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CL_SHOWINCLUDES_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_IMPLICIT_LINK_LIBRARIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_CLANG_RESOURCE_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_COMPILER_IMPORT_STD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
+      },
+      {
+        "label": "CMAKE_CXX23_COMPILER_IMPORT_STD_NOT_FOUND_MESSAGE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library"
+      }
+    ],
+    "C:\\Dev\\citron\\vendor\\miniray\\CMakeLists.txt": [
+      {
+        "label": "target_copy_miniray_shared_binary",
         "kind": 3,
         "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt"
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\vendor\\miniray\\CMakeLists.txt"
       }
     ],
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake": [
@@ -631,64 +1029,150 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\assimp\\cmake-modules\\HunterGate.cmake"
       }
     ],
-    "C:\\Dev\\citron\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt": [
       {
-        "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
+        "label": "CEREAL_MASTER_PROJECT",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PORTABILITY_TEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_REQUIRED_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PORTABILITY_TEST",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_DOC",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "BUILD_SANDBOX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "SKIP_PERFORMANCE_COMPARISON",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "JUST_INSTALL_CEREAL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\ninstalling cereal requires INTERFACE lib"
+      },
+      {
+        "label": "CEREAL_THREAD_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "THREAD_SAFE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CEREAL_THREAD_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "WITH_WERROR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CLANG_USE_LIBCPP",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_EXE_LINKER_FLAGS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\nTODO: use add_link_options(-stdlib=libc++ -lc++abi\") bud this needs cmake 3.13! CK"
       },
       {
         "label": "CMAKE_CXX_STANDARD",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
         "label": "CMAKE_CXX_STANDARD_REQUIRED",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\vendor\\miniray\\CMakeLists.txt": [
-      {
-        "label": "target_copy_miniray_shared_binary",
-        "kind": 3,
-        "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\vendor\\miniray\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt": [
-      {
-        "label": "CMAKE_CXX_STANDARD",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "CMAKE_CXX_STANDARD_REQUIRED",
+        "label": "CEREAL_INSTALL",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "IMGUIZMO_STANDALONE",
+        "label": "configFile",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "IMGUIZMO_STANDALONE",
+        "label": "versionFile",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       },
       {
-        "label": "IMGUIZMO_BUILD_EXAMPLE",
+        "label": "configInstallDestination",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+      },
+      {
+        "label": "Boost::serialization",
+        "kind": 6,
+        "detail": "Variable",
+        "documentation": "package from: Boost"
+      },
+      {
+        "label": "Boost_LIBRARIES",
+        "kind": 6,
+        "detail": "Variable",
+        "documentation": "package: Boost"
+      },
+      {
+        "label": "Boost_INCLUDE_DIRS",
+        "kind": 6,
+        "detail": "Variable",
+        "documentation": "package: Boost"
+      },
+      {
+        "label": "BUILD_TESTS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
       }
     ],
     "C:\\Dev\\citron\\vendor\\cereal-yaml\\CMakeLists.txt": [
@@ -1139,6 +1623,54 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal-yaml\\yaml-cpp\\CMakeLists.txt"
       }
     ],
+    "C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt": [
+      {
+        "label": "target_copy_graphics_shared_dependencies",
+        "kind": 3,
+        "detail": "Function",
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\editor\\CMakeLists.txt": [
+      {
+        "label": "target_copy_shared_library",
+        "kind": 3,
+        "detail": "Function",
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\editor\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt": [
+      {
+        "label": "CMAKE_CXX_STANDARD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_REQUIRED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+      },
+      {
+        "label": "IMGUIZMO_STANDALONE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+      },
+      {
+        "label": "IMGUIZMO_STANDALONE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+      },
+      {
+        "label": "IMGUIZMO_BUILD_EXAMPLE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\imguizmo\\CMakeLists.txt"
+      }
+    ],
     "C:\\Dev\\citron\\vendor\\CMakeLists.txt": [
       {
         "label": "DAWN_FETCH_DEPENDENCIES",
@@ -1153,556 +1685,24 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
       }
     ],
-    "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake": [
+    "C:\\Dev\\citron\\CMakeLists.txt": [
       {
-        "label": "CMAKE_CXX_COMPILER",
+        "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_ARG1",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_ID",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_VERSION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_VERSION_INTERNAL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_WRAPPER",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD_COMPUTED_DEFAULT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD_LATEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX98_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX11_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX14_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX17_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX20_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX23_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX26_COMPILE_FEATURES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_PLATFORM_ID",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_SIMULATE_ID",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_FRONTEND_VARIANT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_APPLE_SYSROOT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_SIMULATE_VERSION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_ARCHITECTURE_ID",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "MSVC_CXX_ARCHITECTURE_ID",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_AR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_AR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_RANLIB",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_RANLIB",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_LINKER",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_LINKER_LINK",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_LINKER_LLD",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_LINKER",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_LINKER_ID",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_LINKER_VERSION",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_MT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_TAPI",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_COMPILER_IS_GNUCXX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_LOADED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_WORKS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_ABI_COMPILED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_ENV_VAR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_ID_RUN",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_SOURCE_FILE_EXTENSIONS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_IGNORE_EXTENSIONS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_LINKER_PREFERENCE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_LINKER_DEPFILE_SUPPORTED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_SIZEOF_DATA_PTR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\nSave compiler ABI information."
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_ABI",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_BYTE_ORDER",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_LIBRARY_ARCHITECTURE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_SIZEOF_VOID_P",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_INTERNAL_PLATFORM_ABI",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_LIBRARY_ARCHITECTURE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_CL_SHOWINCLUDES_PREFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CL_SHOWINCLUDES_PREFIX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_IMPLICIT_LINK_LIBRARIES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_CLANG_RESOURCE_DIR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX_COMPILER_IMPORT_STD",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake"
-      },
-      {
-        "label": "CMAKE_CXX23_COMPILER_IMPORT_STD_NOT_FOUND_MESSAGE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library"
-      }
-    ],
-    "C:\\Dev\\citron\\editor\\CMakeLists.txt": [
-      {
-        "label": "target_copy_shared_library",
-        "kind": 3,
-        "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\editor\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt": [
-      {
-        "label": "CEREAL_MASTER_PROJECT",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PORTABILITY_TEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_REQUIRED_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PORTABILITY_TEST",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_DOC",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "BUILD_SANDBOX",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "SKIP_PERFORMANCE_COMPARISON",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "JUST_INSTALL_CEREAL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\ninstalling cereal requires INTERFACE lib"
-      },
-      {
-        "label": "CEREAL_THREAD_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "THREAD_SAFE",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CEREAL_THREAD_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "WITH_WERROR",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CLANG_USE_LIBCPP",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_EXE_LINKER_FLAGS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt\n\nTODO: use add_link_options(-stdlib=libc++ -lc++abi\") bud this needs cmake 3.13! CK"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
       },
       {
         "label": "CMAKE_CXX_STANDARD",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
       },
       {
         "label": "CMAKE_CXX_STANDARD_REQUIRED",
         "kind": 12,
         "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "CEREAL_INSTALL",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "configFile",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "versionFile",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "configInstallDestination",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
-      },
-      {
-        "label": "Boost::serialization",
-        "kind": 6,
-        "detail": "Variable",
-        "documentation": "package from: Boost"
-      },
-      {
-        "label": "Boost_LIBRARIES",
-        "kind": 6,
-        "detail": "Variable",
-        "documentation": "package: Boost"
-      },
-      {
-        "label": "Boost_INCLUDE_DIRS",
-        "kind": 6,
-        "detail": "Variable",
-        "documentation": "package: Boost"
-      },
-      {
-        "label": "BUILD_TESTS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\cereal\\CMakeLists.txt"
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
       }
     ]
   }

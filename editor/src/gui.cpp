@@ -77,6 +77,32 @@ void GuiLayer::onAttach() {
 
 	renderer.createRenderTargetColorTexture(editorViewTextureRenderTarget, context.window.getWidth(), context.window.getHeight());
 
+	icons.initAtlas(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/editor_icons.png", context.renderer.getContext().device);
+
+	// register editor icons from font atlas
+	ImVec2i atlasSize = icons.getAtlasSize();
+	const ImVec2 uvSize = ImVec2(((float)atlasSize.x / 20.0f) / atlasSize.x, ((float)atlasSize.y / 20.0f) / atlasSize.y);
+	CITRON_CLIENT_INFO("SIZE {} ", uvSize.x);
+	float i = 1.0f;
+	icons.registerIcon("Play", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Pause", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Stop", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Select", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Translate", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Rotate", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Scale", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Snap", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Local", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	i++;
+
 	viewPanel.onAttach();
 	assetPanel.onAttach();
 	assetPropertiesPanel.onAttach();
@@ -143,7 +169,6 @@ void GuiLayer::drawGui(Texture &editorView, Texture &gameView,
 
 	ImGui_ImplWGPU_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
-	ImOGuizmo::SetRect(200.0f, 200.0f, 120.0f /* square size */);
 
 	ImGui::NewFrame();
 
@@ -269,7 +294,6 @@ void GuiLayer::applyTheme() {
 	style.WindowBorderSize = 0.0f;
 	style.WindowMinSize = ImVec2(32.0f, 32.0f);
 	style.WindowTitleAlign = ImVec2(0.0f, 0.6f);
-	style.WindowMenuButtonPosition = ImGuiDir_Left;
 	style.ChildRounding = 3.0f;
 	style.ChildBorderSize = 0.0f;
 	style.PopupRounding = 3.0f;
@@ -286,7 +310,7 @@ void GuiLayer::applyTheme() {
 	style.ScrollbarRounding = 9.0f;
 	style.GrabMinSize = 10.0f;
 	style.GrabRounding = 2.5f;
-	style.TabRounding = 4.0f;
+	style.TabRounding = 1.0f;
 	style.TabBorderSize = 0.0f;
 	style.TabCloseButtonMinWidthSelected = 0.0f;
 	style.ColorButtonPosition = ImGuiDir_Right;

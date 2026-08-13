@@ -1,7 +1,10 @@
 #include "ImOGuizmo.hpp"
 #include "clock.hpp"
+#include "imgui_internal.h"
 #include "panel.hpp"
 #include "uuid.hpp"
+#include <webgpu.h>
+#include <webgpu/webgpu.hpp>
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 #include "SDL3/SDL_mouse.h"
@@ -68,6 +71,8 @@ void ViewPanel::onDraw() {
 	PerspectiveView &editorView = Editor::get().editorView;
 	EditorContext &editorContext = Editor::get().getEditorContext();
 
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+
 	ImGui::Begin("Viewport", nullptr);
 	viewportSize = ImGui::GetContentRegionAvail();
 	ImVec2 viewportPos = ImGui::GetCursorScreenPos();
@@ -78,44 +83,69 @@ void ViewPanel::onDraw() {
 	WGPUTextureView view = sceneView;
 	ImDrawList *drawList = ImGui::GetWindowDrawList();
 	drawList->AddImage((ImTextureID)(uintptr_t)view, viewportPos, ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y));
+	float imoguizmoSize = 120.0f;
+	ImOGuizmo::config.axisLengthScale = 0.1f;
+	ImOGuizmo::SetRect(viewportPos.x + viewportSize.x - imoguizmoSize, viewportPos.y, imoguizmoSize);
 
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
 	ImGui::PushStyleColor(ImGuiCol_Header, themeColor);
 
-	float toolbarWidth = 40.0f;
+	float toolbarWidth = 32.0f;
 
 	if (ImGui::BeginChild("##Actions", ImVec2(toolbarWidth, 0), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar)) {
-		if (ImGui::Selectable("Play", editorContext.getPlaymodeState() == EditorPlaymodeState::Playing, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
+		if (ImGui::Selectable("##Play", editorContext.getPlaymodeState() == EditorPlaymodeState::Playing, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			if (editorContext.getPlaymodeState() == EditorPlaymodeState::Playing) {
 				Editor::get().stopPlaying();
 			} else {
 				Editor::get().startPlaying();
 			}
 		}
-		if (ImGui::Selectable("Translate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::TRANSLATE, ImGuiSelectableFlags_None, ImVec2(80.0f, 18.0f))) {
+		ImVec2 rectMin = ImGui::GetItemRectMin();
+		ImVec2 rectMax = ImGui::GetItemRectMax();
+		WGPUTextureView renameIconView = icons.getTextureView();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Play").uv.Min, icons.getIcon("Play").uv.Max);
+		if (ImGui::Selectable("##Translate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::TRANSLATE, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		}
-		if (ImGui::Selectable("Rotate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::ROTATE, ImGuiSelectableFlags_None, ImVec2(50.0f, 18.0f))) {
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
+		renameIconView = icons.getTextureView();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Translate").uv.Min, icons.getIcon("Translate").uv.Max);
+		if (ImGui::Selectable("##Rotate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::ROTATE, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
 		}
-		if (ImGui::Selectable("Scale", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::SCALE, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
+		renameIconView = icons.getTextureView();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Rotate").uv.Min, icons.getIcon("Rotate").uv.Max);
+		if (ImGui::Selectable("##Scale", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::SCALE, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
 		}
-		if (ImGui::Selectable("World", manipulationSettings.relativeSpaceMode == ImGuizmo::MODE::WORLD, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
-			manipulationSettings.relativeSpaceMode = ImGuizmo::MODE::WORLD;
-		}
-		if (ImGui::Selectable("Local", manipulationSettings.relativeSpaceMode == ImGuizmo::MODE::LOCAL, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
-			manipulationSettings.relativeSpaceMode = ImGuizmo::MODE::LOCAL;
-		}
-		if (ImGui::Selectable("Snap", manipulationSettings.snap, ImGuiSelectableFlags_None, ImVec2(40.0f, 18.0f))) {
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
+		renameIconView = icons.getTextureView();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Scale").uv.Min, icons.getIcon("Scale").uv.Max);
+		if (ImGui::Selectable("##Snap", manipulationSettings.snap, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.snap = !manipulationSettings.snap;
 		}
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
+		renameIconView = icons.getTextureView();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Snap").uv.Min, icons.getIcon("Snap").uv.Max);
+		if (ImGui::Selectable("##Local", manipulationSettings.relativeSpaceMode == ImGuizmo::MODE::LOCAL, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
+			if (manipulationSettings.relativeSpaceMode == ImGuizmo::MODE::WORLD)
+				manipulationSettings.relativeSpaceMode = ImGuizmo::MODE::LOCAL;
+			else
+				manipulationSettings.relativeSpaceMode = ImGuizmo::MODE::WORLD;
+		}
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
+		renameIconView = icons.getTextureView();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Local").uv.Min, icons.getIcon("Local").uv.Max);
 		ImGui::EndChild();
 	}
 
 	ImGui::PopStyleColor();
-	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 
 	glm::mat4 viewMatrix = editorView.getViewMatrix();
@@ -170,15 +200,6 @@ void ViewPanel::onEvent(Event &e) {
 }
 
 void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity entity) {
-	if (ImGui::IsKeyPressed(ImGuiKey_T) && !viewportMovementActive && focused)
-		manipulationSettings.currentGizmoOperation = ImGuizmo::TRANSLATE;
-	if (ImGui::IsKeyPressed(ImGuiKey_E) && !viewportMovementActive && focused)
-		manipulationSettings.currentGizmoOperation = ImGuizmo::ROTATE;
-	if (ImGui::IsKeyPressed(ImGuiKey_R) && !viewportMovementActive && focused)
-		manipulationSettings.currentGizmoOperation = ImGuizmo::SCALE;
-
-	if (ImGui::IsKeyPressed(ImGuiKey_S) && !viewportMovementActive && focused)
-		manipulationSettings.snap = !manipulationSettings.snap;
 	glm::vec3 snap;
 	switch (manipulationSettings.currentGizmoOperation) {
 	case ImGuizmo::TRANSLATE:

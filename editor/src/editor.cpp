@@ -175,12 +175,16 @@ void Editor::stopPlaying() {
 }
 
 void Editor::pausePlaying() {
+	sceneManager.setSceneMode(SceneMode::PAUSE);
+
 	editorContext.setPlaymodeState(EditorPlaymodeState::Paused);
 	EditorPlaymodeEvent event = EditorPlaymodeEvent(editorContext.getPlaymodeState());
 	onEvent(event);
 }
 
 void Editor::resumePlaying() {
+	sceneManager.setSceneMode(SceneMode::PLAY);
+
 	editorContext.setPlaymodeState(EditorPlaymodeState::Playing);
 	EditorPlaymodeEvent event = EditorPlaymodeEvent(editorContext.getPlaymodeState());
 	onEvent(event);

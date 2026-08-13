@@ -88,11 +88,13 @@ void ViewPanel::onDraw() {
 	ImOGuizmo::SetRect(viewportPos.x + viewportSize.x - imoguizmoSize, viewportPos.y, imoguizmoSize);
 
 	ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
-	ImGui::PushStyleColor(ImGuiCol_Header, themeColor);
+	ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
 
-	float toolbarWidth = 32.0f;
+	float toolbarWidth = 40.0f;
 
 	if (ImGui::BeginChild("##Actions", ImVec2(toolbarWidth, 0), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar)) {
+		WGPUTextureView iconView = icons.getTextureView();
+
 		if (ImGui::Selectable("##Play", editorContext.getPlaymodeState() == EditorPlaymodeState::Playing, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			if (editorContext.getPlaymodeState() == EditorPlaymodeState::Playing) {
 				Editor::get().stopPlaying();
@@ -102,36 +104,41 @@ void ViewPanel::onDraw() {
 		}
 		ImVec2 rectMin = ImGui::GetItemRectMin();
 		ImVec2 rectMax = ImGui::GetItemRectMax();
-		WGPUTextureView renameIconView = icons.getTextureView();
-		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Play").uv.Min, icons.getIcon("Play").uv.Max);
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Play").uv.Min, icons.getIcon("Play").uv.Max);
+		if (ImGui::Selectable("##Pause", editorContext.getPlaymodeState() == EditorPlaymodeState::Paused, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
+			if (editorContext.getPlaymodeState() == EditorPlaymodeState::Playing) {
+				Editor::get().pausePlaying();
+			} else if (editorContext.getPlaymodeState() == EditorPlaymodeState::Paused) {
+				Editor::get().resumePlaying();
+			}
+		}
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Pause").uv.Min, icons.getIcon("Pause").uv.Max);
 		if (ImGui::Selectable("##Translate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::TRANSLATE, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		}
 		rectMin = ImGui::GetItemRectMin();
 		rectMax = ImGui::GetItemRectMax();
-		renameIconView = icons.getTextureView();
-		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Translate").uv.Min, icons.getIcon("Translate").uv.Max);
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Translate").uv.Min, icons.getIcon("Translate").uv.Max);
 		if (ImGui::Selectable("##Rotate", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::ROTATE, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
 		}
 		rectMin = ImGui::GetItemRectMin();
 		rectMax = ImGui::GetItemRectMax();
-		renameIconView = icons.getTextureView();
-		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Rotate").uv.Min, icons.getIcon("Rotate").uv.Max);
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Rotate").uv.Min, icons.getIcon("Rotate").uv.Max);
 		if (ImGui::Selectable("##Scale", manipulationSettings.currentGizmoOperation == ImGuizmo::OPERATION::SCALE, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
 		}
 		rectMin = ImGui::GetItemRectMin();
 		rectMax = ImGui::GetItemRectMax();
-		renameIconView = icons.getTextureView();
-		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Scale").uv.Min, icons.getIcon("Scale").uv.Max);
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Scale").uv.Min, icons.getIcon("Scale").uv.Max);
 		if (ImGui::Selectable("##Snap", manipulationSettings.snap, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			manipulationSettings.snap = !manipulationSettings.snap;
 		}
 		rectMin = ImGui::GetItemRectMin();
 		rectMax = ImGui::GetItemRectMax();
-		renameIconView = icons.getTextureView();
-		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Snap").uv.Min, icons.getIcon("Snap").uv.Max);
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Snap").uv.Min, icons.getIcon("Snap").uv.Max);
 		if (ImGui::Selectable("##Local", manipulationSettings.relativeSpaceMode == ImGuizmo::MODE::LOCAL, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			if (manipulationSettings.relativeSpaceMode == ImGuizmo::MODE::WORLD)
 				manipulationSettings.relativeSpaceMode = ImGuizmo::MODE::LOCAL;
@@ -140,8 +147,7 @@ void ViewPanel::onDraw() {
 		}
 		rectMin = ImGui::GetItemRectMin();
 		rectMax = ImGui::GetItemRectMax();
-		renameIconView = icons.getTextureView();
-		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)renameIconView, rectMin, rectMax, icons.getIcon("Local").uv.Min, icons.getIcon("Local").uv.Max);
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Local").uv.Min, icons.getIcon("Local").uv.Max);
 		ImGui::EndChild();
 	}
 

@@ -12,6 +12,7 @@
 #include <ecs.hpp>
 #include <event.hpp>
 #include <texture.hpp>
+#include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 
 using namespace CitronCore;
@@ -166,8 +167,11 @@ class InspectorPanel : public Panel {
 											   AppContext appContext);
 
 	static bool collapsingHeader(const char *label,
-								 const char *icon_open = "+",
-								 const char *icon_closed = "-");
+								 const char *icon_open = "",
+								 const char *icon_closed = "");
+
+  private:
+	void drawComponentIcon(const std::string &name, WGPUTextureView iconView, ImVec2 iconMin, ImVec2 iconMax);
 };
 
 class AssetRegistryPanel : public Panel {

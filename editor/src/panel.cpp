@@ -5,6 +5,7 @@
 #include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
 #include "gui.hpp"
+#include "lang.hpp"
 #include "registry.hpp"
 #include "editor.hpp"
 #include <cfloat>
@@ -549,6 +550,9 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	CitronECS::EntityBaseComponent &entityBase =
 		scene->getRegistry().get<CitronECS::EntityBaseComponent>(entity);
 
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	WGPUTextureView iconView = icons.getTextureView();
+
 	ImGui::PushID(entityBase.uuid);
 	ImGui::TableNextRow();
 	ImGui::TableNextColumn();
@@ -566,6 +570,15 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	}
 	bool node1_open = ImGui::TreeNodeEx(entityBase.name.c_str(),
 										flags);
+
+	// icon
+	ImVec2 rectMin = ImGui::GetItemRectMin();
+	ImVec2 rectMax = ImGui::GetItemRectMax();
+	float size = rectMax.y - rectMin.y;
+	ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
+	ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
+	ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Entity").uv.Min, icons.getIcon("Entity").uv.Max);
+
 	ImGui::PopStyleVar();
 	if (selected) {
 		ImGui::PopStyleColor();
@@ -636,6 +649,9 @@ void OutlinerPanel::onDraw() {
 		ImGui::TableHeadersRow();
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
+		EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+		WGPUTextureView iconView = icons.getTextureView();
+
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 			bool selected = context.getCurrentlySelectedItem().index() == 1 && std::get<std::shared_ptr<System>>(context.getCurrentlySelectedItem()) == system;
@@ -650,6 +666,14 @@ void OutlinerPanel::onDraw() {
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			ImGui::TreeNodeEx(system->getName().c_str(), flags);
+
+			// icon
+			ImVec2 rectMin = ImGui::GetItemRectMin();
+			ImVec2 rectMax = ImGui::GetItemRectMax();
+			float size = rectMax.y - rectMin.y;
+			ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
+			ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
+			ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("System").uv.Min, icons.getIcon("System").uv.Max);
 
 			if (ImGui::IsItemClicked()) {
 				context.setCurrentlySelectedItem(system);
@@ -776,7 +800,7 @@ bool InspectorPanel::collapsingHeader(const char *label,
 	// Format full-width label with your custom trailing/leading icons
 	char buf[128];
 	ImGui::SetWindowFontScale(4.0f);
-	snprintf(buf, sizeof(buf), "%s  %s", (open ? icon_open : icon_closed),
+	snprintf(buf, sizeof(buf), "%s    %s", (open ? icon_open : icon_closed),
 			 label);
 	ImGui::SetWindowFontScale(1.0f);
 
@@ -790,6 +814,21 @@ bool InspectorPanel::collapsingHeader(const char *label,
 	return open;
 }
 
+void InspectorPanel::drawComponentIcon(const std::string &name, WGPUTextureView iconView, ImVec2 iconMin, ImVec2 iconMax) {
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	if (name == "Transform Component") {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Local").uv.Min, icons.getIcon("Local").uv.Max);
+	} else if (name == "Mesh Component") {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Mesh").uv.Min, icons.getIcon("Mesh").uv.Max);
+	} else if (name == "Perspective Camera Component") {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Camera").uv.Min, icons.getIcon("Camera").uv.Max);
+	} else if (name == "Rigidbody Component") {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Rigidbody").uv.Min, icons.getIcon("Rigidbody").uv.Max);
+	} else {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Component").uv.Min, icons.getIcon("Component").uv.Max);
+	}
+}
+
 void InspectorPanel::onAttach() {}
 void InspectorPanel::onDetach() {}
 void InspectorPanel::onUpdate() {}
@@ -797,6 +836,9 @@ void InspectorPanel::onUpdate() {}
 void InspectorPanel::onDraw() {
 	EditorContext &context = Editor::get().getEditorContext();
 	std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
+
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	WGPUTextureView iconView = icons.getTextureView();
 
 	ImGui::Begin("Inspector");
 	auto &registry = appContext.sceneManager.getActiveScene()->getRegistry();
@@ -807,6 +849,14 @@ void InspectorPanel::onDraw() {
 			if (metadata.has(currentScene)) {
 				std::shared_ptr<System> system = metadata.get(currentScene);
 				if (collapsingHeader(metadata.name.c_str())) {
+					// icon when opened
+					ImVec2 rectMin = ImGui::GetItemRectMin();
+					ImVec2 rectMax = ImGui::GetItemRectMax();
+					float size = rectMax.y - rectMin.y;
+					ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
+					ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
+					ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("System").uv.Min, icons.getIcon("System").uv.Max);
+
 					if (ImGui::BeginTable("##ComponentMemberTable", 2,
 										  ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner)) {
 						// First column gets a fixed width of 150 units
@@ -837,6 +887,14 @@ void InspectorPanel::onDraw() {
 
 						ImGui::EndTable();
 					}
+				} else {
+					// icon when closed
+					ImVec2 rectMin = ImGui::GetItemRectMin();
+					ImVec2 rectMax = ImGui::GetItemRectMax();
+					float size = rectMax.y - rectMin.y;
+					ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
+					ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
+					ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("System").uv.Min, icons.getIcon("System").uv.Max);
 				}
 			}
 		}
@@ -848,6 +906,15 @@ void InspectorPanel::onDraw() {
 			if (metadata.has(registry, selectedEntity)) {
 				void *component = metadata.get(registry, selectedEntity);
 				if (collapsingHeader(metadata.name.c_str())) {
+					// icon when open
+					ImVec2 rectMin = ImGui::GetItemRectMin();
+					ImVec2 rectMax = ImGui::GetItemRectMax();
+					float size = rectMax.y - rectMin.y;
+					ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
+					ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
+					// builting component icons based on name
+					drawComponentIcon(metadata.name, iconView, iconMin, iconMax);
+
 					if (ImGui::BeginPopupContextItem()) {
 						if (ImGui::MenuItem("Remove Component")) {
 							metadata.remove(registry, selectedEntity);
@@ -879,6 +946,14 @@ void InspectorPanel::onDraw() {
 
 						ImGui::EndTable();
 					}
+				} else {
+					// icon when closed
+					ImVec2 rectMin = ImGui::GetItemRectMin();
+					ImVec2 rectMax = ImGui::GetItemRectMax();
+					float size = rectMax.y - rectMin.y;
+					ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
+					ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
+					drawComponentIcon(metadata.name, iconView, iconMin, iconMax);
 				}
 			}
 		}

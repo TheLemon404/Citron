@@ -84,23 +84,37 @@ void GuiLayer::onAttach() {
 	const ImVec2 uvSize = ImVec2(((float)atlasSize.x / 20.0f) / atlasSize.x, ((float)atlasSize.y / 20.0f) / atlasSize.y);
 	CITRON_CLIENT_INFO("SIZE {} ", uvSize.x);
 	float i = 1.0f;
-	icons.registerIcon("Play", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	float j = 1.0f;
+	icons.registerIcon("Play", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Pause", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Pause", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Stop", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Stop", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Select", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Select", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Translate", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Translate", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Rotate", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Rotate", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Scale", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Scale", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Snap", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Snap", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Local", ImRect(uvSize.x * (i - 1), 0.0f, uvSize.x * i, uvSize.y), ImVec2(32.0f, 32.0f));
+	icons.registerIcon("Local", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i = 1.0f;
+	j++;
+	icons.registerIcon("Entity", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("System", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Component", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Rigidbody", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Mesh", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Camera", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
 
 	viewPanel.onAttach();
@@ -369,7 +383,7 @@ void GuiLayer::applyTheme() {
 	style.Colors[ImGuiCol_ButtonActive] =
 		ImVec4(0.20171672f, 0.2017147f, 0.2017147f, 1.0f);
 	style.Colors[ImGuiCol_Header] =
-		ImVec4(0.32941177f, 0.24f, 0.24f, 1.0f);
+		ImVec4(0.24f, 0.24f, 0.24f, 1.0f);
 	style.Colors[ImGuiCol_HeaderHovered] =
 		ImVec4(0.24f, 0.24f, 0.24f, 1.0f);
 	style.Colors[ImGuiCol_HeaderActive] =

@@ -1,5 +1,5 @@
 # Citron Engine
-  An ECS-first custom game engine
+  An ECS-first, WebGPU game engine
 
 > [!IMPORTANT]  
 > This project is actively in development. This is not the finished project, and I am currently building this engine in my free time.

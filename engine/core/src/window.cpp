@@ -3,6 +3,7 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_messagebox.h"
 #include "SDL3/SDL_oldnames.h"
+#include "SDL3/SDL_surface.h"
 #include "SDL3/SDL_video.h"
 #include "keyboard.hpp"
 #include "mouse.hpp"
@@ -10,17 +11,26 @@
 #include <logger.hpp>
 #include <sdl3webgpu.h>
 #include <webgpu/webgpu.hpp>
+#include <SDL3_image/SDL_image.h>
 
 using namespace CitronCore;
 
 Window::Window(const char *title, int width, int height,
-			   EventCallbackFn eventCallback)
-	: title(title), width(width), height(height), eventCallback(eventCallback) {
+			   EventCallbackFn eventCallback, const char *iconSVGFilepath)
+	: title(title), width(width), height(height), eventCallback(eventCallback), iconSVGFilepath(iconSVGFilepath) {
 }
 
 Window::~Window() {
 	if (sdl_window && SDL_WasInit(SDL_INIT_VIDEO)) {
 		SDL_DestroyWindow(sdl_window);
+	}
+}
+
+void Window::setIcon(const char *iconSVGFilepath) {
+	this->iconSVGFilepath = iconSVGFilepath;
+	if (iconSVGFilepath) {
+		SDL_Surface *icon = IMG_Load(iconSVGFilepath);
+		SDL_SetWindowIcon(sdl_window, icon);
 	}
 }
 
@@ -43,6 +53,11 @@ void Window::open() {
 		CITRON_CORE_CRITICAL("Error initializing SDL window");
 		close();
 		return;
+	}
+
+	if (iconSVGFilepath) {
+		SDL_Surface *icon = IMG_Load(iconSVGFilepath);
+		SDL_SetWindowIcon(sdl_window, icon);
 	}
 
 	sdl_surface = SDL_GetWindowSurface(sdl_window);

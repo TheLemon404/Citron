@@ -86,13 +86,15 @@ class CITRON_CORE_API Window {
 	using EventCallbackFn = std::function<void(Event &)>;
 
 	Window(const char *title, int width, int height,
-		   EventCallbackFn eventCallback);
+		   EventCallbackFn eventCallback, const char *iconSVGfilepath = nullptr);
 	Window &operator=(const Window &) = delete;
 	~Window();
 
 	inline void setEventCallback(const EventCallbackFn &callback) {
 		eventCallback = callback;
 	}
+
+	void setIcon(const char *iconSVGFilepath);
 
 	void setName(std::string &name);
 
@@ -110,6 +112,7 @@ class CITRON_CORE_API Window {
 	int getHeight() const { return height; }
 
   private:
+	const char *iconSVGFilepath = nullptr;
 	EventCallbackFn eventCallback = nullptr;
 };
 

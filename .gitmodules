@@ -58,3 +58,6 @@
 [submodule "vendor/imoguizmo"]
 	path = vendor/imoguizmo
 	url = https://github.com/TheLemon404/imoguizmo.git
+[submodule "vendor/SDL_image"]
+	path = vendor/SDL_image
+	url = https://github.com/libsdl-org/SDL_image.git

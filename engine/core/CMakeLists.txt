@@ -15,6 +15,7 @@ target_link_libraries(citron_core
 PUBLIC
 spdlog::spdlog
 SDL3::SDL3
+SDL3_image::SDL3_image
 sdl3webgpu
 )
 

@@ -83,6 +83,8 @@ void ViewPanel::onDraw() {
 	WGPUTextureView view = sceneView;
 	ImDrawList *drawList = ImGui::GetWindowDrawList();
 	drawList->AddImage((ImTextureID)(uintptr_t)view, viewportPos, ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y));
+	if (editorContext.getPlaymodeState() != EditorPlaymodeState::Stopped)
+		drawList->AddRect(viewportPos, ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y), ImColor(themeSecondaryColor), 0, 0, 2.0f);
 	float imoguizmoSize = 120.0f;
 	ImOGuizmo::config.axisLengthScale = 0.1f;
 	ImOGuizmo::SetRect(viewportPos.x + viewportSize.x - imoguizmoSize, viewportPos.y, imoguizmoSize);

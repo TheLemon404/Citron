@@ -193,6 +193,8 @@ void Editor::resumePlaying() {
 void Editor::init() {
 	App::init();
 
+	window.setIcon("C:\\Citron\\EngineResources\\Textures\\citron_logo.svg");
+
 	openProject(editorContext.projectFilePath.string());
 
 	assetManager.initializeAssetRegistry();
@@ -283,12 +285,6 @@ bool Editor::openProject(std::string projectFilePath) {
 	std::string editorTitle = std::string("Citron Editor: ") +
 							  editorContext.projectFilePath.filename().string();
 	Editor::get().getContext().window.setName(editorTitle);
-
-	YAML::Node citronConfig =
-		YAML::LoadFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml");
-	citronConfig["last_project"] = projectFilePath;
-	CitronIO::IO::writeFile(std::string(CITRON_PROGRAM_FOLDER) + "/citron.yaml",
-							YAML::Dump(citronConfig));
 
 	CITRON_CLIENT_INFO("Opened project: {}", projectFilePath);
 	return true;

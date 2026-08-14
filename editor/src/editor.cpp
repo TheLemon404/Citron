@@ -282,8 +282,7 @@ bool Editor::openProject(std::string projectFilePath) {
 		sceneManager.setActiveScene(std::make_shared<Scene>(""));
 	}
 
-	std::string editorTitle = std::string("Citron Editor: ") +
-							  editorContext.projectFilePath.filename().string();
+	std::string editorTitle = projectFileNode["name"].as<std::string>();
 	Editor::get().getContext().window.setName(editorTitle);
 
 	CITRON_CLIENT_INFO("Opened project: {}", projectFilePath);

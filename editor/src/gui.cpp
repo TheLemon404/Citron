@@ -326,6 +326,7 @@ void GuiLayer::applyTheme() {
 	style.GrabRounding = 2.5f;
 	style.TabRounding = 1.0f;
 	style.TabBorderSize = 0.0f;
+	style.TabBarOverlineSize = 0.0f;
 	style.TabCloseButtonMinWidthSelected = 0.0f;
 	style.ColorButtonPosition = ImGuiDir_Right;
 	style.ButtonTextAlign = ImVec2(0.5f, 0.5f);

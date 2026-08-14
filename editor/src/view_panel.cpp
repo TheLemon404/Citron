@@ -150,8 +150,8 @@ void ViewPanel::onDraw() {
 		rectMin = ImGui::GetItemRectMin();
 		rectMax = ImGui::GetItemRectMax();
 		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Local").uv.Min, icons.getIcon("Local").uv.Max);
-		ImGui::EndChild();
 	}
+	ImGui::EndChild();
 
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();

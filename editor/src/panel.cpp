@@ -649,6 +649,15 @@ void OutlinerPanel::onDraw() {
 		ImGui::TableHeadersRow();
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
+		if (ImGui::BeginPopupContextItem(
+				"SceneContextPopup",
+				ImGuiPopupFlags_NoOpenOverExistingPopup)) {
+			if (ImGui::MenuItem("Add System")) {
+				pendingAddSystem = true;
+			}
+			ImGui::EndPopup();
+		}
+
 		EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
 		WGPUTextureView iconView = icons.getTextureView();
 
@@ -666,6 +675,18 @@ void OutlinerPanel::onDraw() {
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			ImGui::TreeNodeEx(system->getName().c_str(), flags);
+
+			if (ImGui::BeginPopupContextItem(
+					"SceneContextPopup",
+					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
+				if (ImGui::MenuItem("Delete System") && context.getCurrentlySelectedItem().index() == 1) {
+					pendingDeleteSystem = system;
+				}
+				if (ImGui::MenuItem("Add System")) {
+					pendingAddSystem = true;
+				}
+				ImGui::EndPopup();
+			}
 
 			// icon
 			ImVec2 rectMin = ImGui::GetItemRectMin();
@@ -686,19 +707,6 @@ void OutlinerPanel::onDraw() {
 			}
 		}
 
-		if (currentEditedScene) {
-			if (ImGui::BeginPopupContextWindow(
-					"SceneContextPopup",
-					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
-				if (ImGui::MenuItem("Delete System") && context.getCurrentlySelectedItem().index() == 1) {
-					pendingDeleteSystem = std::get<std::shared_ptr<System>>(context.getCurrentlySelectedItem());
-				}
-				if (ImGui::MenuItem("Add System")) {
-					pendingAddSystem = true;
-				}
-				ImGui::EndPopup();
-			}
-		}
 		ImGui::PopStyleVar();
 
 		ImGui::EndTable();
@@ -708,6 +716,15 @@ void OutlinerPanel::onDraw() {
 						  ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY)) {
 		ImGui::TableSetupColumn("  Entities");
 		ImGui::TableHeadersRow();
+
+		if (ImGui::BeginPopupContextItem(
+				"SceneContextPopup",
+				ImGuiPopupFlags_NoOpenOverExistingPopup)) {
+			if (ImGui::MenuItem("Create Entity")) {
+				currentEditedScene->createEntity();
+			}
+			ImGui::EndPopup();
+		}
 
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload *payload =
@@ -731,16 +748,6 @@ void OutlinerPanel::onDraw() {
 				if (entityBase.parentId == 0) {
 					showEntityChildTree(entity, currentEditedScene);
 				}
-			}
-
-			if (ImGui::BeginPopupContextWindow(
-					"SceneContextPopup",
-					ImGuiPopupFlags_NoOpenOverExistingPopup)) {
-				if (ImGui::MenuItem("Create Entity")) {
-					currentEditedScene->createEntity();
-				}
-
-				ImGui::EndPopup();
 			}
 		}
 
@@ -971,11 +978,21 @@ void InspectorPanel::onDraw() {
 				std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(), ::tolower);
 
 				if (component.name.starts_with(componentSearchResult)) {
-					if (ImGui::Selectable(component.name.c_str())) {
+					std::string componentIDName = "##" + component.name;
+					if (ImGui::Selectable(componentIDName.c_str())) {
 						componentSearchResult = component.name;
 						component.add(registry, selectedEntity);
 						ImGui::CloseCurrentPopup();
 					}
+					ImGui::SameLine();
+					ImVec2 rectMin = ImGui::GetItemRectMin();
+					ImVec2 rectMax = ImGui::GetItemRectMax();
+					float delta = rectMax.y - rectMin.y;
+					ImVec2 iconMax = ImVec2(rectMin.x + delta, rectMin.y + delta);
+					ImGui::Dummy(ImVec2(0, delta));
+					drawComponentIcon(component.name, iconView, rectMin, iconMax);
+					ImGui::SameLine();
+					ImGui::Text("%s", component.name.c_str());
 				}
 			}
 			ImGui::EndPopup();

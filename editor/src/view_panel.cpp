@@ -97,6 +97,13 @@ void ViewPanel::onDraw() {
 	if (ImGui::BeginChild("##Actions", ImVec2(toolbarWidth, 0), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar)) {
 		WGPUTextureView iconView = icons.getTextureView();
 
+		if (ImGui::Selectable("##Build", false, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
+			// build scripts
+			CITRON_CLIENT_INFO("Building Scripts");
+		}
+		ImVec2 rectMin = ImGui::GetItemRectMin();
+		ImVec2 rectMax = ImGui::GetItemRectMax();
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Build").uv.Min, icons.getIcon("Build").uv.Max);
 		if (ImGui::Selectable("##Play", editorContext.getPlaymodeState() == EditorPlaymodeState::Playing, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			if (editorContext.getPlaymodeState() == EditorPlaymodeState::Playing) {
 				Editor::get().stopPlaying();
@@ -104,8 +111,8 @@ void ViewPanel::onDraw() {
 				Editor::get().startPlaying();
 			}
 		}
-		ImVec2 rectMin = ImGui::GetItemRectMin();
-		ImVec2 rectMax = ImGui::GetItemRectMax();
+		rectMin = ImGui::GetItemRectMin();
+		rectMax = ImGui::GetItemRectMax();
 		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, icons.getIcon("Play").uv.Min, icons.getIcon("Play").uv.Max);
 		if (ImGui::Selectable("##Pause", editorContext.getPlaymodeState() == EditorPlaymodeState::Paused, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			if (editorContext.getPlaymodeState() == EditorPlaymodeState::Playing) {

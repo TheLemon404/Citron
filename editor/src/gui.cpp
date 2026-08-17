@@ -102,6 +102,8 @@ void GuiLayer::onAttach() {
 	icons.registerIcon("Snap", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
 	icons.registerIcon("Local", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	icons.registerIcon("Build", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i = 1.0f;
 	j++;
 	icons.registerIcon("Entity", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));

@@ -20,10 +20,12 @@
 #include <spdlog/spdlog.h>
 #include <webgpu/webgpu.hpp>
 #include <window.hpp>
+#include <scripting.hpp>
 
 using namespace CitronGraphics;
 using namespace CitronECS;
 using namespace CitronAssets;
+using namespace CitronScripting;
 
 namespace CitronCore {
 class CITRON_APP_API AppEvent : public Event {
@@ -70,6 +72,7 @@ struct CITRON_APP_API AppContext {
 	CitronGraphics::Renderer &renderer;
 	CitronAssets::AssetManager &assetManager;
 	CitronECS::SceneManager &sceneManager;
+	CitronScripting::ScriptingEngine &scriptingEngine;
 };
 
 class CITRON_APP_API App {
@@ -103,7 +106,7 @@ class CITRON_APP_API App {
 	bool isRunning() const { return running; }
 
 	AppContext getContext() {
-		return {window, renderer, assetManager, sceneManager};
+		return {window, renderer, assetManager, sceneManager, scriptingEngine};
 	}
 
 	void initLogSink() {
@@ -125,6 +128,7 @@ class CITRON_APP_API App {
 	}
 
   protected:
+	std::filesystem::path projectFilepath;
 	const bool isRuntimeMode = false;
 
 	std::shared_ptr<AppLogSink> sink = nullptr;
@@ -133,8 +137,10 @@ class CITRON_APP_API App {
 	AssetManager assetManager;
 	SceneManager sceneManager;
 	Renderer renderer;
+	ScriptingEngine scriptingEngine;
 
-	std::vector<CitronGraphics::RenderObject> extractRenderObjects();
+	std::vector<CitronGraphics::RenderObject>
+	extractRenderObjects();
 
 	bool onWindowClose(Event &e);
 

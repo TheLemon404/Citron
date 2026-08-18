@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(scripts LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+file(GLOB_RECURSE src CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.cpp)
+add_library(scripts SHARED ${src})
+target_sources(citron_scripting PRIVATE ${src})
+target_include_directories(citron_scripting PUBLIC ${PROJECT_SOURCE_DIR})

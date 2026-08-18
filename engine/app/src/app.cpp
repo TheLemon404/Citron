@@ -2,6 +2,7 @@
 #include "SDL3/SDL_timer.h"
 #include "clock.hpp"
 #include "texture.hpp"
+#include <filesystem>
 #define WEBGPU_CPP_IMPLEMENTATION
 #include "registry.hpp"
 
@@ -69,7 +70,7 @@ void AppLogSink::sink_it_(const spdlog::details::log_msg &msg) {
 }
 
 App::App(bool isRuntime, std::filesystem::path projectFilePath)
-	: window("Citron Editor", 1280, 720, CITRON_BIND_EVENT_FN(App::onEvent)), assetManager(isRuntime, projectFilePath.parent_path(), CITRON_BIND_EVENT_FN(App::onEvent)),
+	: projectFilepath(projectFilePath), window("Citron Editor", 1280, 720, CITRON_BIND_EVENT_FN(App::onEvent)), assetManager(isRuntime, projectFilePath.parent_path(), CITRON_BIND_EVENT_FN(App::onEvent)),
 	  renderer(window, assetManager),
 	  isRuntimeMode(isRuntime), sceneManager(assetManager) {
 	CITRON_CORE_ASSERT(!instance, "App already exists");

@@ -39,7 +39,7 @@
 
 void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get().getEditorContext();
-	currentDirectory = context.projectFilePath.parent_path();
+	currentDirectory = context.projectFilePath.parent_path() / "Assets";
 	refreshDirectoryListings();
 
 	folderIconTexture = ImageTexture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getContext().device);
@@ -59,7 +59,7 @@ void AssetPanel::onDraw() {
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_ARROW_UP)) {
 		if (!currentDirectory.empty() &&
-			currentDirectory != context.projectFilePath.parent_path()) {
+			currentDirectory != context.projectFilePath.parent_path() / "Assets") {
 			currentDirectory = currentDirectory.parent_path();
 			refreshDirectoryListings();
 		}

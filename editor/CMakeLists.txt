@@ -18,6 +18,7 @@ SDL3::SDL3
 imguizmo
 iconfontcppheaders
 citron_io
+citron_scripting
 #citron_networking
 #citron_physics
 #citron_util
@@ -39,6 +40,7 @@ target_copy_shared_library(citron_editor citron_ecs)
 target_copy_shared_library(citron_editor citron_input)
 target_copy_shared_library(citron_editor citron_io)
 target_copy_shared_library(citron_editor citron_assets)
+target_copy_shared_library(citron_editor citron_scripting)
 target_copy_shared_library(citron_editor SDL3::SDL3)
 target_copy_shared_library(citron_editor imgui)
 target_copy_shared_library(citron_editor imguizmo)

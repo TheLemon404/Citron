@@ -99,6 +99,7 @@ void ViewPanel::onDraw() {
 
 		if (ImGui::Selectable("##Build", false, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			// build scripts
+			Editor::get().getContext().scriptingEngine.buildScripts(Editor::get().getEditorContext().projectFilePath.parent_path());
 			CITRON_CLIENT_INFO("Building Scripts");
 		}
 		ImVec2 rectMin = ImGui::GetItemRectMin();

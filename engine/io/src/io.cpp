@@ -6,9 +6,17 @@
 #include <iostream>
 #include <logger.hpp>
 #include <nfd.h>
-#include <stdexcept>
 #include <winerror.h>
 #include <winscard.h>
+
+#if defined(_WIN32)
+#include <windows.h>
+#elif defined(__linux__)
+#include <unistd.h>
+#include <limits.h>
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#endif
 
 using namespace CitronIO;
 
@@ -173,4 +181,26 @@ std::string IO::saveFileDialog(const std::string &filtername,
 	NFD_Quit();
 
 	return result;
+}
+
+std::filesystem::path IO::getRunningExecutablePath() {
+#if defined(_WIN32)
+	wchar_t buffer[MAX_PATH];
+	GetModuleFileNameW(NULL, buffer, MAX_PATH);
+	return std::filesystem::path(buffer);
+#elif defined(__linux__)
+	char buffer[PATH_MAX];
+	ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
+	if (len != -1) {
+		buffer[len] = '\0';
+		return std::filesystem::path(buffer);
+	}
+#elif defined(__APPLE__)
+	char buffer[1024];
+	uint32_t size = sizeof(buffer);
+	if (_NSGetExecutablePath(buffer, &size) == 0) {
+		return std::filesystem::path(buffer);
+	}
+#endif
+	return ""; // Fallback
 }

@@ -45,5 +45,7 @@ class CITRON_IO_API IO {
 	static std::string saveFileDialog(const std::string &filtername,
 									  const std::string &filters,
 									  const void *bytes, size_t size);
+
+	static std::filesystem::path getRunningExecutablePath();
 };
 } // namespace CitronIO

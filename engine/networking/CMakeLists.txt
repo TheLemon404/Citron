@@ -6,3 +6,5 @@ target_sources(citron_networking PRIVATE ${src})
 target_include_directories(citron_networking PUBLIC include)
 
 target_compile_features(citron_networking PUBLIC cxx_std_26)
+
+citron_export_sdk_headers(citron_networking)

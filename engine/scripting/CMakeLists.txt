@@ -9,4 +9,6 @@ target_include_directories(citron_scripting PUBLIC include)
 
 target_compile_features(citron_scripting PUBLIC cxx_std_26)
 
-target_link_libraries(citron_scripting PRIVATE citron_core citron_ecs citron_graphics citron_input citron_assets citron_util)
+target_link_libraries(citron_scripting PRIVATE citron_core citron_ecs citron_graphics citron_input citron_assets citron_util citron_io)
+
+citron_export_sdk_headers(citron_scripting)

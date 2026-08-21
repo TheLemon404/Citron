@@ -26,9 +26,12 @@ citron_scripting
 
 function(target_copy_shared_library target library)
 	add_custom_command(TARGET ${target} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:${library}>
-		$<TARGET_FILE_DIR:${target}>
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	$<TARGET_FILE:${library}>
+	$<TARGET_FILE_DIR:${target}>
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	$<TARGET_LINKER_FILE:${library}>
+	$<TARGET_FILE_DIR:${target}>
 	)
 endfunction()
 
@@ -41,6 +44,7 @@ target_copy_shared_library(citron_editor citron_input)
 target_copy_shared_library(citron_editor citron_io)
 target_copy_shared_library(citron_editor citron_assets)
 target_copy_shared_library(citron_editor citron_scripting)
+target_copy_shared_library(citron_editor citron_util)
 target_copy_shared_library(citron_editor SDL3::SDL3)
 target_copy_shared_library(citron_editor imgui)
 target_copy_shared_library(citron_editor imguizmo)

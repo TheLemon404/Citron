@@ -12,3 +12,5 @@ target_compile_features(citron_io PUBLIC cxx_std_26)
 target_link_libraries(citron_io PUBLIC nfd)
 
 target_link_libraries(citron_io PRIVATE citron_core)
+
+citron_export_sdk_headers(citron_io)

@@ -15,3 +15,5 @@ target_link_libraries(citron_graphics PRIVATE citron_core miniray nlohmann_json 
 function(target_copy_graphics_shared_dependencies target)
 	target_copy_webgpu_binaries(${target})
 endfunction()
+
+citron_export_sdk_headers(citron_graphics)

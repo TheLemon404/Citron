@@ -20,3 +20,5 @@ sdl3webgpu
 )
 
 target_link_libraries(citron_core PRIVATE webgpu)
+
+citron_export_sdk_headers(citron_core)

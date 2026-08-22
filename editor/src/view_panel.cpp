@@ -108,6 +108,9 @@ void ViewPanel::onDraw() {
 		if (ImGui::Selectable("##Play", editorContext.getPlaymodeState() == EditorPlaymodeState::Playing, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			if (editorContext.getPlaymodeState() == EditorPlaymodeState::Playing) {
 				Editor::get().stopPlaying();
+			} else if (editorContext.getPlaymodeState() == EditorPlaymodeState::Paused) {
+				Editor::get().stopPlaying();
+				Editor::get().startPlaying();
 			} else {
 				Editor::get().startPlaying();
 			}

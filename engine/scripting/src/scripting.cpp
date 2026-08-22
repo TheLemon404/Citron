@@ -79,7 +79,7 @@ void ScriptingEngine::parseAndRegisterUserTypes(const std::filesystem::path proj
 		return;
 	}
 
-	CITRON_CORE_CRITICAL("Registering user types...");
+	CITRON_CORE_INFO("Registering user types...");
 
 #if defined(__WIN32)
 	if (HMODULE scriptModulePreviousHandle = GetModuleHandle("libscripts.dll")) {

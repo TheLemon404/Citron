@@ -6,7 +6,6 @@
 #include "mesh.hpp"
 #include "serialization.hpp"
 #include "shader.hpp"
-#include "test_system.hpp"
 #include "uuid.hpp"
 #include "view.hpp"
 #include <lang.hpp>
@@ -64,8 +63,8 @@ void ECSRegistry::registerDefaultComponents() {
 		PerspectiveView *perspectiveView = (PerspectiveView *)data;
 		writer.writeData(&perspectiveView->aspect, sizeof(perspectiveView->aspect));
 		writer.writeData(&perspectiveView->fov, sizeof(perspectiveView->fov));
-		writer.writeData(&perspectiveView->near, sizeof(perspectiveView->near));
-		writer.writeData(&perspectiveView->far, sizeof(perspectiveView->far));
+		writer.writeData(&perspectiveView->nearPlane, sizeof(perspectiveView->nearPlane));
+		writer.writeData(&perspectiveView->farPlane, sizeof(perspectiveView->farPlane));
 	});
 
 	registerAssetReferenceSerialization<Mesh>();
@@ -115,8 +114,8 @@ void ECSRegistry::registerDefaultComponents() {
 		PerspectiveView *perspectiveView = (PerspectiveView *)data;
 		reader.readData(&perspectiveView->aspect, sizeof(perspectiveView->aspect));
 		reader.readData(&perspectiveView->fov, sizeof(perspectiveView->fov));
-		reader.readData(&perspectiveView->near, sizeof(perspectiveView->near));
-		reader.readData(&perspectiveView->far, sizeof(perspectiveView->far));
+		reader.readData(&perspectiveView->nearPlane, sizeof(perspectiveView->nearPlane));
+		reader.readData(&perspectiveView->farPlane, sizeof(perspectiveView->farPlane));
 	});
 	registerAssetReferenceDeserialization<Mesh>();
 	registerAssetReferenceDeserialization<Material>();
@@ -139,6 +138,4 @@ void ECSRegistry::registerDefaultComponents() {
 }
 
 void ECSRegistry::registerDefaultSystems() {
-	registerSystem<TestSystem>("Test System");
-	registerSystemMember<TestSystem, float>("speed Scaler", offset_of<&TestSystem::speedScaler, TestSystem>());
 }

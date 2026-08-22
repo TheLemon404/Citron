@@ -98,6 +98,8 @@ void App::init() {
 	ECSRegistry::registerDefaultComponents();
 	ECSRegistry::registerDefaultSystems();
 
+	scriptingEngine.init(projectFilepath.parent_path());
+
 	window.init();
 	window.open();
 

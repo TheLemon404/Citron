@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "ecs_exports.hpp"
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "logger.hpp"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "core_exports.hpp"
 
 #include "SDL3/SDL_events.h"
 #include "core.hpp"

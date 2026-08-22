@@ -1,7 +1,7 @@
 #pragma once
 
 #include "buffer.hpp"
-#include "citron_exports.hpp"
+#include "graphics_exports.hpp"
 #include <lang.hpp>
 #include "logger.hpp"
 #include "mesh.hpp"

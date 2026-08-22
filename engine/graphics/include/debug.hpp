@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "graphics_exports.hpp"
 #include "glm/fwd.hpp"
 #include <glm/glm.hpp>
 #include <vector>

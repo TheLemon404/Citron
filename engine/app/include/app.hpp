@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "app_exports.hpp"
 
 #include "registry.hpp"
 #include "mesh.hpp"

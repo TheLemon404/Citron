@@ -2,7 +2,7 @@
 
 #include "assets.hpp"
 #include "buffer.hpp"
-#include "citron_exports.hpp"
+#include "graphics_exports.hpp"
 
 #include "debug.hpp"
 #include "device.hpp"

@@ -142,8 +142,8 @@ Editor::Editor(const std::string &projectFilePath)
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			PerspectiveView *field = (PerspectiveView *)((char *)object + member.offset);
 			std::string fieldNameId = "##" + member.fieldName;
-			ImGui::DragFloat("near", &field->near);
-			ImGui::DragFloat("far", &field->far);
+			ImGui::DragFloat("near", &field->nearPlane);
+			ImGui::DragFloat("far", &field->farPlane);
 			ImGui::DragFloat("fov", &field->fov);
 			ImGui::DragFloat("aspect", &field->aspect);
 		});

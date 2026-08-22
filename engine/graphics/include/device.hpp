@@ -4,7 +4,7 @@
 #define WEBGPU_BACKEND DAWN
 
 #include "buffer.hpp"
-#include "citron_exports.hpp"
+#include "graphics_exports.hpp"
 #include <webgpu/webgpu.hpp>
 #include <window.hpp>
 

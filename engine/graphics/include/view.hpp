@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "graphics_exports.hpp"
 #include <glm/glm.hpp>
 
 namespace CitronGraphics {
@@ -19,8 +19,8 @@ class CITRON_GRAPHICS_API View {
 class CITRON_GRAPHICS_API PerspectiveView : public View {
   public:
 	float fov = 100.0f;
-	float near = 0.01f;
-	float far = 20000.0f;
+	float nearPlane = 0.01f;
+	float farPlane = 20000.0f;
 	float aspect = 1.2f;
 	glm::mat4 getProjectionMatrix() override;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "core_exports.hpp"
 
 namespace CitronCore {
 class CITRON_CORE_API Clock {

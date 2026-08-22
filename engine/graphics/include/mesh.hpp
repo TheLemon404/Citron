@@ -1,5 +1,5 @@
 #pragma once
-#include "citron_exports.hpp"
+#include "graphics_exports.hpp"
 
 #include "assets.hpp"
 #include "buffer.hpp"

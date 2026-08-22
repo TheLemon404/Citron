@@ -1,7 +1,7 @@
 #pragma once
 
 #include "assets.hpp"
-#include "citron_exports.hpp"
+#include "ecs_exports.hpp"
 #include "ecs.hpp"
 #include "serialization.hpp"
 #include <cstdint>

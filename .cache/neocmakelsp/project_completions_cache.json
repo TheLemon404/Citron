@@ -1,12 +1,42 @@
 {
-  "date": "2026-08-20T21:37:08.375916600-04:00",
+  "date": "2026-08-22T16:20:53.754374200-04:00",
   "data": {
-    "C:\\Dev\\citron\\engine\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\engine\\core\\CMakeLists.txt": [
       {
-        "label": "citron_install_target",
+        "label": "SDL_SHARED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\engine\\core\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\vendor\\CMakeLists.txt": [
+      {
+        "label": "DAWN_FETCH_DEPENDENCIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
+      },
+      {
+        "label": "YAML_BUILD_SHARED_LIBS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt": [
+      {
+        "label": "target_copy_graphics_shared_dependencies",
         "kind": 3,
         "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\CMakeLists.txt"
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeLists.txt": [
+      {
+        "label": "DUMP_FILE",
+        "kind": 3,
+        "detail": "Function",
+        "documentation": "defined macro\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeLists.txt\n\nbinary tree"
       }
     ],
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake": [
@@ -371,12 +401,502 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake"
       }
     ],
-    "C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake": [
       {
-        "label": "target_copy_graphics_shared_dependencies",
+        "label": "CPACK_BINARY_7Z",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BINARY_IFW",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BINARY_INNOSETUP",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BINARY_NSIS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BINARY_NUGET",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BINARY_WIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BINARY_ZIP",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_BUILD_SOURCE_DIRS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_CMAKE_GENERATOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_COMPONENT_UNSPECIFIED_HIDDEN",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_COMPONENT_UNSPECIFIED_REQUIRED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEBIAN_COMPRESSION_TYPE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEBIAN_PACKAGE_DEPENDS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEBIAN_PACKAGE_MAINTAINER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEBIAN_PACKAGE_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEBIAN_PACKAGE_SUGGESTS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEB_COMPONENT_INSTALL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEFAULT_PACKAGE_DESCRIPTION_FILE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DEFAULT_PACKAGE_DESCRIPTION_SUMMARY",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_GENERATOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_IGNORE_FILES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_INNOSETUP_ARCHITECTURE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_INSTALLED_DIRECTORIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_INSTALL_CMAKE_PROJECTS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_INSTALL_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_MODULE_PATH",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_COMPONENT_INSTALL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_DISPLAY_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_INSTALLER_ICON_CODE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_INSTALLER_MUI_ICON_CODE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_INSTALL_ROOT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_PACKAGE_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_NSIS_UNINSTALL_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_OBJCOPY_EXECUTABLE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_OBJDUMP_EXECUTABLE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_OUTPUT_CONFIG_FILE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_DEFAULT_LOCATION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_DESCRIPTION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_DESCRIPTION_FILE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_DESCRIPTION_SUMMARY",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_FILE_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_HOMEPAGE_URL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_INSTALL_DIRECTORY",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_INSTALL_REGISTRY_KEY",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_MAINTAINER",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_RELOCATABLE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_VENDOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_VERSION",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_VERSION_MAJOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PACKAGE_VERSION_MINOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_READELF_EXECUTABLE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RESOURCE_FILE_LICENSE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RESOURCE_FILE_README",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RESOURCE_FILE_WELCOME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RPM_COMPONENT_INSTALL",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RPM_PACKAGE_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RPM_PACKAGE_SOURCES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_RPM_PACKAGE_SUGGESTS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SET_DESTDIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_7Z",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_GENERATOR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_IGNORE_FILES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_INSTALLED_DIRECTORIES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_OUTPUT_CONFIG_FILE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_PACKAGE_FILE_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_TOPLEVEL_TAG",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SOURCE_ZIP",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_STRIP_FILES",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_SYSTEM_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_THREADS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_TOPLEVEL_TAG",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_WIX_SIZEOF_VOID_P",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      },
+      {
+        "label": "CPACK_PROPERTIES_FILE",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake"
+      }
+    ],
+    "C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake": [
+      {
+        "label": "CMAKE_INSTALL_PREFIX",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake"
+      },
+      {
+        "label": "CMAKE_INSTALL_CONFIG_NAME",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake"
+      },
+      {
+        "label": "CMAKE_INSTALL_COMPONENT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake"
+      },
+      {
+        "label": "CMAKE_INSTALL_COMPONENT",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake"
+      },
+      {
+        "label": "CMAKE_CROSSCOMPILING",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake"
+      },
+      {
+        "label": "CMAKE_OBJDUMP",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake"
+      }
+    ],
+    "C:\\Dev\\citron\\editor\\CMakeLists.txt": [
+      {
+        "label": "target_copy_shared_library",
         "kind": 3,
         "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt"
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\editor\\CMakeLists.txt"
       }
     ],
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake": [
@@ -777,6 +1297,54 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library"
       }
     ],
+    "C:\\Dev\\citron\\build.cmake": [
+      {
+        "label": "CMAKE_CXX_STANDARD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\build.cmake"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_REQUIRED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\build.cmake"
+      }
+    ],
+    "C:\\Dev\\citron\\CMakeLists.txt": [
+      {
+        "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+      },
+      {
+        "label": "CMAKE_CXX_STANDARD_REQUIRED",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
+      }
+    ],
+    "C:\\Dev\\citron\\engine\\CMakeLists.txt": [
+      {
+        "label": "citron_export_sdk_headers",
+        "kind": 3,
+        "detail": "Function",
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\CMakeLists.txt"
+      },
+      {
+        "label": "CITRON_SDK_DIR",
+        "kind": 12,
+        "detail": "Value",
+        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\engine\\CMakeLists.txt"
+      }
+    ],
     "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake": [
       {
         "label": "CMAKE_HOST_SYSTEM",
@@ -839,18 +1407,12 @@
         "documentation": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake"
       }
     ],
-    "C:\\Dev\\citron\\vendor\\CMakeLists.txt": [
+    "C:\\Dev\\citron\\engine\\cmake\\CitronInstall.cmake": [
       {
-        "label": "DAWN_FETCH_DEPENDENCIES",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
-      },
-      {
-        "label": "YAML_BUILD_SHARED_LIBS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt"
+        "label": "citron_install_target",
+        "kind": 3,
+        "detail": "Function",
+        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\cmake\\CitronInstall.cmake"
       }
     ],
     "C:\\Dev\\citron\\cmake\\CitronInstall.cmake": [
@@ -859,50 +1421,6 @@
         "kind": 3,
         "detail": "Function",
         "documentation": "defined function\nfrom: C:\\Dev\\citron\\cmake\\CitronInstall.cmake"
-      }
-    ],
-    "C:\\Dev\\citron\\__cmake_systeminformation\\CMakeLists.txt": [
-      {
-        "label": "DUMP_FILE",
-        "kind": 3,
-        "detail": "Function",
-        "documentation": "defined macro\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeLists.txt\n\nbinary tree"
-      }
-    ],
-    "C:\\Dev\\citron\\CMakeLists.txt": [
-      {
-        "label": "CMAKE_EXPORT_COMPILE_COMMANDS",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
-      },
-      {
-        "label": "CMAKE_CXX_STANDARD_REQUIRED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\engine\\core\\CMakeLists.txt": [
-      {
-        "label": "SDL_SHARED",
-        "kind": 12,
-        "detail": "Value",
-        "documentation": "defined variable\nfrom: C:\\Dev\\citron\\engine\\core\\CMakeLists.txt"
-      }
-    ],
-    "C:\\Dev\\citron\\engine\\cmake\\CitronInstall.cmake": [
-      {
-        "label": "citron_install_target",
-        "kind": 3,
-        "detail": "Function",
-        "documentation": "defined function\nfrom: C:\\Dev\\citron\\engine\\cmake\\CitronInstall.cmake"
       }
     ]
   }

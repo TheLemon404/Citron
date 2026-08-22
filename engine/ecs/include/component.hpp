@@ -1,6 +1,6 @@
 #pragma once
 
-#include "citron_exports.hpp"
+#include "ecs_exports.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "uuid.hpp"
 #include "view.hpp"

@@ -10,7 +10,7 @@ glm::mat4 View::getViewMatrix() {
 }
 
 glm::mat4 PerspectiveView::getProjectionMatrix() {
-	return glm::perspective(fov, aspect, near, far);
+	return glm::perspective(fov, aspect, nearPlane, farPlane);
 }
 
 bool PerspectiveView::isInsideBounds(glm::vec3 position) {

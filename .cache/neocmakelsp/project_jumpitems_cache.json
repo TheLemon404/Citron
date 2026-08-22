@@ -1,193 +1,6 @@
 {
-  "date": "2026-08-20T21:37:08.376403200-04:00",
+  "date": "2026-08-22T16:20:53.755078800-04:00",
   "data": {
-    "CMAKE_MT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 38,
-            "character": 4
-          },
-          "end": {
-            "line": 38,
-            "character": 12
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_LINKER_DEPFILE_SUPPORTED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 61,
-            "character": 4
-          },
-          "end": {
-            "line": 61,
-            "character": 38
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_PLATFORM_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 16,
-            "character": 4
-          },
-          "end": {
-            "line": 16,
-            "character": 23
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_WRAPPER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 5,
-            "character": 4
-          },
-          "end": {
-            "line": 5,
-            "character": 30
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_SIMULATE_VERSION": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 20,
-            "character": 4
-          },
-          "end": {
-            "line": 20,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 37,
-            "character": 4
-          },
-          "end": {
-            "line": 37,
-            "character": 46
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "YAML_BUILD_SHARED_LIBS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/vendor/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 4,
-            "character": 4
-          },
-          "end": {
-            "line": 4,
-            "character": 26
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 0,
-            "character": 4
-          },
-          "end": {
-            "line": 0,
-            "character": 22
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_STANDARD": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 5,
-            "character": 4
-          },
-          "end": {
-            "line": 5,
-            "character": 22
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_LINKER_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 33,
-            "character": 4
-          },
-          "end": {
-            "line": 33,
-            "character": 30
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_IMPLICIT_LINK_DIRECTORIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 82,
-            "character": 4
-          },
-          "end": {
-            "line": 82,
-            "character": 37
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
     "CMAKE_CXX_COMPILER_RANLIB": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
@@ -199,1043 +12,6 @@
           "end": {
             "line": 30,
             "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_APPLE_SYSROOT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 19,
-            "character": 4
-          },
-          "end": {
-            "line": 19,
-            "character": 34
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_LOADED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 39,
-            "character": 4
-          },
-          "end": {
-            "line": 39,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_SYSTEM_NAME": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
-        "range": {
-          "start": {
-            "line": 8,
-            "character": 4
-          },
-          "end": {
-            "line": 8,
-            "character": 21
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_CL_SHOWINCLUDES_PREFIX": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 83,
-            "character": 4
-          },
-          "end": {
-            "line": 83,
-            "character": 36
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 95,
-            "character": 4
-          },
-          "end": {
-            "line": 95,
-            "character": 49
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CROSSCOMPILING": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
-        "range": {
-          "start": {
-            "line": 12,
-            "character": 4
-          },
-          "end": {
-            "line": 12,
-            "character": 24
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
-      "is_function": false
-    },
-    "CMAKE_EXPORT_COMPILE_COMMANDS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 4,
-            "character": 4
-          },
-          "end": {
-            "line": 4,
-            "character": 33
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt",
-      "is_function": false
-    },
-    "CMAKE_CXX_STANDARD_COMPUTED_DEFAULT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 6,
-            "character": 4
-          },
-          "end": {
-            "line": 6,
-            "character": 39
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX26_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 16,
-            "character": 4
-          },
-          "end": {
-            "line": 16,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_BYTE_ORDER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 68,
-            "character": 4
-          },
-          "end": {
-            "line": 68,
-            "character": 24
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_LINKER_VERSION": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 34,
-            "character": 4
-          },
-          "end": {
-            "line": 34,
-            "character": 35
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_ARG1": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 1,
-            "character": 4
-          },
-          "end": {
-            "line": 1,
-            "character": 25
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_LINKER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 32,
-            "character": 4
-          },
-          "end": {
-            "line": 32,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX14_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 12,
-            "character": 4
-          },
-          "end": {
-            "line": 12,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "MSVC_CXX_ARCHITECTURE_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 25,
-            "character": 4
-          },
-          "end": {
-            "line": 25,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_LINKER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 34,
-            "character": 4
-          },
-          "end": {
-            "line": 34,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_IMPORT_STD": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 98,
-            "character": 4
-          },
-          "end": {
-            "line": 98,
-            "character": 33
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_HOST_SYSTEM_NAME": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
-        "range": {
-          "start": {
-            "line": 1,
-            "character": 4
-          },
-          "end": {
-            "line": 1,
-            "character": 26
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_BYTE_ORDER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 56,
-            "character": 4
-          },
-          "end": {
-            "line": 56,
-            "character": 22
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_STANDARD_LATEST": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 8,
-            "character": 4
-          },
-          "end": {
-            "line": 8,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_STANDARD_REQUIRED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 6,
-            "character": 4
-          },
-          "end": {
-            "line": 6,
-            "character": 31
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_LINKER_FRONTEND_VARIANT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 35,
-            "character": 4
-          },
-          "end": {
-            "line": 35,
-            "character": 44
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_LINKER_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 35,
-            "character": 4
-          },
-          "end": {
-            "line": 35,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 80,
-            "character": 4
-          },
-          "end": {
-            "line": 80,
-            "character": 40
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_AR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 26,
-            "character": 4
-          },
-          "end": {
-            "line": 26,
-            "character": 23
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 9,
-            "character": 4
-          },
-          "end": {
-            "line": 9,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 94,
-            "character": 4
-          },
-          "end": {
-            "line": 94,
-            "character": 39
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_SIZEOF_VOID_P": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 72,
-            "character": 6
-          },
-          "end": {
-            "line": 72,
-            "character": 25
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_SYSTEM_PROCESSOR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
-        "range": {
-          "start": {
-            "line": 10,
-            "character": 4
-          },
-          "end": {
-            "line": 10,
-            "character": 26
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_ENV_VAR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 43,
-            "character": 4
-          },
-          "end": {
-            "line": 43,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX20_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 14,
-            "character": 4
-          },
-          "end": {
-            "line": 14,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_TAPI": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 39,
-            "character": 4
-          },
-          "end": {
-            "line": 39,
-            "character": 14
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_ID_RUN": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 45,
-            "character": 4
-          },
-          "end": {
-            "line": 45,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "SDL_SHARED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/engine/core/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 11,
-            "character": 4
-          },
-          "end": {
-            "line": 11,
-            "character": 14
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\engine\\core\\CMakeLists.txt",
-      "is_function": false
-    },
-    "CMAKE_CXX_LINKER_PREFERENCE": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 59,
-            "character": 4
-          },
-          "end": {
-            "line": 59,
-            "character": 31
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_ABI_COMPILED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 41,
-            "character": 4
-          },
-          "end": {
-            "line": 41,
-            "character": 24
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_LINKER_LINK": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 32,
-            "character": 4
-          },
-          "end": {
-            "line": 32,
-            "character": 21
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX23_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 15,
-            "character": 4
-          },
-          "end": {
-            "line": 15,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "DAWN_FETCH_DEPENDENCIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/vendor/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 2,
-            "character": 4
-          },
-          "end": {
-            "line": 2,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt",
-      "is_function": false
-    },
-    "CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 62,
-            "character": 4
-          },
-          "end": {
-            "line": 62,
-            "character": 40
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_LIBRARY_ARCHITECTURE": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 80,
-            "character": 6
-          },
-          "end": {
-            "line": 80,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_VERSION": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 3,
-            "character": 4
-          },
-          "end": {
-            "line": 3,
-            "character": 30
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX23_COMPILER_IMPORT_STD_NOT_FOUND_MESSAGE": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 100,
-            "character": 4
-          },
-          "end": {
-            "line": 100,
-            "character": 53
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library",
-      "is_function": false
-    },
-    "CMAKE_LINKER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 31,
-            "character": 4
-          },
-          "end": {
-            "line": 31,
-            "character": 16
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX98_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 10,
-            "character": 4
-          },
-          "end": {
-            "line": 10,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_LOADED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 41,
-            "character": 4
-          },
-          "end": {
-            "line": 41,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 2,
-            "character": 4
-          },
-          "end": {
-            "line": 2,
-            "character": 23
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_APPLE_SYSROOT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 21,
-            "character": 4
-          },
-          "end": {
-            "line": 21,
-            "character": 36
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_LINKER_VERSION": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 36,
-            "character": 4
-          },
-          "end": {
-            "line": 36,
-            "character": 37
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_WRAPPER": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 5,
-            "character": 4
-          },
-          "end": {
-            "line": 5,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_SIZEOF_DATA_PTR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 66,
-            "character": 4
-          },
-          "end": {
-            "line": 66,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\nSave compiler ABI information.",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_ARG1": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 1,
-            "character": 4
-          },
-          "end": {
-            "line": 1,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CL_SHOWINCLUDES_PREFIX": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 85,
-            "character": 6
-          },
-          "end": {
-            "line": 85,
-            "character": 34
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 92,
-            "character": 4
-          },
-          "end": {
-            "line": 92,
-            "character": 42
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_VERSION": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 3,
-            "character": 4
-          },
-          "end": {
-            "line": 3,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_RANLIB": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 29,
-            "character": 4
-          },
-          "end": {
-            "line": 29,
-            "character": 16
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_FRONTEND_VARIANT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 20,
-            "character": 4
-          },
-          "end": {
-            "line": 20,
-            "character": 39
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_ARCHITECTURE_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 21,
-            "character": 4
-          },
-          "end": {
-            "line": 21,
-            "character": 36
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_VERSION_INTERNAL": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 4,
-            "character": 4
-          },
-          "end": {
-            "line": 4,
-            "character": 39
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_CLANG_RESOURCE_DIR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 96,
-            "character": 4
-          },
-          "end": {
-            "line": 96,
-            "character": 41
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 63,
-            "character": 4
-          },
-          "end": {
-            "line": 63,
-            "character": 44
           }
         }
       },
@@ -1259,208 +35,21 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
       "is_function": false
     },
-    "CMAKE_C_SIMULATE_ID": {
+    "CITRON_SDK_DIR": {
       "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "uri": "file:///C:/Dev/citron/engine/CMakeLists.txt",
         "range": {
           "start": {
-            "line": 17,
+            "line": 0,
             "character": 4
           },
           "end": {
-            "line": 17,
-            "character": 23
+            "line": 0,
+            "character": 18
           }
         }
       },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 83,
-            "character": 4
-          },
-          "end": {
-            "line": 83,
-            "character": 47
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_HOST_SYSTEM_PROCESSOR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
-        "range": {
-          "start": {
-            "line": 3,
-            "character": 4
-          },
-          "end": {
-            "line": 3,
-            "character": 31
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_IGNORE_EXTENSIONS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 47,
-            "character": 4
-          },
-          "end": {
-            "line": 47,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_STANDARD_COMPUTED_DEFAULT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 6,
-            "character": 4
-          },
-          "end": {
-            "line": 6,
-            "character": 37
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_COMPILER_FRONTEND_VARIANT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 18,
-            "character": 4
-          },
-          "end": {
-            "line": 18,
-            "character": 37
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX17_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 13,
-            "character": 4
-          },
-          "end": {
-            "line": 13,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_IGNORE_EXTENSIONS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 49,
-            "character": 4
-          },
-          "end": {
-            "line": 49,
-            "character": 31
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_WORKS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 42,
-            "character": 4
-          },
-          "end": {
-            "line": 42,
-            "character": 28
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_ABI": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 67,
-            "character": 4
-          },
-          "end": {
-            "line": 67,
-            "character": 26
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_ARCHITECTURE_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 23,
-            "character": 4
-          },
-          "end": {
-            "line": 23,
-            "character": 38
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_CL_SHOWINCLUDES_PREFIX": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 71,
-            "character": 4
-          },
-          "end": {
-            "line": 71,
-            "character": 34
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\engine\\CMakeLists.txt",
       "is_function": false
     },
     "CMAKE_SYSTEM_LOADED": {
@@ -1480,208 +69,72 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
       "is_function": false
     },
-    "CMAKE_HOST_SYSTEM": {
+    "CPACK_PACKAGE_NAME": {
       "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
         "range": {
           "start": {
-            "line": 0,
+            "line": 58,
             "character": 4
           },
           "end": {
-            "line": 0,
+            "line": 58,
+            "character": 22
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_SET_DESTDIR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 72,
+            "character": 4
+          },
+          "end": {
+            "line": 72,
             "character": 21
           }
         }
       },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
       "is_function": false
     },
-    "CMAKE_C_COMPILER_WORKS": {
+    "CPACK_RESOURCE_FILE_LICENSE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 65,
+            "character": 4
+          },
+          "end": {
+            "line": 65,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_BYTE_ORDER": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 40,
+            "line": 56,
             "character": 4
           },
           "end": {
-            "line": 40,
-            "character": 26
+            "line": 56,
+            "character": 22
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_STANDARD_LATEST": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 8,
-            "character": 4
-          },
-          "end": {
-            "line": 8,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX11_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 11,
-            "character": 4
-          },
-          "end": {
-            "line": 11,
-            "character": 32
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_ABI_COMPILED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 43,
-            "character": 4
-          },
-          "end": {
-            "line": 43,
-            "character": 26
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_ID_RUN": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 47,
-            "character": 4
-          },
-          "end": {
-            "line": 47,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 7,
-            "character": 4
-          },
-          "end": {
-            "line": 7,
-            "character": 39
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_SIZEOF_DATA_PTR": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 54,
-            "character": 4
-          },
-          "end": {
-            "line": 54,
-            "character": 27
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake\n\nSave compiler ABI information.",
-      "is_function": false
-    },
-    "target_copy_graphics_shared_dependencies": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/engine/graphics/CMakeLists.txt",
-        "range": {
-          "start": {
-            "line": 14,
-            "character": 9
-          },
-          "end": {
-            "line": 14,
-            "character": 49
-          }
-        }
-      },
-      "document_info": "defined function\nfrom: C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt",
-      "is_function": true
-    },
-    "CMAKE_C_LINKER_PREFERENCE": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 48,
-            "character": 4
-          },
-          "end": {
-            "line": 48,
-            "character": 29
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_SIMULATE_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 19,
-            "character": 4
-          },
-          "end": {
-            "line": 19,
-            "character": 25
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 60,
-            "character": 4
-          },
-          "end": {
-            "line": 60,
-            "character": 42
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
       "is_function": false
     },
     "CMAKE_SYSTEM_VERSION": {
@@ -1701,85 +154,272 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
       "is_function": false
     },
-    "CMAKE_C_COMPILER_VERSION_INTERNAL": {
+    "CMAKE_C_COMPILE_FEATURES": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 4,
+            "line": 9,
             "character": 4
           },
           "end": {
-            "line": 4,
-            "character": 37
+            "line": 9,
+            "character": 28
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_LINKER_LLD": {
+    "CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
         "range": {
           "start": {
-            "line": 33,
+            "line": 63,
             "character": 4
           },
           "end": {
-            "line": 33,
-            "character": 20
+            "line": 63,
+            "character": 44
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
       "is_function": false
     },
-    "MSVC_C_ARCHITECTURE_ID": {
+    "CMAKE_C11_COMPILE_FEATURES": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 23,
+            "line": 12,
             "character": 4
           },
           "end": {
-            "line": 23,
-            "character": 26
+            "line": 12,
+            "character": 30
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "DUMP_FILE": {
+    "CPACK_DEBIAN_COMPRESSION_TYPE": {
       "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeLists.txt",
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
         "range": {
           "start": {
-            "line": 70,
-            "character": 6
+            "line": 23,
+            "character": 4
           },
           "end": {
-            "line": 70,
-            "character": 15
+            "line": 23,
+            "character": 33
           }
         }
       },
-      "document_info": "defined macro\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeLists.txt\n\nbinary tree",
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_THREADS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 83,
+            "character": 4
+          },
+          "end": {
+            "line": 83,
+            "character": 17
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "target_copy_shared_library": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/editor/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 9
+          },
+          "end": {
+            "line": 26,
+            "character": 35
+          }
+        }
+      },
+      "document_info": "defined function\nfrom: C:\\Dev\\citron\\editor\\CMakeLists.txt",
       "is_function": true
     },
-    "CMAKE_C_LINKER_DEPFILE_SUPPORTED": {
+    "CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 95,
+            "character": 4
+          },
+          "end": {
+            "line": 95,
+            "character": 49
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_CLANG_RESOURCE_DIR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 96,
+            "character": 4
+          },
+          "end": {
+            "line": 96,
+            "character": 41
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_STANDARD_LATEST": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 49,
+            "line": 8,
             "character": 4
           },
           "end": {
-            "line": 49,
-            "character": 36
+            "line": 8,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C90_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 4
+          },
+          "end": {
+            "line": 10,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_HOMEPAGE_URL": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 54,
+            "character": 4
+          },
+          "end": {
+            "line": 54,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_LINKER_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 4
+          },
+          "end": {
+            "line": 33,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_ENV_VAR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 43,
+            "character": 4
+          },
+          "end": {
+            "line": 43,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_NSIS_INSTALLER_ICON_CODE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 41,
+            "character": 4
+          },
+          "end": {
+            "line": 41,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_OBJDUMP": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/engine/app/cmake_install.cmake",
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 6
+          },
+          "end": {
+            "line": 36,
+            "character": 19
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_SOURCE_FILE_EXTENSIONS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 46,
+            "character": 4
+          },
+          "end": {
+            "line": 46,
+            "character": 34
           }
         }
       },
@@ -1803,191 +443,38 @@
       "document_info": "defined function\nfrom: C:\\Dev\\citron\\engine\\cmake\\CitronInstall.cmake",
       "is_function": true
     },
-    "CMAKE_C_COMPILER_RANLIB": {
+    "CPACK_BINARY_7Z": {
       "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
         "range": {
           "start": {
-            "line": 28,
+            "line": 12,
             "character": 4
           },
           "end": {
-            "line": 28,
-            "character": 27
+            "line": 12,
+            "character": 19
           }
         }
       },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
       "is_function": false
     },
-    "CMAKE_C_LIBRARY_ARCHITECTURE": {
+    "CMAKE_CXX20_COMPILE_FEATURES": {
       "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
         "range": {
           "start": {
-            "line": 57,
+            "line": 14,
             "character": 4
           },
           "end": {
-            "line": 57,
+            "line": 14,
             "character": 32
           }
         }
       },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_COMPILER_IS_GNUCXX": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 40,
-            "character": 4
-          },
-          "end": {
-            "line": 40,
-            "character": 28
-          }
-        }
-      },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_LINKER_PUSHPOP_STATE_SUPPORTED": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 51,
-            "character": 4
-          },
-          "end": {
-            "line": 51,
-            "character": 42
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_IMPLICIT_LINK_LIBRARIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 81,
-            "character": 4
-          },
-          "end": {
-            "line": 81,
-            "character": 35
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C_SOURCE_FILE_EXTENSIONS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 46,
-            "character": 4
-          },
-          "end": {
-            "line": 46,
-            "character": 34
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_SOURCE_FILE_EXTENSIONS": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 48,
-            "character": 4
-          },
-          "end": {
-            "line": 48,
-            "character": 36
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_COMPILER_ID": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 2,
-            "character": 4
-          },
-          "end": {
-            "line": 2,
-            "character": 25
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_SIMULATE_VERSION": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 22,
-            "character": 4
-          },
-          "end": {
-            "line": 22,
-            "character": 30
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_LIBRARY_ARCHITECTURE": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 69,
-            "character": 4
-          },
-          "end": {
-            "line": 69,
-            "character": 34
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_C17_COMPILE_FEATURES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 13,
-            "character": 4
-          },
-          "end": {
-            "line": 13,
-            "character": 30
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
     "CMAKE_CXX_PLATFORM_ID": {
@@ -2007,55 +494,55 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_C_COMPILER_ABI": {
+    "CMAKE_C_COMPILER_LINKER_VERSION": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 55,
+            "line": 34,
             "character": 4
           },
           "end": {
-            "line": 55,
-            "character": 24
+            "line": 34,
+            "character": 35
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_CXX_COMPILER_ENV_VAR": {
+    "CMAKE_C_COMPILER_VERSION_INTERNAL": {
       "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 45,
+            "line": 4,
             "character": 4
           },
           "end": {
-            "line": 45,
-            "character": 30
-          }
-        }
-      },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
-      "is_function": false
-    },
-    "CMAKE_CXX_IMPLICIT_LINK_LIBRARIES": {
-      "location": {
-        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
-        "range": {
-          "start": {
-            "line": 93,
-            "character": 4
-          },
-          "end": {
-            "line": 93,
+            "line": 4,
             "character": 37
           }
         }
       },
-      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_INSTALL_CONFIG_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/engine/app/cmake_install.cmake",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 8
+          },
+          "end": {
+            "line": 14,
+            "character": 33
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake",
       "is_function": false
     },
     "CMAKE_COMPILER_IS_GNUCC": {
@@ -2075,34 +562,510 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_C99_COMPILE_FEATURES": {
+    "CPACK_PACKAGE_DESCRIPTION_FILE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 51,
+            "character": 4
+          },
+          "end": {
+            "line": 51,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_INSTALLED_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 35,
+            "character": 4
+          },
+          "end": {
+            "line": 35,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_INSTALL_CMAKE_PROJECTS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 4
+          },
+          "end": {
+            "line": 36,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_RANLIB": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 11,
+            "line": 28,
             "character": 4
           },
           "end": {
-            "line": 11,
-            "character": 30
+            "line": 28,
+            "character": 27
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_CXX_COMPILER_AR": {
+    "CMAKE_CXX_IGNORE_EXTENSIONS": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
         "range": {
           "start": {
-            "line": 28,
+            "line": 49,
             "character": 4
           },
           "end": {
-            "line": 28,
+            "line": 49,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 60,
+            "character": 4
+          },
+          "end": {
+            "line": 60,
+            "character": 42
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 83,
+            "character": 4
+          },
+          "end": {
+            "line": 83,
+            "character": 47
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_GENERATOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 4
+          },
+          "end": {
+            "line": 32,
+            "character": 19
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_LIBRARY_ARCHITECTURE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 57,
+            "character": 4
+          },
+          "end": {
+            "line": 57,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_RPM_PACKAGE_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 69,
+            "character": 4
+          },
+          "end": {
+            "line": 69,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_AR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 27,
+            "character": 4
+          },
+          "end": {
+            "line": 27,
+            "character": 12
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_BINARY_WIX": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 4
+          },
+          "end": {
+            "line": 17,
+            "character": 20
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "SDL_SHARED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/engine/core/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 4
+          },
+          "end": {
+            "line": 11,
+            "character": 14
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\engine\\core\\CMakeLists.txt",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 4
+          },
+          "end": {
+            "line": 2,
             "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_BUILD_SOURCE_DIRS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 4
+          },
+          "end": {
+            "line": 19,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_SOURCE_FILE_EXTENSIONS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 48,
+            "character": 4
+          },
+          "end": {
+            "line": 48,
+            "character": 36
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_GENERATOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 74,
+            "character": 4
+          },
+          "end": {
+            "line": 74,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_IGNORE_FILES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 4
+          },
+          "end": {
+            "line": 33,
+            "character": 22
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "MSVC_CXX_ARCHITECTURE_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 4
+          },
+          "end": {
+            "line": 25,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_STANDARD_LATEST": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 4
+          },
+          "end": {
+            "line": 8,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX26_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 4
+          },
+          "end": {
+            "line": 16,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_RPM_COMPONENT_INSTALL": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 68,
+            "character": 4
+          },
+          "end": {
+            "line": 68,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_ABI_COMPILED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 41,
+            "character": 4
+          },
+          "end": {
+            "line": 41,
+            "character": 24
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 4
+          },
+          "end": {
+            "line": 2,
+            "character": 23
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_LINKER_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 35,
+            "character": 4
+          },
+          "end": {
+            "line": 35,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_HOST_SYSTEM": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 4
+          },
+          "end": {
+            "line": 0,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_SIZEOF_DATA_PTR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 54,
+            "character": 4
+          },
+          "end": {
+            "line": 54,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake\n\nSave compiler ABI information.",
+      "is_function": false
+    },
+    "CMAKE_C_LINKER_PREFERENCE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 48,
+            "character": 4
+          },
+          "end": {
+            "line": 48,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_LINKER_PUSHPOP_STATE_SUPPORTED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 51,
+            "character": 4
+          },
+          "end": {
+            "line": 51,
+            "character": 42
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_MT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 38,
+            "character": 4
+          },
+          "end": {
+            "line": 38,
+            "character": 12
           }
         }
       },
@@ -2126,55 +1089,1483 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_C_COMPILER": {
+    "CPACK_RESOURCE_FILE_WELCOME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 67,
+            "character": 4
+          },
+          "end": {
+            "line": 67,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_EXPORT_COMPILE_COMMANDS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 4
+          },
+          "end": {
+            "line": 4,
+            "character": 33
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\CMakeLists.txt",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_LOADED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 41,
+            "character": 4
+          },
+          "end": {
+            "line": 41,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_ARG1": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 4
+          },
+          "end": {
+            "line": 1,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_WORKS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 42,
+            "character": 4
+          },
+          "end": {
+            "line": 42,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_VERSION_MINOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 63,
+            "character": 4
+          },
+          "end": {
+            "line": 63,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_CL_SHOWINCLUDES_PREFIX": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 0,
+            "line": 71,
             "character": 4
           },
           "end": {
-            "line": 0,
-            "character": 20
+            "line": 71,
+            "character": 34
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_AR": {
+    "CMAKE_CXX23_COMPILER_IMPORT_STD_NOT_FOUND_MESSAGE": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
         "range": {
           "start": {
-            "line": 27,
+            "line": 100,
             "character": 4
           },
           "end": {
-            "line": 27,
-            "character": 12
+            "line": 100,
+            "character": 53
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\n## Imported target for C++23 standard library",
+      "is_function": false
+    },
+    "CMAKE_CXX_CL_SHOWINCLUDES_PREFIX": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 83,
+            "character": 4
+          },
+          "end": {
+            "line": 83,
+            "character": 36
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_CXX_COMPILE_FEATURES": {
+    "CMAKE_LINKER_LLD": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
         "range": {
           "start": {
-            "line": 9,
+            "line": 33,
             "character": 4
           },
           "end": {
-            "line": 9,
+            "line": 33,
+            "character": 20
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_BINARY_ZIP": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 18,
+            "character": 4
+          },
+          "end": {
+            "line": 18,
+            "character": 20
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_LINKER_DEPFILE_SUPPORTED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 61,
+            "character": 4
+          },
+          "end": {
+            "line": 61,
+            "character": 38
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_TAPI": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 39,
+            "character": 4
+          },
+          "end": {
+            "line": 39,
+            "character": 14
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_BINARY_IFW": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 4
+          },
+          "end": {
+            "line": 13,
+            "character": 20
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_NSIS_UNINSTALL_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 45,
+            "character": 4
+          },
+          "end": {
+            "line": 45,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_INNOSETUP_ARCHITECTURE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 4
+          },
+          "end": {
+            "line": 34,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "target_copy_graphics_shared_dependencies": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/engine/graphics/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 9
+          },
+          "end": {
+            "line": 14,
+            "character": 49
+          }
+        }
+      },
+      "document_info": "defined function\nfrom: C:\\Dev\\citron\\engine\\graphics\\CMakeLists.txt",
+      "is_function": true
+    },
+    "CMAKE_CXX_COMPILER_ABI": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 67,
+            "character": 4
+          },
+          "end": {
+            "line": 67,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_DEFAULT_LOCATION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 49,
+            "character": 4
+          },
+          "end": {
+            "line": 49,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_OBJCOPY_EXECUTABLE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 46,
+            "character": 4
+          },
+          "end": {
+            "line": 46,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_FILE_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 53,
+            "character": 4
+          },
+          "end": {
+            "line": 53,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_COMPILER_IS_GNUCXX": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 40,
+            "character": 4
+          },
+          "end": {
+            "line": 40,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_OBJDUMP_EXECUTABLE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 47,
+            "character": 4
+          },
+          "end": {
+            "line": 47,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_SYSTEM_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 4
+          },
+          "end": {
+            "line": 8,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_STANDARD_COMPUTED_DEFAULT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 4
+          },
+          "end": {
+            "line": 6,
+            "character": 39
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_LINKER_PREFERENCE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 59,
+            "character": 4
+          },
+          "end": {
+            "line": 59,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CL_SHOWINCLUDES_PREFIX": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 85,
+            "character": 6
+          },
+          "end": {
+            "line": 85,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 94,
+            "character": 4
+          },
+          "end": {
+            "line": 94,
+            "character": 39
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_VERSION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 61,
+            "character": 4
+          },
+          "end": {
+            "line": 61,
+            "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_NSIS_PACKAGE_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 44,
+            "character": 4
+          },
+          "end": {
+            "line": 44,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_OUTPUT_CONFIG_FILE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 48,
+            "character": 4
+          },
+          "end": {
+            "line": 48,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_INSTALLED_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 76,
+            "character": 4
+          },
+          "end": {
+            "line": 76,
+            "character": 38
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C99_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 4
+          },
+          "end": {
+            "line": 11,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_SYSTEM_PROCESSOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 4
+          },
+          "end": {
+            "line": 10,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
+      "is_function": false
+    },
+    "CPACK_NSIS_DISPLAY_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 40,
+            "character": 4
+          },
+          "end": {
+            "line": 40,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "MSVC_C_ARCHITECTURE_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 4
+          },
+          "end": {
+            "line": 23,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "YAML_BUILD_SHARED_LIBS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/vendor/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 4
+          },
+          "end": {
+            "line": 4,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt",
+      "is_function": false
+    },
+    "CPACK_SOURCE_PACKAGE_FILE_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 78,
+            "character": 4
+          },
+          "end": {
+            "line": 78,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_BINARY_NSIS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 4
+          },
+          "end": {
+            "line": 15,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_ID_RUN": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 47,
+            "character": 4
+          },
+          "end": {
+            "line": 47,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_WRAPPER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 4
+          },
+          "end": {
+            "line": 5,
             "character": 30
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_PLATFORM_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 4
+          },
+          "end": {
+            "line": 16,
+            "character": 23
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_LINKER_DEPFILE_SUPPORTED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 49,
+            "character": 4
+          },
+          "end": {
+            "line": 49,
+            "character": 36
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_STANDARD": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/build.cmake",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 4
+          },
+          "end": {
+            "line": 2,
+            "character": 22
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\build.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_IMPLICIT_LINK_LIBRARIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 93,
+            "character": 4
+          },
+          "end": {
+            "line": 93,
+            "character": 37
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_SIMULATE_VERSION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 4
+          },
+          "end": {
+            "line": 22,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_FRONTEND_VARIANT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 4
+          },
+          "end": {
+            "line": 20,
+            "character": 39
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_OUTPUT_CONFIG_FILE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 77,
+            "character": 4
+          },
+          "end": {
+            "line": 77,
+            "character": 35
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_DESCRIPTION_SUMMARY": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 52,
+            "character": 4
+          },
+          "end": {
+            "line": 52,
+            "character": 37
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_LINKER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 4
+          },
+          "end": {
+            "line": 34,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_NSIS_COMPONENT_INSTALL": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 39,
+            "character": 4
+          },
+          "end": {
+            "line": 39,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_BINARY_INNOSETUP": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 4
+          },
+          "end": {
+            "line": 14,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_STANDARD_COMPUTED_DEFAULT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 4
+          },
+          "end": {
+            "line": 6,
+            "character": 37
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PROPERTIES_FILE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 88,
+            "character": 6
+          },
+          "end": {
+            "line": 88,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_SIMULATE_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 4
+          },
+          "end": {
+            "line": 19,
+            "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_RPM_PACKAGE_SOURCES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 70,
+            "character": 4
+          },
+          "end": {
+            "line": 70,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "citron_export_sdk_headers": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/engine/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 9
+          },
+          "end": {
+            "line": 2,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined function\nfrom: C:\\Dev\\citron\\engine\\CMakeLists.txt",
+      "is_function": true
+    },
+    "CMAKE_C_COMPILER_ID_RUN": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 45,
+            "character": 4
+          },
+          "end": {
+            "line": 45,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 4
+          },
+          "end": {
+            "line": 0,
+            "character": 22
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_INSTALL_PREFIX": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/engine/app/cmake_install.cmake",
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 6
+          },
+          "end": {
+            "line": 4,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake",
+      "is_function": false
+    },
+    "CPACK_INSTALL_PREFIX": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 4
+          },
+          "end": {
+            "line": 37,
+            "character": 24
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_WIX_SIZEOF_VOID_P": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 85,
+            "character": 4
+          },
+          "end": {
+            "line": 85,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_DEBIAN_PACKAGE_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 4
+          },
+          "end": {
+            "line": 26,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 62,
+            "character": 4
+          },
+          "end": {
+            "line": 62,
+            "character": 40
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_TOPLEVEL_TAG": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 79,
+            "character": 4
+          },
+          "end": {
+            "line": 79,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_MAINTAINER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 57,
+            "character": 4
+          },
+          "end": {
+            "line": 57,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 31,
+            "character": 4
+          },
+          "end": {
+            "line": 31,
+            "character": 43
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_DEFAULT_PACKAGE_DESCRIPTION_FILE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 29,
+            "character": 4
+          },
+          "end": {
+            "line": 29,
+            "character": 42
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 80,
+            "character": 4
+          },
+          "end": {
+            "line": 80,
+            "character": 40
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_LIBRARY_ARCHITECTURE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 69,
+            "character": 4
+          },
+          "end": {
+            "line": 69,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_ARCHITECTURE_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 4
+          },
+          "end": {
+            "line": 23,
+            "character": 38
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_ABI_COMPILED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 43,
+            "character": 4
+          },
+          "end": {
+            "line": 43,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX23_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 4
+          },
+          "end": {
+            "line": 15,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_DESCRIPTION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 50,
+            "character": 4
+          },
+          "end": {
+            "line": 50,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_COMPONENT_UNSPECIFIED_REQUIRED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 4
+          },
+          "end": {
+            "line": 22,
+            "character": 40
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_RESOURCE_FILE_README": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 66,
+            "character": 4
+          },
+          "end": {
+            "line": 66,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_INSTALL_DIRECTORY": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 55,
+            "character": 4
+          },
+          "end": {
+            "line": 55,
+            "character": 35
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_APPLE_SYSROOT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 4
+          },
+          "end": {
+            "line": 19,
+            "character": 34
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_ARG1": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 4
+          },
+          "end": {
+            "line": 1,
+            "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_7Z": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 73,
+            "character": 4
+          },
+          "end": {
+            "line": 73,
+            "character": 19
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_IMPLICIT_LINK_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 82,
+            "character": 4
+          },
+          "end": {
+            "line": 82,
+            "character": 37
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_MODULE_PATH": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 38,
+            "character": 4
+          },
+          "end": {
+            "line": 38,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_READELF_EXECUTABLE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 64,
+            "character": 4
+          },
+          "end": {
+            "line": 64,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_LOADED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 39,
+            "character": 4
+          },
+          "end": {
+            "line": 39,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_SIMULATE_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 4
+          },
+          "end": {
+            "line": 17,
+            "character": 23
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_AR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 4
+          },
+          "end": {
+            "line": 28,
+            "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_FRONTEND_VARIANT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 18,
+            "character": 4
+          },
+          "end": {
+            "line": 18,
+            "character": 37
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
     "CMAKE_INTERNAL_PLATFORM_ABI": {
@@ -2211,38 +2602,480 @@
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
       "is_function": false
     },
-    "CMAKE_C90_COMPILE_FEATURES": {
+    "CPACK_CMAKE_GENERATOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 4
+          },
+          "end": {
+            "line": 20,
+            "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_IGNORE_FILES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 75,
+            "character": 4
+          },
+          "end": {
+            "line": 75,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_IGNORE_EXTENSIONS": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 10,
+            "line": 47,
             "character": 4
           },
           "end": {
-            "line": 10,
-            "character": 30
+            "line": 47,
+            "character": 29
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
       "is_function": false
     },
-    "CMAKE_C11_COMPILE_FEATURES": {
+    "CMAKE_LINKER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 31,
+            "character": 4
+          },
+          "end": {
+            "line": 31,
+            "character": 16
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 4
+          },
+          "end": {
+            "line": 37,
+            "character": 46
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "DAWN_FETCH_DEPENDENCIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/vendor/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 4
+          },
+          "end": {
+            "line": 2,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\vendor\\CMakeLists.txt",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_VERSION": {
       "location": {
         "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
         "range": {
           "start": {
-            "line": 12,
+            "line": 3,
             "character": 4
           },
           "end": {
-            "line": 12,
-            "character": 30
+            "line": 3,
+            "character": 28
           }
         }
       },
       "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_WRAPPER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 4
+          },
+          "end": {
+            "line": 5,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_LIBRARY_ARCHITECTURE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 80,
+            "character": 6
+          },
+          "end": {
+            "line": 80,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 4
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_RELOCATABLE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 59,
+            "character": 4
+          },
+          "end": {
+            "line": 59,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CROSSCOMPILING": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/engine/app/cmake_install.cmake",
+        "range": {
+          "start": {
+            "line": 31,
+            "character": 6
+          },
+          "end": {
+            "line": 31,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_ENV_VAR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 45,
+            "character": 4
+          },
+          "end": {
+            "line": 45,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_VERSION_INTERNAL": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 4
+          },
+          "end": {
+            "line": 4,
+            "character": 39
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_LINKER_FRONTEND_VARIANT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 35,
+            "character": 4
+          },
+          "end": {
+            "line": 35,
+            "character": 44
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_SIMULATE_VERSION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 4
+          },
+          "end": {
+            "line": 20,
+            "character": 28
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_APPLE_SYSROOT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 4
+          },
+          "end": {
+            "line": 21,
+            "character": 36
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX98_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 4
+          },
+          "end": {
+            "line": 10,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_SIZEOF_DATA_PTR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 66,
+            "character": 4
+          },
+          "end": {
+            "line": 66,
+            "character": 29
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake\n\nSave compiler ABI information.",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_VERSION_MAJOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 62,
+            "character": 4
+          },
+          "end": {
+            "line": 62,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_DEBIAN_PACKAGE_SUGGESTS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 27,
+            "character": 4
+          },
+          "end": {
+            "line": 27,
+            "character": 33
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_DEBIAN_PACKAGE_DEPENDS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 24,
+            "character": 4
+          },
+          "end": {
+            "line": 24,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_INSTALL_COMPONENT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/engine/app/cmake_install.cmake",
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 8
+          },
+          "end": {
+            "line": 25,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\engine\\app\\cmake_install.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_IMPLICIT_LINK_LIBRARIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 81,
+            "character": 4
+          },
+          "end": {
+            "line": 81,
+            "character": 35
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 92,
+            "character": 4
+          },
+          "end": {
+            "line": 92,
+            "character": 42
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_STANDARD_REQUIRED": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/build.cmake",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 4
+          },
+          "end": {
+            "line": 3,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\build.cmake",
+      "is_function": false
+    },
+    "CMAKE_RANLIB": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 29,
+            "character": 4
+          },
+          "end": {
+            "line": 29,
+            "character": 16
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_COMPONENT_UNSPECIFIED_HIDDEN": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 4
+          },
+          "end": {
+            "line": 21,
+            "character": 38
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
       "is_function": false
     },
     "CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT": {
@@ -2256,6 +3089,567 @@
           "end": {
             "line": 7,
             "character": 41
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_VERSION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 4
+          },
+          "end": {
+            "line": 3,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 4
+          },
+          "end": {
+            "line": 9,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_IMPORT_STD": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 98,
+            "character": 4
+          },
+          "end": {
+            "line": 98,
+            "character": 33
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX11_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 4
+          },
+          "end": {
+            "line": 11,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_VENDOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 60,
+            "character": 4
+          },
+          "end": {
+            "line": 60,
+            "character": 24
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_HOST_SYSTEM_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 4
+          },
+          "end": {
+            "line": 1,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_ABI": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 55,
+            "character": 4
+          },
+          "end": {
+            "line": 55,
+            "character": 24
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_DEFAULT_PACKAGE_DESCRIPTION_SUMMARY": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 4
+          },
+          "end": {
+            "line": 30,
+            "character": 45
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_LINKER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 4
+          },
+          "end": {
+            "line": 32,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX14_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 4
+          },
+          "end": {
+            "line": 12,
+            "character": 32
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C17_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 4
+          },
+          "end": {
+            "line": 13,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_WORKS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 40,
+            "character": 4
+          },
+          "end": {
+            "line": 40,
+            "character": 26
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_ARCHITECTURE_ID": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 4
+          },
+          "end": {
+            "line": 21,
+            "character": 36
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_SOURCE_ZIP": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 80,
+            "character": 4
+          },
+          "end": {
+            "line": 80,
+            "character": 20
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_SIZEOF_VOID_P": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 72,
+            "character": 6
+          },
+          "end": {
+            "line": 72,
+            "character": 25
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_DEBIAN_PACKAGE_MAINTAINER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 4
+          },
+          "end": {
+            "line": 25,
+            "character": 35
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_LINKER_LINK": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 4
+          },
+          "end": {
+            "line": 32,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_NSIS_INSTALLER_MUI_ICON_CODE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 42,
+            "character": 4
+          },
+          "end": {
+            "line": 42,
+            "character": 38
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_SYSTEM_NAME": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 82,
+            "character": 4
+          },
+          "end": {
+            "line": 82,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_COMPILER_LINKER_VERSION": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 4
+          },
+          "end": {
+            "line": 36,
+            "character": 37
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_COMPILER_AR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 4
+          },
+          "end": {
+            "line": 26,
+            "character": 23
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "DUMP_FILE": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeLists.txt",
+        "range": {
+          "start": {
+            "line": 70,
+            "character": 6
+          },
+          "end": {
+            "line": 70,
+            "character": 15
+          }
+        }
+      },
+      "document_info": "defined macro\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeLists.txt\n\nbinary tree",
+      "is_function": true
+    },
+    "CPACK_NSIS_INSTALL_ROOT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 43,
+            "character": 4
+          },
+          "end": {
+            "line": 43,
+            "character": 27
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_TOPLEVEL_TAG": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 84,
+            "character": 4
+          },
+          "end": {
+            "line": 84,
+            "character": 22
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_RPM_PACKAGE_SUGGESTS": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 71,
+            "character": 4
+          },
+          "end": {
+            "line": 71,
+            "character": 30
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX_BYTE_ORDER": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 68,
+            "character": 4
+          },
+          "end": {
+            "line": 68,
+            "character": 24
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCXXCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_BINARY_NUGET": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 4
+          },
+          "end": {
+            "line": 16,
+            "character": 22
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 4
+          },
+          "end": {
+            "line": 7,
+            "character": 39
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeCCompiler.cmake",
+      "is_function": false
+    },
+    "CPACK_DEB_COMPONENT_INSTALL": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 4
+          },
+          "end": {
+            "line": 28,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_PACKAGE_INSTALL_REGISTRY_KEY": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 56,
+            "character": 4
+          },
+          "end": {
+            "line": 56,
+            "character": 38
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CPACK_STRIP_FILES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/cmake-build-citron/CPackSourceConfig.cmake",
+        "range": {
+          "start": {
+            "line": 81,
+            "character": 4
+          },
+          "end": {
+            "line": 81,
+            "character": 21
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\cmake-build-citron\\CPackSourceConfig.cmake",
+      "is_function": false
+    },
+    "CMAKE_HOST_SYSTEM_PROCESSOR": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeSystem.cmake",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 4
+          },
+          "end": {
+            "line": 3,
+            "character": 31
+          }
+        }
+      },
+      "document_info": "defined variable\nfrom: C:\\Dev\\citron\\__cmake_systeminformation\\CMakeFiles\\4.2.1\\CMakeSystem.cmake",
+      "is_function": false
+    },
+    "CMAKE_CXX17_COMPILE_FEATURES": {
+      "location": {
+        "uri": "file:///C:/Dev/citron/__cmake_systeminformation/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake",
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 4
+          },
+          "end": {
+            "line": 13,
+            "character": 32
           }
         }
       },

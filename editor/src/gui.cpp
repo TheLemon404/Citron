@@ -287,6 +287,15 @@ void GuiLayer::onEvent(Event &e) {
 		}
 	}
 
+	if (e.isInCategory(EventCategoryKeyboard)) {
+		if (e.getEventType() == EventType::KeyJustPressed) {
+			KeyJustPressedEvent &keyEvent = (KeyJustPressedEvent &)e;
+			if (keyEvent.getKeycode() == SDLK_B && keyEvent.getMods() & SDLK_LCTRL) {
+				Editor::get().getContext().scriptingEngine.buildScripts(Editor::get().getEditorContext().projectFilePath.parent_path());
+			}
+		}
+	}
+
 	viewPanel.onEvent(e);
 	assetPanel.onEvent(e);
 	outlinerPanel.onEvent(e);

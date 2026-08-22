@@ -1,11 +1,18 @@
 set(CITRON_SDK_DIR ${CMAKE_BINARY_DIR}/editor/sdk)
 
 function(citron_export_sdk_headers target)
+	if (NOT TARGET ${target})
+		message(WARNING "citron_export_sdk_headers: '${target}' is not a target, skipping")
+		return()
+	endif()
+
 	add_custom_command(TARGET ${target} POST_BUILD
-								COMMAND ${CMAKE_COMMAND} -E copy_directory
-												$<TARGET_PROPERTY:${target},SOURCE_DIR>/include
-												${CITRON_SDK_DIR}/include/${target}
+								COMMAND ${CMAKE_COMMAND}
+												-DTARGET_INCLUDE_DIRS=$<TARGET_PROPERTY:${target},INTERFACE_INCLUDE_DIRECTORIES>
+												-DDEST_DIR=${CITRON_SDK_DIR}/include/${target}
+												-P "${CMAKE_SOURCE_DIR}/cmake/CopySdkHeaders.cmake"
 								COMMENT "Exporting public headers for ${target}"
+								VERBATIM
 				)
 endfunction()
 

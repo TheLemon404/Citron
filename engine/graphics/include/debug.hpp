@@ -10,12 +10,7 @@ namespace CitronGraphics {
 struct CITRON_GRAPHICS_API DebugLine {
 	glm::vec3 start;
 	glm::vec3 end;
-};
-
-class CITRON_GRAPHICS_API DebugShape {
-  public:
-	std::vector<DebugLine> lines;
-	glm::vec4 color;
+	glm::vec3 color = glm::vec3(1.0f);
 };
 
 } // namespace CitronGraphics

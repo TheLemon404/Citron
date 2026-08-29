@@ -31,6 +31,7 @@ ScriptingSDKModule::ScriptingSDKModule(const std::string sdkName) : name(sdkName
 }
 
 ScriptingEngine::ScriptingEngine() {
+	scriptingSKDs.push_back(ScriptingSDKModule("citron_app"));
 	scriptingSKDs.push_back(ScriptingSDKModule("citron_assets"));
 	scriptingSKDs.push_back(ScriptingSDKModule("citron_core"));
 	scriptingSKDs.push_back(ScriptingSDKModule("citron_ecs"));

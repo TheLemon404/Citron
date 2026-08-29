@@ -65,6 +65,12 @@ void ViewPanel::onUpdate() {
 	if (inputLayer->isPressed(SDLK_Q)) {
 		editorView.position -= globalUp * (inputLayer->isPressed(SDLK_LSHIFT) ? motionSettings.fastMoveSpeed : motionSettings.moveSpeed) * deltaTime;
 	}
+
+	if (pendingBuildScripts) {
+		Editor::get().getContext().scriptingEngine.buildScripts(Editor::get().getEditorContext().projectFilePath.parent_path());
+		CITRON_CLIENT_INFO("Building Scripts");
+		pendingBuildScripts = false;
+	}
 }
 
 void ViewPanel::onDraw() {
@@ -99,8 +105,7 @@ void ViewPanel::onDraw() {
 
 		if (ImGui::Selectable("##Build", false, ImGuiSelectableFlags_None, ImVec2(toolbarWidth, toolbarWidth))) {
 			// build scripts
-			Editor::get().getContext().scriptingEngine.buildScripts(Editor::get().getEditorContext().projectFilePath.parent_path());
-			CITRON_CLIENT_INFO("Building Scripts");
+			pendingBuildScripts = true;
 		}
 		ImVec2 rectMin = ImGui::GetItemRectMin();
 		ImVec2 rectMax = ImGui::GetItemRectMax();

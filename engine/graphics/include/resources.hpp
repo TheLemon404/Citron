@@ -1,6 +1,7 @@
 #pragma once
 
 #include "buffer.hpp"
+#include "debug.hpp"
 #include "graphics_exports.hpp"
 #include <lang.hpp>
 #include "logger.hpp"
@@ -53,9 +54,10 @@ struct CITRON_GRAPHICS_API PipelineKey {
 	const std::vector<wgpu::TextureFormat> colorAttachmentFormats;
 	bool hasDepthStencilAttachment = false;
 	PipelineCullMode cullMode = PipelineCullMode::Back;
+	wgpu::PrimitiveTopology topology = wgpu::PrimitiveTopology::TriangleList;
 
 	bool operator==(const PipelineKey &other) const {
-		if (shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment && cullMode == other.cullMode) {
+		if (shader == other.shader && colorAttachmentFormats.size() == other.colorAttachmentFormats.size() && hasDepthStencilAttachment == other.hasDepthStencilAttachment && cullMode == other.cullMode && topology == other.topology) {
 			for (size_t i = 0; i < colorAttachmentFormats.size(); i++) {
 				if (colorAttachmentFormats[i] != other.colorAttachmentFormats[i]) {
 					return false;
@@ -164,12 +166,32 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 	GPUBuffer &getFrameUniformsBuffer() { return frameUniformsBuffer; }
 
 	const std::shared_ptr<Shader> getDebugGridShader() { return debugGridShader; }
+	const std::shared_ptr<Shader> getDebugWireframeShader() { return debugWireframeShader; }
 	const std::shared_ptr<Mesh> getDebugGridMesh() { return debugGridMesh; }
 
+	void addDebugLine(const DebugLine &line) {
+		debugLines.push_back(line);
+	}
+	void clearDebugLines() {
+		debugLines.clear();
+	}
+	size_t numDebugLines() {
+		return debugLines.size();
+	}
+
+	void constructDebugLinesMultiMesh();
+	std::shared_ptr<Mesh> getDebugLinesMultiMesh() { return debugLinesMultiMesh; }
+
   private:
+	std::vector<Vertex> debugLinesMeshVertices;
+	std::vector<uint32_t> debugLinesMeshIndices;
+	std::shared_ptr<Mesh> debugLinesMultiMesh = nullptr;
+	std::vector<DebugLine> debugLines;
+
 	AssetManager &assetManager;
 
 	std::shared_ptr<Shader> debugGridShader = nullptr;
+	std::shared_ptr<Shader> debugWireframeShader = nullptr;
 
 	std::unordered_set<BindGroupKey> usedBindGroupKeysThisFrame;
 	std::unordered_map<BindGroupKey, wgpu::BindGroup> bindGroupCache;

@@ -287,6 +287,14 @@ void GuiLayer::onEvent(Event &e) {
 		}
 	}
 
+	viewPanel.onEvent(e);
+	assetPanel.onEvent(e);
+	outlinerPanel.onEvent(e);
+	consolePanel.onEvent(e);
+	inspectorPanel.onEvent(e);
+	assetRegistryPanel.onEvent(e);
+	gamePanel.onEvent(e);
+
 	if (e.isInCategory(EventCategoryKeyboard)) {
 		if (e.getEventType() == EventType::KeyJustPressed) {
 			KeyJustPressedEvent &keyEvent = (KeyJustPressedEvent &)e;
@@ -296,13 +304,6 @@ void GuiLayer::onEvent(Event &e) {
 		}
 	}
 
-	viewPanel.onEvent(e);
-	assetPanel.onEvent(e);
-	outlinerPanel.onEvent(e);
-	consolePanel.onEvent(e);
-	inspectorPanel.onEvent(e);
-	assetRegistryPanel.onEvent(e);
-	gamePanel.onEvent(e);
 	if (SDL_Event *sdlEvent = (SDL_Event *)e.getInternalEvent())
 		ImGui_ImplSDL3_ProcessEvent(sdlEvent);
 }

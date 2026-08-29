@@ -134,6 +134,47 @@ void RenderPass::drawDebugGrid() {
 	draw(context.rendererResourcesManager.getDebugGridMesh());
 }
 
+void RenderPass::drawDebugRenderData() {
+	RendererContext context = renderer.getContext();
+
+	if (context.rendererResourcesManager.numDebugLines() == 0 || context.rendererResourcesManager.getDebugLinesMultiMesh() == nullptr)
+		return;
+
+	std::shared_ptr<Pipeline> pipeline = context.rendererResourcesManager.getPipeline({
+		.shader = context.rendererResourcesManager.getDebugWireframeShader(),
+		.colorAttachmentFormats = getColorAttachmentFormats(),
+		.hasDepthStencilAttachment = false,
+		.cullMode = PipelineCullMode::None,
+		.topology = wgpu::PrimitiveTopology::LineList,
+	});
+	setPipeline(pipeline);
+
+	// risky to assume all shaders use the same frame uniforms, but this should be the case.
+	wgpu::BindGroup frameBindGroup = context.rendererResourcesManager.getBindGroup(
+		{.layout = context.rendererResourcesManager.getDebugWireframeShader()->getBindGroupLayout(0),
+		 .entries = {
+			 {.binding = 0,
+			  .resource = context.rendererResourcesManager.getFrameUniformsBuffer().buffer,
+			  .offset = 0,
+			  .size = Shader::paddedSizeof<FrameUniforms>()}}});
+
+	setBindGroup(0, frameBindGroup);
+
+	wgpu::BindGroup drawBindGroup = context.rendererResourcesManager.getBindGroup(
+		{.layout = context.rendererResourcesManager.getDebugWireframeShader()->getBindGroupLayout(1),
+		 .entries = {
+			 {.binding = 0,
+			  .resource = context.rendererResourcesManager.getDrawUniformBuffer(parentFrame.getRenderCount()).buffer,
+			  .offset = 0,
+			  .size = Shader::paddedSizeof<DrawUniforms>()},
+		 }});
+
+	setBindGroup(1, drawBindGroup);
+
+	setMesh(context.rendererResourcesManager.getDebugLinesMultiMesh());
+	draw(context.rendererResourcesManager.getDebugLinesMultiMesh());
+}
+
 void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects) {
 	if (renderObjects.size() == 0)
 		return;
@@ -224,6 +265,10 @@ void RenderPass::setBindGroup(int index, wgpu::BindGroup bindGroup) {
 	renderPassEncoder.setBindGroup(index, bindGroup, 0, nullptr);
 }
 
+void RenderPass::drawInstanced(std::shared_ptr<Mesh> geometry, uint32_t instanceCount) {
+	renderPassEncoder.drawIndexed(geometry->getIndexBuffer().entryCount, instanceCount, 0, 0, 0);
+}
+
 void RenderPass::draw(std::shared_ptr<Mesh> geometry) {
 	renderPassEncoder.drawIndexed(geometry->getIndexBuffer().entryCount, 1, 0, 0, 0);
 }
@@ -260,6 +305,7 @@ bool Renderer::frameReady() {
 Frame Renderer::beginFrame() {
 	deviceSurfaceTexture = Texture{
 		device.getCurrentSurfaceTexture().texture, (uint32_t)device.getLastSurfaceWidth(), (uint32_t)device.getLastSurfaceHeight()};
+	rendererResourcesManager.constructDebugLinesMultiMesh();
 	return Frame(*this,
 				 device.getWGPUDevice().createCommandEncoder(),
 				 device.getCurrentSurfaceTexture());
@@ -276,6 +322,7 @@ void Renderer::endFrame(Frame &frame) {
 
 	deviceSurfaceTexture.release();
 	rendererResourcesManager.releaseUnusedBindGroups();
+	rendererResourcesManager.clearDebugLines();
 }
 
 void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, Texture &outputTexture, bool drawDebug) {
@@ -364,6 +411,7 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 		debugPassParams.stencilLoadOp = wgpu::LoadOp::Load;
 		RenderPass debugPass = frame.beginRenderPass(debugPassParams);
 		debugPass.drawDebugGrid();
+		debugPass.drawDebugRenderData();
 		debugPass.end();
 	}
 

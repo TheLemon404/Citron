@@ -14,6 +14,7 @@ using namespace CitronAssets;
 namespace CitronGraphics {
 struct CITRON_GRAPHICS_API Vertex {
 	Vertex(float x, float y, float z) : position(x, y, z) {}
+	Vertex() = default;
 	glm::vec3 position;
 	glm::vec3 normal = glm::vec3(0.0f);
 	glm::vec3 color = glm::vec3(1.0f);
@@ -24,6 +25,10 @@ class CITRON_GRAPHICS_API Mesh : public Asset<Mesh, AssetType::MESH> {
   public:
 	Mesh(const UUID uuid, Device &device) : Asset<Mesh, AssetType::MESH>(uuid), device(device) {}
 	Mesh(const UUID uuid, std::vector<Vertex> vertices, std::vector<uint32_t> indices, glm::vec3 worldSpaceBoundsMin, glm::vec3 worldSpaceBoundsMax, Device &device);
+	Mesh(const UUID uuid, uint32_t numVertices, uint32_t numIndices, Device &device);
+
+	void updateVertexBuffer(std::vector<Vertex> vertices);
+	void updateIndexBuffer(std::vector<uint32_t> indices);
 
 	const GPUBuffer &getVertexBuffer() const { return vertexBuffer; }
 	const GPUBuffer &getIndexBuffer() const { return indexBuffer; }

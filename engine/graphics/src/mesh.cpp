@@ -31,6 +31,34 @@ Mesh::Mesh(const UUID uuid, std::vector<Vertex> vertices, std::vector<uint32_t> 
 	device.getQueue().writeBuffer(indexBuffer.buffer, 0, indices.data(), indexBufferDesc.size);
 }
 
+Mesh::Mesh(const UUID uuid, uint32_t numVertices, uint32_t numIndices, Device &device) : Asset<Mesh, AssetType::MESH>(uuid), device(device) {
+	wgpu::BufferDescriptor vertexBufferDesc = {};
+	vertexBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Vertex;
+	vertexBufferDesc.size = numVertices * sizeof(Vertex);
+	vertexBufferDesc.mappedAtCreation = false;
+
+	vertexBuffer.buffer = device.getWGPUDevice().createBuffer(vertexBufferDesc);
+	vertexBuffer.size = numVertices * sizeof(Vertex);
+	vertexBuffer.entryCount = numVertices;
+
+	wgpu::BufferDescriptor indexBufferDesc = {};
+	indexBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Index;
+	indexBufferDesc.size = numIndices * sizeof(uint32_t);
+	indexBufferDesc.mappedAtCreation = false;
+
+	indexBuffer.buffer = device.getWGPUDevice().createBuffer(indexBufferDesc);
+	indexBuffer.size = numIndices * sizeof(uint32_t);
+	indexBuffer.entryCount = numIndices;
+}
+
+void Mesh::updateVertexBuffer(std::vector<Vertex> vertices) {
+	device.getQueue().writeBuffer(vertexBuffer.buffer, 0, vertices.data(), vertices.size() * sizeof(Vertex));
+}
+
+void Mesh::updateIndexBuffer(std::vector<uint32_t> indices) {
+	device.getQueue().writeBuffer(indexBuffer.buffer, 0, indices.data(), indices.size() * sizeof(uint32_t));
+}
+
 std::shared_ptr<AssetBase> MeshImporter::importAsset(AssetMetadata metadata) {
 	CITRON_CORE_INFO("Importing geometry asset {}", metadata.assetPath.string());
 

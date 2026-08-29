@@ -55,4 +55,6 @@ class ViewPanel : public Panel {
 	ViewportManipulationSettings manipulationSettings;
 	bool viewportMovementActive = false;
 	wgpu::TextureView sceneView;
+
+	bool pendingBuildScripts = false;
 };

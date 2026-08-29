@@ -71,11 +71,12 @@ class CITRON_GRAPHICS_API RenderPass {
 	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader);
 	void drawRenderData(std::vector<RenderObject> renderableReferenceData);
 	void drawDebugGrid();
-	void drawRebugRenderData(std::vector<RenderObject> renderableReferenceData, DrawUniforms frameUniforms);
+	void drawDebugRenderData();
 
 	void setPipeline(std::shared_ptr<Pipeline> pipeline);
 	void setMesh(std::shared_ptr<Mesh> geometry);
 	void setBindGroup(int index, wgpu::BindGroup bindGroup);
+	void drawInstanced(std::shared_ptr<Mesh> geometry, uint32_t instanceCount);
 	void draw(std::shared_ptr<Mesh> geometry);
 	void end();
 
@@ -178,8 +179,6 @@ class CITRON_GRAPHICS_API Renderer {
 	const std::shared_ptr<Shader> &getLightingPassShader() const { return lightingPassShader; }
 
   private:
-	std::stack<DebugShape> debugShapes;
-
 	Texture deviceSurfaceTexture;
 
 	RenderObjectCache renderObjectCache;

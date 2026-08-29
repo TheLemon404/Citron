@@ -100,7 +100,7 @@ void AssetPanel::onDraw() {
 
 	WGPUTextureView folderIconView = folderIconTexture->getTextureView();
 	WGPUTextureView fileIconView = fileIconTexture->getTextureView();
-	if (ImGui::BeginTable("##AssetBrowserTable", std::max((int)(ImGui::GetCurrentWindow()->Size.x / zoomLevel), 1), ImGuiTableFlags_ScrollY)) {
+	if (ImGui::BeginTable("##AssetBrowserTable", std::max((int)(ImGui::GetCurrentWindow()->Size.x / zoomLevel), 1), ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingFixedFit)) {
 
 		bool createFolder = false;
 
@@ -1000,7 +1000,16 @@ void InspectorPanel::onDraw() {
 	ImGui::End();
 }
 
-void InspectorPanel::onEvent(Event &e) {}
+void InspectorPanel::onEvent(Event &e) {
+	if (e.getCategoryFlags() & EventCategory::EventCategoryKeyboard) {
+		if (e.getEventType() == EventType::KeyPressed) {
+			KeyPressedEvent &event = (KeyPressedEvent &)e;
+			if (event.getKeycode() == SDLK_B && event.getMods() & SDLK_LCTRL) {
+				Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
+			}
+		}
+	}
+}
 
 void AssetRegistryPanel::onAttach() {
 }

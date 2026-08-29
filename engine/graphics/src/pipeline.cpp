@@ -7,7 +7,7 @@
 using namespace CitronGraphics;
 
 Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> colorAttachmentFormats, bool hasDepthStencilAttachment,
-				   std::shared_ptr<Shader> shader, PipelineCullMode cullMode)
+				   std::shared_ptr<Shader> shader, PipelineCullMode cullMode, wgpu::PrimitiveTopology topology)
 	: device(device) {
 
 	// render pipeline
@@ -46,7 +46,7 @@ Pipeline::Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> 
 	pipelineDesc.vertex.entryPoint = wgpu::StringView("vs_main");
 	pipelineDesc.vertex.constantCount = 0;
 	pipelineDesc.vertex.constants = nullptr;
-	pipelineDesc.primitive.topology = wgpu::PrimitiveTopology::TriangleList;
+	pipelineDesc.primitive.topology = topology;
 	pipelineDesc.primitive.stripIndexFormat = wgpu::IndexFormat::Undefined;
 	pipelineDesc.primitive.frontFace = wgpu::FrontFace::CCW;
 	switch (cullMode) {

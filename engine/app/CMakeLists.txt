@@ -18,3 +18,5 @@ citron_ecs
 citron_graphics
 citron_scripting
 )
+
+citron_export_sdk_headers(citron_app)

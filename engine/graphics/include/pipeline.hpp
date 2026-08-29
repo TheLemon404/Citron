@@ -13,7 +13,7 @@ enum class PipelineCullMode {
 
 class CITRON_GRAPHICS_API Pipeline {
   public:
-	Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> colorAttachmentFormats, bool hasDepthStencilAttachment, std::shared_ptr<Shader> shader, PipelineCullMode cullMode = PipelineCullMode::Back);
+	Pipeline(wgpu::Device &device, const std::vector<wgpu::TextureFormat> colorAttachmentFormats, bool hasDepthStencilAttachment, std::shared_ptr<Shader> shader, PipelineCullMode cullMode = PipelineCullMode::Back, wgpu::PrimitiveTopology topology = wgpu::PrimitiveTopology::TriangleList);
 	~Pipeline();
 	void draw(wgpu::CommandEncoder &encoder);
 

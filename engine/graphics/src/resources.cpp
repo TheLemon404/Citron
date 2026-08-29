@@ -1,11 +1,15 @@
 #include "resources.hpp"
 #include "buffer.hpp"
+#include "debug.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
 #include "shader.hpp"
 #include <memory>
 #include <webgpu/webgpu.hpp>
 #include "compiled_shaders.hpp"
+#include "uuid.hpp"
+
+constexpr uint32_t MAX_DEBUG_LINES = 1000;
 
 using namespace CitronGraphics;
 
@@ -22,6 +26,7 @@ void RendererResourceManager::initResources() {
 
 	// debug shaders
 	debugGridShader = assetManager.createAsset<Shader>(device, CompiledShaders::debug_grid);
+	debugWireframeShader = assetManager.createAsset<Shader>(device, CompiledShaders::debug_wireframe);
 
 	// debug meshes
 	debugGridMesh = Mesh::createPlane(device, assetManager);
@@ -102,10 +107,63 @@ wgpu::BindGroup RendererResourceManager::getBindGroup(BindGroupKey key) {
 
 std::shared_ptr<Pipeline> RendererResourceManager::getPipeline(PipelineKey key) {
 	if (!pipelineCache.contains(key)) {
-		auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachmentFormats, key.hasDepthStencilAttachment, key.shader, key.cullMode);
+		auto pipeline = std::make_shared<Pipeline>(device.getWGPUDevice(), key.colorAttachmentFormats, key.hasDepthStencilAttachment, key.shader, key.cullMode, key.topology);
 		pipelineCache[key] = pipeline;
 	}
 	return pipelineCache[key];
+}
+
+void RendererResourceManager::constructDebugLinesMultiMesh() {
+	if (debugLines.size() == 0) {
+		return;
+	}
+
+	debugLinesMeshVertices.clear();
+	debugLinesMeshIndices.clear();
+	glm::vec3 minBounds;
+	glm::vec3 maxBounds;
+
+	for (const DebugLine &line : debugLines) {
+		Vertex startVertex(line.start.x, line.start.y, line.start.z);
+		startVertex.color = line.color;
+		Vertex endVertex(line.end.x, line.end.y, line.end.z);
+		endVertex.color = line.color;
+
+		debugLinesMeshVertices.push_back(startVertex);
+		debugLinesMeshVertices.push_back(endVertex);
+
+		debugLinesMeshIndices.push_back(debugLinesMeshVertices.size() - 2);
+		debugLinesMeshIndices.push_back(debugLinesMeshVertices.size() - 1);
+
+		// bounding box logic does not work!!!
+		if (line.start.x < minBounds.x) {
+			minBounds.x = line.start.x;
+		}
+		if (line.end.x > maxBounds.x) {
+			maxBounds.x = line.end.x;
+		}
+		if (line.start.y < minBounds.y) {
+			minBounds.y = line.start.y;
+		}
+		if (line.end.y > maxBounds.y) {
+			maxBounds.y = line.end.y;
+		}
+		if (line.start.z < minBounds.z) {
+			minBounds.z = line.start.z;
+		}
+		if (line.end.z > maxBounds.z) {
+			maxBounds.z = line.end.z;
+		}
+	}
+	if (!debugLinesMultiMesh) {
+		debugLinesMultiMesh = std::make_shared<Mesh>(
+			UUID::nullID,
+			MAX_DEBUG_LINES * 2,
+			MAX_DEBUG_LINES * 2, device);
+	}
+
+	debugLinesMultiMesh->updateVertexBuffer(debugLinesMeshVertices);
+	debugLinesMultiMesh->updateIndexBuffer(debugLinesMeshIndices);
 }
 
 GPUBuffer &RendererResourceManager::getEntityModelUniformBuffer(uint32_t entityUUID, ModelUniforms &modelUniforms) {

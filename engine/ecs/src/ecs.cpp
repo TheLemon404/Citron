@@ -1,4 +1,5 @@
 
+#include "debug.hpp"
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/vector_float3.hpp"
@@ -325,7 +326,8 @@ void Scene::update() {
 	}
 }
 
-void Scene::editorUpdate() {}
+void Scene::editorUpdate() {
+}
 
 void Scene::onEvent(Event &e) {
 	for (auto &[id, system] : m_systemRegistry) {

@@ -16,11 +16,13 @@ using namespace CitronECS;
 std::unordered_map<uint32_t, ComponentMetadata> ECSRegistry::m_componentRegistry;
 std::unordered_map<uint32_t, PropertyGuiDrawer> ECSRegistry::m_propertyGuiDrawers;
 std::unordered_map<uint32_t, SystemMetadata> ECSRegistry::m_systemRegistry;
+std::unordered_set<uint32_t> ECSRegistry::m_builtinComponents;
+std::unordered_set<uint32_t> ECSRegistry::m_builtinSystems;
 
 std::unordered_map<uint32_t, std::function<void(StreamWriter &, void *)>> Member::serializationMethods;
 std::unordered_map<uint32_t, std::function<void(StreamReader &, void *)>> Member::deserializationMethods;
 
-void ECSRegistry::registerDefaultComponents() {
+void ECSRegistry::registerBuiltinComponents() {
 	registerSerializationMethod<int>([](StreamWriter &writer, void *data) {
 		writer.writeData(data, sizeof(int));
 	});
@@ -135,7 +137,12 @@ void ECSRegistry::registerDefaultComponents() {
 	registerComponentMember<MeshComponent, AssetReference<Material>>("material", offsetof(MeshComponent, materialAsset));
 	registerComponent<PerspectiveCameraComponent>("Perspective Camera Component");
 	registerComponentMember<PerspectiveCameraComponent, PerspectiveView>("view", offset_of<&PerspectiveCameraComponent::view, PerspectiveView>());
+
+	m_builtinComponents.insert(Hashing::typeHash<EntityBaseComponent>());
+	m_builtinComponents.insert(Hashing::typeHash<TransformComponent>());
+	m_builtinComponents.insert(Hashing::typeHash<MeshComponent>());
+	m_builtinComponents.insert(Hashing::typeHash<PerspectiveCameraComponent>());
 }
 
-void ECSRegistry::registerDefaultSystems() {
+void ECSRegistry::registerBuiltinSystems() {
 }

@@ -2,6 +2,7 @@
 #include "assets.hpp"
 #include "buffer.hpp"
 #include "compiled_shaders.hpp"
+#include "debug.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
@@ -398,7 +399,7 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	RenderPass lightingPass = frame.beginRenderPass(lightingPassParams);
 	lightingPass.drawFullscreenQuadPass(fullscreenQuad, lightingPassShader);
 	lightingPass.end();
-	// debug grid
+	// debug visuals
 	if (drawDebug) {
 		RenderPassColorAttachment debugAttachment = {
 			.loadOp = wgpu::LoadOp::Load,

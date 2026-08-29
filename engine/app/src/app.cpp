@@ -95,8 +95,8 @@ void App::init() {
 	CITRON_CORE_INFO("Core logger initialized");
 	CITRON_CLIENT_INFO("Client logger initialized");
 
-	ECSRegistry::registerDefaultComponents();
-	ECSRegistry::registerDefaultSystems();
+	ECSRegistry::registerBuiltinComponents();
+	ECSRegistry::registerBuiltinSystems();
 
 	scriptingEngine.init(projectFilepath.parent_path());
 
@@ -133,15 +133,15 @@ void App::update() {
 		}
 
 		{
-			CITRON_PROFILE_SCOPE("Render")
+			CITRON_PROFILE_SCOPE("Render") {
+				CITRON_PROFILE_SCOPE("Renderable Data Extraction")
+				if (sceneManager.getActiveScene()) {
+					renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
+				}
+			}
+
 			if (renderer.frameReady()) {
 				Frame frame = renderer.beginFrame();
-				{
-					CITRON_PROFILE_SCOPE("Renderable Data Extraction")
-					if (sceneManager.getActiveScene()) {
-						renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
-					}
-				}
 				{
 					CITRON_PROFILE_SCOPE("Render Scene")
 					if (!renderableData.empty()) {
@@ -151,10 +151,6 @@ void App::update() {
 					for (auto &layer : layerStack) {
 						layer->onRender(&frame, &renderableData);
 					}
-				}
-
-				// for editor ui
-				{
 				}
 
 				{

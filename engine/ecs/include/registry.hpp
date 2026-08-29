@@ -57,6 +57,8 @@ class CITRON_ECS_API ECSRegistry {
 	static std::unordered_map<uint32_t, ComponentMetadata> m_componentRegistry;
 	static std::unordered_map<uint32_t, PropertyGuiDrawer> m_propertyGuiDrawers;
 	static std::unordered_map<uint32_t, SystemMetadata> m_systemRegistry;
+	static std::unordered_set<uint32_t> m_builtinComponents;
+	static std::unordered_set<uint32_t> m_builtinSystems;
 
   public:
 	static std::unordered_map<uint32_t, ComponentMetadata> &getComponentRegistry() {
@@ -65,6 +67,14 @@ class CITRON_ECS_API ECSRegistry {
 
 	static std::unordered_map<uint32_t, SystemMetadata> &getSystemRegistry() {
 		return m_systemRegistry;
+	}
+
+	static std::unordered_set<uint32_t> &getBuiltinComponents() {
+		return m_builtinComponents;
+	}
+
+	static std::unordered_set<uint32_t> &getBuiltinSystems() {
+		return m_builtinSystems;
 	}
 
 	template <typename T>
@@ -122,6 +132,14 @@ class CITRON_ECS_API ECSRegistry {
 		};
 
 		m_componentRegistry[componentHash] = metadata;
+	}
+
+	static void deregisterComponent(uint32_t componentHash) {
+		m_componentRegistry.erase(componentHash);
+	}
+
+	static void deregisterSystem(uint32_t systemHash) {
+		m_systemRegistry.erase(systemHash);
 	}
 
 	template <typename T>
@@ -243,8 +261,8 @@ class CITRON_ECS_API ECSRegistry {
 		};
 	}
 
-	static void registerDefaultComponents();
-	static void registerDefaultSystems();
+	static void registerBuiltinComponents();
+	static void registerBuiltinSystems();
 };
 
 } // namespace CitronECS

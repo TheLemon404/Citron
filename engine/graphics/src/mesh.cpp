@@ -52,10 +52,12 @@ Mesh::Mesh(const UUID uuid, uint32_t numVertices, uint32_t numIndices, Device &d
 }
 
 void Mesh::updateVertexBuffer(std::vector<Vertex> vertices) {
+	vertexBuffer.entryCount = vertices.size();
 	device.getQueue().writeBuffer(vertexBuffer.buffer, 0, vertices.data(), vertices.size() * sizeof(Vertex));
 }
 
 void Mesh::updateIndexBuffer(std::vector<uint32_t> indices) {
+	indexBuffer.entryCount = indices.size();
 	device.getQueue().writeBuffer(indexBuffer.buffer, 0, indices.data(), indices.size() * sizeof(uint32_t));
 }
 

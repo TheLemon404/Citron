@@ -30,6 +30,8 @@ void RendererResourceManager::initResources() {
 
 	// debug meshes
 	debugGridMesh = Mesh::createPlane(device, assetManager);
+
+	DebugUtils::initialize(&debugLines);
 }
 
 void RendererResourceManager::releaseUnusedBindGroups() {

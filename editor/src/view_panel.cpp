@@ -1,5 +1,7 @@
 #include "ImOGuizmo.hpp"
+#include "app.hpp"
 #include "clock.hpp"
+#include "debug.hpp"
 #include "imgui_internal.h"
 #include "panel.hpp"
 #include "uuid.hpp"
@@ -40,6 +42,33 @@ void ViewPanel::onDetach() {
 }
 
 void ViewPanel::onUpdate() {
+	for (const auto &entity : appContext.sceneManager.getActiveScene()->getRegistry().view<TransformComponent, PerspectiveCameraComponent>()) {
+		PerspectiveCameraComponent &camera = appContext.sceneManager.getActiveScene()->getRegistry().get<PerspectiveCameraComponent>(entity);
+		glm::vec3 globalPosition = appContext.sceneManager.getActiveScene()->getGlobalPosition(entity);
+		glm::vec3 forwardPoint = globalPosition + camera.view.forward;
+		glm::vec3 frustrumCorners[4] = {
+			globalPosition - glm::vec3(1.0f),
+			globalPosition + glm::vec3(1.0f),
+			globalPosition - glm::vec3(1.0f),
+			globalPosition + glm::vec3(1.0f),
+		};
+
+		DebugUtils::addDebugLine(globalPosition, frustrumCorners[0], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(globalPosition, frustrumCorners[1], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(globalPosition, frustrumCorners[2], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(globalPosition, frustrumCorners[3], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(frustrumCorners[0], frustrumCorners[1], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(frustrumCorners[1], frustrumCorners[2], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(frustrumCorners[2], frustrumCorners[3], glm::vec3(1.0f, 0.0, 0.0f));
+		DebugUtils::addDebugLine(frustrumCorners[3], frustrumCorners[1], glm::vec3(1.0f, 0.0, 0.0f));
+	}
+
+	if (currentlySelectedItem.index() == 0 && std::get<entt::entity>(currentlySelectedItem) != entt::null) {
+		entt::entity entity = std::get<entt::entity>(currentlySelectedItem);
+		glm::vec3 globalPosition = appContext.sceneManager.getActiveScene()->getGlobalPosition(entity);
+		DebugUtils::addDebugCube(globalPosition - glm::vec3(1.0f), globalPosition + glm::vec3(1.0f));
+	}
+
 	if (!focused || !viewportMovementActive)
 		return;
 

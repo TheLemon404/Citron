@@ -49,6 +49,12 @@ void ScriptingEngine::init(const std::filesystem::path projectRootFolder) {
 }
 
 void ScriptingEngine::buildScripts(const std::filesystem::path projectRootFolder) {
+#if defined(__WIN32)
+	if (HMODULE scriptModulePreviousHandle = GetModuleHandle("libscripts.dll")) {
+		CITRON_CORE_INFO("Unloading previous libscripts.dll...");
+		FreeLibrary(scriptModulePreviousHandle);
+	}
+#endif
 	generateCompilationFiles(projectRootFolder);
 	parseAndRegisterUserTypes(projectRootFolder);
 }
@@ -83,10 +89,6 @@ void ScriptingEngine::parseAndRegisterUserTypes(const std::filesystem::path proj
 	CITRON_CORE_INFO("Registering user types...");
 
 #if defined(__WIN32)
-	if (HMODULE scriptModulePreviousHandle = GetModuleHandle("libscripts.dll")) {
-		CITRON_CORE_INFO("Unloading previous libscripts.dll...");
-		FreeLibrary(scriptModulePreviousHandle);
-	}
 	HMODULE scriptModule = LoadLibrary((projectRootFolder / "build" / "libscripts.dll").string().c_str());
 	if (scriptModule == NULL) {
 		CITRON_CORE_ERROR("Failed to load scripts.dll: {}", GetLastError());

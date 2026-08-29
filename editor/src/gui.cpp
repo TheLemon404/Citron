@@ -298,7 +298,7 @@ void GuiLayer::onEvent(Event &e) {
 	if (e.isInCategory(EventCategoryKeyboard)) {
 		if (e.getEventType() == EventType::KeyJustPressed) {
 			KeyJustPressedEvent &keyEvent = (KeyJustPressedEvent &)e;
-			if (keyEvent.getKeycode() == SDLK_B && keyEvent.getMods() & SDLK_LCTRL) {
+			if (keyEvent.getKeycode() == SDLK_B && keyEvent.getMods() & SDLK_LCTRL && Editor::get().getEditorContext().getPlaymodeState() == EditorPlaymodeState::Stopped) {
 				Editor::get().getContext().scriptingEngine.buildScripts(Editor::get().getEditorContext().projectFilePath.parent_path());
 			}
 		}

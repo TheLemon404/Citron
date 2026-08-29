@@ -2,18 +2,18 @@
   An ECS-first, WebGPU game engine
 
 # Current Features
-> Serialization
-> C++ scripting
-> C++ Component and System reflection
-> 3D editor
-> Asset lifetime UUID management
+- Serialization
+- C++ scripting
+- C++ Component and System reflection
+- 3D editor
+- Asset lifetime UUID management
 
 # Future Features
-> Project executable exporting
-> Node-based shader editor
-> C# scripting
-> Box3D Physics
-> Networking Solution
+- Project executable exporting
+- Node-based shader editor
+- C# scripting
+- Box3D Physics
+- Networking Solution
 
 > [!IMPORTANT]  
 > This project is actively in development. This is not the finished project, and I am currently building this engine in my free time.

@@ -234,7 +234,18 @@ void AssetPanel::onDraw() {
 				}
 				ImVec2 rect_min = ImGui::GetItemRectMin();
 				ImVec2 rect_max = ImGui::GetItemRectMax();
-				Icon fileIcon = fileIcons.getIcon("GenericFile");
+				std::string iconType = "GenericFile";
+				const std::string fileExtension = entry.path.extension().string();
+				if (fileExtension == ".cpp" || fileExtension == ".hpp") {
+					iconType = "C++";
+				} else if (fileExtension == ".cs") {
+					iconType = "C#";
+				} else if (fileExtension == ".mat") {
+					iconType = "Material";
+				} else if (fileExtension == ".wgsl") {
+					iconType = "Shader";
+				}
+				Icon fileIcon = fileIcons.getIcon(iconType);
 				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rect_min, rect_max, fileIcon.uv.Min, fileIcon.uv.Max);
 
 				ImGui::PopStyleVar();

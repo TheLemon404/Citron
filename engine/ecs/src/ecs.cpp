@@ -277,7 +277,6 @@ glm::mat4 Scene::getGlobalTransform(entt::entity entity) {
 	TransformComponent &t = registry.get<TransformComponent>(entity);
 	EntityBaseComponent &b = registry.get<EntityBaseComponent>(entity);
 
-	t.matrix = glm::identity<glm::mat4>();
 	t.matrix = glm::translate(glm::mat4(1.0f), t.position) *
 			   glm::mat4_cast(glm::normalize(t.rotation)) *
 			   glm::scale(glm::mat4(1.0f), t.scale);

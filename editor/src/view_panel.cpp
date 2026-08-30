@@ -67,12 +67,12 @@ void ViewPanel::onUpdate() {
 
 	if (currentlySelectedItem.index() == 0 && std::get<entt::entity>(currentlySelectedItem) != entt::null) {
 		entt::entity entity = std::get<entt::entity>(currentlySelectedItem);
-		if (appContext.sceneManager.getActiveScene()->getRegistry().any_of<MeshComponent>(entity)) {
+		if (appContext.sceneManager.getActiveScene()->getRegistry().any_of<MeshComponent>(entity) && appContext.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity).meshAsset.uuid != UUID::nullID) {
 			std::shared_ptr<Mesh> entityMesh = appContext.assetManager.getAsset<Mesh>(appContext.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity).meshAsset.uuid);
-			glm::vec3 minBounds = entityMesh->getBoundsMin();
-			glm::vec3 maxBounds = entityMesh->getBoundsMax();
-			glm::vec3 globalPosition = appContext.sceneManager.getActiveScene()->getGlobalPosition(entity);
-			DebugUtils::addDebugCube(globalPosition - (maxBounds - minBounds) / 2.0f, globalPosition + (maxBounds - minBounds) / 2.0f);
+			glm::vec4 minBounds = glm::vec4(entityMesh->getBoundsMin(), 1.0f);
+			glm::vec4 maxBounds = glm::vec4(entityMesh->getBoundsMax(), 1.0f);
+			glm::mat4 globalTransform = appContext.sceneManager.getActiveScene()->getGlobalTransform(entity);
+			DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds));
 		}
 	}
 

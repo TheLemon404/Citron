@@ -73,6 +73,8 @@ const GRID_CELL_SECONDARY_SIZE = GRID_CELL_SIZE * 0.2f;
 const CELL_LINE_THICKNESS = 0.002f;
 const CELL_SECONDARY_LINE_THICKNESS = CELL_LINE_THICKNESS * 0.8f;
 const GRID_COLOR = vec3f(0.357f);
+const GRID_X_COLOR = vec3f(1, 0.373, 0.373);
+const GRID_Z_COLOR = vec3f(0.337, 0.596, 0.988);
 
 @group(1) @binding(1) var depthTexture: texture_depth_2d;
 

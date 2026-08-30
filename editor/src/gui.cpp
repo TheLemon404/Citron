@@ -77,46 +77,61 @@ void GuiLayer::onAttach() {
 
 	renderer.createRenderTargetColorTexture(editorViewTextureRenderTarget, context.window.getWidth(), context.window.getHeight());
 
-	icons.initAtlas(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/editor_icons.png", context.renderer.getContext().device);
+	editorIcons.initAtlas(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/editor_icons.png", context.renderer.getContext().device);
 
 	// register editor icons from font atlas
-	ImVec2i atlasSize = icons.getAtlasSize();
-	const ImVec2 uvSize = ImVec2(((float)atlasSize.x / 20.0f) / atlasSize.x, ((float)atlasSize.y / 20.0f) / atlasSize.y);
-	CITRON_CLIENT_INFO("SIZE {} ", uvSize.x);
+	ImVec2i atlasSize = editorIcons.getAtlasSize();
+	ImVec2 uvSize = ImVec2(((float)atlasSize.x / 20.0f) / atlasSize.x, ((float)atlasSize.y / 20.0f) / atlasSize.y);
 	float i = 1.0f;
 	float j = 1.0f;
-	icons.registerIcon("Play", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Play", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Pause", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Pause", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Stop", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Stop", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Select", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Select", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Translate", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Translate", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Rotate", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Rotate", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Scale", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Scale", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Snap", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Snap", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Local", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Local", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Build", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Build", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i = 1.0f;
 	j++;
-	icons.registerIcon("Entity", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Entity", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("System", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("System", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Component", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Component", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Rigidbody", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Rigidbody", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Mesh", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Mesh", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
-	icons.registerIcon("Camera", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	editorIcons.registerIcon("Camera", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+
+	fileIcons.initAtlas(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/file_icons.png", context.renderer.getContext().device);
+
+	// register editor icons from font atlas
+	atlasSize = fileIcons.getAtlasSize();
+	uvSize = ImVec2(((float)atlasSize.x / 20.0f) / atlasSize.x, ((float)atlasSize.y / 20.0f) / atlasSize.y);
+	i = 1.0f;
+	j = 1.0f;
+	fileIcons.registerIcon("Folder", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	fileIcons.registerIcon("GenericFile", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	fileIcons.registerIcon("ColoredLogo", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
+	i++;
+	fileIcons.registerIcon("Logo", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(32.0f, 32.0f));
 	i++;
 
 	viewPanel.onAttach();

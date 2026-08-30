@@ -113,7 +113,7 @@ void ViewPanel::onDraw() {
 	PerspectiveView &editorView = Editor::get().editorView;
 	EditorContext &editorContext = Editor::get().getEditorContext();
 
-	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->editorIcons;
 
 	ImGui::Begin("Viewport", nullptr);
 	viewportSize = ImGui::GetContentRegionAvail();

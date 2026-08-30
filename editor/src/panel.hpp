@@ -82,8 +82,6 @@ class AssetPanel : public Panel {
 
   private:
 	AssetPropertiesPanel &assetPropertiesPanel;
-	std::shared_ptr<Texture> folderIconTexture = nullptr;
-	std::shared_ptr<Texture> fileIconTexture = nullptr;
 
 	void refreshDirectoryListings();
 	std::vector<AssetCard> directoryListings;

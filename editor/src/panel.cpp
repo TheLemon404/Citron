@@ -40,9 +40,6 @@ void AssetPanel::onAttach() {
 	EditorContext &context = Editor::get().getEditorContext();
 	currentDirectory = context.projectFilePath.parent_path() / "Assets";
 	refreshDirectoryListings();
-
-	folderIconTexture = ImageTexture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_folder.png", appContext.renderer.getContext().device);
-	fileIconTexture = ImageTexture::loadFromFile(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/citron_file.png", appContext.renderer.getContext().device);
 }
 
 void AssetPanel::onDetach() {}
@@ -98,8 +95,8 @@ void AssetPanel::onDraw() {
 	ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(20.0f, 20.0f));
 	ImGui::BeginChild("AssetList");
 
-	WGPUTextureView folderIconView = folderIconTexture->getTextureView();
-	WGPUTextureView fileIconView = fileIconTexture->getTextureView();
+	EditorIcons &fileIcons = Editor::get().getLayer<GuiLayer>()->fileIcons;
+	WGPUTextureView iconView = fileIcons.getTextureView();
 	if (ImGui::BeginTable("##AssetBrowserTable", std::max((int)(ImGui::GetCurrentWindow()->Size.x / zoomLevel), 1), ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingFixedFit)) {
 
 		bool createFolder = false;
@@ -156,7 +153,8 @@ void AssetPanel::onDraw() {
 				}
 				ImVec2 rectMin = ImGui::GetItemRectMin();
 				ImVec2 rectMax = ImGui::GetItemRectMax();
-				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)folderIconView, rectMin, rectMax);
+				Icon folderIcon = fileIcons.getIcon("Folder");
+				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rectMin, rectMax, folderIcon.uv.Min, folderIcon.uv.Max);
 
 				if (ImGui::BeginDragDropTarget()) {
 					if (const ImGuiPayload *payload =
@@ -236,7 +234,8 @@ void AssetPanel::onDraw() {
 				}
 				ImVec2 rect_min = ImGui::GetItemRectMin();
 				ImVec2 rect_max = ImGui::GetItemRectMax();
-				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)fileIconView, rect_min, rect_max);
+				Icon fileIcon = fileIcons.getIcon("GenericFile");
+				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rect_min, rect_max, fileIcon.uv.Min, fileIcon.uv.Max);
 
 				ImGui::PopStyleVar();
 				ImGui::SetWindowFontScale(1.0f);
@@ -549,7 +548,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	CitronECS::EntityBaseComponent &entityBase =
 		scene->getRegistry().get<CitronECS::EntityBaseComponent>(entity);
 
-	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->editorIcons;
 	WGPUTextureView iconView = icons.getTextureView();
 
 	ImGui::PushID(entityBase.uuid);
@@ -657,7 +656,7 @@ void OutlinerPanel::onDraw() {
 			ImGui::EndPopup();
 		}
 
-		EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+		EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->editorIcons;
 		WGPUTextureView iconView = icons.getTextureView();
 
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
@@ -821,7 +820,7 @@ bool InspectorPanel::collapsingHeader(const char *label,
 }
 
 void InspectorPanel::drawComponentIcon(const std::string &name, WGPUTextureView iconView, ImVec2 iconMin, ImVec2 iconMax) {
-	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->editorIcons;
 	if (name == "Transform Component") {
 		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Local").uv.Min, icons.getIcon("Local").uv.Max);
 	} else if (name == "Mesh Component") {
@@ -843,7 +842,7 @@ void InspectorPanel::onDraw() {
 	EditorContext &context = Editor::get().getEditorContext();
 	std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
 
-	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->icons;
+	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->editorIcons;
 	WGPUTextureView iconView = icons.getTextureView();
 
 	ImGui::Begin("Inspector");

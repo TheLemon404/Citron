@@ -65,7 +65,8 @@ class GuiLayer : public Layer {
 
 	Texture editorViewTextureRenderTarget;
 
-	EditorIcons icons;
+	EditorIcons editorIcons;
+	EditorIcons fileIcons;
 
 	ViewPanel viewPanel;
 	AssetPanel assetPanel;

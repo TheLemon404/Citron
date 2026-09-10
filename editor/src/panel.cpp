@@ -685,11 +685,6 @@ void OutlinerPanel::onDraw() {
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 			bool selected = context.getCurrentlySelectedItem().index() == 1 && std::get<std::shared_ptr<System>>(context.getCurrentlySelectedItem()) == system;
-			bool secondarySelected = context.getSecondarySelectedItems().contains(system);
-			if (secondarySelected) {
-				ImGui::PushStyleColor(ImGuiCol_Header, themeSecondarySelectedColor);
-				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondarySelectedColor);
-			}
 			if (selected) {
 				ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
 				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondaryColor);
@@ -729,10 +724,6 @@ void OutlinerPanel::onDraw() {
 			ImGui::PopStyleVar();
 			ImGui::PopID();
 			if (selected) {
-				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
-			}
-			if (secondarySelected) {
 				ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 			}

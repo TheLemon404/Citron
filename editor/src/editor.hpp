@@ -54,11 +54,7 @@ class EditorContext {
 		currentlySelectedItem = entity;
 	}
 	void setCurrentlySelectedItem(const std::shared_ptr<System> &system, bool retainSecondary = false) {
-		if (retainSecondary) {
-			secondarySelectedItems.insert(currentlySelectedItem);
-		} else {
-			secondarySelectedItems.clear();
-		}
+		secondarySelectedItems.clear();
 		currentlySelectedItem = system;
 	}
 

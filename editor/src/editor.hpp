@@ -53,8 +53,9 @@ class EditorContext {
 		}
 		currentlySelectedItem = entity;
 	}
-	void setCurrentlySelectedItem(const std::shared_ptr<System> &system, bool retainSecondary = false) {
+	void setCurrentlySelectedItem(const std::shared_ptr<System> &system) {
 		secondarySelectedItems.clear();
+
 		currentlySelectedItem = system;
 	}
 

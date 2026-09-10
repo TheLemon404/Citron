@@ -160,6 +160,10 @@ Entity Scene::createEntity() {
 	return {entity, this};
 }
 
+Entity Scene::getEntity(entt::entity entity) {
+	return {entity, this};
+}
+
 Entity Scene::getEntity(UUID uuid) {
 	if (entityMap.contains(uuid)) {
 		return {entityMap[uuid], this};

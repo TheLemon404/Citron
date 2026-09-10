@@ -544,13 +544,19 @@ void OutlinerPanel::onUpdate() {
 			pendingCreateEntityParent = UUID::nullID;
 		}
 	}
+
 	if (pendingDeleteEntity != UUID::nullID) {
+		for (const std::variant<entt::entity, std::shared_ptr<System>> entity : Editor::get().getEditorContext().getSecondarySelectedItems()) {
+			currentEditedScene->deleteEntity(currentEditedScene->getEntity(std::get<entt::entity>(entity)));
+		}
 		currentEditedScene->deleteEntity(currentEditedScene->getEntity(pendingDeleteEntity));
 		pendingDeleteEntity = UUID::nullID;
+		Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
 	}
 	if (pendingDeleteSystem != nullptr) {
 		currentEditedScene->removeSystem(pendingDeleteSystem);
 		pendingDeleteSystem = nullptr;
+		Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
 	}
 }
 
@@ -718,8 +724,7 @@ void OutlinerPanel::onDraw() {
 			ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("System").uv.Min, icons.getIcon("System").uv.Max);
 
 			if (ImGui::IsItemClicked()) {
-				CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
-				context.setCurrentlySelectedItem(system, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
+				context.setCurrentlySelectedItem(system);
 			}
 			ImGui::PopStyleVar();
 			ImGui::PopID();

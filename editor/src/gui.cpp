@@ -118,6 +118,8 @@ void GuiLayer::onAttach() {
 	i++;
 	editorIcons.registerIcon("Camera", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(editorIconSize, editorIconSize));
 	i++;
+	editorIcons.registerIcon("ParentEntity", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(editorIconSize, editorIconSize));
+	i++;
 
 	fileIcons.initAtlas(std::filesystem::path(CITRON_PROGRAM_FOLDER) / "EngineResources/Textures/file_icons.png", context.renderer.getContext().device);
 

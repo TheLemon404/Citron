@@ -599,7 +599,8 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	float size = rectMax.y - rectMin.y;
 	ImVec2 iconMin = ImVec2(rectMin.x, rectMin.y);
 	ImVec2 iconMax = ImVec2(iconMin.x + size, iconMin.y + size);
-	ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Entity").uv.Min, icons.getIcon("Entity").uv.Max);
+	Icon icon = isLeaf ? icons.getIcon("Entity") : icons.getIcon("ParentEntity");
+	ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icon.uv.Min, icon.uv.Max);
 
 	ImGui::PopStyleVar();
 	if (selected) {

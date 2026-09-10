@@ -217,7 +217,9 @@ void Editor::close() {
 			CitronIO::IO::writeFile(editorContext.projectFilePath,
 									YAML::Dump(projectFileNode));
 
-			saveCurrentScene();
+			if (getEditorContext().getPlaymodeState() != EditorPlaymodeState::Playing) {
+				saveCurrentScene();
+			}
 		}
 	}
 }

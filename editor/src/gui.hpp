@@ -18,6 +18,7 @@ constexpr ImVec4 zColor = ImVec4(0.337, 0.596, 0.988, 1.0f);
 constexpr ImVec4 wColor = ImVec4(0.698, 0.443, 0.922, 1.0f);
 constexpr ImVec4 themeColor = ImVec4(0.737, 0.502, 0.306, 1.0f);
 constexpr ImVec4 themeSecondaryColor = ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 1.0f);
+constexpr ImVec4 themeSecondarySelectedColor = ImVec4(0.2784314f, 0.44705883f, 0.7019608f, 0.7f);
 
 using namespace CitronCore;
 

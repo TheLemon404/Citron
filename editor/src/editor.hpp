@@ -8,6 +8,8 @@
 #include <ecs.hpp>
 #include <layer.hpp>
 #include <logger.hpp>
+#include <set>
+#include <unordered_set>
 #include <variant>
 #include <window.hpp>
 
@@ -39,10 +41,24 @@ class EditorContext {
 		return currentlySelectedItem;
 	}
 
-	void setCurrentlySelectedItem(const entt::entity entity) {
+	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &getSecondarySelectedItems() {
+		return secondarySelectedItems;
+	}
+
+	void setCurrentlySelectedItem(const entt::entity entity, bool retainSecondary = false) {
+		if (retainSecondary) {
+			secondarySelectedItems.insert(currentlySelectedItem);
+		} else {
+			secondarySelectedItems.clear();
+		}
 		currentlySelectedItem = entity;
 	}
-	void setCurrentlySelectedItem(const std::shared_ptr<System> &system) {
+	void setCurrentlySelectedItem(const std::shared_ptr<System> &system, bool retainSecondary = false) {
+		if (retainSecondary) {
+			secondarySelectedItems.insert(currentlySelectedItem);
+		} else {
+			secondarySelectedItems.clear();
+		}
 		currentlySelectedItem = system;
 	}
 
@@ -56,6 +72,7 @@ class EditorContext {
 
   private:
 	EditorPlaymodeState playmodeState = EditorPlaymodeState::Stopped;
+	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> secondarySelectedItems;
 	std::variant<entt::entity, std::shared_ptr<System>> currentlySelectedItem;
 };
 

@@ -1,5 +1,6 @@
 #include "resources.hpp"
 #include "buffer.hpp"
+#include "clock.hpp"
 #include "debug.hpp"
 #include "mesh.hpp"
 #include "pipeline.hpp"
@@ -113,6 +114,16 @@ std::shared_ptr<Pipeline> RendererResourceManager::getPipeline(PipelineKey key) 
 		pipelineCache[key] = pipeline;
 	}
 	return pipelineCache[key];
+}
+
+void RendererResourceManager::addDebugLine(const DebugLine &line) {
+	debugLines.push_back(line);
+}
+void RendererResourceManager::clearDebugLines() {
+	debugLines.clear();
+}
+size_t RendererResourceManager::numDebugLines() {
+	return debugLines.size();
 }
 
 void RendererResourceManager::constructDebugLinesMultiMesh() {

@@ -5,6 +5,7 @@
 #include "SDL3/SDL_mouse.h"
 #include "assets.hpp"
 #include "gui.hpp"
+#include "input.hpp"
 #include "lang.hpp"
 #include "registry.hpp"
 #include "editor.hpp"
@@ -568,9 +569,15 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding;
 	bool selected = context.getCurrentlySelectedItem().index() == 0 && std::get<entt::entity>(context.getCurrentlySelectedItem()) == entity;
+	bool secondarySelected = context.getSecondarySelectedItems().contains(entity);
 	bool isLeaf = scene->getRegistry().get<CitronECS::EntityBaseComponent>(entity).children.empty();
 	if (isLeaf) {
 		flags |= ImGuiTreeNodeFlags_Leaf;
+	}
+	if (secondarySelected) {
+		ImGui::PushStyleColor(ImGuiCol_Header, themeSecondarySelectedColor);
+		ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondarySelectedColor);
+		flags |= ImGuiTreeNodeFlags_Selected;
 	}
 	if (selected) {
 		ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
@@ -590,6 +597,10 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 	ImGui::PopStyleVar();
 	if (selected) {
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+	}
+	if (secondarySelected) {
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 	}
@@ -614,7 +625,8 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	}
 
 	if (ImGui::IsItemClicked()) {
-		context.setCurrentlySelectedItem(entity);
+		CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
+		context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
 	}
 
 	if (ImGui::BeginPopupContextItem("EntityContextPopup")) {
@@ -673,6 +685,11 @@ void OutlinerPanel::onDraw() {
 		for (auto &[id, system] : currentEditedScene->getSystems()) {
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 			bool selected = context.getCurrentlySelectedItem().index() == 1 && std::get<std::shared_ptr<System>>(context.getCurrentlySelectedItem()) == system;
+			bool secondarySelected = context.getSecondarySelectedItems().contains(system);
+			if (secondarySelected) {
+				ImGui::PushStyleColor(ImGuiCol_Header, themeSecondarySelectedColor);
+				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondarySelectedColor);
+			}
 			if (selected) {
 				ImGui::PushStyleColor(ImGuiCol_Header, themeSecondaryColor);
 				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, themeSecondaryColor);
@@ -706,11 +723,16 @@ void OutlinerPanel::onDraw() {
 			ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("System").uv.Min, icons.getIcon("System").uv.Max);
 
 			if (ImGui::IsItemClicked()) {
-				context.setCurrentlySelectedItem(system);
+				CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
+				context.setCurrentlySelectedItem(system, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
 			}
 			ImGui::PopStyleVar();
 			ImGui::PopID();
 			if (selected) {
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+			}
+			if (secondarySelected) {
 				ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 			}

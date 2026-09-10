@@ -169,15 +169,9 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 	const std::shared_ptr<Shader> getDebugWireframeShader() { return debugWireframeShader; }
 	const std::shared_ptr<Mesh> getDebugGridMesh() { return debugGridMesh; }
 
-	void addDebugLine(const DebugLine &line) {
-		debugLines.push_back(line);
-	}
-	void clearDebugLines() {
-		debugLines.clear();
-	}
-	size_t numDebugLines() {
-		return debugLines.size();
-	}
+	void addDebugLine(const DebugLine &line);
+	void clearDebugLines();
+	size_t numDebugLines();
 
 	void constructDebugLinesMultiMesh();
 	std::shared_ptr<Mesh> getDebugLinesMultiMesh() { return debugLinesMultiMesh; }

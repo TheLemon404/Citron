@@ -632,7 +632,7 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 	if (ImGui::IsItemClicked()) {
 		CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
-		context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
+		context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) || inputLayer->isPressed(SDLK_LSHIFT) ? true : false);
 	}
 
 	if (ImGui::BeginPopupContextItem("EntityContextPopup")) {

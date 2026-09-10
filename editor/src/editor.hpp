@@ -45,6 +45,9 @@ class EditorContext {
 		return secondarySelectedItems;
 	}
 
+	void addSecondarySelectedItem(const std::variant<entt::entity, std::shared_ptr<System>> &item) {
+		secondarySelectedItems.insert(item);
+	}
 	void setCurrentlySelectedItem(const entt::entity entity, bool retainSecondary = false) {
 		if (retainSecondary) {
 			secondarySelectedItems.insert(currentlySelectedItem);

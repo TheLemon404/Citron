@@ -546,10 +546,13 @@ void OutlinerPanel::onUpdate() {
 	}
 
 	if (pendingDeleteEntity != UUID::nullID) {
-		for (const std::variant<entt::entity, std::shared_ptr<System>> entity : Editor::get().getEditorContext().getSecondarySelectedItems()) {
-			currentEditedScene->deleteEntity(currentEditedScene->getEntity(std::get<entt::entity>(entity)));
+		if (Editor::get().getEditorContext().getSecondarySelectedItems().empty()) {
+			currentEditedScene->deleteEntity(currentEditedScene->getEntity(pendingDeleteEntity));
+		} else {
+			for (const std::variant<entt::entity, std::shared_ptr<System>> entity : Editor::get().getEditorContext().getSecondarySelectedItems()) {
+				currentEditedScene->deleteEntity(currentEditedScene->getEntity(std::get<entt::entity>(entity)));
+			}
 		}
-		currentEditedScene->deleteEntity(currentEditedScene->getEntity(pendingDeleteEntity));
 		pendingDeleteEntity = UUID::nullID;
 		Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
 	}
@@ -633,7 +636,38 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 	if (ImGui::IsItemClicked()) {
 		CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
-		context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) || inputLayer->isPressed(SDLK_LSHIFT) ? true : false);
+
+		if (inputLayer->isJustReleased(SDLK_LSHIFT)) {
+			shiftSelectStartEntity = entt::null;
+		}
+
+		if (inputLayer->isPressed(SDLK_LSHIFT)) {
+			if (shiftSelectStartEntity == entt::null) {
+				shiftSelectStartEntity = entity;
+				context.setCurrentlySelectedItem(entity, true);
+			} else {
+				bool addingEntities = false;
+				for (Entity e : scene->getRootEntities()) {
+					if (e == shiftSelectStartEntity && !addingEntities) {
+						addingEntities = true;
+						context.setCurrentlySelectedItem(e, true);
+					} else if (e == shiftSelectStartEntity && addingEntities) {
+						addingEntities = false;
+						context.setCurrentlySelectedItem(e, true);
+					} else if (e == entity && !addingEntities) {
+						addingEntities = true;
+						context.setCurrentlySelectedItem(e, true);
+					} else if (e == entity && addingEntities) {
+						addingEntities = false;
+						context.setCurrentlySelectedItem(e, true);
+					} else if (addingEntities) {
+						context.setCurrentlySelectedItem(e, true);
+					}
+				}
+			}
+		} else {
+			context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
+		}
 	}
 
 	if (ImGui::BeginPopupContextItem("EntityContextPopup")) {
@@ -769,13 +803,8 @@ void OutlinerPanel::onDraw() {
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 
 		if (currentEditedScene) {
-			const auto &view =
-				currentEditedScene->getRegistry().view<EntityBaseComponent>();
-			for (const entt::entity &entity : view) {
-				auto &entityBase = view.get<EntityBaseComponent>(entity);
-				if (entityBase.parentId == 0) {
-					showEntityChildTree(entity, currentEditedScene);
-				}
+			for (Entity entity : currentEditedScene->getRootEntities()) {
+				showEntityChildTree(entity, currentEditedScene);
 			}
 		}
 

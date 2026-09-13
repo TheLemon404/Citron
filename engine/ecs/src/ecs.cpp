@@ -148,6 +148,25 @@ std::shared_ptr<Scene> Scene::clone() {
 	return clonedScene;
 }
 
+std::vector<Entity> Scene::getEntities() {
+	std::vector<Entity> entities;
+	for (auto entity : registry.view<EntityBaseComponent>()) {
+		entities.push_back({entity, this});
+	}
+	return entities;
+}
+
+std::vector<Entity> Scene::getRootEntities() {
+	std::vector<Entity> rootEntities;
+	for (auto entity : registry.view<EntityBaseComponent>()) {
+		if (registry.get<EntityBaseComponent>(entity).parentId != 0) {
+			continue;
+		}
+		rootEntities.push_back({entity, this});
+	}
+	return rootEntities;
+}
+
 Entity Scene::createEntity() {
 	const auto entity = registry.create();
 	UUID uuid = UUID();
@@ -373,6 +392,11 @@ void SceneManager::onDetach() {}
 
 void SceneManager::onUpdate() {
 	if (activeScene) {
+		// sort entities by uuid
+		activeScene->getRegistry().sort<EntityBaseComponent>([](const EntityBaseComponent &a, const EntityBaseComponent &b) {
+			return a.uuid < b.uuid;
+		});
+
 		switch (mode) {
 		case SceneMode::STOP:
 			activeScene->editorUpdate();

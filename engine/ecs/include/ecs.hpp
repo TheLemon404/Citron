@@ -92,6 +92,8 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 
 	std::shared_ptr<Scene> clone();
 
+	std::vector<Entity> getEntities();
+	std::vector<Entity> getRootEntities();
 	Entity createEntity();
 	Entity getEntity(entt::entity entity);
 	Entity getEntity(UUID entity);
@@ -157,6 +159,8 @@ class CITRON_ECS_API Entity {
 
 	Entity getParent();
 	std::vector<Entity> getChildren();
+
+	const entt::entity getHandle() { return handle; }
 
 	operator entt::entity() { return handle; }
 

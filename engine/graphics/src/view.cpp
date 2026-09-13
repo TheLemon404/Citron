@@ -14,7 +14,7 @@ glm::mat4 PerspectiveView::getProjectionMatrix() {
 }
 
 bool PerspectiveView::isInsideBounds(glm::vec3 position) {
-	glm::vec4 clipCoord = glm::vec4(position, 1.0f) * getProjectionMatrix() * getViewMatrix();
+	glm::vec4 clipCoord = getProjectionMatrix() * getViewMatrix() * glm::vec4(position, 1.0f);
 	clipCoord /= clipCoord.w;
 	return clipCoord.x >= -1.0f && clipCoord.x <= 1.0f && clipCoord.y >= -1.0f && clipCoord.y <= 1.0f && clipCoord.z >= -1.0f && clipCoord.z <= 1.0f;
 }

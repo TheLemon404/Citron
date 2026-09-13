@@ -115,8 +115,6 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	if (ImGui::IsItemClicked()) {
 		CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
 
-		CITRON_CLIENT_INFO("i {}", scene->getEntityIndex(entity));
-
 		if (inputLayer->isJustReleased(SDLK_LSHIFT)) {
 			shiftSelectStartEntity = entt::null;
 		}
@@ -126,8 +124,6 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 
 			uint32_t i = scene->getEntityIndex(shiftSelectStartEntity);
 			uint32_t j = scene->getEntityIndex(entity);
-
-			CITRON_CLIENT_INFO("i {} j {}", i, j);
 
 			uint32_t start = i < j ? i : j;
 			uint32_t end = i < j ? j : i;

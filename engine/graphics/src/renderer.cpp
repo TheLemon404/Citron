@@ -333,8 +333,8 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	for (size_t i = 0; i < renderableReferenceData.size(); i++) {
 		std::shared_ptr<Mesh> mesh = assetManager.getAsset<Mesh>(renderableReferenceData[i].meshUUID);
 		// frustrum culling
-		glm::vec4 transformedMin = glm::vec4(mesh->getBoundsMin(), 1.0f) * renderableReferenceData[i].transform;
-		glm::vec4 transformedMax = glm::vec4(mesh->getBoundsMax(), 1.0f) * renderableReferenceData[i].transform;
+		glm::vec4 transformedMin = renderableReferenceData[i].transform * glm::vec4(mesh->getBoundsMin(), 1.0f);
+		glm::vec4 transformedMax = renderableReferenceData[i].transform * glm::vec4(mesh->getBoundsMax(), 1.0f);
 		if (!view.isInsideBounds(glm::xyz(transformedMin)) && !view.isInsideBounds(glm::xyz(transformedMax))) {
 			continue;
 		}

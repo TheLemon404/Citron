@@ -191,6 +191,18 @@ Entity Scene::getEntity(UUID uuid) {
 	throw std::runtime_error("Entity not found: " + std::to_string(uuid));
 }
 
+uint32_t Scene::getEntityIndex(Entity entity) {
+	return registry.storage<EntityBaseComponent>().index(entity.getHandle());
+}
+
+uint32_t Scene::getEntityIndex(entt::entity entity) {
+	return registry.storage<EntityBaseComponent>().index(entity);
+}
+
+uint32_t Scene::getEntityIndex(UUID uuid) {
+	return registry.storage<EntityBaseComponent>().index(entityMap[uuid]);
+}
+
 bool Scene::hasEntity(entt::entity entity) {
 	return registry.valid(entity);
 }
@@ -400,11 +412,6 @@ void SceneManager::onDetach() {}
 
 void SceneManager::onUpdate() {
 	if (activeScene) {
-		// sort entities by uuid
-		activeScene->getRegistry().sort<EntityBaseComponent>([](const EntityBaseComponent &a, const EntityBaseComponent &b) {
-			return a.uuid < b.uuid;
-		});
-
 		switch (mode) {
 		case SceneMode::STOP:
 			activeScene->editorUpdate();

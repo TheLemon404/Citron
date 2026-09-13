@@ -2,6 +2,7 @@
 #include "editor.hpp"
 #include "gui.hpp"
 #include "keyboard.hpp"
+#include "logger.hpp"
 
 #include <ecs.hpp>
 #include <component.hpp>
@@ -114,34 +115,30 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 	if (ImGui::IsItemClicked()) {
 		CitronInput::InputLayer *inputLayer = Editor::get().getLayer<CitronInput::InputLayer>();
 
+		CITRON_CLIENT_INFO("i {}", scene->getEntityIndex(entity));
+
 		if (inputLayer->isJustReleased(SDLK_LSHIFT)) {
 			shiftSelectStartEntity = entt::null;
 		}
 
-		if (inputLayer->isPressed(SDLK_LSHIFT)) {
-			if (shiftSelectStartEntity == entt::null) {
-				shiftSelectStartEntity = entity;
-				context.setCurrentlySelectedItem(entity, true);
-			} else {
-				bool addingEntities = false;
-				for (Entity e : scene->getRootEntities()) {
-					if (e == shiftSelectStartEntity && !addingEntities) {
-						addingEntities = true;
-						context.setCurrentlySelectedItem(e, true);
-					} else if (e == shiftSelectStartEntity && addingEntities) {
-						addingEntities = false;
-						context.setCurrentlySelectedItem(e, true);
-					} else if (e == entity && !addingEntities) {
-						addingEntities = true;
-						context.setCurrentlySelectedItem(e, true);
-					} else if (e == entity && addingEntities) {
-						addingEntities = false;
-						context.setCurrentlySelectedItem(e, true);
-					} else if (addingEntities) {
-						context.setCurrentlySelectedItem(e, true);
-					}
+		if (inputLayer->isPressed(SDLK_LSHIFT) && context.getCurrentlySelectedItem().index() == 0) {
+			shiftSelectStartEntity = std::get<entt::entity>(context.getCurrentlySelectedItem());
+
+			uint32_t i = scene->getEntityIndex(shiftSelectStartEntity);
+			uint32_t j = scene->getEntityIndex(entity);
+
+			CITRON_CLIENT_INFO("i {} j {}", i, j);
+
+			uint32_t start = i < j ? i : j;
+			uint32_t end = i < j ? j : i;
+
+			for (Entity e : scene->getRootEntities()) {
+				if (start <= scene->getEntityIndex(e) && scene->getEntityIndex(e) <= end) {
+					context.addSecondarySelectedItem(e);
 				}
 			}
+
+			context.setCurrentlySelectedItem(entity, true);
 		} else {
 			context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
 		}

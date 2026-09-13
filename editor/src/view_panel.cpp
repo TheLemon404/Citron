@@ -1,8 +1,10 @@
 #include "ImOGuizmo.hpp"
+#include "SDL3/SDL_keycode.h"
 #include "app.hpp"
 #include "clock.hpp"
 #include "debug.hpp"
 #include "imgui_internal.h"
+#include "keyboard.hpp"
 #include "mesh.hpp"
 #include "panel.hpp"
 #include "uuid.hpp"
@@ -254,6 +256,20 @@ void ViewPanel::onEvent(Event &e) {
 			MouseButtonReleasedEvent &mouseEvent = static_cast<MouseButtonReleasedEvent &>(e);
 			if (mouseEvent.getButton() == SDL_BUTTON_RIGHT) {
 				viewportMovementActive = false;
+			}
+		}
+	} else if (e.isInCategory(CitronCore::EventCategoryKeyboard)) {
+		if (e.getEventType() == EventType::KeyPressed) {
+			KeyPressedEvent &keyEvent = static_cast<KeyPressedEvent &>(e);
+
+			if (keyEvent.getKeycode() == SDLK_LCTRL) {
+				manipulationSettings.snap = true;
+			}
+		} else if (e.getEventType() == EventType::KeyJustReleased) {
+			KeyJustReleasedEvent &keyEvent = static_cast<KeyJustReleasedEvent &>(e);
+
+			if (keyEvent.getKeycode() == SDLK_LCTRL) {
+				manipulationSettings.snap = false;
 			}
 		}
 	}

@@ -841,7 +841,22 @@ void OutlinerPanel::onDraw() {
 	ImGui::End();
 }
 
-void OutlinerPanel::onEvent(Event &e) {}
+void OutlinerPanel::onEvent(Event &e) {
+	if (e.isInCategory(CitronCore::EventCategoryKeyboard)) {
+		if (e.getEventType() == EventType::KeyPressed) {
+			KeyPressedEvent &keyEvent = static_cast<KeyPressedEvent &>(e);
+			if (keyEvent.getKeycode() == SDLK_DELETE) {
+				if (Editor::get().getEditorContext().getCurrentlySelectedItem().index() == 0) {
+					entt::entity e = std::get<entt::entity>(Editor::get().getEditorContext().getCurrentlySelectedItem());
+					std::shared_ptr<Scene> currentEditedScene = appContext.sceneManager.getActiveScene();
+					if (e != entt::null && currentEditedScene) {
+						pendingDeleteEntity = currentEditedScene->getEntity(e).getComponent<EntityBaseComponent>().uuid;
+					}
+				}
+			}
+		}
+	}
+}
 
 bool InspectorPanel::collapsingHeader(const char *label,
 									  const char *icon_open,

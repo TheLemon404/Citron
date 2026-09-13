@@ -74,7 +74,7 @@ void ViewPanel::onUpdate() {
 			glm::vec4 minBounds = glm::vec4(entityMesh->getBoundsMin(), 1.0f);
 			glm::vec4 maxBounds = glm::vec4(entityMesh->getBoundsMax(), 1.0f);
 			glm::mat4 globalTransform = appContext.sceneManager.getActiveScene()->getGlobalTransform(entity);
-			DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds));
+			DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {1.0, 0.5, 0.0});
 		}
 	}
 

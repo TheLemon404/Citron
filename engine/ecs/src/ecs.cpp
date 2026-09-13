@@ -191,6 +191,14 @@ Entity Scene::getEntity(UUID uuid) {
 	throw std::runtime_error("Entity not found: " + std::to_string(uuid));
 }
 
+bool Scene::hasEntity(entt::entity entity) {
+	return registry.valid(entity);
+}
+
+bool Scene::hasEntity(UUID uuid) {
+	return entityMap.contains(uuid);
+}
+
 void Scene::reparentEntityToRoot(Entity entity) {
 	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
 

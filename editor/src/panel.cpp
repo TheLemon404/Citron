@@ -546,12 +546,11 @@ void OutlinerPanel::onUpdate() {
 	}
 
 	if (pendingDeleteEntity != UUID::nullID) {
-		if (Editor::get().getEditorContext().getSecondarySelectedItems().empty()) {
+		for (const std::variant<entt::entity, std::shared_ptr<System>> entity : Editor::get().getEditorContext().getSecondarySelectedItems()) {
+			currentEditedScene->deleteEntity(currentEditedScene->getEntity(std::get<entt::entity>(entity)));
+		}
+		if (currentEditedScene->hasEntity(pendingDeleteEntity)) {
 			currentEditedScene->deleteEntity(currentEditedScene->getEntity(pendingDeleteEntity));
-		} else {
-			for (const std::variant<entt::entity, std::shared_ptr<System>> entity : Editor::get().getEditorContext().getSecondarySelectedItems()) {
-				currentEditedScene->deleteEntity(currentEditedScene->getEntity(std::get<entt::entity>(entity)));
-			}
 		}
 		pendingDeleteEntity = UUID::nullID;
 		Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);

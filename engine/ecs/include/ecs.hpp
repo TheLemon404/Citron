@@ -97,6 +97,8 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	Entity createEntity();
 	Entity getEntity(entt::entity entity);
 	Entity getEntity(UUID entity);
+	bool hasEntity(entt::entity entity);
+	bool hasEntity(UUID entity);
 	void reparentEntityToRoot(Entity entity);
 	void reparentEntity(Entity entity, Entity parent);
 	void deleteEntity(Entity entity);

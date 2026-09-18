@@ -262,20 +262,6 @@ void ViewPanel::onEvent(Event &e) {
 				viewportMovementActive = false;
 			}
 		}
-	} else if (e.isInCategory(CitronCore::EventCategoryKeyboard)) {
-		if (e.getEventType() == EventType::KeyPressed) {
-			KeyPressedEvent &keyEvent = static_cast<KeyPressedEvent &>(e);
-
-			if (keyEvent.getKeycode() == SDLK_LCTRL) {
-				manipulationSettings.snap = true;
-			}
-		} else if (e.getEventType() == EventType::KeyJustReleased) {
-			KeyJustReleasedEvent &keyEvent = static_cast<KeyJustReleasedEvent &>(e);
-
-			if (keyEvent.getKeycode() == SDLK_LCTRL) {
-				manipulationSettings.snap = false;
-			}
-		}
 	}
 }
 
@@ -322,7 +308,7 @@ void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, 
 
 bool ViewPanel::mouseSelectEvent(Event &e) {
 	MouseButtonPressedEvent &event = static_cast<MouseButtonPressedEvent &>(e);
-	if (event.getButton() == SDL_BUTTON_LEFT) {
+	if (event.getButton() == SDL_BUTTON_LEFT && event.getClicks() == 2) {
 		AppContext context = Editor::get().getContext();
 
 		PerspectiveView &view = Editor::get().editorView;

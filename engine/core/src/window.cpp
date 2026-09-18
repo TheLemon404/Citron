@@ -141,7 +141,7 @@ void Window::pollEvents() {
 		}
 		case SDL_EVENT_MOUSE_BUTTON_DOWN: {
 			MouseButtonPressedEvent pressedEvent =
-				MouseButtonPressedEvent(&event, event.button.button);
+				MouseButtonPressedEvent(&event, event.button.button, event.button.clicks);
 			eventCallback(pressedEvent);
 			break;
 		}

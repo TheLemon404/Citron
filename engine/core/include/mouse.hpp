@@ -68,10 +68,11 @@ class CITRON_CORE_API MouseButtonEvent : public MouseEvent {
 
 class CITRON_CORE_API MouseButtonPressedEvent : public MouseButtonEvent {
   public:
-	MouseButtonPressedEvent(SDL_Event *e, int button)
-		: MouseButtonEvent(e), button(button) {}
+	MouseButtonPressedEvent(SDL_Event *e, int button, int clicks)
+		: MouseButtonEvent(e), button(button), clicks(clicks) {}
 
 	inline int getButton() const { return button; }
+	inline int getClicks() const { return clicks; }
 
 	std::string toString() const override {
 		std::stringstream ss;
@@ -83,6 +84,7 @@ class CITRON_CORE_API MouseButtonPressedEvent : public MouseButtonEvent {
 
   private:
 	int button;
+	int clicks;
 };
 
 class CITRON_CORE_API MouseButtonReleasedEvent : public MouseButtonEvent {

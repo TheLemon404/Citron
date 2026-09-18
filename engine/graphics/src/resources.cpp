@@ -120,7 +120,13 @@ void RendererResourceManager::addDebugLine(const DebugLine &line) {
 	debugLines.push_back(line);
 }
 void RendererResourceManager::clearDebugLines() {
-	debugLines.clear();
+	for (auto it = debugLines.begin(); it != debugLines.end();) {
+		if (it->deleteTime < Clock::getLastFrameTime()) {
+			it = debugLines.erase(it);
+		} else {
+			++it;
+		}
+	}
 }
 size_t RendererResourceManager::numDebugLines() {
 	return debugLines.size();

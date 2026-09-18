@@ -5,6 +5,8 @@
 #include "debug.hpp"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
+#include "logger.hpp"
+#include "math.hpp"
 #include "mesh.hpp"
 #include "panel.hpp"
 #include "uuid.hpp"
@@ -48,7 +50,7 @@ void ViewPanel::onUpdate() {
 	for (const auto &entity : appContext.sceneManager.getActiveScene()->getRegistry().view<TransformComponent, PerspectiveCameraComponent>()) {
 		PerspectiveCameraComponent &camera = appContext.sceneManager.getActiveScene()->getRegistry().get<PerspectiveCameraComponent>(entity);
 		glm::vec3 globalPosition = appContext.sceneManager.getActiveScene()->getGlobalPosition(entity);
-		glm::vec3 cameraRight = glm::cross(camera.view.up, camera.view.forward) * camera.view.aspect;
+		glm::vec3 cameraRight = glm::normalize(glm::cross(camera.view.up, camera.view.forward)) * camera.view.aspect * (camera.view.fov / 90.0f);
 		glm::vec3 forwardPoint = globalPosition + camera.view.forward;
 		glm::vec3 frustrumCorners[4] = {
 			forwardPoint + cameraRight + camera.view.up,
@@ -119,7 +121,7 @@ void ViewPanel::onDraw() {
 
 	ImGui::Begin("Viewport", nullptr);
 	viewportSize = ImGui::GetContentRegionAvail();
-	ImVec2 viewportPos = ImGui::GetCursorScreenPos();
+	viewportPos = ImGui::GetCursorScreenPos();
 	focused = ImGui::IsWindowFocused();
 	if (viewportMovementActive)
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
@@ -245,6 +247,8 @@ void ViewPanel::onEvent(Event &e) {
 			editorView.forward = glm::rotate(editorView.forward, -dx, globalUp);
 			glm::vec3 localRightVector = glm::normalize(glm::cross(editorView.forward, globalUp));
 			editorView.forward = glm::rotate(editorView.forward, -dy, localRightVector);
+
+			editorView.up = glm::normalize(glm::cross(localRightVector, editorView.forward));
 		}
 		if (e.getEventType() == EventType::MouseButtonPressed) {
 			MouseButtonPressedEvent &mouseEvent = static_cast<MouseButtonPressedEvent &>(e);
@@ -319,7 +323,44 @@ void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, 
 bool ViewPanel::mouseSelectEvent(Event &e) {
 	MouseButtonPressedEvent &event = static_cast<MouseButtonPressedEvent &>(e);
 	if (event.getButton() == SDL_BUTTON_LEFT) {
-		CITRON_CLIENT_INFO("Need to implement mouse picking...");
+		AppContext context = Editor::get().getContext();
+
+		PerspectiveView &view = Editor::get().editorView;
+
+		glm::vec2 mousePos = Editor::get().getLayer<CitronInput::InputLayer>()->getMousePosition();
+		glm::vec2 mousePosInViewport = glm::vec2(mousePos.x - viewportPos.x, mousePos.y - viewportPos.y);
+		glm::vec2 mouseViewportUV = glm::vec2(mousePosInViewport.x / viewportSize.x, mousePosInViewport.y / viewportSize.y);
+
+		CITRON_CLIENT_INFO("MX {} MY {}", mousePos.x / (viewportPos.x + viewportSize.x), mousePos.y / (viewportPos.y + viewportSize.y));
+		CITRON_CLIENT_INFO("FOV {} ASPECT {}", view.fov, view.aspect);
+
+		float halfVertical = std::tan(glm::radians(view.fov) * 0.5f);
+		float halfHorizontal = halfVertical * view.aspect;
+		glm::vec3 viewportRight = glm::normalize(glm::cross(view.forward, view.up));
+		glm::vec3 mouseRayWorldPos = view.position;
+		float mouseXFactor = mouseViewportUV.x * 2.0f - 1.0f;
+		float mouseYFactor = mouseViewportUV.y * 2.0f - 1.0f;
+		glm::vec3 mouseRayWorldDir = view.forward + view.up * halfVertical * -mouseYFactor + viewportRight * mouseXFactor * halfHorizontal;
+
+		bool selected = false;
+
+		for (entt::entity entity : Editor::get().getContext().sceneManager.getActiveScene()->getRegistry().view<MeshComponent>()) {
+			MeshComponent &meshComponent = context.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity);
+			std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(meshComponent.meshAsset.uuid);
+			glm::mat4 transform = context.sceneManager.getActiveScene()->getGlobalTransform(entity);
+			glm::vec3 minBBPos = glm::xyz(transform * glm::vec4(mesh->getBoundsMin(), 1.0f));
+			glm::vec3 maxBBPos = glm::xyz(transform * glm::vec4(mesh->getBoundsMax(), 1.0f));
+
+			if (MathUtils::rayIntersectsAABB(mouseRayWorldPos, mouseRayWorldDir, minBBPos, maxBBPos)) {
+				Editor::get().getEditorContext().setCurrentlySelectedItem(entity);
+				selected = true;
+				break;
+			}
+		}
+
+		if (!selected) {
+			Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
+		}
 	}
 
 	return false;

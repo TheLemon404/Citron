@@ -129,7 +129,7 @@ void Window::pollEvents() {
 		}
 		case SDL_EVENT_MOUSE_MOTION: {
 			MouseMovedEvent motionEvent =
-				MouseMovedEvent(&event, event.motion.xrel, event.motion.yrel);
+				MouseMovedEvent(&event, event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
 			eventCallback(motionEvent);
 			break;
 		}

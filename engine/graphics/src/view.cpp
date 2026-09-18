@@ -6,11 +6,11 @@
 using namespace CitronGraphics;
 
 glm::mat4 View::getViewMatrix() {
-	return glm::lookAt(position, position + forward, -up);
+	return glm::lookAt(position, position + forward, up);
 }
 
 glm::mat4 PerspectiveView::getProjectionMatrix() {
-	return glm::perspective(fov, aspect, nearPlane, farPlane);
+	return glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
 }
 
 bool PerspectiveView::isInsideBounds(glm::vec3 position) {

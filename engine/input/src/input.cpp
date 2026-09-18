@@ -47,8 +47,13 @@ bool InputLayer::processKeyReleasedEvent(Event &e) {
 	return false;
 }
 
-bool InputLayer::processMouseEvent(Event &e) { return false; }
-
+bool InputLayer::processMouseEvent(Event &e) {
+	if (e.getEventType() == EventType::MouseMoved) {
+		MouseMovedEvent &mouseMovedEvent = static_cast<MouseMovedEvent &>(e);
+		mousePosition = glm::vec2(mouseMovedEvent.getX(), mouseMovedEvent.getY());
+	}
+	return false;
+}
 bool InputLayer::isPressed(uint32_t pressable) {
 	return pressedInputs.contains(pressable) && (pressedInputs[pressable] == PressableInputState::PRESSED || pressedInputs[pressable] == PressableInputState::JUST_PRESSED);
 }
@@ -63,4 +68,8 @@ bool InputLayer::isJustPressed(uint32_t pressable) {
 
 bool InputLayer::isJustReleased(uint32_t pressable) {
 	return pressedInputs.contains(pressable) && pressedInputs[pressable] == PressableInputState::JUST_RELEASED;
+}
+
+glm::vec2 InputLayer::getMousePosition() {
+	return mousePosition;
 }

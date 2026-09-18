@@ -7,6 +7,7 @@ file(GLOB_RECURSE src CONFIGURE_DEPENDS  src/*.cpp)
 target_sources(citron_util PRIVATE ${src})
 target_include_directories(citron_util PUBLIC include)
 
+target_link_libraries(citron_util PRIVATE glm)
 target_compile_features(citron_util PUBLIC cxx_std_26)
 
 citron_export_sdk_headers(citron_util)

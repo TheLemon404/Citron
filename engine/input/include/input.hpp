@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/ext/vector_float2.hpp"
 #include "input_exports.hpp"
 #include "layer.hpp"
 #include <SDL3/SDL.h>
@@ -34,11 +35,14 @@ class CITRON_INPUT_API InputLayer : public Layer {
 	bool isJustPressed(uint32_t pressable);
 	bool isJustReleased(uint32_t pressable);
 
+	glm::vec2 getMousePosition();
+
   private:
 	bool processKeyPressedEvent(Event &e);
 	bool processKeyReleasedEvent(Event &e);
 	bool processMouseEvent(Event &e);
 
+	glm::vec2 mousePosition = glm::vec2(0.0f);
 	static std::unordered_map<uint64_t, PressableInputState> pressedInputs;
 };
 

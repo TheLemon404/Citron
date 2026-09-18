@@ -18,7 +18,7 @@ class CITRON_GRAPHICS_API View {
 
 class CITRON_GRAPHICS_API PerspectiveView : public View {
   public:
-	float fov = 100.0f;
+	float fov = 70.0f;
 	float nearPlane = 0.01f;
 	float farPlane = 20000.0f;
 	float aspect = 1.2f;

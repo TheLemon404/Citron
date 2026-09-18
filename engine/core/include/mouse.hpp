@@ -35,9 +35,11 @@ class CITRON_CORE_API MouseScrolledEvent : public MouseEvent {
 
 class CITRON_CORE_API MouseMovedEvent : public MouseEvent {
   public:
-	MouseMovedEvent(SDL_Event *e, double dx, double dy)
-		: MouseEvent(e), dx(dx), dy(dy) {}
+	MouseMovedEvent(SDL_Event *e, double x, double y, double dx, double dy)
+		: MouseEvent(e), x(x), y(y), dx(dx), dy(dy) {}
 
+	inline double getX() const { return x; }
+	inline double getY() const { return y; }
 	inline double getDx() const { return dx; }
 	inline double getDy() const { return dy; }
 
@@ -50,6 +52,8 @@ class CITRON_CORE_API MouseMovedEvent : public MouseEvent {
 	EVENT_CLASS_TYPE(MouseMoved)
 
   private:
+	double x;
+	double y;
 	double dx;
 	double dy;
 };

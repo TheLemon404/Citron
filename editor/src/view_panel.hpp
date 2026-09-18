@@ -44,6 +44,7 @@ class ViewPanel : public Panel {
 	}
 
   private:
+	ImVec2 viewportPos;
 	ImVec2 viewportSize;
 	void editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity);
 	bool mouseSelectEvent(Event &e);

@@ -48,6 +48,12 @@ class EditorContext {
 	void addSecondarySelectedItem(const std::variant<entt::entity, std::shared_ptr<System>> &item) {
 		secondarySelectedItems.insert(item);
 	}
+	void removeSecondarySelectedItem(const std::variant<entt::entity, std::shared_ptr<System>> &item) {
+		secondarySelectedItems.erase(item);
+	}
+	bool isSecondarySelectedItem(const std::variant<entt::entity, std::shared_ptr<System>> &item) {
+		return secondarySelectedItems.find(item) != secondarySelectedItems.end();
+	}
 	void setCurrentlySelectedItem(const entt::entity entity, bool retainSecondary = false) {
 		if (retainSecondary) {
 			secondarySelectedItems.insert(currentlySelectedItem);

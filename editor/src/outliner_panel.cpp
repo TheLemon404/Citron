@@ -1,4 +1,5 @@
 #include "outliner_panel.hpp"
+#include "SDL3/SDL_keycode.h"
 #include "editor.hpp"
 #include "gui.hpp"
 #include "keyboard.hpp"
@@ -135,8 +136,14 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 			}
 
 			context.setCurrentlySelectedItem(entity, true);
+		} else if (inputLayer->isPressed(SDLK_LCTRL) && context.getCurrentlySelectedItem().index() == 0) {
+			if (context.isSecondarySelectedItem(entity)) {
+				context.removeSecondarySelectedItem(entity);
+			} else {
+				context.setCurrentlySelectedItem(entity, true);
+			}
 		} else {
-			context.setCurrentlySelectedItem(entity, inputLayer->isPressed(SDLK_LCTRL) ? true : false);
+			context.setCurrentlySelectedItem(entity);
 		}
 	}
 

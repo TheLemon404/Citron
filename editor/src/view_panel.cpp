@@ -3,6 +3,8 @@
 #include "app.hpp"
 #include "clock.hpp"
 #include "debug.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
+#include "glm/ext/matrix_transform.hpp"
 #include "imgui_internal.h"
 #include "keyboard.hpp"
 #include "logger.hpp"
@@ -10,6 +12,7 @@
 #include "mesh.hpp"
 #include "panel.hpp"
 #include "uuid.hpp"
+#include <unordered_set>
 #include <webgpu.h>
 #include <webgpu/webgpu.hpp>
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -69,6 +72,7 @@ void ViewPanel::onUpdate() {
 		DebugUtils::addDebugLine(frustrumCorners[3], frustrumCorners[0]);
 	}
 
+	// draw bounding boxes for primary selection
 	if (currentlySelectedItem.index() == 0 && std::get<entt::entity>(currentlySelectedItem) != entt::null) {
 		entt::entity entity = std::get<entt::entity>(currentlySelectedItem);
 		if (appContext.sceneManager.getActiveScene()->getRegistry().any_of<MeshComponent>(entity) && appContext.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity).meshAsset.uuid != UUID::nullID) {
@@ -77,6 +81,19 @@ void ViewPanel::onUpdate() {
 			glm::vec4 maxBounds = glm::vec4(entityMesh->getBoundsMax(), 1.0f);
 			glm::mat4 globalTransform = appContext.sceneManager.getActiveScene()->getGlobalTransform(entity);
 			DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {1.0, 0.5, 0.0});
+		}
+	}
+	// draw bounding boxes for group selection
+	for (std::variant<entt::entity, std::shared_ptr<System>> secondary : Editor::get().getEditorContext().getSecondarySelectedItems()) {
+		if (secondary.index() == 0) {
+			entt::entity entity = std::get<entt::entity>(secondary);
+			if (appContext.sceneManager.getActiveScene()->getRegistry().any_of<MeshComponent>(entity) && appContext.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity).meshAsset.uuid != UUID::nullID) {
+				std::shared_ptr<Mesh> entityMesh = appContext.assetManager.getAsset<Mesh>(appContext.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity).meshAsset.uuid);
+				glm::vec4 minBounds = glm::vec4(entityMesh->getBoundsMin(), 1.0f);
+				glm::vec4 maxBounds = glm::vec4(entityMesh->getBoundsMax(), 1.0f);
+				glm::mat4 globalTransform = appContext.sceneManager.getActiveScene()->getGlobalTransform(entity);
+				DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {1.0, 0.5, 0.0});
+			}
 		}
 	}
 
@@ -219,9 +236,10 @@ void ViewPanel::onDraw() {
 	if (currentlySelectedItem.index() == 0 && registry.valid(std::get<entt::entity>(currentlySelectedItem)) && registry.any_of<TransformComponent, EntityBaseComponent>(std::get<entt::entity>(currentlySelectedItem))) {
 		ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 		ImGuizmo::Enable(true);
-		TransformComponent &transform = appContext.sceneManager.getActiveScene()->getRegistry().get<TransformComponent>(std::get<entt::entity>(currentlySelectedItem));
-		editTransformComponent(viewportPos, viewportSize, &viewMatrix[0][0], &projMat[0][0], std::get<entt::entity>(currentlySelectedItem));
+
+		editMultiTransform(viewportPos, viewportSize, &viewMatrix[0][0], &projMat[0][0], std::get<entt::entity>(currentlySelectedItem), secondarySelectedItems);
 	}
+
 	editorView.aspect = viewportSize.x / viewportSize.y;
 
 	ImOGuizmo::DrawGizmo(&viewMatrix[0][0], &projMat[0][0]);
@@ -265,7 +283,7 @@ void ViewPanel::onEvent(Event &e) {
 	}
 }
 
-void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity entity) {
+void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondaryItems) {
 	glm::vec3 snap;
 	switch (manipulationSettings.currentGizmoOperation) {
 	case ImGuizmo::TRANSLATE:
@@ -282,12 +300,11 @@ void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, 
 	}
 
 	std::shared_ptr<Scene> activeScene = appContext.sceneManager.getActiveScene();
-	TransformComponent &transform = activeScene->getRegistry().get<TransformComponent>(entity);
-	EntityBaseComponent &base = activeScene->getRegistry().get<EntityBaseComponent>(entity);
-
+	TransformComponent &primaryTransform = activeScene->getRegistry().get<TransformComponent>(primaryEntity);
+	EntityBaseComponent &primaryBase = activeScene->getRegistry().get<EntityBaseComponent>(primaryEntity);
 	ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewRectSize.x, viewRectSize.y);
-	glm::mat4 globalParentMatrix = base.parentId != UUID::nullID ? activeScene->getGlobalTransform(activeScene->getEntity(base.parentId)) : glm::mat4(1.0f);
-	glm::mat4 matrix = globalParentMatrix * glm::translate(glm::mat4(1.0f), transform.position) * glm::mat4_cast(transform.rotation) * glm::scale(glm::mat4(1.0f), transform.scale);
+	glm::mat4 globalParentMatrix = primaryBase.parentId != UUID::nullID ? activeScene->getGlobalTransform(activeScene->getEntity(primaryBase.parentId)) : glm::mat4(1.0f);
+	glm::mat4 matrix = globalParentMatrix * glm::translate(glm::mat4(1.0f), primaryTransform.position) * glm::mat4_cast(primaryTransform.rotation) * glm::scale(glm::mat4(1.0f), primaryTransform.scale);
 	glm::mat4 deltaMatrix(1.0f);
 
 	if (ImGuizmo::Manipulate(cameraView, cameraProjection, manipulationSettings.currentGizmoOperation, manipulationSettings.relativeSpaceMode, &matrix[0][0], &deltaMatrix[0][0], manipulationSettings.snap ? &snap.x : nullptr)) {
@@ -295,13 +312,32 @@ void ViewPanel::editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, 
 			glm::quat deltaRotation = glm::quat_cast(glm::mat3(deltaMatrix));
 			glm::quat parentRotation = glm::quat_cast(glm::mat3(globalParentMatrix));
 			glm::quat localDeltaRotation = glm::inverse(parentRotation) * deltaRotation * parentRotation;
-			transform.rotation = glm::normalize(localDeltaRotation * transform.rotation);
+			primaryTransform.rotation = glm::normalize(localDeltaRotation * primaryTransform.rotation);
+
+			for (auto &secondaryItem : secondaryItems) {
+				if (secondaryItem.index() == 0 && activeScene->getEntity(std::get<entt::entity>(secondaryItem)).hasComponent<TransformComponent>()) {
+					TransformComponent &secondaryTransform = activeScene->getRegistry().get<TransformComponent>(std::get<entt::entity>(secondaryItem));
+					secondaryTransform.rotation = glm::normalize(localDeltaRotation * secondaryTransform.rotation);
+				}
+			}
 		} else {
 			glm::vec3 skew;
 			glm::vec4 perspective;
 			glm::quat orientation;
 			glm::mat4 localMatrix = glm::inverse(globalParentMatrix) * matrix;
-			glm::decompose(localMatrix, transform.scale, orientation, transform.position, skew, perspective);
+			glm::decompose(localMatrix, primaryTransform.scale, orientation, primaryTransform.position, skew, perspective);
+
+			glm::vec3 deltaPosition = glm::vec3(0.0);
+			glm::vec3 deltaScale = glm::vec3(1.0f);
+			glm::decompose(deltaMatrix, deltaScale, orientation, deltaPosition, skew, perspective);
+
+			for (auto &secondaryItem : secondaryItems) {
+				if (secondaryItem.index() == 0 && activeScene->getEntity(std::get<entt::entity>(secondaryItem)).hasComponent<TransformComponent>()) {
+					TransformComponent &secondaryTransform = activeScene->getRegistry().get<TransformComponent>(std::get<entt::entity>(secondaryItem));
+					secondaryTransform.position += deltaPosition;
+					secondaryTransform.scale *= deltaScale;
+				}
+			}
 		}
 	}
 }
@@ -330,6 +366,9 @@ bool ViewPanel::mouseSelectEvent(Event &e) {
 
 		bool selected = false;
 
+		float lastDistance = std::numeric_limits<float>::max();
+		entt::entity lastClosestEntity = entt::null;
+
 		for (entt::entity entity : Editor::get().getContext().sceneManager.getActiveScene()->getRegistry().view<MeshComponent>()) {
 			MeshComponent &meshComponent = context.sceneManager.getActiveScene()->getRegistry().get<MeshComponent>(entity);
 			std::shared_ptr<Mesh> mesh = context.assetManager.getAsset<Mesh>(meshComponent.meshAsset.uuid);
@@ -338,14 +377,19 @@ bool ViewPanel::mouseSelectEvent(Event &e) {
 			glm::vec3 maxBBPos = glm::xyz(transform * glm::vec4(mesh->getBoundsMax(), 1.0f));
 
 			if (MathUtils::rayIntersectsAABB(mouseRayWorldPos, mouseRayWorldDir, minBBPos, maxBBPos)) {
-				Editor::get().getEditorContext().setCurrentlySelectedItem(entity);
-				selected = true;
-				break;
+				float distance = glm::distance(mouseRayWorldPos, minBBPos);
+				if (distance < lastDistance) {
+					lastDistance = distance;
+					lastClosestEntity = entity;
+					selected = true;
+				}
 			}
 		}
 
 		if (!selected) {
 			Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
+		} else {
+			Editor::get().getEditorContext().setCurrentlySelectedItem(lastClosestEntity, App::get().getLayer<CitronInput::InputLayer>()->isPressed(SDLK_LSHIFT) || App::get().getLayer<CitronInput::InputLayer>()->isPressed(SDLK_LCTRL));
 		}
 	}
 

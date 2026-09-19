@@ -24,7 +24,7 @@ struct ViewportManipulationSettings {
 
 class ViewPanel : public Panel {
   public:
-	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem) {
+	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondarySelectedItems) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), secondarySelectedItems(secondarySelectedItems) {
 		viewportSize.x = appContext.window.getWidth();
 		viewportSize.y = appContext.window.getHeight();
 	};
@@ -44,9 +44,11 @@ class ViewPanel : public Panel {
 	}
 
   private:
+	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondarySelectedItems;
+
 	ImVec2 viewportPos;
 	ImVec2 viewportSize;
-	void editTransformComponent(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity);
+	void editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondaryItems);
 	bool mouseSelectEvent(Event &e);
 
 	std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem;

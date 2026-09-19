@@ -23,7 +23,7 @@
 #include <instrumentor.hpp>
 
 GuiLayer::GuiLayer(AppContext appContext) : Layer("GuiLayer"),
-											viewPanel(appContext, Editor::get().getEditorContext().getCurrentlySelectedItem()),
+											viewPanel(appContext, Editor::get().getEditorContext().getCurrentlySelectedItem(), Editor::get().getEditorContext().getSecondarySelectedItems()),
 											appContext(appContext),
 											assetPropertiesPanel(appContext),
 											assetPanel(appContext, assetPropertiesPanel),

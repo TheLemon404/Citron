@@ -128,6 +128,12 @@ void Scene::deserialize(StreamReader &reader) {
 	}
 }
 
+void Scene::addSystem(std::shared_ptr<System> system) {
+	if (system != nullptr) {
+		m_systemRegistry[system->getTypeHash()] = system;
+	}
+}
+
 std::shared_ptr<Scene> Scene::clone() {
 	std::shared_ptr<Scene> clonedScene = std::make_shared<Scene>("Runtime Scene");
 

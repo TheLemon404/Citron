@@ -2,6 +2,7 @@
 
 #include "util_exports.hpp"
 #include <cstddef>
+#include <memory>
 #include <tuple>
 #include <typeinfo>
 

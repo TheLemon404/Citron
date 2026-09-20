@@ -1,14 +1,17 @@
 #include "outliner_panel.hpp"
 #include "SDL3/SDL_keycode.h"
+#include "command.hpp"
 #include "editor.hpp"
 #include "gui.hpp"
 #include "keyboard.hpp"
 #include "logger.hpp"
+#include "registry.hpp"
 
 #include <ecs.hpp>
 #include <component.hpp>
 #include <input.hpp>
 #include <imgui_stdlib.h>
+#include <memory>
 
 void OutlinerPanel::onAttach() {}
 void OutlinerPanel::onDetach() {}
@@ -36,7 +39,7 @@ void OutlinerPanel::onUpdate() {
 		Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
 	}
 	if (pendingDeleteSystem != nullptr) {
-		currentEditedScene->removeSystem(pendingDeleteSystem);
+		Editor::get().getEditorContext().getCommandManager().execute(std::make_unique<RemoveSystemCommand>(pendingDeleteSystem, currentEditedScene));
 		pendingDeleteSystem = nullptr;
 		Editor::get().getEditorContext().setCurrentlySelectedItem(nullptr);
 	}
@@ -213,7 +216,7 @@ void OutlinerPanel::onDraw() {
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0, 4.0));
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
-			ImGui::TreeNodeEx(system->getName().c_str(), flags);
+			ImGui::TreeNodeEx(ECSRegistry::getSystemMetadata(system->getTypeHash()).name.c_str(), flags);
 
 			if (ImGui::BeginPopupContextItem(
 					"SceneContextPopup",
@@ -307,7 +310,7 @@ void OutlinerPanel::onDraw() {
 			if (system.name.starts_with(systemSearchResult)) {
 				if (ImGui::Selectable(system.name.c_str())) {
 					systemSearchResult = system.name;
-					system.add(currentEditedScene);
+					context.getCommandManager().execute(std::make_unique<CreateSystemCommand>(system, currentEditedScene));
 					ImGui::CloseCurrentPopup();
 				}
 			}

@@ -1,4 +1,5 @@
 #include "ImOGuizmo.hpp"
+#include "SDL3/SDL_keycode.h"
 #include "texture.hpp"
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -310,6 +311,10 @@ void GuiLayer::onEvent(Event &e) {
 
 				appContext.assetManager.serializeAssets();
 				Editor::get().saveCurrentScene();
+			} else if (event.getKeycode() == SDLK_Z && event.getMods() & SDLK_LCTRL) {
+				Editor::get().getEditorContext().getCommandManager().undo();
+			} else if ((event.getKeycode() == SDLK_Y && event.getMods() & SDLK_LCTRL) || (event.getKeycode() == SDLK_Z && event.getMods() & SDLK_LCTRL & SDLK_LSHIFT)) {
+				Editor::get().getEditorContext().getCommandManager().redo();
 			}
 		}
 	}

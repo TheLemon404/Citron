@@ -147,6 +147,15 @@ class CITRON_ECS_API ECSRegistry {
 		return m_componentRegistry.at(Hashing::typeHash<T>());
 	}
 
+	template <typename T>
+	static const SystemMetadata &getSystemMetadata() {
+		return m_systemRegistry.at(Hashing::typeHash<T>());
+	}
+
+	static const SystemMetadata &getSystemMetadata(uint32_t systemHash) {
+		return m_systemRegistry.at(systemHash);
+	}
+
 	template <typename T, typename U>
 	static void registerComponentMember(std::string memberName, size_t offset, bool hideInEditor = false) {
 		uint32_t parentClassTypeHash = Hashing::typeHash<T>();

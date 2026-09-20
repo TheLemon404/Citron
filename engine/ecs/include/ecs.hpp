@@ -3,6 +3,7 @@
 #include "ecs_exports.hpp"
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
+#include "lang.hpp"
 #include "logger.hpp"
 #include "serialization.hpp"
 #include "uuid.hpp"
@@ -24,7 +25,7 @@ class CITRON_ECS_API Scene;
 
 class CITRON_ECS_API System {
   public:
-	System(const std::string name) : name(name) {}
+	System(const uint32_t typeHash) : typeHash(typeHash) {}
 
 	virtual std::shared_ptr<System> clone() = 0;
 
@@ -33,10 +34,11 @@ class CITRON_ECS_API System {
 	virtual void update(Scene &activeScene) {};
 	virtual void onEvent(Scene &activeScene, Event &e) {};
 	virtual void end(Scene &registry) {};
-	const std::string getName() { return name; }
+
+	const uint32_t getTypeHash() { return typeHash; }
 
   private:
-	const std::string name;
+	const uint32_t typeHash;
 };
 
 class CITRON_ECS_API Entity;
@@ -51,9 +53,11 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	template <typename T>
 	void addSystem() {
 		if (!hasSystem<T>()) {
-			m_systemRegistry[Hashing::typeHash<T>()] = std::make_shared<T>();
+			m_systemRegistry[Hashing::typeHash<T>()] = std::make_shared<T>(Hashing::typeHash<T>());
 		}
 	}
+
+	void addSystem(std::shared_ptr<System> system);
 
 	template <typename T>
 	void removeSystem() {

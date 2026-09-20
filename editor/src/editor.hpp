@@ -1,6 +1,7 @@
 #pragma once
 
 #include "app.hpp"
+#include "command.hpp"
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
 #include "event.hpp"
@@ -35,6 +36,8 @@ class EditorPlaymodeEvent : public Event {
 
 class EditorContext {
   public:
+	CommandManager &getCommandManager() { return commandManager; }
+
 	std::filesystem::path currentlyEditedSceneAssetPath = "";
 
 	std::variant<entt::entity, std::shared_ptr<System>> &getCurrentlySelectedItem() {
@@ -77,6 +80,7 @@ class EditorContext {
 	}
 
   private:
+	CommandManager commandManager;
 	EditorPlaymodeState playmodeState = EditorPlaymodeState::Stopped;
 	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> secondarySelectedItems;
 	std::variant<entt::entity, std::shared_ptr<System>> currentlySelectedItem;

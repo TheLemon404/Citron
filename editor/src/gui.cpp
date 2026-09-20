@@ -313,7 +313,7 @@ void GuiLayer::onEvent(Event &e) {
 				Editor::get().saveCurrentScene();
 			} else if (event.getKeycode() == SDLK_Z && event.getMods() & SDLK_LCTRL) {
 				Editor::get().getEditorContext().getCommandManager().undo();
-			} else if ((event.getKeycode() == SDLK_Y && event.getMods() & SDLK_LCTRL) || (event.getKeycode() == SDLK_Z && event.getMods() & SDLK_LCTRL & SDLK_LSHIFT)) {
+			} else if ((event.getKeycode() == SDLK_Y && event.getMods() & SDLK_LCTRL) || (event.getKeycode() == SDLK_Z && event.getMods() & SDLK_LCTRL && event.getMods() & SDLK_LSHIFT)) {
 				Editor::get().getEditorContext().getCommandManager().redo();
 			}
 		}

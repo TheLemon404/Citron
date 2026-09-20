@@ -20,12 +20,7 @@ void OutlinerPanel::onUpdate() {
 		appContext.sceneManager.getActiveScene();
 	if (pendingCreateEntity) {
 		pendingCreateEntity = false;
-		Entity newEntity = currentEditedScene->createEntity();
-		if (pendingCreateEntityParent != UUID::nullID) {
-			currentEditedScene->reparentEntity(newEntity,
-											   currentEditedScene->getEntity(pendingCreateEntityParent));
-			pendingCreateEntityParent = UUID::nullID;
-		}
+		Editor::get().getEditorContext().getCommandManager().execute(std::make_unique<CreateEntityCommand>(pendingCreateEntityParent, currentEditedScene));
 	}
 
 	if (pendingDeleteEntity != UUID::nullID) {
@@ -263,7 +258,7 @@ void OutlinerPanel::onDraw() {
 				"SceneContextPopup",
 				ImGuiPopupFlags_NoOpenOverExistingPopup)) {
 			if (ImGui::MenuItem("Create Entity")) {
-				currentEditedScene->createEntity();
+				Editor::get().getEditorContext().getCommandManager().execute(std::make_unique<CreateEntityCommand>(UUID::nullID, currentEditedScene));
 			}
 			ImGui::EndPopup();
 		}

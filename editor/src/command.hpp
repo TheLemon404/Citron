@@ -2,6 +2,7 @@
 
 #include "ecs.hpp"
 #include "registry.hpp"
+#include "uuid.hpp"
 #include <stack>
 #include <memory>
 class ICommand {
@@ -46,7 +47,13 @@ class RemoveSystemCommand : public ICommand {
 };
 
 class CreateEntityCommand : public ICommand {
+	UUID parentId;
+	std::shared_ptr<CitronECS::Scene> scene;
+	UUID newEntityId = UUID::nullID;
+
   public:
+	CreateEntityCommand(UUID parentId, std::shared_ptr<CitronECS::Scene> scene) : parentId(parentId),
+																				  scene(scene) {}
 	void execute() override;
 	void undo() override;
 	void redo() override;

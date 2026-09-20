@@ -185,6 +185,17 @@ Entity Scene::createEntity() {
 	return {entity, this};
 }
 
+Entity Scene::createEntity(UUID uuid) {
+	const auto entity = registry.create();
+	registry.emplace<EntityBaseComponent>(entity, uuid, "Entity");
+	registry.emplace<TransformComponent>(entity);
+	entityMap[uuid] = entity;
+
+	CITRON_CORE_INFO("Successfully created entity: {}", (int)uuid);
+
+	return {entity, this};
+}
+
 Entity Scene::getEntity(entt::entity entity) {
 	return {entity, this};
 }

@@ -99,6 +99,7 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	std::vector<Entity> getEntities();
 	std::vector<Entity> getRootEntities();
 	Entity createEntity();
+	Entity createEntity(UUID uuid);
 	Entity getEntity(entt::entity entity);
 	Entity getEntity(UUID entity);
 	uint32_t getEntityIndex(Entity entity);

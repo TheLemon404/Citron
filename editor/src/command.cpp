@@ -1,4 +1,6 @@
 #include "command.hpp"
+#include "component.hpp"
+#include "ecs.hpp"
 #include "logger.hpp"
 
 void CommandManager::execute(std::unique_ptr<ICommand> command) {
@@ -47,4 +49,29 @@ void RemoveSystemCommand::undo() {
 
 void RemoveSystemCommand::redo() {
 	scene->removeSystem(system);
+}
+
+void CreateEntityCommand::execute() {
+	CitronECS::Entity newEntity = scene->createEntity();
+	newEntityId = newEntity.getComponent<CitronECS::EntityBaseComponent>().uuid;
+	if (parentId != UUID::nullID) {
+		scene->reparentEntity(newEntity,
+							  scene->getEntity(parentId));
+	}
+}
+
+void CreateEntityCommand::undo() {
+	if (newEntityId != UUID::nullID) {
+		scene->deleteEntity(scene->getEntity(newEntityId));
+	}
+}
+
+void CreateEntityCommand::redo() {
+	if (newEntityId != UUID::nullID) {
+		CitronECS::Entity newEntity = scene->createEntity(newEntityId);
+		if (parentId != UUID::nullID) {
+			scene->reparentEntity(newEntity,
+								  scene->getEntity(parentId));
+		}
+	}
 }

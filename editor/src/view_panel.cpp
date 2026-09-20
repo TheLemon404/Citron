@@ -80,7 +80,7 @@ void ViewPanel::onUpdate() {
 			glm::vec4 minBounds = glm::vec4(entityMesh->getBoundsMin(), 1.0f);
 			glm::vec4 maxBounds = glm::vec4(entityMesh->getBoundsMax(), 1.0f);
 			glm::mat4 globalTransform = appContext.sceneManager.getActiveScene()->getGlobalTransform(entity);
-			DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {1.0, 0.5, 0.0});
+			DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {1.0, 0.4, 0.0});
 		}
 	}
 	// draw bounding boxes for group selection
@@ -92,7 +92,7 @@ void ViewPanel::onUpdate() {
 				glm::vec4 minBounds = glm::vec4(entityMesh->getBoundsMin(), 1.0f);
 				glm::vec4 maxBounds = glm::vec4(entityMesh->getBoundsMax(), 1.0f);
 				glm::mat4 globalTransform = appContext.sceneManager.getActiveScene()->getGlobalTransform(entity);
-				DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {1.0, 0.5, 0.0});
+				DebugUtils::addDebugCube(glm::xyz(globalTransform * minBounds), glm::xyz(globalTransform * maxBounds), {0.8, 0.55, 0.0});
 			}
 		}
 	}
@@ -304,20 +304,32 @@ void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, floa
 	EntityBaseComponent &primaryBase = activeScene->getRegistry().get<EntityBaseComponent>(primaryEntity);
 	ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewRectSize.x, viewRectSize.y);
 	glm::mat4 globalParentMatrix = primaryBase.parentId != UUID::nullID ? activeScene->getGlobalTransform(activeScene->getEntity(primaryBase.parentId)) : glm::mat4(1.0f);
-	glm::mat4 matrix = globalParentMatrix * glm::translate(glm::mat4(1.0f), primaryTransform.position) * glm::mat4_cast(primaryTransform.rotation) * glm::scale(glm::mat4(1.0f), primaryTransform.scale);
+
+	glm::vec3 centerPosition = primaryTransform.position;
+	size_t objectCount = 1;
+
+	for (auto &secondaryItem : secondaryItems) {
+		if (secondaryItem.index() == 0 && activeScene->getRegistry().any_of<TransformComponent>(std::get<entt::entity>(secondaryItem))) {
+			TransformComponent &secondaryTransform = activeScene->getRegistry().get<TransformComponent>(std::get<entt::entity>(secondaryItem));
+			centerPosition += secondaryTransform.position;
+			objectCount++;
+		}
+	}
+
+	centerPosition /= objectCount;
+
+	glm::mat4 matrix = globalParentMatrix * glm::translate(glm::mat4(1.0f), centerPosition) * glm::mat4_cast(primaryTransform.rotation) * glm::scale(glm::mat4(1.0f), primaryTransform.scale);
 	glm::mat4 deltaMatrix(1.0f);
 
 	if (ImGuizmo::Manipulate(cameraView, cameraProjection, manipulationSettings.currentGizmoOperation, manipulationSettings.relativeSpaceMode, &matrix[0][0], &deltaMatrix[0][0], manipulationSettings.snap ? &snap.x : nullptr)) {
 		if (manipulationSettings.currentGizmoOperation == ImGuizmo::ROTATE) {
 			glm::quat deltaRotation = glm::quat_cast(glm::mat3(deltaMatrix));
-			glm::quat parentRotation = glm::quat_cast(glm::mat3(globalParentMatrix));
-			glm::quat localDeltaRotation = glm::inverse(parentRotation) * deltaRotation * parentRotation;
-			primaryTransform.rotation = glm::normalize(localDeltaRotation * primaryTransform.rotation);
+			primaryTransform.rotation = glm::normalize(deltaRotation * primaryTransform.rotation);
 
 			for (auto &secondaryItem : secondaryItems) {
 				if (secondaryItem.index() == 0 && activeScene->getEntity(std::get<entt::entity>(secondaryItem)).hasComponent<TransformComponent>()) {
 					TransformComponent &secondaryTransform = activeScene->getRegistry().get<TransformComponent>(std::get<entt::entity>(secondaryItem));
-					secondaryTransform.rotation = glm::normalize(localDeltaRotation * secondaryTransform.rotation);
+					secondaryTransform.rotation = glm::normalize(deltaRotation * secondaryTransform.rotation);
 				}
 			}
 		} else {

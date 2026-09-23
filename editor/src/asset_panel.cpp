@@ -1,6 +1,8 @@
 #include "asset_panel.hpp"
+#include "asset_defaults.hpp"
 #include "editor.hpp"
 #include "gui.hpp"
+#include "imgui.h"
 #include "keyboard.hpp"
 
 #include <io.hpp>
@@ -79,6 +81,18 @@ void AssetPanel::onDraw() {
 			}
 			if (ImGui::MenuItem("Open in File Explorer")) {
 				CitronIO::IO::openFileExplorer(currentDirectory.c_str());
+			}
+			if (ImGui::BeginMenu("Create")) {
+				if (ImGui::MenuItem("Shader")) {
+					CitronIO::IO::createFile(currentDirectory / "test.wgsl");
+					CitronIO::IO::writeFile(currentDirectory / "test.wgsl", AssetDefaults::getDefaultShader());
+					refreshDirectoryListings();
+				}
+				if (ImGui::MenuItem("Material")) {
+					CitronIO::IO::createFile(currentDirectory / "test.mat");
+					refreshDirectoryListings();
+				}
+				ImGui::EndMenu();
 			}
 
 			ImGui::EndPopup();

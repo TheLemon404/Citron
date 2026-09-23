@@ -7,6 +7,8 @@
 #include "view.hpp"
 #include <ImGuizmo.h>
 
+using SceneSelectionItem = std::variant<entt::entity, std::shared_ptr<System>>;
+
 struct ViewportMotionSettings {
 	float moveSpeed = 0.05f;
 	float fastMoveSpeed = 0.1f;
@@ -24,7 +26,7 @@ struct ViewportManipulationSettings {
 
 class ViewPanel : public Panel {
   public:
-	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondarySelectedItems) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), secondarySelectedItems(secondarySelectedItems) {
+	ViewPanel(AppContext appContext, std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem, std::set<SceneSelectionItem> &secondarySelectedItems) : Panel("Viewport", appContext), currentlySelectedItem(currentlySelectedItem), secondarySelectedItems(secondarySelectedItems) {
 		viewportSize.x = appContext.window.getWidth();
 		viewportSize.y = appContext.window.getHeight();
 	};
@@ -44,11 +46,11 @@ class ViewPanel : public Panel {
 	}
 
   private:
-	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondarySelectedItems;
+	std::set<SceneSelectionItem> &secondarySelectedItems;
 
 	ImVec2 viewportPos;
 	ImVec2 viewportSize;
-	void editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondaryItems);
+	void editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::set<SceneSelectionItem> &secondaryItems);
 	bool mouseSelectEvent(Event &e);
 
 	std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem;

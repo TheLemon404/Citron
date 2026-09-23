@@ -1,10 +1,14 @@
 #pragma once
 
 #include "ecs.hpp"
+#include "entt/entity/fwd.hpp"
 #include "registry.hpp"
 #include "uuid.hpp"
 #include <stack>
 #include <memory>
+
+using SceneSelectionItem = std::variant<entt::entity, std::shared_ptr<CitronECS::System>>;
+
 class ICommand {
   public:
 	virtual void execute() = 0;
@@ -60,8 +64,13 @@ class CreateEntityCommand : public ICommand {
 };
 
 class DeleteEntitiesCommand : public ICommand {
+	UUID primaryEntityId;
+	std::set<SceneSelectionItem> &secondaryItems;
+	std::unordered_set<UUID> deletedEntities;
+	std::shared_ptr<CitronECS::Scene> scene;
+
   public:
-	DeleteEntitiesCommand();
+	DeleteEntitiesCommand(UUID primaryEntityId, std::set<SceneSelectionItem> &secondaryItems, std::shared_ptr<CitronECS::Scene> scene) : primaryEntityId(primaryEntityId), secondaryItems(secondaryItems), scene(scene) {}
 
 	void execute() override;
 	void undo() override;

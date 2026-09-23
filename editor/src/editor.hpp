@@ -17,6 +17,8 @@
 using namespace CitronECS;
 using namespace CitronCore;
 
+using SceneSelectionItem = std::variant<entt::entity, std::shared_ptr<System>>;
+
 constexpr const char *CITRON_PROGRAM_FOLDER = "C:/Citron";
 
 enum class EditorPlaymodeState {
@@ -44,7 +46,7 @@ class EditorContext {
 		return currentlySelectedItem;
 	}
 
-	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &getSecondarySelectedItems() {
+	std::set<SceneSelectionItem> &getSecondarySelectedItems() {
 		return secondarySelectedItems;
 	}
 
@@ -82,7 +84,7 @@ class EditorContext {
   private:
 	CommandManager commandManager;
 	EditorPlaymodeState playmodeState = EditorPlaymodeState::Stopped;
-	std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> secondarySelectedItems;
+	std::set<SceneSelectionItem> secondarySelectedItems;
 	std::variant<entt::entity, std::shared_ptr<System>> currentlySelectedItem;
 };
 

@@ -75,3 +75,32 @@ void CreateEntityCommand::redo() {
 		}
 	}
 }
+
+void DeleteEntitiesCommand::execute() {
+	for (const std::variant<entt::entity, std::shared_ptr<CitronECS::System>> entity : secondaryItems) {
+		CitronECS::Entity entityToDelete = scene->getEntity(std::get<entt::entity>(entity));
+		deletedEntities.insert(entityToDelete.getComponent<CitronECS::EntityBaseComponent>().uuid);
+		scene->deleteEntity(entityToDelete);
+	}
+	if (scene->hasEntity(primaryEntityId)) {
+		scene->deleteEntity(scene->getEntity(primaryEntityId));
+	}
+}
+
+void DeleteEntitiesCommand::undo() {
+	for (const UUID uuid : deletedEntities) {
+		scene->createEntity(uuid);
+	}
+	if (scene->hasEntity(primaryEntityId)) {
+		scene->createEntity(primaryEntityId);
+	}
+}
+
+void DeleteEntitiesCommand::redo() {
+	for (const UUID uuid : deletedEntities) {
+		scene->deleteEntity(scene->getEntity(uuid));
+	}
+	if (scene->hasEntity(primaryEntityId)) {
+		scene->deleteEntity(scene->getEntity(primaryEntityId));
+	}
+}

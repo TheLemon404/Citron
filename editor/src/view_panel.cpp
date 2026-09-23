@@ -283,7 +283,7 @@ void ViewPanel::onEvent(Event &e) {
 	}
 }
 
-void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::unordered_set<std::variant<entt::entity, std::shared_ptr<System>>> &secondaryItems) {
+void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::set<SceneSelectionItem> &secondaryItems) {
 	glm::vec3 snap;
 	switch (manipulationSettings.currentGizmoOperation) {
 	case ImGuizmo::TRANSLATE:

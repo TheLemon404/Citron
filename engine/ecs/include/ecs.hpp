@@ -111,6 +111,9 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	void reparentEntity(Entity entity, Entity parent);
 	void deleteEntity(Entity entity);
 
+	// VERY SKETCHY METHOD >>> VOID UNLESS NEEDED
+	void randomizeEntityUUID(Entity entity);
+
 	glm::vec3 getGlobalPosition(entt::entity entity);
 	glm::quat getGlobalRotation(entt::entity entity);
 	glm::vec3 getGlobalScale(entt::entity entity);
@@ -177,19 +180,6 @@ class CITRON_ECS_API Entity {
   private:
 	const entt::entity handle;
 	Scene *scene;
-};
-
-class CITRON_ECS_API EntitySnapshot : public ISerializable {
-	entt::entity entity;
-	std::vector<entt::entity> children;
-	std::shared_ptr<Scene> parentScene;
-
-  public:
-	EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene);
-	EntitySnapshot(Entity entity, std::shared_ptr<Scene> parentScene);
-
-	virtual void serialize(StreamWriter &writer) override;
-	virtual void deserialize(StreamReader &reader) override;
 };
 
 enum class SceneMode {

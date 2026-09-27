@@ -3,6 +3,7 @@
 #include "ecs.hpp"
 #include "entt/entity/fwd.hpp"
 #include "registry.hpp"
+#include "snapshot.hpp"
 #include "uuid.hpp"
 #include <stack>
 #include <memory>
@@ -68,6 +69,7 @@ class DeleteEntitiesCommand : public ICommand {
 	std::set<SceneSelectionItem> &secondaryItems;
 	std::unordered_set<UUID> deletedEntities;
 	std::shared_ptr<CitronECS::Scene> scene;
+	std::vector<CitronECS::EntitySnapshot> snapshots;
 
   public:
 	DeleteEntitiesCommand(UUID primaryEntityId, std::set<SceneSelectionItem> &secondaryItems, std::shared_ptr<CitronECS::Scene> scene) : primaryEntityId(primaryEntityId), secondaryItems(secondaryItems), scene(scene) {}

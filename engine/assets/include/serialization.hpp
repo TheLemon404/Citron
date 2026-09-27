@@ -44,8 +44,13 @@ class CITRON_ASSETS_API FileStreamWriter : public StreamWriter {
 
 class CITRON_ASSETS_API CITRON_ASSETS_API MemoryStreamWriter : public StreamWriter {
   public:
+	MemoryStreamWriter(void *cursor) : cursor(cursor) {}
+	
 	void writeData(const void *data, size_t size) override;
 	void writeString(const std::string &str) override;
+
+  private:
+	void* cursor;
 };
 
 class CITRON_ASSETS_API NetworkStreamWriter : public StreamWriter {
@@ -82,8 +87,13 @@ class CITRON_ASSETS_API FileStreamReader : public StreamReader {
 
 class CITRON_ASSETS_API MemoryStreamReader : public StreamReader {
   public:
+	MemoryStreamReader(void *cursor) : cursor(cursor) {}
+	
 	void readData(void *data, size_t size) override;
 	void readString(std::string &str) override;
+
+  private:
+	void* cursor;
 };
 
 class CITRON_ASSETS_API NetworkStreamReader : public StreamReader {

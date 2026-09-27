@@ -106,17 +106,6 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 				currentScene->getEntity(newChildUUID),
 				currentScene->getEntity(entityBase.uuid));
 		}
-		if (const ImGuiPayload *payload =
-				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
-			std::filesystem::path srcPath(std::string((const char *)payload->Data, payload->DataSize));
-			if (srcPath.extension() == ".prefab") {
-				FileStreamReader reader(srcPath);
-				EntitySnapshot entitySnapshot = EntitySnapshot(reader, Editor::get().getContext().sceneManager.getActiveScene());
-			} else {
-				CITRON_CLIENT_ERROR(
-					"Cannot drag non-prefab assets into scene hierarchy");
-			}
-		}
 		ImGui::EndDragDropTarget();
 	}
 
@@ -295,6 +284,21 @@ void OutlinerPanel::onDraw() {
 		ImGui::PopStyleVar();
 
 		ImGui::EndTable();
+	}
+
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload *payload =
+				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
+			std::filesystem::path srcPath(std::string((const char *)payload->Data, payload->DataSize));
+			if (srcPath.extension() == ".prefab") {
+				FileStreamReader reader(srcPath);
+				EntitySnapshot entitySnapshot = EntitySnapshot(reader, Editor::get().getContext().sceneManager.getActiveScene());
+			} else {
+				CITRON_CLIENT_ERROR(
+					"Cannot drag non-prefab assets into scene hierarchy");
+			}
+		}
+		ImGui::EndDragDropTarget();
 	}
 
 	if (pendingAddSystem) {

@@ -2,6 +2,7 @@
 #include "assets.hpp"
 #include "buffer.hpp"
 #include "compiled_shaders.hpp"
+#include "core.hpp"
 #include "debug.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "material.hpp"

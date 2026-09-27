@@ -1,9 +1,12 @@
 #include "asset_panel.hpp"
 #include "asset_defaults.hpp"
+#include "component.hpp"
+#include "ecs.hpp"
 #include "editor.hpp"
 #include "gui.hpp"
 #include "imgui.h"
 #include "keyboard.hpp"
+#include "serialization.hpp"
 
 #include <io.hpp>
 #include <string>
@@ -21,6 +24,7 @@ void AssetPanel::onDraw() {
 	EditorContext &context = Editor::get().getEditorContext();
 
 	ImGui::Begin("Assets");
+
 	ImGui::BeginGroup();
 	if (ImGui::Button(ICON_FA_ARROWS_ROTATE)) {
 		refreshDirectoryListings();
@@ -49,6 +53,7 @@ void AssetPanel::onDraw() {
 		}
 		ImGui::EndDragDropTarget();
 	}
+
 	ImGui::SameLine();
 	if (ImGui::Button(ICON_FA_MAGNIFYING_GLASS_PLUS))
 		zoomLevel += 25;
@@ -301,6 +306,21 @@ void AssetPanel::onDraw() {
 			ImGui::PopID();
 		}
 		ImGui::EndTable();
+	}
+
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload *payload =
+				ImGui::AcceptDragDropPayload("ENTITY_TREE_REORDER")) {
+			uint32_t *childEntityUUID = (uint32_t *)payload->Data;
+			UUID newChildUUID = *childEntityUUID;
+			std::shared_ptr<Scene> currentScene = appContext.sceneManager.getActiveScene();
+			Entity targetSnapshotEntity = currentScene->getEntity(newChildUUID);
+			EntitySnapshot entitySnapshot = EntitySnapshot(targetSnapshotEntity, currentScene);
+			FileStreamWriter writer(currentDirectory / (targetSnapshotEntity.getComponent<EntityBaseComponent>().name + ".prefab"));
+			entitySnapshot.serialize(writer);
+			refreshDirectoryListings();
+		}
+		ImGui::EndDragDropTarget();
 	}
 
 	ImGui::EndChild();

@@ -3,6 +3,7 @@
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
 #include "glm/ext/vector_float3.hpp"
+#include "lang.hpp"
 #include "registry.hpp"
 #include "view.hpp"
 #include <stdexcept>
@@ -40,6 +41,112 @@ std::vector<Entity> Entity::getChildren() {
 Entity Entity::getParent() {
 	EntityBaseComponent &base = getComponent<EntityBaseComponent>();
 	return {scene->getEntity(base.parentId), scene};
+}
+
+EntitySnapshot::EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene) {
+	this->parentScene = parentScene;
+	deserialize(reader);
+}
+
+EntitySnapshot::EntitySnapshot(Entity entity, std::shared_ptr<Scene> parentScene) : entity(entity.getHandle()), parentScene(parentScene) {
+	EntityBaseComponent &base = entity.getComponent<EntityBaseComponent>();
+	for (UUID childID : base.children) {
+		children.push_back(parentScene->getEntity(childID));
+	}
+}
+
+void EntitySnapshot::serialize(StreamWriter &writer) {
+	std::map<uint32_t, ComponentMetadata> componentsOnEntity;
+
+	// write data for target entity
+	for (const auto &[typeHash, metadata] : ECSRegistry::getComponentRegistry()) {
+		if (metadata.has(parentScene->getRegistry(), entity)) {
+			componentsOnEntity[typeHash] = metadata;
+		}
+	}
+	size_t numChildComponents = componentsOnEntity.size();
+	writer.writeData(&numChildComponents, sizeof(numChildComponents));
+	for (const auto &[typeHash, metadata] : componentsOnEntity) {
+		writer.writeData(&typeHash, sizeof(typeHash));
+		for (const Member &member : metadata.members) {
+			void *component = metadata.get(parentScene->getRegistry(), entity);
+			void *memberBytes = (char *)component + member.offset;
+			member.serialize(writer, memberBytes);
+		}
+	}
+
+	// write data for child entities
+	size_t numChildren = children.size();
+	writer.writeData(&numChildren, sizeof(numChildren));
+	for (entt::entity child : children) {
+		componentsOnEntity.clear();
+		for (const auto &[typeHash, metadata] : ECSRegistry::getComponentRegistry()) {
+			if (metadata.has(parentScene->getRegistry(), child)) {
+				componentsOnEntity[typeHash] = metadata;
+			}
+		}
+		size_t numChildComponents = componentsOnEntity.size();
+		writer.writeData(&numChildComponents, sizeof(numChildComponents));
+		for (const auto &[typeHash, metadata] : componentsOnEntity) {
+			writer.writeData(&typeHash, sizeof(typeHash));
+			for (const Member &member : metadata.members) {
+				void *component = metadata.get(parentScene->getRegistry(), child);
+				void *memberBytes = (char *)component + member.offset;
+				member.serialize(writer, memberBytes);
+			}
+		}
+	}
+}
+
+void EntitySnapshot::deserialize(StreamReader &reader) {
+	size_t numComponents;
+	Entity targetEntity = parentScene->createEntity();
+	reader.readData(&numComponents, sizeof(numComponents));
+	for (size_t j = 0; j < numComponents; j++) {
+		uint32_t typeHash;
+		reader.readData(&typeHash, sizeof(typeHash));
+
+		CITRON_CORE_ASSERT(ECSRegistry::getComponentRegistry().contains(typeHash), "Component of type hash {} not found", typeHash);
+
+		ComponentMetadata metadata = ECSRegistry::getComponentRegistry()[typeHash];
+		metadata.add(parentScene->getRegistry(), targetEntity);
+		for (Member &member : metadata.members) {
+			void *component = metadata.get(parentScene->getRegistry(), targetEntity);
+			void *memberBytes = (char *)component + member.offset;
+			member.deserialize(reader, memberBytes);
+		}
+		// randomize newly created entity UUID to avoid prefab entities sharing IDs with other entities
+		if (metadata.hash == Hashing::typeHash<EntityBaseComponent>()) {
+			targetEntity.getComponent<EntityBaseComponent>().uuid = UUID();
+		}
+	}
+	entity = targetEntity.getHandle();
+
+	size_t numChildren;
+	reader.readData(&numChildren, sizeof(numChildren));
+	for (size_t i = 0; i < numChildren; i++) {
+		Entity child = parentScene->createEntity();
+		reader.readData(&numComponents, sizeof(numComponents));
+		for (size_t j = 0; j < numComponents; j++) {
+			uint32_t typeHash;
+			reader.readData(&typeHash, sizeof(typeHash));
+
+			CITRON_CORE_ASSERT(ECSRegistry::getComponentRegistry().contains(typeHash), "Component of type hash {} not found", typeHash);
+
+			ComponentMetadata metadata = ECSRegistry::getComponentRegistry()[typeHash];
+			metadata.add(parentScene->getRegistry(), child);
+			for (Member &member : metadata.members) {
+				void *component = metadata.get(parentScene->getRegistry(), child);
+				void *memberBytes = (char *)component + member.offset;
+				member.deserialize(reader, memberBytes);
+			}
+			// randomize newly created entity UUID to avoid prefab entities sharing IDs with other entities
+			if (metadata.hash == Hashing::typeHash<EntityBaseComponent>()) {
+				targetEntity.getComponent<EntityBaseComponent>().uuid = UUID();
+			}
+		}
+		children.push_back(child.getHandle());
+	}
 }
 
 void Scene::serialize(StreamWriter &writer) {
@@ -110,10 +217,8 @@ void Scene::deserialize(StreamReader &reader) {
 		for (size_t j = 0; j < numComponents; j++) {
 			uint32_t typeHash;
 			reader.readData(&typeHash, sizeof(typeHash));
-			if (!ECSRegistry::getComponentRegistry().contains(typeHash)) {
-				CITRON_CORE_ERROR("Component of type hash {} not found", typeHash);
-				throw std::runtime_error("Component of type hash " + std::to_string(typeHash) + " not found");
-			}
+
+			CITRON_CORE_ASSERT(ECSRegistry::getComponentRegistry().contains(typeHash), "Component of type hash {} not found", typeHash);
 
 			ComponentMetadata metadata = ECSRegistry::getComponentRegistry()[typeHash];
 			metadata.add(registry, entity);

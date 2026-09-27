@@ -6,9 +6,11 @@
 #include "keyboard.hpp"
 #include "logger.hpp"
 #include "registry.hpp"
+#include "serialization.hpp"
 
 #include <ecs.hpp>
 #include <component.hpp>
+#include <filesystem>
 #include <input.hpp>
 #include <imgui_stdlib.h>
 #include <memory>
@@ -103,6 +105,17 @@ void OutlinerPanel::showEntityChildTree(entt::entity entity,
 			currentScene->reparentEntity(
 				currentScene->getEntity(newChildUUID),
 				currentScene->getEntity(entityBase.uuid));
+		}
+		if (const ImGuiPayload *payload =
+				ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
+			std::filesystem::path srcPath(std::string((const char *)payload->Data, payload->DataSize));
+			if (srcPath.extension() == ".prefab") {
+				FileStreamReader reader(srcPath);
+				EntitySnapshot entitySnapshot = EntitySnapshot(reader, Editor::get().getContext().sceneManager.getActiveScene());
+			} else {
+				CITRON_CLIENT_ERROR(
+					"Cannot drag non-prefab assets into scene hierarchy");
+			}
 		}
 		ImGui::EndDragDropTarget();
 	}

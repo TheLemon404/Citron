@@ -179,6 +179,19 @@ class CITRON_ECS_API Entity {
 	Scene *scene;
 };
 
+class CITRON_ECS_API EntitySnapshot : public ISerializable {
+	entt::entity entity;
+	std::vector<entt::entity> children;
+	std::shared_ptr<Scene> parentScene;
+
+  public:
+	EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene);
+	EntitySnapshot(Entity entity, std::shared_ptr<Scene> parentScene);
+
+	virtual void serialize(StreamWriter &writer) override;
+	virtual void deserialize(StreamReader &reader) override;
+};
+
 enum class SceneMode {
 	STOP = 0,
 	PLAY = 1,

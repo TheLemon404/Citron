@@ -42,10 +42,10 @@ class CITRON_ASSETS_API FileStreamWriter : public StreamWriter {
 	std::ofstream stream;
 };
 
-class CITRON_ASSETS_API BufferStreamWriter
+class CITRON_ASSETS_API BufferWriter
 	: public StreamWriter {
   public:
-	BufferStreamWriter(std::vector<uint8_t> &buffer)
+	BufferWriter(std::vector<uint8_t> &buffer)
 		: buffer(buffer) {}
 	
 	void writeData(const void *data, size_t size) override;
@@ -87,9 +87,9 @@ class CITRON_ASSETS_API FileStreamReader : public StreamReader {
 	std::ifstream stream;
 };
 
-class CITRON_ASSETS_API BufferStreamReader : public StreamReader {
+class CITRON_ASSETS_API BufferReader : public StreamReader {
   public:
-	BufferStreamReader(const uint8_t *buffer, const size_t bufferSize)
+	BufferReader(const uint8_t *buffer, const size_t bufferSize)
 		: buffer(buffer), bufferSize(bufferSize) {}
 	
 	void readData(void *data, size_t size) override;

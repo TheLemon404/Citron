@@ -3,6 +3,7 @@
 #include "ecs.hpp"
 #include "entt/entity/fwd.hpp"
 #include "serialization.hpp"
+#include <algorithm>
 
 using namespace CitronECS;
 
@@ -22,7 +23,7 @@ EntitySnapshot::EntitySnapshot(Entity entity, std::shared_ptr<Scene> parentScene
 	this->entity = {
 		.handle = entity.getHandle(),
 	};
-	BufferStreamWriter writer = BufferStreamWriter(buffer);
+	BufferWriter writer = BufferWriter(buffer);
 	for (const auto &[typeHash, metadata] : ECSRegistry::getComponentRegistry()) {
 		if (metadata.has(parentScene->getRegistry(), entity)) {
 			this->entity.componentMetadata[typeHash] = metadata;
@@ -126,15 +127,22 @@ void EntitySnapshot::restore(StreamReader& reader) {
 			entity.componentMetadata[typeHash] = metadata;
 		}
 	}
-	
+
 	size_t numChildren;
 	reader.readData(&numChildren, sizeof(numChildren));
 	for (size_t i = 0; i < numChildren; i++) {
 		children.push_back(EntitySnapshot(reader, parentScene, target.getComponent<EntityBaseComponent>().uuid, true));
 	}
+	
+	if (base.parentId != UUID::nullID) {
+		Entity parent = parentScene->getEntity(base.parentId);
+		if (!std::ranges::contains(parent.getComponent<EntityBaseComponent>().children, base.uuid)) {
+			parent.getComponent<EntityBaseComponent>().children.push_back(base.uuid);
+		}
+	}
 }
 
 void EntitySnapshot::apply() {
-	BufferStreamReader reader = BufferStreamReader(buffer.data(), buffer.size());
+	BufferReader reader = BufferReader(buffer.data(), buffer.size());
 	restore(reader);
 }

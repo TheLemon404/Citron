@@ -6,7 +6,8 @@
 
 using namespace CitronECS;
 
-EntitySnapshot::EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene) {
+EntitySnapshot::EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene, UUID parentId) {
+	this->parentId = parentId;
 	this->parentScene = parentScene;
 	deserialize(reader);
 }
@@ -72,13 +73,10 @@ void EntitySnapshot::deserialize(StreamReader &reader) {
 		}
 	}
 
-	size_t numChildren;
-	reader.readData(&numChildren, sizeof(numChildren));
-	for (size_t i = 0; i < numChildren; i++) {
-		children.push_back(EntitySnapshot(reader, parentScene));
-	}
-
-	parentScene->randomizeEntityUUID(parentScene->getEntity(targetEntity));
+	Entity target = parentScene->getEntity(targetEntity);
+	EntityBaseComponent &base = target.getComponent<EntityBaseComponent>();
+	base.uuid = UUID();
+	parentScene->getEntityMap()[base.uuid] = targetEntity;
 	entity.handle = targetEntity;
 	for (const auto &[typeHash, metadata] : ECSRegistry::getComponentRegistry()) {
 		if (metadata.has(parentScene->getRegistry(), targetEntity)) {
@@ -88,6 +86,15 @@ void EntitySnapshot::deserialize(StreamReader &reader) {
 				entity.memberBytes[member.fieldName] = component;
 			}
 		}
+	}
+	base.parentId = parentId;
+	base.children.clear();
+	
+	size_t numChildren;
+	reader.readData(&numChildren, sizeof(numChildren));
+	for (size_t i = 0; i < numChildren; i++) {
+		children.push_back(EntitySnapshot(reader, parentScene, target.getComponent<EntityBaseComponent>().uuid));
+		base.children.push_back(parentScene->getRegistry().get<EntityBaseComponent>(children.back().entity.handle).uuid);
 	}
 }
 

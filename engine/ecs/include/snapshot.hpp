@@ -14,9 +14,10 @@ namespace CitronECS {
 		PerEntitySnapshotData entity;
 		std::shared_ptr<Scene> parentScene;
 		std::vector<EntitySnapshot> children;
+		UUID parentId;
 	
   public:
-		EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene);
+		EntitySnapshot(StreamReader &reader, std::shared_ptr<Scene> parentScene, UUID parentId = UUID::nullID);
 		EntitySnapshot(Entity entity, std::shared_ptr<Scene> parentScene);
 	
 		virtual void serialize(StreamWriter &writer) override;

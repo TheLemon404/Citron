@@ -289,39 +289,6 @@ void Scene::deleteEntity(Entity entity) {
 	entityMap.erase(uuid);
 }
 
-void Scene::randomizeEntityUUID(Entity entity) {
-	EntityBaseComponent &base = registry.get<EntityBaseComponent>(entity);
-
-	if (base.parentId != UUID::nullID && hasEntity(base.parentId)) {
-		Entity parent = getEntity((UUID)base.parentId);
-		EntityBaseComponent &parentBase = registry.get<EntityBaseComponent>(parent);
-		parentBase.children.erase(std::remove(parentBase.children.begin(),
-											  parentBase.children.end(), base.uuid),
-								  parentBase.children.end());
-	}
-
-	EntityBaseComponent* childrenToUpdate[base.children.size()];
-	for (size_t i = 0; i < base.children.size(); i++) {
-		Entity childEntity = getEntity((UUID)base.children[i]);
-		EntityBaseComponent &childBase = registry.get<EntityBaseComponent>(childEntity);
-		childrenToUpdate[i] = &childBase;
-	}
-
-	base.uuid = UUID();
-	entityMap[base.uuid] = entity;
-
-	for (EntityBaseComponent* child : childrenToUpdate) {
-		child->parentId = base.uuid;
-	}
-
-	if (base.parentId != UUID::nullID && hasEntity(base.parentId)) {
-		Entity parent = getEntity(base.parentId);
-		EntityBaseComponent &parentBase = registry.get<EntityBaseComponent>(parent);
-		parentBase.children.push_back(base.uuid);
-	}
-	
-}
-
 glm::vec3 Scene::getGlobalPosition(entt::entity entity) {
 	if (!registry.any_of<TransformComponent>(entity)) {
 		return glm::vec3(0.0f);

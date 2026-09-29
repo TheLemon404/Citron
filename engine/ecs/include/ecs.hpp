@@ -111,9 +111,6 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	void reparentEntity(Entity entity, Entity parent);
 	void deleteEntity(Entity entity);
 
-	// VERY SKETCHY METHOD >>> VOID UNLESS NEEDED
-	void randomizeEntityUUID(Entity entity);
-
 	glm::vec3 getGlobalPosition(entt::entity entity);
 	glm::quat getGlobalRotation(entt::entity entity);
 	glm::vec3 getGlobalScale(entt::entity entity);
@@ -132,6 +129,8 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	void end();
 
 	CitronGraphics::View &getActiveView();
+
+	std::map<UUID, entt::entity>& getEntityMap() { return entityMap; }
 
   private:
 	// needs to be swapped out later with current scene camera

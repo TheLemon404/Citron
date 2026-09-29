@@ -4,16 +4,21 @@
 #include "logger.hpp"
 #include "snapshot.hpp"
 
+constexpr uint8_t MAX_UNDO_STACK_SIZE = 50;
+
 void CommandManager::execute(std::unique_ptr<ICommand> command) {
 	command->execute();
-	action_stack.push(std::move(command));
+	action_stack.push_front(std::move(command));
 	undo_stack = std::stack<std::unique_ptr<ICommand>>();
+	if (action_stack.size() > MAX_UNDO_STACK_SIZE) {
+		action_stack.pop_back();
+	}
 }
 
 void CommandManager::undo() {
 	if (!action_stack.empty()) {
-		auto command = std::move(action_stack.top());
-		action_stack.pop();
+		auto command = std::move(action_stack.front());
+		action_stack.pop_front();
 		command->undo();
 		undo_stack.push(std::move(command));
 	}
@@ -24,7 +29,7 @@ void CommandManager::redo() {
 		auto command = std::move(undo_stack.top());
 		undo_stack.pop();
 		command->redo();
-		action_stack.push(std::move(command));
+		action_stack.push_front(std::move(command));
 	}
 }
 
@@ -109,4 +114,14 @@ void DeleteEntitiesCommand::redo() {
 	if (scene->hasEntity(primaryEntityId)) {
 		scene->deleteEntity(scene->getEntity(primaryEntityId));
 	}
+}
+
+void EditComponentCommand::execute() {
+}
+
+void EditComponentCommand::undo() {
+}
+
+void EditComponentCommand::redo() {
+	
 }

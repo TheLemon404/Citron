@@ -5,6 +5,7 @@
 #include "registry.hpp"
 #include "snapshot.hpp"
 #include "uuid.hpp"
+#include <deque>
 #include <stack>
 #include <memory>
 
@@ -18,7 +19,7 @@ class ICommand {
 };
 
 class CommandManager {
-	std::stack<std::unique_ptr<ICommand>> action_stack;
+	std::deque<std::unique_ptr<ICommand>> action_stack;
 	std::stack<std::unique_ptr<ICommand>> undo_stack;
 
   public:

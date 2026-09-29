@@ -133,7 +133,7 @@ void AssetPanel::onDraw() {
 			if (entry.isDirectory) {
 				if (ImGui::Selectable("##Folder", &entry.selected,
 									  ImGuiSelectableFlags_AllowDoubleClick | ImGuiSelectableFlags_AllowOverlap,
-									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+									  ImVec2(zoomLevel, zoomLevel))) {
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						currentDirectory = entry.path;
 						pendingRefreshDirectory = true;
@@ -211,7 +211,7 @@ void AssetPanel::onDraw() {
 									ImVec2(0.5f, 0.5f));
 				if (ImGui::Selectable("##File", &entry.selected,
 									  ImGuiSelectableFlags_AllowDoubleClick,
-									  ImVec2(zoomLevel * 0.9f, zoomLevel))) {
+									  ImVec2(zoomLevel, zoomLevel))) {
 					if (appContext.assetManager.isKnownAssetFileExtension(entry.path.extension().string()))
 						assetPropertiesPanel.setSelectedAsset(entry.path);
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {

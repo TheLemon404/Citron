@@ -16,12 +16,12 @@ void FileStreamWriter::writeString(const std::string &str) {
 	writeData(str.data(), str.size());
 }
 
-void MemoryStreamWriter::writeData(const void *data, size_t size) {
-	memcpy(cursor, data, size);
-	cursor = (char*)cursor + size;
+void BufferStreamWriter::writeData(const void *data, size_t size) {
+	const uint8_t *bytePtr = reinterpret_cast<const uint8_t *>(data);
+	buffer.insert(buffer.end(), bytePtr, bytePtr + size);
 }
 
-void MemoryStreamWriter::writeString(const std::string &str) {
+void BufferStreamWriter::writeString(const std::string &str) {
 	size_t size = str.size();
 	writeData(&size, sizeof(size));
 	writeData(str.data(), str.size());
@@ -43,12 +43,15 @@ void FileStreamReader::readString(std::string &str) {
 	str = std::move(result);
 }
 
-void MemoryStreamReader::readData(void *data, size_t size) {
-	memcpy(data, cursor, size);
-	cursor = (char*)cursor + size;
+void BufferStreamReader::readData(void *data, size_t size) {
+	if (cursor + size > bufferSize)
+		throw std::runtime_error("BufferStreamReader: readData: out of bounds");
+
+	std::memcpy(data, buffer + cursor, size);
+	cursor += size;
 }
 
-void MemoryStreamReader::readString(std::string &str) {
+void BufferStreamReader::readString(std::string &str) {
 	size_t size;
 	readData(&size, sizeof(size));
 	std::string result(size, '\0');

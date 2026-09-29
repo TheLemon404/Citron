@@ -2,6 +2,7 @@
 #include "component.hpp"
 #include "ecs.hpp"
 #include "logger.hpp"
+#include "snapshot.hpp"
 
 void CommandManager::execute(std::unique_ptr<ICommand> command) {
 	command->execute();
@@ -77,6 +78,8 @@ void CreateEntityCommand::redo() {
 }
 
 void DeleteEntitiesCommand::execute() {
+	CitronECS::Entity primaryEntityToDelete = scene->getEntity(primaryEntityId);
+	snapshots.push_back(CitronECS::EntitySnapshot(primaryEntityToDelete, scene));
 	for (const std::variant<entt::entity, std::shared_ptr<CitronECS::System>> entity : secondaryItems) {
 		CitronECS::Entity entityToDelete = scene->getEntity(std::get<entt::entity>(entity));
 		if (entityToDelete.getComponent<CitronECS::EntityBaseComponent>().parentId == UUID::nullID) {
@@ -86,7 +89,6 @@ void DeleteEntitiesCommand::execute() {
 
 	for (const std::variant<entt::entity, std::shared_ptr<CitronECS::System>> entity : secondaryItems) {
 		CitronECS::Entity entityToDelete = scene->getEntity(std::get<entt::entity>(entity));
-		deletedEntities.insert(entityToDelete.getComponent<CitronECS::EntityBaseComponent>().uuid);
 		scene->deleteEntity(entityToDelete);
 	}
 	if (scene->hasEntity(primaryEntityId)) {
@@ -95,11 +97,8 @@ void DeleteEntitiesCommand::execute() {
 }
 
 void DeleteEntitiesCommand::undo() {
-	for (const UUID uuid : deletedEntities) {
-		scene->createEntity(uuid);
-	}
-	if (scene->hasEntity(primaryEntityId)) {
-		scene->createEntity(primaryEntityId);
+	for (CitronECS::EntitySnapshot &snapshot : snapshots) {
+		snapshot.apply();
 	}
 }
 

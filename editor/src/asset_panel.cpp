@@ -230,6 +230,10 @@ void AssetPanel::onDraw() {
 					iconType = "C++";
 				} else if (fileExtension == ".cs") {
 					iconType = "C#";
+				} else if (fileExtension == ".scene") {
+					iconType = "Logo";
+				} else if (fileExtension == ".project") {
+					iconType = "ColoredLogo";
 				} else if (fileExtension == ".mat") {
 					iconType = "Material";
 				} else if (fileExtension == ".wgsl") {

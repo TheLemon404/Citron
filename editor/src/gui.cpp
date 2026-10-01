@@ -146,6 +146,9 @@ void GuiLayer::onAttach() {
 	i++;
 	fileIcons.registerIcon("Shader", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(fileIconSize, fileIconSize));
 	i++;
+	fileIcons.registerIcon("Prefab", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(fileIconSize, fileIconSize));
+	i++;
+	fileIcons.registerIcon("Mesh", ImRect(uvSize.x * (i - 1), uvSize.y * (j - 1), uvSize.x * i, uvSize.y * j), ImVec2(fileIconSize, fileIconSize));
 
 	viewPanel.onAttach();
 	assetPanel.onAttach();

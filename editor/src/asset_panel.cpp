@@ -238,6 +238,10 @@ void AssetPanel::onDraw() {
 					iconType = "Material";
 				} else if (fileExtension == ".wgsl") {
 					iconType = "Shader";
+				} else if (fileExtension == ".prefab") {
+					iconType = "Prefab";
+				} else if (fileExtension == ".glb") {
+					iconType = "Mesh";
 				}
 				Icon fileIcon = fileIcons.getIcon(iconType);
 				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rect_min, rect_max, fileIcon.uv.Min, fileIcon.uv.Max);

@@ -35,41 +35,82 @@ Editor::Editor(const std::string &projectFilePath)
 	ECSRegistry::registerPropertyGuiDrawer<int>([&commandManager](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		return ImGui::InputInt(fieldNameId.c_str(), (int *)field);
+		uint8_t result = 0;
+		ImGui::InputInt(fieldNameId.c_str(), (int *)field);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<UUID>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
-		return ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		uint8_t result = 0;
+		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<uint32_t>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
-		return ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		uint8_t result = 0;
+		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<uint64_t>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
-		return ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		uint8_t result = 0;
+		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<float>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		return ImGui::InputFloat(fieldNameId.c_str(), (float *)field);
+		uint8_t result = 0;
+		ImGui::InputFloat(fieldNameId.c_str(), (float *)field);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<std::string>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string *str = (std::string *)field;
 		std::string fieldNameId = "##" + member.fieldName;
-		return ImGui::InputText(fieldNameId.c_str(), str);
+		uint8_t result = 0;
+		ImGui::InputText(fieldNameId.c_str(), str);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec2>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		bool result = ImGui::DragFloat2(fieldNameId.c_str(), (float *)field);
+		uint8_t result = 0;
+		ImGui::DragFloat2(fieldNameId.c_str(), (float *)field);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -84,7 +125,12 @@ Editor::Editor(const std::string &projectFilePath)
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec3>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		bool result = ImGui::DragFloat3(fieldNameId.c_str(), (float *)field);
+		uint8_t result = 0;
+		ImGui::DragFloat3(fieldNameId.c_str(), (float *)field);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -101,8 +147,15 @@ Editor::Editor(const std::string &projectFilePath)
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(*(glm::quat *)field));
-		bool result = ImGui::DragFloat3(fieldNameId.c_str(), &eulerRotation[0]);
-		*(glm::quat *)field = glm::quat(glm::radians(eulerRotation));
+		uint8_t result = 0;
+		ImGui::DragFloat3(fieldNameId.c_str(), &eulerRotation[0]);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
+		
+		if(ImGui::IsItemEdited())
+			*(glm::quat *)field = glm::quat(glm::radians(eulerRotation));
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -118,7 +171,12 @@ Editor::Editor(const std::string &projectFilePath)
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec4>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		bool result = ImGui::DragFloat4(fieldNameId.c_str(), (float *)field);
+		uint8_t result = 0;
+		ImGui::DragFloat4(fieldNameId.c_str(), (float *)field);
+		if(ImGui::IsItemActivated())
+			result = 1;
+		if(ImGui::IsItemDeactivatedAfterEdit())
+			result = 2;
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -136,22 +194,52 @@ Editor::Editor(const std::string &projectFilePath)
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;
-			return GuiElements::drawAssetReferenceComponentGui<Mesh>(fieldNameId, *(AssetReference<Mesh> *)field, context);
+			uint8_t result = 0;
+			GuiElements::drawAssetReferenceComponentGui<Mesh>(fieldNameId, *(AssetReference<Mesh> *)field, context);
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			return result;
 		});
 	ECSRegistry::registerPropertyGuiDrawer<AssetReference<Material>>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;
-			return GuiElements::drawAssetReferenceComponentGui<Material>(fieldNameId, *(AssetReference<Material> *)field, context);
+			GuiElements::drawAssetReferenceComponentGui<Material>(fieldNameId, *(AssetReference<Material> *)field, context);
+			uint8_t result = 0;
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			return result;
 		});
 	ECSRegistry::registerPropertyGuiDrawer<PerspectiveView>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			PerspectiveView *field = (PerspectiveView *)((char *)object + member.offset);
 			std::string fieldNameId = "##" + member.fieldName;
-			return ImGui::DragFloat("near", &field->nearPlane) ||
-				ImGui::DragFloat("far", &field->farPlane) ||
-				ImGui::DragFloat("fov", &field->fov) ||
-				ImGui::DragFloat("aspect", &field->aspect);
+			uint8_t result = 0;
+			ImGui::DragFloat("near", &field->nearPlane);
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			ImGui::DragFloat("far", &field->farPlane);
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			ImGui::DragFloat("fov", &field->fov);
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			ImGui::DragFloat("aspect", &field->aspect);
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			return result;
 		});
 
 	sceneManager.setSceneMode(SceneMode::STOP);

@@ -16,7 +16,8 @@ namespace CitronECS {
 
 struct CITRON_ECS_API Member;
 
-using PropertyGuiDrawer = std::function<bool(const Member &, void *object, CitronAssets::AssetManager &)>;
+//returns 0 if nothing changed, 1 if the value was just selected for change, 2 if the value was changed and deselected
+using PropertyGuiDrawer = std::function<uint8_t(const Member &, void *object, CitronAssets::AssetManager &)>;
 
 struct CITRON_ECS_API Member {
 	std::string fieldName;

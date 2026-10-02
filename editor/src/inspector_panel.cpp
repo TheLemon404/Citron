@@ -108,8 +108,11 @@ void InspectorPanel::onDraw() {
 							ImGui::TableNextColumn();
 							PropertyGuiDrawer drawer = member.drawer;
 							if (drawer) {
-								std::vector<uint8_t> oldData = captureMemberData(member, system.get());
-								if (drawer(member, system.get(), appContext.assetManager)) {
+								static std::vector<uint8_t> oldData;
+								uint8_t propertyChangeResult = drawer(member, system.get(), appContext.assetManager);
+								if (propertyChangeResult == 1) {
+									oldData = captureMemberData(member, system.get());
+								} else if (propertyChangeResult == 2) {
 									std::vector<uint8_t> newData = captureMemberData(member, system.get());
 									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(oldData, newData, member, system.get()));
 								}
@@ -179,8 +182,11 @@ void InspectorPanel::onDraw() {
 							ImGui::TableNextColumn();
 							PropertyGuiDrawer drawer = member.drawer;
 							if (drawer) {
-								std::vector<uint8_t> oldData = captureMemberData(member, component);
-								if (drawer(member, component, appContext.assetManager)) {
+								static std::vector<uint8_t> oldData;
+								uint8_t propertyChangeResult = drawer(member, component, appContext.assetManager);
+								if (propertyChangeResult == 1) {
+									oldData = captureMemberData(member, component);
+								} else if (propertyChangeResult == 2) {
 									std::vector<uint8_t> newData = captureMemberData(member, component);
 									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(oldData, newData, member, component));
 								}

@@ -1,7 +1,9 @@
 #include "inspector_panel.hpp"
+#include "command.hpp"
 #include "gui.hpp"
 #include "editor.hpp"
 #include "keyboard.hpp"
+#include "serialization.hpp"
 
 #include <imgui_stdlib.h>
 
@@ -38,6 +40,13 @@ bool InspectorPanel::collapsingHeader(const char *label,
 
 	ImGui::PopStyleVar();
 	return open;
+}
+
+std::vector<uint8_t> InspectorPanel::captureMemberData(const Member& member, void* component) {
+	std::vector<uint8_t> buffer;
+	BufferWriter writer(buffer);
+	member.serialize(writer, (char *)component + member.offset);
+	return std::move(buffer);
 }
 
 void InspectorPanel::drawComponentIcon(const std::string &name, WGPUTextureView iconView, ImVec2 iconMin, ImVec2 iconMax) {
@@ -98,10 +107,15 @@ void InspectorPanel::onDraw() {
 							ImGui::Text("%s", member.fieldName.c_str());
 							ImGui::TableNextColumn();
 							PropertyGuiDrawer drawer = member.drawer;
-							if (drawer)
-								drawer(member, system.get(), appContext.assetManager);
-							else
-								ImGui::Text("Drawing method undefined");
+							if (drawer) {
+								std::vector<uint8_t> oldData = captureMemberData(member, system.get());
+								if (drawer(member, system.get(), appContext.assetManager)) {
+									std::vector<uint8_t> newData = captureMemberData(member, system.get());
+									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(oldData, newData, member, system.get()));
+								}
+							} else {
+								ImGui::Text("Member drawing method undefined");
+							}
 						}
 
 						if (ImGui::BeginPopupContextWindow()) {
@@ -164,10 +178,15 @@ void InspectorPanel::onDraw() {
 							ImGui::Text("%s", member.fieldName.c_str());
 							ImGui::TableNextColumn();
 							PropertyGuiDrawer drawer = member.drawer;
-							if (drawer)
-								drawer(member, component, appContext.assetManager);
-							else
+							if (drawer) {
+								std::vector<uint8_t> oldData = captureMemberData(member, component);
+								if (drawer(member, component, appContext.assetManager)) {
+									std::vector<uint8_t> newData = captureMemberData(member, component);
+									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(oldData, newData, member, component));
+								}
+							} else {
 								ImGui::Text("Drawing method undefined");
+							}
 						}
 
 						ImGui::EndTable();

@@ -2,6 +2,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "app.hpp"
 #include "assets.hpp"
+#include "command.hpp"
 #include "ecs.hpp"
 #include "entt/entity/entity.hpp"
 #include "event.hpp"
@@ -29,45 +30,46 @@ Editor::Editor(const std::string &projectFilePath)
 	editorContext.projectFilePath = projectFilePath;
 
 	AppContext context = App::getContext();
+	CommandManager& commandManager = Editor::get().getEditorContext().getCommandManager();
 
-	ECSRegistry::registerPropertyGuiDrawer<int>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+	ECSRegistry::registerPropertyGuiDrawer<int>([&commandManager](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		ImGui::InputInt(fieldNameId.c_str(), (int *)field);
+		return ImGui::InputInt(fieldNameId.c_str(), (int *)field);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<UUID>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
-		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		return ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<uint32_t>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
-		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		return ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<uint64_t>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		std::string uuidString = std::to_string(*(unsigned int *)field);
-		ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
+		return ImGui::InputText(fieldNameId.c_str(), &uuidString, ImGuiInputTextFlags_ReadOnly);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<float>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		ImGui::InputFloat(fieldNameId.c_str(), (float *)field);
+		return ImGui::InputFloat(fieldNameId.c_str(), (float *)field);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<std::string>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string *str = (std::string *)field;
 		std::string fieldNameId = "##" + member.fieldName;
-		ImGui::InputText(fieldNameId.c_str(), str);
+		return ImGui::InputText(fieldNameId.c_str(), str);
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec2>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		ImGui::DragFloat2(fieldNameId.c_str(), (float *)field);
+		bool result = ImGui::DragFloat2(fieldNameId.c_str(), (float *)field);
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -77,11 +79,12 @@ Editor::Editor(const std::string &projectFilePath)
 		ImDrawList *drawList = ImGui::GetWindowDrawList();
 		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec3>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		ImGui::DragFloat3(fieldNameId.c_str(), (float *)field);
+		bool result = ImGui::DragFloat3(fieldNameId.c_str(), (float *)field);
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -92,12 +95,13 @@ Editor::Editor(const std::string &projectFilePath)
 		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 2.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 2.0f, inputRectBottomMin.y), ImGui::GetColorU32(zColor), 1.5f);
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::quat>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
 		glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(*(glm::quat *)field));
-		ImGui::DragFloat3(fieldNameId.c_str(), &eulerRotation[0]);
+		bool result = ImGui::DragFloat3(fieldNameId.c_str(), &eulerRotation[0]);
 		*(glm::quat *)field = glm::quat(glm::radians(eulerRotation));
 
 		// colors
@@ -109,11 +113,12 @@ Editor::Editor(const std::string &projectFilePath)
 		drawList->AddLine(inputRectMin, inputRectBottomMin, ImGui::GetColorU32(xColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 2.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 2.0f, inputRectBottomMin.y), ImGui::GetColorU32(zColor), 1.5f);
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<glm::vec4>([](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 		void *field = (char *)object + member.offset;
 		std::string fieldNameId = "##" + member.fieldName;
-		ImGui::DragFloat4(fieldNameId.c_str(), (float *)field);
+		bool result = ImGui::DragFloat4(fieldNameId.c_str(), (float *)field);
 
 		// colors
 		ImVec2 inputRectMin = ImGui::GetItemRectMin();
@@ -125,27 +130,28 @@ Editor::Editor(const std::string &projectFilePath)
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset, inputRectBottomMin.y), ImGui::GetColorU32(yColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 2.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 2.0f, inputRectBottomMin.y), ImGui::GetColorU32(zColor), 1.5f);
 		drawList->AddLine(ImVec2(inputRectMin.x + perEntryOffset * 3.0f, inputRectMin.y), ImVec2(inputRectBottomMin.x + perEntryOffset * 3.0f, inputRectBottomMin.y), ImGui::GetColorU32(wColor), 1.5f);
+		return result;
 	});
 	ECSRegistry::registerPropertyGuiDrawer<AssetReference<Mesh>>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;
-			GuiElements::drawAssetReferenceComponentGui<Mesh>(fieldNameId, *(AssetReference<Mesh> *)field, context);
+			return GuiElements::drawAssetReferenceComponentGui<Mesh>(fieldNameId, *(AssetReference<Mesh> *)field, context);
 		});
 	ECSRegistry::registerPropertyGuiDrawer<AssetReference<Material>>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			void *field = (char *)object + member.offset;
 			std::string fieldNameId = "##" + member.fieldName;
-			GuiElements::drawAssetReferenceComponentGui<Material>(fieldNameId, *(AssetReference<Material> *)field, context);
+			return GuiElements::drawAssetReferenceComponentGui<Material>(fieldNameId, *(AssetReference<Material> *)field, context);
 		});
 	ECSRegistry::registerPropertyGuiDrawer<PerspectiveView>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			PerspectiveView *field = (PerspectiveView *)((char *)object + member.offset);
 			std::string fieldNameId = "##" + member.fieldName;
-			ImGui::DragFloat("near", &field->nearPlane);
-			ImGui::DragFloat("far", &field->farPlane);
-			ImGui::DragFloat("fov", &field->fov);
-			ImGui::DragFloat("aspect", &field->aspect);
+			return ImGui::DragFloat("near", &field->nearPlane) ||
+				ImGui::DragFloat("far", &field->farPlane) ||
+				ImGui::DragFloat("fov", &field->fov) ||
+				ImGui::DragFloat("aspect", &field->aspect);
 		});
 
 	sceneManager.setSceneMode(SceneMode::STOP);

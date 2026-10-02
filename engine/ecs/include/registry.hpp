@@ -16,7 +16,7 @@ namespace CitronECS {
 
 struct CITRON_ECS_API Member;
 
-using PropertyGuiDrawer = std::function<void(const Member &, void *object, CitronAssets::AssetManager &)>;
+using PropertyGuiDrawer = std::function<bool(const Member &, void *object, CitronAssets::AssetManager &)>;
 
 struct CITRON_ECS_API Member {
 	std::string fieldName;

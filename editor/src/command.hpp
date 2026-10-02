@@ -95,8 +95,14 @@ class RemoveComponentCommand : public ICommand {
 };
 
 class EditComponentCommand : public ICommand {
+	std::vector<uint8_t> oldData;
+	std::vector<uint8_t> newData;
+	const CitronECS::Member &member;
+	void* component;
+	
   public:
-	void execute() override;
+	EditComponentCommand(std::vector<uint8_t> oldData, std::vector<uint8_t> newData, const CitronECS::Member &member, void* component) : oldData(oldData), newData(newData), member(member), component(component) {}
+	void execute() override {};
 	void undo() override;
 	void redo() override;
 };

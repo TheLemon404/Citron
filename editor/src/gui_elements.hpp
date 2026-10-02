@@ -9,10 +9,12 @@
 class GuiElements {
   public:
 	template <typename T>
-	static void drawAssetReferenceComponentGui(const std::string &assetName, AssetReference<T> &assetReference, AppContext appContext) {
+	static bool drawAssetReferenceComponentGui(const std::string &assetName, AssetReference<T> &assetReference, AppContext appContext) {
 		if (assetReference.path == "" && assetReference.uuid != UUID::nullID && appContext.assetManager.isValidAsset(assetReference.uuid)) {
 			assetReference.path = appContext.assetManager.getAssetMetadata(assetReference.uuid).assetPath.string();
 		}
+
+		bool result = false;
 
 		EditorContext &context = Editor::get().getEditorContext();
 		AssetManager &assetManager =
@@ -26,6 +28,7 @@ class GuiElements {
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload *payload =
 					ImGui::AcceptDragDropPayload("ASSET_FILE_TRANSFER")) {
+				result = true;
 				std::string srcPath((const char *)payload->Data, payload->DataSize);
 				AssetMetadata metadata = assetManager.getAssetMetadata(std::filesystem::path(srcPath));
 				if (assetManager.isValidAsset(metadata.uuid)) {
@@ -40,9 +43,11 @@ class GuiElements {
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Clear")) {
+			result = true;
 			assetReference.uuid = UUID::nullID;
 			assetReference.path.clear();
 		}
 		ImGui::PopID();
+		return result;
 	}
 };

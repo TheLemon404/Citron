@@ -2,6 +2,7 @@
 #include "component.hpp"
 #include "ecs.hpp"
 #include "logger.hpp"
+#include "serialization.hpp"
 #include "snapshot.hpp"
 
 constexpr uint8_t MAX_UNDO_STACK_SIZE = 50;
@@ -116,12 +117,12 @@ void DeleteEntitiesCommand::redo() {
 	}
 }
 
-void EditComponentCommand::execute() {
-}
-
 void EditComponentCommand::undo() {
+	BufferReader reader(oldData.data(), oldData.size());
+	member.deserialize(reader, (char *)component + member.offset);
 }
 
 void EditComponentCommand::redo() {
-	
+	BufferReader reader(newData.data(), newData.size());
+	member.deserialize(reader, (char *)component + member.offset);
 }

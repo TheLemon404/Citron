@@ -59,6 +59,10 @@ void InspectorPanel::drawComponentIcon(const std::string &name, WGPUTextureView 
 		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Camera").uv.Min, icons.getIcon("Camera").uv.Max);
 	} else if (name == "Rigidbody Component") {
 		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Rigidbody").uv.Min, icons.getIcon("Rigidbody").uv.Max);
+	} else if (name == "Directional Light Component") {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("DirectionalLight").uv.Min, icons.getIcon("DirectionalLight").uv.Max);
+	} else if (name == "Environment Component") {
+		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Environment").uv.Min, icons.getIcon("Environment").uv.Max);
 	} else {
 		ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, iconMin, iconMax, icons.getIcon("Component").uv.Min, icons.getIcon("Component").uv.Max);
 	}

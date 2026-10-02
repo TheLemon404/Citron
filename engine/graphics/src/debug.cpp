@@ -21,6 +21,10 @@ void DebugUtils::addDebugLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, f
 	}
 }
 
+void DebugUtils::addDebugRay(glm::vec3 origin, glm::vec3 direction, glm::vec3 color, float deleteTime) {
+	addDebugLine(origin, origin + direction, color, deleteTime);
+}
+
 void DebugUtils::addDebugCube(glm::vec3 min, glm::vec3 max, glm::vec3 color, float deleteTime) {
 	glm::vec3 size = max - min;
 	glm::vec3 center = min + size / 2.0f;

@@ -1,6 +1,7 @@
 
 #include "SDL3/SDL_timer.h"
 #include "clock.hpp"
+#include "resources.hpp"
 #include "texture.hpp"
 #include <filesystem>
 #define WEBGPU_CPP_IMPLEMENTATION
@@ -113,6 +114,7 @@ void App::init() {
 void App::update() {
 	CITRON_PROFILE_FUNCTION();
 	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
+	CitronGraphics::RenderEnvironmentData environmentData;
 
 	while (running) {
 		CITRON_PROFILE_SCOPE("App Running Loop");
@@ -136,11 +138,13 @@ void App::update() {
 			CITRON_PROFILE_SCOPE("Render") {
 				CITRON_PROFILE_SCOPE("Renderable Data Extraction")
 				if (sceneManager.getActiveScene()) {
+					environmentData = sceneManager.getActiveScene()->extractRenderEnvironmentData();
 					renderableData = sceneManager.getActiveScene()->extractRenderableData(assetManager);
 				}
 			}
 
 			if (renderer.frameReady()) {
+				renderer.setEnvironmentData(environmentData);
 				Frame frame = renderer.beginFrame();
 				{
 					CITRON_PROFILE_SCOPE("Render Scene")

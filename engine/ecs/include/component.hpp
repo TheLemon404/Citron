@@ -75,4 +75,12 @@ struct CITRON_ECS_API PerspectiveCameraComponent {
 	PerspectiveView view;
 };
 
+struct CITRON_ECS_API DirectionalLightComponent {
+	glm::vec4 color = glm::vec4(1.0f);
+};
+
+struct CITRON_ECS_API EnvironmentComponent {
+	glm::vec4 ambientLightColor = glm::vec4(0.0f);
+};
+
 } // namespace CitronECS

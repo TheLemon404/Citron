@@ -19,6 +19,7 @@ class CITRON_GRAPHICS_API DebugUtils {
 	static void initialize(std::vector<DebugLine> *debugLinesList);
 	static void addDebugLines(const std::vector<DebugLine> &lines, glm::vec3 color = glm::vec3(1.0f), float deleteTime = 0.0f);
 	static void addDebugLine(glm::vec3 start, glm::vec3 end, glm::vec3 color = glm::vec3(1.0f), float deleteTime = 0.0f);
+	static void addDebugRay(glm::vec3 origin, glm::vec3 direction, glm::vec3 color = glm::vec3(1.0f), float deleteTime = 0.0f);
 	static void addDebugCube(glm::vec3 min, glm::vec3 max, glm::vec3 color = glm::vec3(1.0f), float deleteTime = 0.0f);
 
   private:

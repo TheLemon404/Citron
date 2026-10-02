@@ -69,7 +69,7 @@ class CITRON_GRAPHICS_API RenderPass {
 	RenderPass(RenderPass &&) = default;
 
 	void drawFullscreenQuadPass(std::shared_ptr<Mesh> fullscreenQuad, std::shared_ptr<Shader> shader);
-	void drawRenderData(std::vector<RenderObject> renderableReferenceData);
+	void drawRenderData(std::vector<RenderObject> renderObjects);
 	void drawDebugGrid();
 	void drawDebugRenderData();
 
@@ -110,8 +110,6 @@ class CITRON_GRAPHICS_API Frame {
 
 	RenderPass beginRenderPass(RenderPassParams &params);
 
-	void drawRenderData(std::vector<RenderObject> &renderObjects);
-
 	wgpu::CommandEncoder &getEncoder() { return encoder; }
 
 	void incrementRenderCount() { renderCount++; }
@@ -142,6 +140,7 @@ class CITRON_GRAPHICS_API Renderer {
 	Frame beginFrame();
 	void endFrame(Frame &frame);
 
+	void setEnvironmentData(RenderEnvironmentData &environmentData);
 	void render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 iviewportSize, Texture &outputTexture, bool drawDebug = false);
 
 	void init();

@@ -137,11 +137,17 @@ void ECSRegistry::registerBuiltinComponents() {
 	registerComponentMember<MeshComponent, AssetReference<Material>>("material", offsetof(MeshComponent, materialAsset));
 	registerComponent<PerspectiveCameraComponent>("Perspective Camera Component");
 	registerComponentMember<PerspectiveCameraComponent, PerspectiveView>("view", offset_of<&PerspectiveCameraComponent::view, PerspectiveView>());
+	registerComponent<DirectionalLightComponent>("Directional Light Component");
+	registerComponentMember<DirectionalLightComponent, glm::vec4>("color", offsetof(DirectionalLightComponent, color));
+	registerComponent<EnvironmentComponent>("Environment Component");
+	registerComponentMember<EnvironmentComponent, glm::vec4>("ambientLightColor", offsetof(EnvironmentComponent, ambientLightColor));
 
 	m_builtinComponents.insert(Hashing::typeHash<EntityBaseComponent>());
 	m_builtinComponents.insert(Hashing::typeHash<TransformComponent>());
 	m_builtinComponents.insert(Hashing::typeHash<MeshComponent>());
 	m_builtinComponents.insert(Hashing::typeHash<PerspectiveCameraComponent>());
+	m_builtinComponents.insert(Hashing::typeHash<DirectionalLightComponent>());
+	m_builtinComponents.insert(Hashing::typeHash<EnvironmentComponent>());
 }
 
 void ECSRegistry::registerBuiltinSystems() {

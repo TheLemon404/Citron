@@ -116,8 +116,8 @@ class CITRON_ECS_API Scene : public ISerializable, public std::enable_shared_fro
 	glm::vec3 getGlobalScale(entt::entity entity);
 	glm::mat4 getGlobalTransform(entt::entity entity);
 
-	std::vector<CitronGraphics::RenderableReferenceData>
-	extractRenderableData(AssetManager &assetManager);
+	CitronGraphics::RenderEnvironmentData extractRenderEnvironmentData();
+	std::vector<CitronGraphics::RenderableReferenceData> extractRenderableData(AssetManager &assetManager);
 
 	void rename(const std::string &name) { this->name = name; }
 

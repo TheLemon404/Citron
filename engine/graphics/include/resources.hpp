@@ -19,6 +19,12 @@
 
 namespace CitronGraphics {
 
+struct CITRON_GRAPHICS_API RenderEnvironmentData {
+	glm::vec3 sunLightDirection = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec4 sunLightColor = glm::vec4(1.0f);
+	glm::vec4 ambientLight = glm::vec4(0.2f, 0.2f, 0.25f, 1.0f);
+};
+
 struct CITRON_GRAPHICS_API RenderableReferenceData {
 	uint32_t entityUUID;
 	glm::mat4 transform;
@@ -27,12 +33,12 @@ struct CITRON_GRAPHICS_API RenderableReferenceData {
 };
 
 struct CITRON_GRAPHICS_API FrameUniforms {
-	glm::vec4 sunLight = glm::vec4(1.0f);
+	glm::vec4 sunLightDirection = glm::vec4(1.0f);
 	glm::vec4 sunLightColor = glm::vec4(1.0f);
 	glm::vec4 ambientLight = glm::vec4(0.2f, 0.2f, 0.25f, 0.0f);
 
 	bool operator==(const FrameUniforms &other) const {
-		return sunLight == other.sunLight && sunLightColor == other.sunLightColor && ambientLight == other.ambientLight;
+		return sunLightDirection == other.sunLightDirection && sunLightColor == other.sunLightColor && ambientLight == other.ambientLight;
 	}
 };
 
@@ -163,7 +169,10 @@ class CITRON_GRAPHICS_API RendererResourceManager {
 
 	std::unordered_map<PipelineKey, std::shared_ptr<Pipeline>> pipelineCache;
 
+	FrameUniforms& getFrameUniforms() { return frameUniforms; }
 	GPUBuffer &getFrameUniformsBuffer() { return frameUniformsBuffer; }
+
+	void updateFrameUniformsBuffer();
 
 	const std::shared_ptr<Shader> getDebugGridShader() { return debugGridShader; }
 	const std::shared_ptr<Shader> getDebugWireframeShader() { return debugWireframeShader; }

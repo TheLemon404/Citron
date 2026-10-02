@@ -345,6 +345,24 @@ glm::mat4 Scene::getGlobalTransform(entt::entity entity) {
 	return hasValidParent ? getGlobalTransform(getEntity(b.parentId)) * t.matrix : t.matrix;
 }
 
+CitronGraphics::RenderEnvironmentData Scene::extractRenderEnvironmentData() {
+	CitronGraphics::RenderEnvironmentData environmentData;
+	auto sunView = registry.view<DirectionalLightComponent>();
+	for(entt::entity sun : sunView) {
+		DirectionalLightComponent &directionalLightComponent = registry.get<DirectionalLightComponent>(sun);
+		TransformComponent &transformComponent = registry.get<TransformComponent>(sun);
+		environmentData.sunLightDirection = transformComponent.rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+		environmentData.sunLightColor = directionalLightComponent.color;
+		break;
+	}
+	for(auto &entity : registry.view<EnvironmentComponent>()) {
+		EnvironmentComponent &environmentComponent = registry.get<EnvironmentComponent>(entity);
+		environmentData.ambientLight = environmentComponent.ambientLightColor;
+		break;
+	}
+	return environmentData;
+}
+
 std::vector<CitronGraphics::RenderableReferenceData> Scene::extractRenderableData(AssetManager &assetManager) {
 	std::vector<CitronGraphics::RenderableReferenceData> renderableData;
 	for (auto &entity : registry.view<MeshComponent, TransformComponent, EntityBaseComponent>()) {

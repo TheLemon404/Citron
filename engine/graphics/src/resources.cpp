@@ -16,14 +16,7 @@ using namespace CitronGraphics;
 
 void RendererResourceManager::initResources() {
 	// frame uniforms buffer
-	wgpu::BufferDescriptor frameUniformBufferDesc = {};
-	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
-	frameUniformBufferDesc.mappedAtCreation = false;
-	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
-	frameUniformsBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
-	frameUniformsBuffer.size = frameUniformBufferDesc.size;
-	frameUniformsBuffer.entryCount = 1;
-	device.getQueue().writeBuffer(frameUniformsBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
+	updateFrameUniformsBuffer();
 
 	// debug shaders
 	debugGridShader = assetManager.createAsset<Shader>(device, CompiledShaders::debug_grid);
@@ -114,6 +107,17 @@ std::shared_ptr<Pipeline> RendererResourceManager::getPipeline(PipelineKey key) 
 		pipelineCache[key] = pipeline;
 	}
 	return pipelineCache[key];
+}
+
+void RendererResourceManager::updateFrameUniformsBuffer() {
+	wgpu::BufferDescriptor frameUniformBufferDesc = {};
+	frameUniformBufferDesc.usage = wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::Uniform;
+	frameUniformBufferDesc.mappedAtCreation = false;
+	frameUniformBufferDesc.size = Shader::paddedSizeof<FrameUniforms>();
+	frameUniformsBuffer.buffer = device.getWGPUDevice().createBuffer(frameUniformBufferDesc);
+	frameUniformsBuffer.size = frameUniformBufferDesc.size;
+	frameUniformsBuffer.entryCount = 1;
+	device.getQueue().writeBuffer(frameUniformsBuffer.buffer, 0, &frameUniforms, Shader::paddedSizeof<FrameUniforms>());
 }
 
 void RendererResourceManager::addDebugLine(const DebugLine &line) {

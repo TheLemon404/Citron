@@ -182,6 +182,7 @@ void RenderPass::drawRenderData(std::vector<RenderObject> renderObjects) {
 		return;
 
 	RendererContext context = renderer.getContext();
+	
 
 	// sorting
 	std::shared_ptr<Pipeline> pipeline = nullptr;
@@ -325,6 +326,14 @@ void Renderer::endFrame(Frame &frame) {
 	deviceSurfaceTexture.release();
 	rendererResourcesManager.releaseUnusedBindGroups();
 	rendererResourcesManager.clearDebugLines();
+}
+
+void Renderer::setEnvironmentData(RenderEnvironmentData &environmentData) {
+	FrameUniforms& frameUniforms = rendererResourcesManager.getFrameUniforms();
+	frameUniforms.sunLightDirection = glm::vec4(environmentData.sunLightDirection, 1.0f);
+	frameUniforms.sunLightColor = environmentData.sunLightColor;
+	frameUniforms.ambientLight = environmentData.ambientLight;
+	rendererResourcesManager.updateFrameUniformsBuffer();
 }
 
 void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceData> renderableReferenceData, glm::ivec2 viewportSize, Texture &outputTexture, bool drawDebug) {

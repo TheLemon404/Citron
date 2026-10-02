@@ -158,8 +158,6 @@ void AssetPanel::onDraw() {
 							CitronIO::IO::moveFileOrFolder(srcPath, entry.path);
 							appContext.assetManager.moveAsset(srcPath, entry.path);
 							pendingRefreshDirectory = true;
-							ImGui::PopID();
-							continue;
 						} else {
 							CITRON_CLIENT_ERROR(
 								"Cannot move currently opened Scene file");

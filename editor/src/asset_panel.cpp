@@ -125,9 +125,12 @@ void AssetPanel::onDraw() {
 
 		ImGui::Dummy(ImVec2(0.0f, 4.0f));
 		int i = 0;
+		
 
 		for (auto &entry : directoryListings) {
 			ImGui::TableNextColumn();
+			ImGui::Dummy(ImVec2(5.0f, 0.0f));
+			ImGui::SameLine();
 			ImGui::PushID(i++);
 
 			if (entry.isDirectory) {
@@ -205,6 +208,11 @@ void AssetPanel::onDraw() {
 					}
 					ImGui::EndPopup();
 				}
+
+				ImGui::Dummy(ImVec2(5.0f, 0.0f));
+				ImGui::SameLine();
+				ImGui::SetWindowFontScale(1.0f);
+				ImGui::Text("%s", entry.name.c_str());
 			} else {
 				ImGui::SetWindowFontScale(6.0f * zoomLevel / 150.0f);
 				ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign,
@@ -222,29 +230,8 @@ void AssetPanel::onDraw() {
 						entry.selected = !entry.selected;
 					}
 				}
-				ImVec2 rect_min = ImGui::GetItemRectMin();
-				ImVec2 rect_max = ImGui::GetItemRectMax();
-				std::string iconType = "GenericFile";
-				const std::string fileExtension = entry.path.extension().string();
-				if (fileExtension == ".cpp" || fileExtension == ".hpp") {
-					iconType = "C++";
-				} else if (fileExtension == ".cs") {
-					iconType = "C#";
-				} else if (fileExtension == ".scene") {
-					iconType = "Logo";
-				} else if (fileExtension == ".project") {
-					iconType = "ColoredLogo";
-				} else if (fileExtension == ".mat") {
-					iconType = "Material";
-				} else if (fileExtension == ".wgsl") {
-					iconType = "Shader";
-				} else if (fileExtension == ".prefab") {
-					iconType = "Prefab";
-				} else if (fileExtension == ".glb") {
-					iconType = "Mesh";
-				}
-				Icon fileIcon = fileIcons.getIcon(iconType);
-				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, rect_min, rect_max, fileIcon.uv.Min, fileIcon.uv.Max);
+				ImVec2 thumbnailRectMin = ImGui::GetItemRectMin();
+				ImVec2 thumbnailRectMax = ImGui::GetItemRectMax();
 
 				ImGui::PopStyleVar();
 				ImGui::SetWindowFontScale(1.0f);
@@ -307,10 +294,46 @@ void AssetPanel::onDraw() {
 					}
 					ImGui::EndPopup();
 				}
-			}
 
-			ImGui::SetWindowFontScale(1.0f);
-			ImGui::Text("%s", entry.name.c_str());
+				ImGui::Dummy(ImVec2(5.0f, 0.0f));
+				ImGui::SameLine();
+				ImGui::SetWindowFontScale(1.0f);
+
+				ImGui::Text("%s", entry.name.c_str());
+				ImVec2 lineMin = ImVec2(thumbnailRectMin.x, thumbnailRectMax.y);
+				ImVec2 cardRectMax = ImVec2(thumbnailRectMax.x, ImGui::GetItemRectMax().y);
+
+				ImGui::GetWindowDrawList()->AddLine(lineMin, ImVec2(cardRectMax.x, lineMin.y), IM_COL32(255.0f, 255.0f, 255.0f, 150.0f), 1.0f);
+				ImGui::GetWindowDrawList()->AddRectFilled(thumbnailRectMin, cardRectMax, IM_COL32(255.0f, 255.0f, 255.0f, 5.0f), 1.0f, ImDrawFlags_RoundCornersAll);
+
+				//draw icon here OVER the background
+				std::string iconType = "GenericFile";
+				const std::string fileExtension = entry.path.extension().string();
+				if (fileExtension == ".cpp" || fileExtension == ".hpp") {
+					iconType = "C++";
+				} else if (fileExtension == ".cs") {
+					iconType = "C#";
+				} else if (fileExtension == ".scene") {
+					iconType = "Logo";
+				} else if (fileExtension == ".project") {
+					iconType = "ColoredLogo";
+				} else if (fileExtension == ".mat") {
+					iconType = "Material";
+				} else if (fileExtension == ".wgsl") {
+					iconType = "Shader";
+				} else if (fileExtension == ".prefab") {
+					iconType = "Prefab";
+				} else if (fileExtension == ".glb") {
+					iconType = "Mesh";
+				}
+				Icon fileIcon = fileIcons.getIcon(iconType);
+				ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)iconView, thumbnailRectMin, thumbnailRectMax, fileIcon.uv.Min, fileIcon.uv.Max);
+
+				if(assetPropertiesPanel.getSelectedAssetPath() == entry.path) {
+					ImGui::GetWindowDrawList()->AddRect(thumbnailRectMin, cardRectMax, IM_COL32(zColor.x * 255.0f, zColor.y * 255.0f, zColor.z * 255.0f, 255.0f), 1.0f, ImDrawFlags_RoundCornersAll, 1.0f);
+				}
+			}
+			
 			ImGui::PopID();
 		}
 		ImGui::EndTable();

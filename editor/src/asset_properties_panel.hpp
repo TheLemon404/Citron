@@ -13,6 +13,8 @@ class AssetPropertiesPanel : public Panel {
 	virtual void onEvent(Event &e) override;
 
 	void setSelectedAsset(const std::filesystem::path &path);
+	UUID getSelectedAsset() const { return currentlySelectedAsset; }
+	std::filesystem::path getSelectedAssetPath() const { return currentlySelectedAssetPath; }
 
   private:
 	void drawShaderProperties(std::shared_ptr<Shader> shader);

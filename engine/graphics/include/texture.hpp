@@ -21,6 +21,8 @@ class CITRON_GRAPHICS_API Texture {
 	const uint32_t getWidth() const { return width; }
 	const uint32_t getHeight() const { return height; }
 
+	const wgpu::TextureFormat getFormat() const { return texture.getFormat(); }
+
   protected:
 	uint32_t width;
 	uint32_t height;

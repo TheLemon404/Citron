@@ -387,11 +387,13 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	RenderPassDepthStencilAttachment depthAttachment = {};
 	depthAttachment.targetTexture = depthBufferTexture;
 	RenderPassColorAttachment colorAttachment = {};
+	colorAttachment.textureFormat = colorBufferTexture.getFormat();
 	colorAttachment.targetTexture = colorBufferTexture;
 	RenderPassColorAttachment normalAttachment = {};
-	normalAttachment.textureFormat = wgpu::TextureFormat::RGBA16Float;
+	normalAttachment.textureFormat = normalBufferTexture.getFormat();
 	normalAttachment.targetTexture = normalBufferTexture;
 	RenderPassColorAttachment idAttachment = {};
+	idAttachment.textureFormat = idBufferTexture.getFormat();
 	idAttachment.targetTexture = idBufferTexture;
 	RenderPassParams gBufferPassParams = {};
 	gBufferPassParams.containsDepthStencil = true;
@@ -404,6 +406,7 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	gBufferPass.end();
 
 	RenderPassColorAttachment lightingAttachment = {};
+	lightingAttachment.textureFormat = outputTexture.getFormat();
 	lightingAttachment.targetTexture = outputTexture;
 	RenderPassParams lightingPassParams = {};
 	lightingPassParams.colorAttachments.push_back(lightingAttachment);
@@ -471,7 +474,7 @@ void Renderer::createRenderTargetColorTexture(Texture &texture, uint32_t width, 
 void Renderer::prepareRenderTargetTextures(uint32_t width, uint32_t height) {
 	if (idBufferTexture.getWidth() != width || idBufferTexture.getHeight() != height) {
 		idBufferTexture.release();
-		idBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+		idBufferTexture = {device.createRenderTargetColorTexture(width, height, idBufferTexture.getFormat()), width, height};
 	}
 
 	if (depthBufferTexture.getWidth() != width || depthBufferTexture.getHeight() != height) {
@@ -481,16 +484,16 @@ void Renderer::prepareRenderTargetTextures(uint32_t width, uint32_t height) {
 
 	if (colorBufferTexture.getWidth() != width || colorBufferTexture.getHeight() != height) {
 		colorBufferTexture.release();
-		colorBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+		colorBufferTexture = {device.createRenderTargetColorTexture(width, height, colorBufferTexture.getFormat()), width, height};
 	}
 
 	if (normalBufferTexture.getWidth() != width || normalBufferTexture.getHeight() != height) {
 		normalBufferTexture.release();
-		normalBufferTexture = {device.createRenderTargetColorTexture(width, height, wgpu::TextureFormat::RGBA16Float), width, height};
+		normalBufferTexture = {device.createRenderTargetColorTexture(width, height, normalBufferTexture.getFormat()), width, height};
 	}
 
 	if (lightingBufferTexture.getWidth() != width || lightingBufferTexture.getHeight() != height) {
 		lightingBufferTexture.release();
-		lightingBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+		lightingBufferTexture = {device.createRenderTargetColorTexture(width, height, lightingBufferTexture.getFormat()), width, height};
 	}
 }

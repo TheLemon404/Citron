@@ -159,7 +159,7 @@ class CITRON_GRAPHICS_API Renderer {
 		};
 	}
 
-	void createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height);
+	void createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height, wgpu::TextureFormat format = wgpu::TextureFormat::BGRA8UnormSrgb);
 
 	Texture &getCurrentDeviceSurfaceTexture() {
 		return deviceSurfaceTexture;

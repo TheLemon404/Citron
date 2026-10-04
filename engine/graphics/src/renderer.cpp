@@ -293,7 +293,7 @@ void Renderer::init() {
 	depthBufferTexture = {device.createRenderTargetDepthTexture(window.getWidth(), window.getHeight()), (uint32_t)window.getWidth(), (uint32_t)window.getHeight()};
 	createRenderTargetColorTexture(idBufferTexture, window.getWidth(), window.getHeight());
 	createRenderTargetColorTexture(colorBufferTexture, window.getWidth(), window.getHeight());
-	createRenderTargetColorTexture(normalBufferTexture, window.getWidth(), window.getHeight());
+	createRenderTargetColorTexture(normalBufferTexture, window.getWidth(), window.getHeight(), wgpu::TextureFormat::RGBA16Float);
 	createRenderTargetColorTexture(lightingBufferTexture, window.getWidth(), window.getHeight());
 
 	fullscreenQuad = Mesh::createFullscreenQuad(device, assetManager);
@@ -389,6 +389,7 @@ void Renderer::render(Frame &frame, View &view, std::vector<RenderableReferenceD
 	RenderPassColorAttachment colorAttachment = {};
 	colorAttachment.targetTexture = colorBufferTexture;
 	RenderPassColorAttachment normalAttachment = {};
+	normalAttachment.textureFormat = wgpu::TextureFormat::RGBA16Float;
 	normalAttachment.targetTexture = normalBufferTexture;
 	RenderPassColorAttachment idAttachment = {};
 	idAttachment.targetTexture = idBufferTexture;
@@ -463,8 +464,8 @@ std::vector<RenderObject> Renderer::sortByMaterial(std::vector<RenderObject> &re
 	return renderables;
 }
 
-void Renderer::createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height) {
-	texture = {device.createRenderTargetColorTexture(width, height), width, height};
+void Renderer::createRenderTargetColorTexture(Texture &texture, uint32_t width, uint32_t height, wgpu::TextureFormat format) {
+	texture = {device.createRenderTargetColorTexture(width, height, format), width, height};
 }
 
 void Renderer::prepareRenderTargetTextures(uint32_t width, uint32_t height) {
@@ -485,7 +486,7 @@ void Renderer::prepareRenderTargetTextures(uint32_t width, uint32_t height) {
 
 	if (normalBufferTexture.getWidth() != width || normalBufferTexture.getHeight() != height) {
 		normalBufferTexture.release();
-		normalBufferTexture = {device.createRenderTargetColorTexture(width, height), width, height};
+		normalBufferTexture = {device.createRenderTargetColorTexture(width, height, wgpu::TextureFormat::RGBA16Float), width, height};
 	}
 
 	if (lightingBufferTexture.getWidth() != width || lightingBufferTexture.getHeight() != height) {

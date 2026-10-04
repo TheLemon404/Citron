@@ -39,7 +39,7 @@ fn fs_main(input: VertexOutput) -> @location(0) vec4f {
 
     let normal = textureLoad(normalTexture, vec2i(input.position.xy), 0).rgb;
 
-    let lit = dot(normal, normalize(frameUniforms.sunLight.xyz));
+    let lit = max(dot(normal, normalize(frameUniforms.sunLight.xyz)), 0.0);
 
     return vec4f((color * lit) + frameUniforms.ambientLight.rgb, colorTextureValue.a);
 }

@@ -351,7 +351,7 @@ CitronGraphics::RenderEnvironmentData Scene::extractRenderEnvironmentData() {
 	for(entt::entity sun : sunView) {
 		DirectionalLightComponent &directionalLightComponent = registry.get<DirectionalLightComponent>(sun);
 		TransformComponent &transformComponent = registry.get<TransformComponent>(sun);
-		environmentData.sunLightDirection = transformComponent.rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+		environmentData.sunLightDirection = getGlobalRotation(sun) * glm::vec3(0.0f, 1.0f, 0.0f);
 		environmentData.sunLightColor = directionalLightComponent.color;
 		break;
 	}

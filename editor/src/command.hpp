@@ -81,14 +81,26 @@ class DeleteEntitiesCommand : public ICommand {
 };
 
 class AddComponentCommand : public ICommand {
+	CitronECS::ComponentMetadata metadata;
+	UUID entityId;
+	std::shared_ptr<CitronECS::Scene> currentScene;
+	
   public:
+	AddComponentCommand(CitronECS::ComponentMetadata metadata, UUID entityId, std::shared_ptr<CitronECS::Scene> currentScene) : metadata(metadata), entityId(entityId), currentScene(currentScene) {}
+	
 	void execute() override;
 	void undo() override;
 	void redo() override;
 };
 
 class RemoveComponentCommand : public ICommand {
+	CitronECS::ComponentMetadata metadata;
+	UUID entityId;
+	std::shared_ptr<CitronECS::Scene> currentScene;
+	
   public:
+	RemoveComponentCommand(CitronECS::ComponentMetadata metadata, UUID entityId, std::shared_ptr<CitronECS::Scene> currentScene) : metadata(metadata), entityId(entityId), currentScene(currentScene) {}
+	
 	void execute() override;
 	void undo() override;
 	void redo() override;

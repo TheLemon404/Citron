@@ -34,6 +34,30 @@ void CommandManager::redo() {
 	}
 }
 
+void AddComponentCommand::execute() {
+	metadata.add(currentScene->getRegistry(), currentScene->getEntity(entityId));
+}
+
+void AddComponentCommand::undo() {
+	metadata.remove(currentScene->getRegistry(), currentScene->getEntity(entityId));
+}
+
+void AddComponentCommand::redo() {
+	metadata.add(currentScene->getRegistry(), currentScene->getEntity(entityId));
+}
+
+void RemoveComponentCommand::execute() {
+	metadata.remove(currentScene->getRegistry(), currentScene->getEntity(entityId));
+}
+
+void RemoveComponentCommand::undo() {
+	metadata.add(currentScene->getRegistry(), currentScene->getEntity(entityId));
+}
+
+void RemoveComponentCommand::redo() {
+	metadata.remove(currentScene->getRegistry(), currentScene->getEntity(entityId));
+}
+
 void CreateSystemCommand::execute() {
 	metadata.add(scene);
 }

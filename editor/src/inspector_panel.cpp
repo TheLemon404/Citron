@@ -1,11 +1,13 @@
 #include "inspector_panel.hpp"
 #include "command.hpp"
+#include "component.hpp"
 #include "gui.hpp"
 #include "editor.hpp"
 #include "keyboard.hpp"
 #include "serialization.hpp"
 
 #include <imgui_stdlib.h>
+#include <memory>
 
 bool InspectorPanel::collapsingHeader(const char *label,
 									  const char *icon_open,
@@ -125,13 +127,6 @@ void InspectorPanel::onDraw() {
 							}
 						}
 
-						if (ImGui::BeginPopupContextWindow()) {
-							if (ImGui::MenuItem("Remove System")) {
-								metadata.remove(currentScene);
-							}
-							ImGui::EndPopup();
-						}
-
 						ImGui::EndTable();
 					}
 				} else {
@@ -164,7 +159,8 @@ void InspectorPanel::onDraw() {
 
 					if (ImGui::BeginPopupContextItem()) {
 						if (ImGui::MenuItem("Remove Component")) {
-							metadata.remove(registry, selectedEntity);
+							UUID entityId = currentScene->getRegistry().get<EntityBaseComponent>(selectedEntity).uuid;
+							context.getCommandManager().execute(std::make_unique<RemoveComponentCommand>(metadata, entityId, currentScene));
 						}
 						ImGui::EndPopup();
 					}
@@ -229,7 +225,8 @@ void InspectorPanel::onDraw() {
 					std::string componentIDName = "##" + component.name;
 					if (ImGui::Selectable(componentIDName.c_str())) {
 						componentSearchResult = component.name;
-						component.add(registry, selectedEntity);
+						UUID entityId = currentScene->getRegistry().get<EntityBaseComponent>(selectedEntity).uuid;
+						context.getCommandManager().execute(std::make_unique<AddComponentCommand>(component, entityId, currentScene));
 						ImGui::CloseCurrentPopup();
 					}
 					ImGui::SameLine();

@@ -46,11 +46,13 @@ class ViewPanel : public Panel {
 	}
 
   private:
+	bool lastFrameManipulated = false;
+
 	std::set<SceneSelectionItem> &secondarySelectedItems;
 
 	ImVec2 viewportPos;
 	ImVec2 viewportSize;
-	void editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::set<SceneSelectionItem> &secondaryItems);
+	bool editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::set<SceneSelectionItem> &secondaryItems);
 	bool mouseSelectEvent(Event &e);
 
 	std::variant<entt::entity, std::shared_ptr<System>> &currentlySelectedItem;

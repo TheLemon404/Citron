@@ -44,13 +44,6 @@ bool InspectorPanel::collapsingHeader(const char *label,
 	return open;
 }
 
-std::vector<uint8_t> InspectorPanel::captureMemberData(const Member& member, void* component) {
-	std::vector<uint8_t> buffer;
-	BufferWriter writer(buffer);
-	member.serialize(writer, (char *)component + member.offset);
-	return std::move(buffer);
-}
-
 void InspectorPanel::drawComponentIcon(const std::string &name, WGPUTextureView iconView, ImVec2 iconMin, ImVec2 iconMax) {
 	EditorIcons &icons = Editor::get().getLayer<GuiLayer>()->editorIcons;
 	if (name == "Transform Component") {
@@ -117,10 +110,11 @@ void InspectorPanel::onDraw() {
 								static std::vector<uint8_t> oldData;
 								uint8_t propertyChangeResult = drawer(member, system.get(), appContext.assetManager);
 								if (propertyChangeResult == 1) {
-									oldData = captureMemberData(member, system.get());
+									oldData = EditComponentCommand::captureMemberData(member, system.get());
 								} else if (propertyChangeResult == 2) {
-									std::vector<uint8_t> newData = captureMemberData(member, system.get());
-									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(oldData, newData, member, system.get()));
+									std::vector<uint8_t> newData = EditComponentCommand::captureMemberData(member, system.get());
+									EditComponentData editData = {oldData, newData, member, system.get()};
+									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(std::vector<EditComponentData>{editData}));
 								}
 							} else {
 								ImGui::Text("Member drawing method undefined");
@@ -185,10 +179,11 @@ void InspectorPanel::onDraw() {
 								static std::vector<uint8_t> oldData;
 								uint8_t propertyChangeResult = drawer(member, component, appContext.assetManager);
 								if (propertyChangeResult == 1) {
-									oldData = captureMemberData(member, component);
+									oldData = EditComponentCommand::captureMemberData(member, component);
 								} else if (propertyChangeResult == 2) {
-									std::vector<uint8_t> newData = captureMemberData(member, component);
-									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(oldData, newData, member, component));
+									std::vector<uint8_t> newData = EditComponentCommand::captureMemberData(member, component);
+									EditComponentData editData = {oldData, newData, member, component};
+									context.getCommandManager().execute(std::make_unique<EditComponentCommand>(std::vector<EditComponentData>{editData}));
 								}
 							} else {
 								ImGui::Text("Drawing method undefined");

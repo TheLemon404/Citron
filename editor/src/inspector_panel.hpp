@@ -23,6 +23,5 @@ class InspectorPanel : public Panel {
 								 const char *icon_closed = "");
 
   private:
-	std::vector<uint8_t> captureMemberData(const Member& member, void* component);
 	void drawComponentIcon(const std::string &name, WGPUTextureView iconView, ImVec2 iconMin, ImVec2 iconMax);
 };

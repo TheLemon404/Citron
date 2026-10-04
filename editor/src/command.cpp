@@ -142,11 +142,23 @@ void DeleteEntitiesCommand::redo() {
 }
 
 void EditComponentCommand::undo() {
-	BufferReader reader(oldData.data(), oldData.size());
-	member.deserialize(reader, (char *)component + member.offset);
+	CITRON_CORE_INFO("UNDO");
+	for (EditComponentData &d : data) {
+		BufferReader reader(d.oldData.data(), d.oldData.size());
+		d.member.deserialize(reader, (char *)d.component + d.member.offset);
+	}
 }
 
 void EditComponentCommand::redo() {
-	BufferReader reader(newData.data(), newData.size());
-	member.deserialize(reader, (char *)component + member.offset);
+	for (EditComponentData &d : data) {
+		BufferReader reader(d.newData.data(), d.newData.size());
+		d.member.deserialize(reader, (char *)d.component + d.member.offset);
+	}
+}
+
+std::vector<uint8_t> EditComponentCommand::captureMemberData(const CitronECS::Member& member, void* component) {
+	std::vector<uint8_t> buffer;
+	BufferWriter writer(buffer);
+	member.serialize(writer, (char *)component + member.offset);
+	return std::move(buffer);
 }

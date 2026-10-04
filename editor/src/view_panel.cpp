@@ -2,6 +2,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "app.hpp"
 #include "clock.hpp"
+#include "command.hpp"
 #include "debug.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -11,6 +12,7 @@
 #include "math.hpp"
 #include "mesh.hpp"
 #include "panel.hpp"
+#include "serialization.hpp"
 #include "uuid.hpp"
 #include <unordered_set>
 #include <webgpu.h>
@@ -240,11 +242,71 @@ void ViewPanel::onDraw() {
 	glm::mat4 projMat = editorView.getProjectionMatrix();
 
 	entt::registry &registry = appContext.sceneManager.getActiveScene()->getRegistry();
+
+	static std::vector<std::vector<uint8_t>> oldValues;
+	static std::vector<void*> components;
+	static std::vector<std::vector<uint8_t>> newValues;
+
 	if (currentlySelectedItem.index() == 0 && registry.valid(std::get<entt::entity>(currentlySelectedItem)) && registry.any_of<TransformComponent, EntityBaseComponent>(std::get<entt::entity>(currentlySelectedItem))) {
+		
 		ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 		ImGuizmo::Enable(true);
 
-		editMultiTransform(viewportPos, viewportSize, &viewMatrix[0][0], &projMat[0][0], std::get<entt::entity>(currentlySelectedItem), secondarySelectedItems);
+		if (editMultiTransform(viewportPos, viewportSize, &viewMatrix[0][0], &projMat[0][0], std::get<entt::entity>(currentlySelectedItem), secondarySelectedItems) && ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+			if (lastFrameManipulated == false) {
+				const auto &transformMetadata = ECSRegistry::getComponentRegistry().at(Hashing::typeHash<TransformComponent>());
+				for (auto item : secondarySelectedItems) {
+					void *component = transformMetadata.get(appContext.sceneManager.getActiveScene()->getRegistry(), std::get<entt::entity>(item));
+					const CitronECS::Member &member = transformMetadata.members[0];
+					std::vector<uint8_t> oldData = EditComponentCommand::captureMemberData(member, component);
+					oldValues.push_back(oldData);
+					components.push_back(component);
+				}
+	
+				void *component = transformMetadata.get(appContext.sceneManager.getActiveScene()->getRegistry(), std::get<entt::entity>(currentlySelectedItem));
+				const CitronECS::Member &member = transformMetadata.members[0];
+				std::vector<uint8_t> oldData = EditComponentCommand::captureMemberData(member, component);
+				oldValues.push_back(oldData);
+				components.push_back(component);
+
+				CITRON_CLIENT_INFO("TEST 1");
+
+				lastFrameManipulated = true;
+			}
+		} else if (lastFrameManipulated == true && !ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+			const auto &transformMetadata = ECSRegistry::getComponentRegistry().at(Hashing::typeHash<TransformComponent>());
+
+			//capture new component values using the addresses of the old components
+			for (void *component : components) {
+				const CitronECS::Member &member = transformMetadata.members[0];
+				std::vector<uint8_t> newData = EditComponentCommand::captureMemberData(member, component);
+				newValues.push_back(newData);
+			}
+		
+			CITRON_CLIENT_ASSERT(oldValues.size() == newValues.size(), "number of old values and new values in edit component mismatch");
+			
+			std::vector<EditComponentData> componentEdits;
+
+			for (size_t i = 0; i < oldValues.size(); i++) {
+				EditComponentData edit = {
+					.oldData = oldValues[i],
+					.newData = newValues[i],
+					.member = transformMetadata.members[0],
+					.component = components[i]
+				};
+				
+				componentEdits.push_back(edit);
+			}
+	
+			CITRON_CLIENT_INFO("TEST 2");
+			Editor::get().getEditorContext().getCommandManager().execute(std::make_unique<EditComponentCommand>(componentEdits));
+
+			lastFrameManipulated = false;
+
+			oldValues.clear();
+			components.clear();
+			newValues.clear();
+		}
 	}
 
 	editorView.aspect = viewportSize.x / viewportSize.y;
@@ -290,7 +352,9 @@ void ViewPanel::onEvent(Event &e) {
 	}
 }
 
-void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::set<SceneSelectionItem> &secondaryItems) {
+bool ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, float *cameraView, float *cameraProjection, entt::entity primaryEntity, std::set<SceneSelectionItem> &secondaryItems) {
+	bool result = false;
+	
 	glm::vec3 snap;
 	switch (manipulationSettings.currentGizmoOperation) {
 	case ImGuizmo::TRANSLATE:
@@ -329,6 +393,8 @@ void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, floa
 	glm::mat4 deltaMatrix(1.0f);
 
 	if (ImGuizmo::Manipulate(cameraView, cameraProjection, manipulationSettings.currentGizmoOperation, manipulationSettings.relativeSpaceMode, &matrix[0][0], &deltaMatrix[0][0], manipulationSettings.snap ? &snap.x : nullptr)) {
+		result = true;
+		
 		if (manipulationSettings.currentGizmoOperation == ImGuizmo::ROTATE) {
 			glm::quat deltaRotation = glm::quat_cast(glm::mat3(deltaMatrix));
 			primaryTransform.rotation = glm::normalize(deltaRotation * primaryTransform.rotation);
@@ -340,16 +406,19 @@ void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, floa
 				}
 			}
 		} else {
-			glm::vec3 skew;
+			glm::vec3 skew, throwAwayScale, throwAwayOffset;
 			glm::vec4 perspective;
 			glm::quat orientation;
 			glm::mat4 localMatrix = glm::inverse(globalParentMatrix) * matrix;
-			glm::decompose(localMatrix, primaryTransform.scale, orientation, primaryTransform.position, skew, perspective);
+			glm::decompose(localMatrix, throwAwayScale, orientation, throwAwayOffset, skew, perspective);
 
 			glm::vec3 deltaPosition = glm::vec3(0.0);
 			glm::vec3 deltaScale = glm::vec3(1.0f);
 			glm::decompose(deltaMatrix, deltaScale, orientation, deltaPosition, skew, perspective);
 
+			primaryTransform.position += deltaPosition;
+			primaryTransform.scale *= deltaScale;
+			
 			for (auto &secondaryItem : secondaryItems) {
 				if (secondaryItem.index() == 0 && activeScene->getEntity(std::get<entt::entity>(secondaryItem)).hasComponent<TransformComponent>()) {
 					TransformComponent &secondaryTransform = activeScene->getRegistry().get<TransformComponent>(std::get<entt::entity>(secondaryItem));
@@ -359,6 +428,8 @@ void ViewPanel::editMultiTransform(ImVec2 viewportPos, ImVec2 viewRectSize, floa
 			}
 		}
 	}
+
+	return result;
 }
 
 bool ViewPanel::mouseSelectEvent(Event &e) {

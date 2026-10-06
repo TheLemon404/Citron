@@ -187,6 +187,8 @@ enum class SceneMode {
 	PAUSE = 2,
 };
 
+class SceneAsset;
+
 class CITRON_ECS_API SceneManager {
   public:
 	SceneManager(AssetManager &assetManager) : assetManager(assetManager) {}
@@ -198,7 +200,8 @@ class CITRON_ECS_API SceneManager {
 	void switchSceneForPlaymode(std::shared_ptr<Scene> newScene);
 
 	std::shared_ptr<Scene> getActiveScene() { return activeScene; }
-	void changeScene(std::shared_ptr<Scene> newScene);
+	void changeSceneManually(std::shared_ptr<Scene> newScene);
+	void changeScene(SceneAsset& sceneAsset);
 
 	void setSceneMode(SceneMode mode);
 
@@ -210,9 +213,14 @@ class CITRON_ECS_API SceneManager {
 	std::shared_ptr<Scene> activeScene;
 };
 
-class CITRON_ECS_API SceneAsset : public Asset<SceneAsset, AssetType::SCENE> {	
+class CITRON_ECS_API SceneAsset : public Asset<SceneAsset, AssetType::SCENE> {
+  private:
+	AssetMetadata metadata;
+	
   public:
-	SceneAsset(const UUID uuid) : Asset<SceneAsset, AssetType::SCENE>(uuid){}
+	SceneAsset(const UUID uuid, AssetMetadata metadata) : Asset<SceneAsset, AssetType::SCENE>(uuid), metadata(metadata) {}
+
+	const AssetMetadata &getMetadata() { return metadata; }	
 };
 
 class CITRON_ECS_API SceneAssetImporter : public AssetImporter {

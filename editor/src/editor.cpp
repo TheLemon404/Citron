@@ -260,7 +260,7 @@ Editor::Editor(const std::string &projectFilePath)
 void Editor::startPlaying() {
 	temporaryPlaymodeSceneHolder = sceneManager.getActiveScene();
 	std::shared_ptr<Scene> playmodeScene = sceneManager.getActiveScene()->clone();
-	sceneManager.changeScene(playmodeScene);
+	sceneManager.changeSceneManually(playmodeScene);
 	sceneManager.setSceneMode(SceneMode::PLAY);
 
 	editorContext.setPlaymodeState(EditorPlaymodeState::Playing);
@@ -270,7 +270,7 @@ void Editor::startPlaying() {
 
 void Editor::stopPlaying() {
 	if (temporaryPlaymodeSceneHolder) {
-		sceneManager.changeScene(temporaryPlaymodeSceneHolder);
+		sceneManager.changeSceneManually(temporaryPlaymodeSceneHolder);
 		temporaryPlaymodeSceneHolder = nullptr;
 	}
 	sceneManager.setSceneMode(SceneMode::STOP);
@@ -338,7 +338,7 @@ bool Editor::openScene(std::string sceneAssetPath) {
 
 	try {
 		FileStreamReader reader = FileStreamReader(sceneAssetPath);
-		Editor::get().sceneManager.changeScene(std::make_shared<Scene>(""));
+		Editor::get().sceneManager.changeSceneManually(std::make_shared<Scene>(""));
 		Editor::get().sceneManager.getActiveScene()->deserialize(reader);
 		editorContext.currentlyEditedSceneAssetPath = sceneAssetPath;
 		editorContext.setCurrentlySelectedItem(entt::null);
@@ -359,7 +359,7 @@ bool Editor::createScene() {
 	}
 	CitronIO::IO::createFile(newSceneFile);
 	FileStreamWriter writer = FileStreamWriter(newSceneFile);
-	Editor::get().sceneManager.changeScene(std::make_shared<Scene>(""));
+	Editor::get().sceneManager.changeSceneManually(std::make_shared<Scene>(""));
 	Editor::get().sceneManager.getActiveScene()->serialize(writer);
 	editorContext.currentlyEditedSceneAssetPath = newSceneFile;
 	editorContext.setCurrentlySelectedItem(entt::null);
@@ -384,10 +384,10 @@ bool Editor::openProject(std::string projectFilePath) {
 			CITRON_CLIENT_ERROR("Failed to load last edited scene file: {}",
 								lastEditedSceneFile);
 			projectFileNode["last_scene"] = "";
-			sceneManager.changeScene(std::make_shared<Scene>(""));
+			sceneManager.changeSceneManually(std::make_shared<Scene>(""));
 		}
 	} else {
-		sceneManager.changeScene(std::make_shared<Scene>(""));
+		sceneManager.changeSceneManually(std::make_shared<Scene>(""));
 	}
 
 	std::string editorTitle = projectFileNode["name"].as<std::string>();

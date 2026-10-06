@@ -143,7 +143,7 @@ void ECSRegistry::registerBuiltinComponents() {
 	registerComponent<DirectionalLightComponent>("Directional Light Component");
 	registerComponentMember<DirectionalLightComponent, glm::vec4>("color", offsetof(DirectionalLightComponent, color));
 	registerComponent<EnvironmentComponent>("Environment Component");
-	registerComponentMember<EnvironmentComponent, glm::vec4>("ambientLightColor", offsetof(EnvironmentComponent, ambientLightColor));
+	registerComponentMember<EnvironmentComponent, glm::vec4>("ambient light color", offsetof(EnvironmentComponent, ambientLightColor));
 
 	m_builtinComponents.insert(Hashing::typeHash<EntityBaseComponent>());
 	m_builtinComponents.insert(Hashing::typeHash<TransformComponent>());

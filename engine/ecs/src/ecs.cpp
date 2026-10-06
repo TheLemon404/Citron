@@ -428,7 +428,7 @@ View &Scene::getActiveView() {
 	return tempSceneView;
 }
 
-void SceneManager::switchScene(std::shared_ptr<Scene> newScene) {
+void SceneManager::switchSceneForPlaymode(std::shared_ptr<Scene> newScene) {
 	if (activeScene) {
 		if (mode == SceneMode::PLAY)
 			activeScene->end();
@@ -466,8 +466,13 @@ void SceneManager::onEvent(Event &e) {
 	}
 }
 
-void SceneManager::setActiveScene(std::shared_ptr<Scene> newScene) {
+void SceneManager::changeScene(std::shared_ptr<Scene> newScene) {
+	if (activeScene) {
+		activeScene->end();
+		assetManager.clearLoadedAssets();
+	}
 	activeScene = newScene;
+	activeScene->start();
 }
 
 void SceneManager::setSceneMode(SceneMode mode) {
@@ -490,9 +495,6 @@ bool SceneManager::checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e) 
 
 std::shared_ptr<AssetBase> SceneAssetImporter::importAsset(AssetMetadata metadata) {
 	CITRON_CORE_INFO("Importing scene asset {}", metadata.assetPath.string());
-	FileStreamReader reader(metadata.assetPath.string());
-	std::shared_ptr<Scene> scene = std::make_shared<Scene>("");
-	scene->deserialize(reader);
-	std::shared_ptr<SceneAsset> sceneAsset = std::make_shared<SceneAsset>(metadata.uuid, scene);
+	std::shared_ptr<SceneAsset> sceneAsset = std::make_shared<SceneAsset>(metadata.uuid);
 	return sceneAsset;
 }

@@ -1,6 +1,7 @@
 #include "registry.hpp"
 #include "assets.hpp"
 #include "component.hpp"
+#include "ecs.hpp"
 #include "glm/ext/vector_float2.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
@@ -72,6 +73,7 @@ void ECSRegistry::registerBuiltinComponents() {
 	registerAssetReferenceSerialization<Mesh>();
 	registerAssetReferenceSerialization<Material>();
 	registerAssetReferenceSerialization<Shader>();
+	registerAssetReferenceSerialization<SceneAsset>();
 
 	registerDeserializationMethod<int>([](StreamReader &reader, void *data) {
 		reader.readData(data, sizeof(int));
@@ -122,6 +124,7 @@ void ECSRegistry::registerBuiltinComponents() {
 	registerAssetReferenceDeserialization<Mesh>();
 	registerAssetReferenceDeserialization<Material>();
 	registerAssetReferenceDeserialization<Shader>();
+	registerAssetReferenceDeserialization<SceneAsset>();
 
 	registerComponent<EntityBaseComponent>("Entity Base Component");
 	registerComponentMember<EntityBaseComponent, uint32_t>("uuid", offsetof(EntityBaseComponent, uuid));

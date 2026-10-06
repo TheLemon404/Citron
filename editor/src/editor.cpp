@@ -214,6 +214,18 @@ Editor::Editor(const std::string &projectFilePath)
 				result = 2;
 			return result;
 		});
+	ECSRegistry::registerPropertyGuiDrawer<AssetReference<SceneAsset>>(
+		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
+			void *field = (char *)object + member.offset;
+			std::string fieldNameId = "##" + member.fieldName;
+			GuiElements::drawAssetReferenceComponentGui<SceneAsset>(fieldNameId, *(AssetReference<SceneAsset> *)field, context);
+			uint8_t result = 0;
+			if(ImGui::IsItemActivated())
+				result = 1;
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				result = 2;
+			return result;
+		});
 	ECSRegistry::registerPropertyGuiDrawer<PerspectiveView>(
 		[context](const Member &member, void *object, CitronAssets::AssetManager &assetManager) {
 			PerspectiveView *field = (PerspectiveView *)((char *)object + member.offset);
@@ -248,7 +260,7 @@ Editor::Editor(const std::string &projectFilePath)
 void Editor::startPlaying() {
 	temporaryPlaymodeSceneHolder = sceneManager.getActiveScene();
 	std::shared_ptr<Scene> playmodeScene = sceneManager.getActiveScene()->clone();
-	sceneManager.setActiveScene(playmodeScene);
+	sceneManager.changeScene(playmodeScene);
 	sceneManager.setSceneMode(SceneMode::PLAY);
 
 	editorContext.setPlaymodeState(EditorPlaymodeState::Playing);
@@ -258,7 +270,7 @@ void Editor::startPlaying() {
 
 void Editor::stopPlaying() {
 	if (temporaryPlaymodeSceneHolder) {
-		sceneManager.setActiveScene(temporaryPlaymodeSceneHolder);
+		sceneManager.changeScene(temporaryPlaymodeSceneHolder);
 		temporaryPlaymodeSceneHolder = nullptr;
 	}
 	sceneManager.setSceneMode(SceneMode::STOP);
@@ -326,7 +338,7 @@ bool Editor::openScene(std::string sceneAssetPath) {
 
 	try {
 		FileStreamReader reader = FileStreamReader(sceneAssetPath);
-		Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
+		Editor::get().sceneManager.changeScene(std::make_shared<Scene>(""));
 		Editor::get().sceneManager.getActiveScene()->deserialize(reader);
 		editorContext.currentlyEditedSceneAssetPath = sceneAssetPath;
 		editorContext.setCurrentlySelectedItem(entt::null);
@@ -347,7 +359,7 @@ bool Editor::createScene() {
 	}
 	CitronIO::IO::createFile(newSceneFile);
 	FileStreamWriter writer = FileStreamWriter(newSceneFile);
-	Editor::get().sceneManager.setActiveScene(std::make_shared<Scene>(""));
+	Editor::get().sceneManager.changeScene(std::make_shared<Scene>(""));
 	Editor::get().sceneManager.getActiveScene()->serialize(writer);
 	editorContext.currentlyEditedSceneAssetPath = newSceneFile;
 	editorContext.setCurrentlySelectedItem(entt::null);
@@ -372,10 +384,10 @@ bool Editor::openProject(std::string projectFilePath) {
 			CITRON_CLIENT_ERROR("Failed to load last edited scene file: {}",
 								lastEditedSceneFile);
 			projectFileNode["last_scene"] = "";
-			sceneManager.setActiveScene(std::make_shared<Scene>(""));
+			sceneManager.changeScene(std::make_shared<Scene>(""));
 		}
 	} else {
-		sceneManager.setActiveScene(std::make_shared<Scene>(""));
+		sceneManager.changeScene(std::make_shared<Scene>(""));
 	}
 
 	std::string editorTitle = projectFileNode["name"].as<std::string>();

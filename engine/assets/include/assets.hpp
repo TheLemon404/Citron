@@ -262,6 +262,10 @@ class CITRON_ASSETS_API AssetManager {
 		return m_assetManager->getAssetMetadataRegistry();
 	}
 
+	void clearLoadedAssets() {
+		m_assetManager->getLoadedAssets().clear();
+	}
+
   protected:
 	EventCallbackFn eventCallback = nullptr;
 

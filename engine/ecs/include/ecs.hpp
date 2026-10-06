@@ -209,4 +209,20 @@ class CITRON_ECS_API SceneManager {
 	SceneMode mode = SceneMode::PLAY;
 	std::shared_ptr<Scene> activeScene;
 };
+
+class CITRON_ECS_API SceneAsset : public Asset<SceneAsset, AssetType::SCENE> {
+private:
+	std::shared_ptr<Scene> scene;
+	
+  public:
+	SceneAsset(const UUID uuid, std::shared_ptr<Scene> scene) : Asset<SceneAsset, AssetType::SCENE>(uuid), scene(scene) {}
+	std::shared_ptr<Scene> getScene() { return scene; }
+};
+
+class CITRON_ECS_API SceneAssetImporter : public AssetImporter {
+  public:
+	SceneAssetImporter() : AssetImporter({".scene"}) {}
+	std::shared_ptr<AssetBase> importAsset(AssetMetadata metadata) override;
+};
+
 } // namespace CitronECS

@@ -487,3 +487,12 @@ bool SceneManager::checkAllAssetReferenceValidity(AssetRegistryRefreshEvent &e) 
 	}
 	return true;
 }
+
+std::shared_ptr<AssetBase> SceneAssetImporter::importAsset(AssetMetadata metadata) {
+	CITRON_CORE_INFO("Importing scene asset {}", metadata.assetPath.string());
+	FileStreamReader reader(metadata.assetPath.string());
+	std::shared_ptr<Scene> scene = std::make_shared<Scene>("");
+	scene->deserialize(reader);
+	std::shared_ptr<SceneAsset> sceneAsset = std::make_shared<SceneAsset>(metadata.uuid, scene);
+	return sceneAsset;
+}

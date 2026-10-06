@@ -82,6 +82,7 @@ App::App(bool isRuntime, std::filesystem::path projectFilePath)
 	assetManager.registerAssetImporter(AssetType::SHADER, std::make_shared<ShaderImporter>(rendererContext.device));
 	assetManager.registerAssetImporter(AssetType::MESH, std::make_shared<MeshImporter>(rendererContext.device));
 	assetManager.registerAssetImporter(AssetType::TEXTURE, std::make_shared<TextureImporter>(rendererContext.device));
+	assetManager.registerAssetImporter(AssetType::SCENE, std::make_shared<SceneAssetImporter>());
 }
 
 App::~App() {}

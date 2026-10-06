@@ -22,6 +22,7 @@ enum class AssetType : std::size_t {
 	MATERIAL,
 	TEXTURE,
 	MESH,
+	SCENE,
 };
 
 constexpr std::string_view to_string(AssetType t) {
@@ -34,6 +35,8 @@ constexpr std::string_view to_string(AssetType t) {
 		return "TEXTURE";
 	case AssetType::MESH:
 		return "MESH";
+	case AssetType::SCENE:
+		return "SCENE";
 	default:
 		return "UNKNOWN";
 	}
